@@ -1,0 +1,164 @@
+/*
+ * MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package plugily.projects.minigamesbox.classic.item;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import plugily.projects.minigamesbox.classic.misc.stuff.ComplementAccessor;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * @author Tigerpanzer_02
+ * <p>
+ * Created at 06.08.2021
+ * @version 2.0.0
+ */
+public class ItemBuilder {
+
+  private final ItemStack itemStack;
+  private final ItemMeta itemMeta;
+
+  public ItemBuilder(final ItemStack itemStack) {
+    this.itemStack = itemStack == null ? new ItemStack(Material.STONE) : itemStack;
+    this.itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
+  }
+
+  public ItemBuilder(final Material material) {
+    this.itemStack = new ItemStack(material == null ? Material.STONE : material);
+    this.itemMeta = itemStack.getItemMeta();
+  }
+
+  public ItemBuilder type(Material material) {
+    this.itemStack.setType(material == null ? Material.STONE : material);
+    return this;
+  }
+
+  public ItemBuilder amount(int amount) {
+    this.itemStack.setAmount(Math.max(amount, 1));
+    return this;
+  }
+
+  public ItemBuilder data(byte data) {
+    Objects.requireNonNull(this.itemStack.getData()).setData(data);
+    return this;
+  }
+
+  public ItemBuilder data(int data) {
+    return durability((short) data);
+  }
+
+  @SuppressWarnings("deprecation")
+  public ItemBuilder durability(short durability) {
+    this.itemStack.setDurability(durability);
+    return this;
+  }
+
+  public ItemBuilder name(final String name) {
+    ComplementAccessor.getComplement().setDisplayName(itemMeta, name == null ? "" : name);
+    return this;
+  }
+
+  public ItemBuilder enchantment(Enchantment enchantment) {
+    this.itemStack.addUnsafeEnchantment(enchantment, 1);
+    return this;
+  }
+
+  public ItemBuilder enchantment(Enchantment enchantment, int level) {
+    this.itemStack.addUnsafeEnchantment(enchantment, level);
+    return this;
+  }
+
+  public ItemBuilder removeEnchant(Enchantment enchantment) {
+    this.itemMeta.removeEnchant(enchantment);
+    return this;
+  }
+
+  public ItemBuilder removeEnchants() {
+    this.itemMeta.getEnchants().keySet().forEach(this.itemMeta::removeEnchant);
+    return this;
+  }
+
+  public ItemBuilder lore(String lore) {
+    return lore(Collections.singletonList(lore));
+  }
+
+  public ItemBuilder lore(final String... name) {
+    return lore(Arrays.asList(name));
+  }
+
+  public ItemBuilder lore(final List<String> name) {
+    List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
+    if(name != null) {
+      lore.addAll(name);
+    }
+    ComplementAccessor.getComplement().setLore(itemMeta, lore);
+    return this;
+  }
+
+  public ItemBuilder colorizeItem() {
+    if(itemMeta.hasDisplayName()) {
+      ComplementAccessor.getComplement().setDisplayName(itemMeta,
+          ChatColor.translateAlternateColorCodes('&', ComplementAccessor.getComplement().getDisplayName(itemMeta)));
+    }
+    if(itemMeta.hasLore()) {
+      List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
+      int size = lore.size();
+
+      for(int a = 0; a < size; a++) {
+        lore.set(a, ChatColor.translateAlternateColorCodes('&', lore.get(a)));
+      }
+
+      ComplementAccessor.getComplement().setLore(itemMeta, lore);
+    }
+    return this;
+  }
+
+  public ItemBuilder flags(ItemFlag... flags) {
+    this.itemMeta.addItemFlags(flags);
+    return this;
+  }
+
+  public ItemBuilder flags() {
+    return flags(ItemFlag.values());
+  }
+
+  public ItemBuilder removeFlags(ItemFlag... flags) {
+    this.itemMeta.removeItemFlags(flags);
+    return this;
+  }
+
+  public ItemBuilder removeFlags() {
+    return removeFlags(ItemFlag.values());
+  }
+
+  public ItemStack build() {
+    this.itemStack.setItemMeta(this.itemMeta);
+    return itemStack;
+  }
+
+}
