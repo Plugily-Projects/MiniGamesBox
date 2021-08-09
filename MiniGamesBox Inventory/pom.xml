@@ -43,6 +43,7 @@
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastInv</artifactId>
             <version>3.0.3</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
