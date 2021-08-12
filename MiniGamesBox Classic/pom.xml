@@ -119,11 +119,11 @@
                     <relocations>
                         <relocation>
                             <pattern>com.cryptomorin.xseries.particles</pattern>
-                            <shadedPattern>plugily.projects.minigamesbox.classic.compat.xseries</shadedPattern>
+                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.version.xseries</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>plugily.projects.minigamesbox.classic.compat.xseries</shadedPattern>
+                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.version.xseries</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
