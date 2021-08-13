@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.inventory.paged;
 
-import fr.mrmicky.fastinv.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -30,6 +29,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.inventory.util.ItemBuilder;
+import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -473,6 +474,28 @@ public class PagedFastInv implements InventoryHolder {
     this.clickHandlers.add(clickHandler);
   }
 
+
+  /**
+   * Remove all handlers which handles inventory open.
+   */
+  public void removeOpenHandlers() {
+    this.openHandlers.clear();
+  }
+
+  /**
+   * Remove all handlers which handles inventory close.
+   */
+  public void removeCloseHandlers() {
+    this.closeHandlers.clear();
+  }
+
+  /**
+   * Remove all handlers which handles inventory click.
+   */
+  public void removeClickHandlers() {
+    this.clickHandlers.clear();
+  }
+
   /**
    * Open the inventory to a player.
    *
@@ -518,6 +541,38 @@ public class PagedFastInv implements InventoryHolder {
   public int[] getBorders(int page) {
     int size = getInventory(page).getSize();
     return IntStream.range(0, size).filter(i -> size < 27 || i < 9 || i % 9 == 0 || (i - 8) % 9 == 0 || i > size - 9).toArray();
+  }
+
+  /**
+   * Fill the page with items
+   *
+   * @param stack ItemStack to fill the inventory
+   * @param page  page to fill
+   */
+  public void fill(ItemStack stack, int page) {
+    for(int i = 0; i <= getInventory(page).getSize(); i++) {
+      ItemStack itemStack = getInventory(page).getItem(i);
+      if(itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) {
+        continue;
+      }
+      getInventory(page).setItem(i, stack);
+    }
+  }
+
+  /**
+   * Fill all pages with items
+   *
+   * @param stack ItemStack to fill the inventory
+   */
+  public void fill(ItemStack stack) {
+    for(Inventory inventory : pagedInventories.values())
+      for(int i = 0; i <= inventory.getSize(); i++) {
+        ItemStack itemStack = inventory.getItem(i);
+        if(itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) {
+          continue;
+        }
+        inventory.setItem(i, stack);
+      }
   }
 
   /**

@@ -21,7 +21,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package plugily.projects.minigamesbox.inventory.paged;
+package plugily.projects.minigamesbox.inventory.util;
 
 import com.google.common.base.Enums;
 import com.google.common.cache.Cache;
