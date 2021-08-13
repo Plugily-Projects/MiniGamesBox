@@ -189,6 +189,11 @@ public class MiscUtils {
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Plugin: §6" + descriptionFile.getVersion() + " §r| Server: §6" + plugin.getServer().getVersion() + " §r| Detected: §6" + ServerVersion.Version.getCurrent() + " §r| Software: §6" + plugin.getServer().getName() + " §r| Java: §6" + System.getProperty("java.version"));
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] This plugin was created by §6Plugily Projects §ras part of an §6open source project§r ( https://donate.plugily.xyz )");
+    if(!plugin.getServer().getName().equalsIgnoreCase("craftbukkit") && !plugin.getServer().getName().equalsIgnoreCase("paper")) {
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SOFTWARE] §cYou are using some fork that was not tested by us. The plugin may work on it, too.");
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SOFTWARE] §cIf you have any bugs, please try to replicate the issue on paper software first!");
+    }
     if(plugin.getDescription().getVersion().contains("-debug") || plugin.getConfig().getBoolean("Debug")) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DEBUG] §eThe debug mode of this plugin is enabled");
@@ -228,6 +233,14 @@ public class MiscUtils {
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "]                               §6The plugin got fully enabled! Enjoy the plugin ;)");
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] -_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_-");
+  }
+
+  public static void sendStartUpMessage(Plugin plugin) {
+    sendStartUpMessage(plugin, plugin.getName(), plugin.getDescription(), true, true);
+  }
+
+  public static void sendStartUpMessage(Plugin plugin, boolean disclaimer, boolean support) {
+    sendStartUpMessage(plugin, plugin.getName(), plugin.getDescription(), disclaimer, support);
   }
 
 }

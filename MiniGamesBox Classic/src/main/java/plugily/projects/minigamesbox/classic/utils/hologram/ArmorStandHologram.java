@@ -136,12 +136,13 @@ public class ArmorStandHologram {
   private void append() {
     delete();
 
-    if (location.getWorld() == null) {
+    org.bukkit.World world = location.getWorld();
+    if(world == null) {
       return;
     }
 
-    double distanceAbove = -0.27,
-        y = location.getY();
+    double distanceAbove = -0.27;
+    double y = location.getY();
 
     for(int i = 0; i <= lines.size() - 1; i++) {
       y += distanceAbove;
@@ -152,16 +153,20 @@ public class ArmorStandHologram {
     }
 
     if(item != null && item.getType() != org.bukkit.Material.AIR) {
-      Location l = location.clone();
-      entityItem = location.getWorld().dropItem(l, item);
-      if(VersionUtils.isPaper())
+      entityItem = world.dropItem(location, item);
+      if(VersionUtils.isPaper()) {
         entityItem.setCanMobPickup(false);
+      }
       entityItem.setCustomNameVisible(false);
-      if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R3)) {
+
+      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1)) {
         entityItem.setGravity(true);
+      }
+
+      if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R3)) {
         entityItem.setInvulnerable(true);
       }
-      entityItem.teleport(l);
+      entityItem.teleport(location);
     }
   }
 
