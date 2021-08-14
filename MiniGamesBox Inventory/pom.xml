@@ -71,15 +71,16 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <relocations>
+                    <!--<relocations>
                         <relocation>
-                            <!-- imported
+                             imported
                             <pattern>fr.mrmicky.fastinv</pattern>
                              Replace 'com.yourpackae' with the package of your plugin
                             <shadedPattern>plugily.projects.minigamesbox.inventory.normal</shadedPattern>
-                            -->
+
                         </relocation>
                     </relocations>
+                    -->
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
             </plugin>

@@ -145,8 +145,10 @@ public class PagedFastInv implements InventoryHolder {
 
   private Inventory giveCleanInv(int size, InventoryType type, String title) {
     Inventory inventory;
+
     if(type == InventoryType.CHEST && size > 0) {
-      inventory = Bukkit.createInventory(this, size, title);
+      int invSize = getInventorySize(size);
+      inventory = Bukkit.createInventory(this, invSize, title);
     } else {
       inventory = Bukkit.createInventory(this, type, title);
     }
@@ -179,6 +181,28 @@ public class PagedFastInv implements InventoryHolder {
     return inventory;
   }
 
+
+  private int getInventorySize(int size) {
+    if(size <= 9) {
+      return 9;
+    }
+    if(size <= 9 * 2) {
+      return 9 * 2;
+    }
+    if(size <= 9 * 3) {
+      return 9 * 3;
+    }
+    if(size <= 9 * 4) {
+      return 9 * 4;
+    }
+    if(size <= 9 * 5) {
+      return 9 * 5;
+    }
+    if(size <= 9 * 6) {
+      return 9 * 6;
+    }
+    return 9;
+  }
 
   protected void onOpen(InventoryOpenEvent event) {
   }

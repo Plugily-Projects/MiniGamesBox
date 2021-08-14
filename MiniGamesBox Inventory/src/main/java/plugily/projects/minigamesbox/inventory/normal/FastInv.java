@@ -101,8 +101,10 @@ public class FastInv implements InventoryHolder {
   }
 
   private FastInv(int size, InventoryType type, String title) {
+
     if(type == InventoryType.CHEST && size > 0) {
-      this.inventory = Bukkit.createInventory(this, size, title);
+      int invSize = getInventorySize(size);
+      this.inventory = Bukkit.createInventory(this, invSize, title);
     } else {
       this.inventory = Bukkit.createInventory(this, type, title);
     }
@@ -111,6 +113,30 @@ public class FastInv implements InventoryHolder {
       throw new IllegalStateException("Inventory holder is not FastInv, found: " + this.inventory.getHolder());
     }
   }
+
+
+  private int getInventorySize(int size) {
+    if(size <= 9) {
+      return 9;
+    }
+    if(size <= 9 * 2) {
+      return 9 * 2;
+    }
+    if(size <= 9 * 3) {
+      return 9 * 3;
+    }
+    if(size <= 9 * 4) {
+      return 9 * 4;
+    }
+    if(size <= 9 * 5) {
+      return 9 * 5;
+    }
+    if(size <= 9 * 6) {
+      return 9 * 6;
+    }
+    return 9;
+  }
+
 
   protected void onOpen(InventoryOpenEvent event) {
   }
