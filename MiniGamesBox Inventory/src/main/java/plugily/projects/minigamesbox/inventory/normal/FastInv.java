@@ -361,12 +361,8 @@ public class FastInv implements InventoryHolder {
    * @param stack ItemStack to fill the inventory
    */
   public void fill(ItemStack stack) {
-    for(int i = 0; i <= this.inventory.getSize(); i++) {
-      ItemStack itemStack = this.inventory.getItem(i);
-      if(itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) {
-        continue;
-      }
-      this.inventory.setItem(i, stack);
+    while(this.inventory.firstEmpty() != -1) {
+      this.inventory.setItem(this.inventory.firstEmpty(), stack);
     }
   }
 

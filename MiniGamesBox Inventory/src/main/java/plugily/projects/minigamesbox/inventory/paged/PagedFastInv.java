@@ -574,12 +574,8 @@ public class PagedFastInv implements InventoryHolder {
    * @param page  page to fill
    */
   public void fill(ItemStack stack, int page) {
-    for(int i = 0; i <= getInventory(page).getSize(); i++) {
-      ItemStack itemStack = getInventory(page).getItem(i);
-      if(itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) {
-        continue;
-      }
-      getInventory(page).setItem(i, stack);
+    while(getInventory(page).firstEmpty() != -1) {
+      getInventory(page).setItem(getInventory(page).firstEmpty(), stack);
     }
   }
 
@@ -590,12 +586,8 @@ public class PagedFastInv implements InventoryHolder {
    */
   public void fill(ItemStack stack) {
     for(Inventory inventory : pagedInventories.values())
-      for(int i = 0; i <= inventory.getSize(); i++) {
-        ItemStack itemStack = inventory.getItem(i);
-        if(itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) {
-          continue;
-        }
-        inventory.setItem(i, stack);
+      while(inventory.firstEmpty() != -1) {
+        inventory.setItem(inventory.firstEmpty(), stack);
       }
   }
 
