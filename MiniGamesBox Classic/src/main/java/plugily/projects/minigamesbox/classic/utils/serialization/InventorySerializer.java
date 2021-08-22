@@ -27,7 +27,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -136,21 +135,20 @@ public class InventorySerializer {
         invSize = 36;
       }
 
-      InventoryHolder invHolder = invConfig.contains("Holder") ? Bukkit.getPlayer(invConfig.getString("Holder")) : null;
-      Inventory inventory = Bukkit.getServer().createInventory(invHolder, InventoryType.PLAYER);
+      String holder = invConfig.getString("Holder");
+      Inventory inventory = plugin.getServer().createInventory(holder != null ? Bukkit.getPlayer(holder) : null, InventoryType.PLAYER);
       inventory.setMaxStackSize(invConfig.getInt("Max stack size", 64));
-      try {
-        ItemStack[] invContents = new ItemStack[invSize];
-        for(int i = 0; i < invSize; i++) {
-          if(invConfig.contains("Slot " + i)) {
-            invContents[i] = invConfig.getItemStack("Slot " + i);
-          } else {
-            invContents[i] = new ItemStack(Material.AIR);
-          }
+      ItemStack[] invContents = new ItemStack[invSize];
+      for(int i = 0; i < invSize; i++) {
+        if(invConfig.contains("Slot " + i)) {
+          invContents[i] = invConfig.getItemStack("Slot " + i);
+        } else {
+          invContents[i] = new ItemStack(Material.AIR);
         }
+      }
+      try {
         inventory.setContents(invContents);
-
-      } catch(Exception ex) {
+      } catch(IllegalArgumentException ex) {
         ex.printStackTrace();
         Bukkit.getConsoleSender().sendMessage("Cannot save inventory of player! Could not get armor!");
         Bukkit.getConsoleSender().sendMessage("Disable inventory saving option in config.yml or restart the server!");
