@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBInventoryClickEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
@@ -60,7 +61,7 @@ public class LegacyEvents implements Listener {
     if(!(event.getItem() instanceof Projectile)) {
       return;
     }
-    CBPlayerPickupArrow cbEvent = new CBPlayerPickupArrow(event.getPlayer(), event.getItem(), (Projectile) event.getItem(), event.getRemaining(), event.getFlyAtPlayer());
+    CBPlayerPickupArrow cbEvent = new CBPlayerPickupArrow(event.getPlayer(), event.getItem(), (Projectile) event.getItem(), event.getRemaining(), VersionUtils.isPaper() && event.getFlyAtPlayer());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
