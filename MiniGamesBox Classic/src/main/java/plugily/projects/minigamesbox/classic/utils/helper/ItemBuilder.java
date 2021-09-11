@@ -64,7 +64,11 @@ public class ItemBuilder {
   }
 
   public ItemBuilder data(byte data) {
-    Objects.requireNonNull(this.itemStack.getData()).setData(data);
+    org.bukkit.material.MaterialData materialData = this.itemStack.getData();
+
+    if (materialData != null) {
+      materialData.setData(data);
+    }
     return this;
   }
 
@@ -127,9 +131,8 @@ public class ItemBuilder {
     }
     if(itemMeta.hasLore()) {
       List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
-      int size = lore.size();
 
-      for(int a = 0; a < size; a++) {
+      for(int a = 0; a < lore.size(); a++) {
         lore.set(a, ChatColor.translateAlternateColorCodes('&', lore.get(a)));
       }
 

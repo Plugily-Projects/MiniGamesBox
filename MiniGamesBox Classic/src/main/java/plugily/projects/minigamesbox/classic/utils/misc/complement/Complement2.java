@@ -41,7 +41,7 @@ import java.util.List;
 public final class Complement2 implements Complement {
 
   private String serialize(Component component) {
-    return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+    return component == null ? "" : LegacyComponentSerializer.legacyAmpersand().serialize(component);
   }
 
   private Component deserialize(String t) {

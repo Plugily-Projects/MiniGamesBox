@@ -28,6 +28,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -377,11 +378,7 @@ public final class VersionUtils {
     }
 
     java.util.Optional<org.bukkit.attribute.AttributeInstance> at = MiscUtils.getEntityAttribute(entity, Attribute.GENERIC_MAX_HEALTH);
-    if(at.isPresent()) {
-      return at.get().getValue();
-    }
-
-    return 20D;
+    return at.map(AttributeInstance::getValue).orElse(20D);
   }
 
   public static void setMaxHealth(Player player, double health) {
@@ -416,28 +413,34 @@ public final class VersionUtils {
   }
 
   public static void setItemInHand(LivingEntity entity, ItemStack stack) {
-    if(entity.getEquipment() == null) {
+    org.bukkit.inventory.EntityEquipment equipment = entity.getEquipment();
+
+    if(equipment == null) {
       return;
     }
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
-      entity.getEquipment().setItemInHand(stack);
+      equipment.setItemInHand(stack);
       return;
     }
-    entity.getEquipment().setItemInMainHand(stack);
+    equipment.setItemInMainHand(stack);
   }
 
   public static void setItemInHandDropChance(LivingEntity entity, float chance) {
-    if(entity.getEquipment() == null) {
+    org.bukkit.inventory.EntityEquipment equipment = entity.getEquipment();
+
+    if(equipment == null) {
       return;
     }
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
-      entity.getEquipment().setItemInHandDropChance(chance);
+      equipment.setItemInHandDropChance(chance);
       return;
     }
-    entity.getEquipment().setItemInMainHandDropChance(chance);
+    equipment.setItemInMainHandDropChance(chance);
   }
 
   public static void sendActionBar(Player player, String message) {
+    if(player == null)
+      return;
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R1)) {
       try {
         if(chatMessageTypeClass == null) {
@@ -461,6 +464,8 @@ public final class VersionUtils {
 
   public static void sendTitles(Player player, String title, String subtitle, int fadeInTime, int showTime,
                                 int fadeOutTime) {
+    if(player == null)
+      return;
     if(title == null && subtitle == null) {
       return;
     }
@@ -477,6 +482,8 @@ public final class VersionUtils {
   }
 
   public static void sendTitle(Player player, String text, int fadeInTime, int showTime, int fadeOutTime) {
+    if(player == null)
+      return;
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
       try {
         Object chatTitle = null;
@@ -497,6 +504,8 @@ public final class VersionUtils {
   }
 
   public static void sendSubTitle(Player player, String text, int fadeInTime, int showTime, int fadeOutTime) {
+    if(player == null)
+      return;
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
       try {
         Object chatTitle = null;

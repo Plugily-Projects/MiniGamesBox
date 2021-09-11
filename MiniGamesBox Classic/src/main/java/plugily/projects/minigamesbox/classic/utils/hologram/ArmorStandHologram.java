@@ -177,13 +177,14 @@ public class ArmorStandHologram {
   private ArmorStand getEntityArmorStand(Location loc, double y) {
     loc.setY(y);
     if(location != null) {
-      location.getWorld().getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
-        if(entity instanceof ArmorStand && !armorStands.contains(entity) && !HologramManager.getArmorStands().contains(entity)) {
-          entity.remove();
-          entity.setCustomNameVisible(false);
-          HologramManager.getArmorStands().remove(entity);
-        }
-      });
+      if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R1)) {
+        location.getWorld().getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
+          if(entity instanceof ArmorStand && HologramManager.getArmorStands().remove(entity)) {
+            entity.remove();
+            entity.setCustomNameVisible(false);
+          }
+        });
+      }
     }
     ArmorStand stand = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
     stand.setVisible(false);
