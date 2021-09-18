@@ -1,0 +1,153 @@
+### Initial config.yml for all plugily projects
+## Thanks for using our plugins! ~Tigerpanzer_02 from Plugily Projects
+#      PlugilyProjects configuration file
+#
+#    You can edit here the basic things of PlugilyProjects
+#      Please read everything CAREFULLY!
+#   You don't want to break anything, do you?
+#
+
+# Select locale of PlugilyProjects, default it's English.
+# Available locales:
+#    default - English language. Uses 'language.yml'.
+#    de - Deutsche sprache          pl - Język polski
+#    es - Idioma español            id - Bhasa Indonesia
+#    fr - Langue française          vn - Tiếng việt
+#    hu - Magyar nyelv              cn - 简体中文
+#    ro - Limba română              cs - Český jazyk
+#    pt_br - Português Brasileiro   lt - Lietuvių kalba
+#    it - Lingua italiana           ru - Русский язык
+#    kr - Korean                    nl - Dutch
+#    zh - Chinese (Traditional)     tr - Türk dili
+#    th - Thai
+locale: default
+
+# Should we display a boss bar with additional arena information?
+Bossbar: true
+
+# Should we hook into bungeecord? (If you wanna use arena per server option)
+# This option will let you access bungee.yml and its options.
+# You STILL need to use external addon for HUB server game signs
+# Check here for more info: https://wiki.plugily.xyz/
+Bungee-Mode: false
+
+# Enable Inventory Manager for your games? (VERY USEFUL feature for MULTI ARENA)
+# This saves inventory of players and restores it after player leaves arena.
+# Saved elements: max health, health, food, experience, full inventory, armor contents, fire ticks, active potions
+Inventory-Manager: true
+
+# Should the leave command be blocked inside arena?
+Leave-Command: false
+
+# Commands which can be used in game, remove all of them to disable
+Whitelisted-Commands:
+  - me
+  - help
+
+# Should we enable short commands such as /start and /leave
+Short-Commands: true
+
+# Should we block every not plugin associated commands in game?
+Block-In-Game-Commands: true
+
+# Enable this option when you're using MySQL, otherwise it won't work.
+# Be careful when changing this because there is NO migrator between
+# flat file and MySQL for player stats.
+# If this option is disabled it means all stats will be saved as flat file!
+Database: false
+
+# Should we enable in game rewards? See rewards.yml for more...
+# You should also check out our script engine tutorial for rewards! https://tutorial.plugily.xyz
+Rewards: true
+
+# Enable in game (eg. '[KIT][LEVEL] Plajer: hey') special formatting?
+# Formatting is configurable in language.yml
+# You can use PlaceholderAPI placeholders in chat format!
+Plugin-Chat-Format: true
+
+# Should we enable a separate arena chat for players inside a arena
+# Useful on multi arena servers that don't want the same chat for all players on the server
+Separate-Arena-Chat: true
+
+# Should we fire some cool fireworks at locations of every player at special events such as the game end?
+Firework: true
+
+# Should blocks behind game signs change their color based on game state?
+# They will change color to:
+# - white (waiting for players) stained glass
+# - yellow (starting) stained glass
+# - orange (in game) stained glass
+# - gray (ending) stained glass
+# - black (restarting) stained glass
+# or define your own at signs.yml!
+Sign-Block-States: true
+
+
+# Should holiday events for the plugin be enabled?
+# Eg. 4 days before and 4 days after Halloween special effects
+# for death, spooky! There are more holiday events! Check wiki!
+# Wiki: -
+Holidays: true
+
+# The plugin will be able to spawn holograms with armorstands! (no additional plugin required!)
+Hologram: true
+
+# Should we create leaderboards out of the stats?
+Leaderboard: true
+
+Parties:
+  # Should we try to hook into your current party plugin? (Supports well know party plugins, see wiki!)
+  # It will group up all players with the party leader. The party leader can join with the whole party!
+  External: true
+  # Should we enable our own party system that can be only used for this plugin?
+  # Check the wiki for commands
+  Own: false
+
+Damage:
+  # Should players get fall damage?
+  Fall: false
+  # Should players get drowning damage?
+  Drowning: false
+  # Should players get fire damage?
+  Fire: false
+
+# Should we make clear weather without weather cycle on all worlds where our arenas are?
+Weather-Cycle: false
+
+# You can create custom players permissions here.
+# Player with your custom permission will get int
+Custom-Permissions:
+  # Player with permission my-permission-one get int
+  # Do not use dots (.), they won't work.
+  my-permission-one: 10
+
+# Basic permissions for game, permissions explained here: https://wiki.plugily.xyz/
+Basic-Permissions:
+  Full-Games-Permission: "plugilyprojects.fullgames"
+  Vip-Permission: "plugilyprojects.vip"
+  Mvp-Permission: "plugilyprojects.mvp"
+  Elite-Permission: "plugilyprojects.elite"
+  # <arena> represents arena name (NOT MAP NAME!), for example: 'plugilyprojects.join.ARENAnice'
+  # use 'plugilyprojects.join.*' to enable access to all arenas
+  Join-Permission: "plugilyprojects.join.<arena>"
+
+# How many seconds game should take to start.
+Time-Manager:
+  Waiting-For-Players: 30
+  Shorten-Waiting-For-Players: 5
+  In-Game: 270
+  End: 10
+  Restarting: 5
+
+Update-Notifier:
+  # Should we check for updates on plugin start/after admin join?
+  # You REALLY should have this true!
+  Enabled: true
+  # Should we inform you when beta version is out?
+  # BETA IS NOT ALWAYS AS STABLE AS NORMAL RELEASE!
+  Notify-Beta-Versions: true
+
+# Don't modify.
+Version: 1
+
+# No way! You've reached the end! But... where's the dragon!?
