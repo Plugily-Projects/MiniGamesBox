@@ -63,7 +63,7 @@ public class ConfigPreferences {
    */
   public boolean getOption(String name) {
     if(!options.containsKey(name)) {
-      throw new IllegalStateException("Option with name " + name + " does not exists");
+      throw new IllegalStateException("Option with name " + name + " does not exist");
     }
     return options.get(name).getValue();
   }

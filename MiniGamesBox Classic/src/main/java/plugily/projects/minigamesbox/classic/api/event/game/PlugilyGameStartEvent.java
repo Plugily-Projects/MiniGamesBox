@@ -17,32 +17,32 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.party;
+package plugily.projects.minigamesbox.classic.api.event.game;
 
-import org.bukkit.entity.Player;
-
-import java.util.List;
+import org.bukkit.event.HandlerList;
+import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
+ * Called when arena has started
  */
-public class GameParty {
+public class PlugilyGameStartEvent extends PlugilyEvent {
 
-  private final List<Player> players;
-  private final Player leader;
+  private static final HandlerList HANDLERS = new HandlerList();
 
-  public GameParty(List<Player> players, Player leader) {
-    this.players = players;
-    this.leader = leader;
+  public PlugilyGameStartEvent(Arena arena) {
+    super(arena);
   }
 
-  public List<Player> getPlayers() {
-    return players;
+  public static HandlerList getHandlerList() {
+    return HANDLERS;
   }
 
-  public Player getLeader() {
-    return leader;
+  @Override
+  public HandlerList getHandlers() {
+    return HANDLERS;
   }
+
 }

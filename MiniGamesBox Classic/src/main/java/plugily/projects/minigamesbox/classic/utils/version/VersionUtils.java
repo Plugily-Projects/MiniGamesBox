@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.version;
 
+import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -26,6 +27,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -38,8 +40,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -523,6 +528,19 @@ public final class VersionUtils {
     } else {
       player.sendTitle(null, text, fadeInTime, showTime, fadeOutTime);
     }
+  }
+
+  public static ItemStack getPotion(PotionType type, int tier, boolean splash) {
+    ItemStack potion = new ItemStack((ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !splash)
+        ? Material.POTION : Material.SPLASH_POTION, 1);
+    PotionMeta meta = (PotionMeta) potion.getItemMeta();
+    meta.setBasePotionData(new PotionData(type, false, tier >= 2 && !splash));
+    potion.setItemMeta(meta);
+    return potion;
+  }
+
+  public void playSound(Location loc, String sound) {
+    XSound.matchXSound(sound).orElse(XSound.BLOCK_ANVIL_HIT).play(loc, 1, 1);
   }
 
 }

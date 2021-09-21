@@ -17,32 +17,8 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.party;
-
-import org.bukkit.entity.Player;
-
-import java.util.List;
-
 /**
- * @author Tigerpanzer_02
- * <p>
- * Created at 21.09.2021
+ * All in-game player related events.
  */
-public class GameParty {
 
-  private final List<Player> players;
-  private final Player leader;
-
-  public GameParty(List<Player> players, Player leader) {
-    this.players = players;
-    this.leader = leader;
-  }
-
-  public List<Player> getPlayers() {
-    return players;
-  }
-
-  public Player getLeader() {
-    return leader;
-  }
-}
+package plugily.projects.minigamesbox.classic.api.event.player;

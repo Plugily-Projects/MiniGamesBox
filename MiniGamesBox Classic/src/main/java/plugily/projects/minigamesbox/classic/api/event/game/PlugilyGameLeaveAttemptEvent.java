@@ -17,32 +17,39 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.party;
+package plugily.projects.minigamesbox.classic.api.event.game;
 
 import org.bukkit.entity.Player;
-
-import java.util.List;
+import org.bukkit.event.HandlerList;
+import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
+ * Called when player is attempting to leave arena
  */
-public class GameParty {
+public class PlugilyGameLeaveAttemptEvent extends PlugilyEvent {
 
-  private final List<Player> players;
-  private final Player leader;
+  private static final HandlerList HANDLERS = new HandlerList();
+  private final Player player;
 
-  public GameParty(List<Player> players, Player leader) {
-    this.players = players;
-    this.leader = leader;
+  public PlugilyGameLeaveAttemptEvent(Player player, Arena arena) {
+    super(arena);
+    this.player = player;
   }
 
-  public List<Player> getPlayers() {
-    return players;
+  public static HandlerList getHandlerList() {
+    return HANDLERS;
   }
 
-  public Player getLeader() {
-    return leader;
+  public Player getPlayer() {
+    return player;
   }
+
+  @Override
+  public HandlerList getHandlers() {
+    return HANDLERS;
+  }
+
 }

@@ -1,12 +1,33 @@
+/*
+ * MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package plugily.projects.minigamesbox.classic;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
+import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.party.PartySupportInitializer;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
+import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
@@ -33,6 +54,8 @@ public class Main extends JavaPlugin {
   private ConfigPreferences configPreferences;
   private PartyHandler partyHandler;
   private Debugger debugger;
+  private UserManager userManager;
+  private StatsStorage statsStorage;
   private boolean forceDisable = false;
 
   @TestOnly
@@ -90,6 +113,8 @@ public class Main extends JavaPlugin {
 
   public void initializeDefaultClasses() {
     partyHandler = new PartySupportInitializer().initialize(this);
+    statsStorage = new StatsStorage(this);
+    userManager = new UserManager(this);
     new EventsInitializer(this);
   }
 
@@ -181,6 +206,14 @@ public class Main extends JavaPlugin {
     return messageUtils;
   }
 
+  public UserManager getUserManager() {
+    return userManager;
+  }
+
+  public StatsStorage getStatsStorage() {
+    return statsStorage;
+  }
+
   private void setupPluginMetrics(int pluginMetricsId) {
     Metrics metrics = new Metrics(this, pluginMetricsId);
 
@@ -204,7 +237,7 @@ public class Main extends JavaPlugin {
   private ExceptionLogHandler exceptionLogHandler;
   private BungeeManager bungeeManager;
   private ChatManager chatManager;
-  private UserManager userManager;
+
   private ArgumentsRegistry registry;
   private SignManager signManager;
   private SpecialItemManager specialItemManager;
@@ -300,7 +333,7 @@ public class Main extends JavaPlugin {
       if(Bukkit.getServer().getPluginManager().isPluginEnabled("HolographicDisplays")) {
         Debugger.debug("Hooking into HolographicDisplays");
         if(!new File(getDataFolder(), "internal/holograms_data.yml").exists()) {
-          new File(getDataFolder().getPath() + "/internal").mkdir();
+          new File(getDataFolder().getName() + "/internal").mkdir();
         }
         holographicEnabled = true;
         hologramsRegistry = new HologramsRegistry(this);
@@ -314,7 +347,7 @@ public class Main extends JavaPlugin {
       UpgradeBuilder.init(this);
       new EntityUpgradeMenu(this);
     }
-    userManager = new UserManager(this);
+
     new DoorBreakListener(this);
 
     signManager = new SignManager(this);
@@ -345,9 +378,7 @@ public class Main extends JavaPlugin {
     return chatManager;
   }
 
-  public UserManager getUserManager() {
-    return userManager;
-  }
+
 
   public SpecialItemManager getSpecialItemManager() {
     return specialItemManager;

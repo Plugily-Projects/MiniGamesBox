@@ -20,9 +20,9 @@
 package plugily.projects.minigamesbox.classic.utils.misc;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 09.03.2019
+ * Created at 21.09.2021
  */
 enum DefaultFontInfo {
 

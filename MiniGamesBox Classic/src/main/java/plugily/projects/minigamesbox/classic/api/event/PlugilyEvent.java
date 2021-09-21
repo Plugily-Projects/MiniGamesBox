@@ -17,32 +17,27 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.party;
+package plugily.projects.minigamesbox.classic.api.event;
 
-import org.bukkit.entity.Player;
-
-import java.util.List;
+import org.bukkit.event.Event;
 
 /**
- * @author Tigerpanzer_02
- * <p>
- * Created at 21.09.2021
+ * Represents Village Defense game related events.
  */
-public class GameParty {
+public abstract class PlugilyEvent extends Event {
 
-  private final List<Player> players;
-  private final Player leader;
+  protected Arena arena;
 
-  public GameParty(List<Player> players, Player leader) {
-    this.players = players;
-    this.leader = leader;
+  public PlugilyEvent(Arena eventArena) {
+    arena = eventArena;
   }
 
-  public List<Player> getPlayers() {
-    return players;
-  }
-
-  public Player getLeader() {
-    return leader;
+  /**
+   * Returns event arena
+   *
+   * @return event arena
+   */
+  public Arena getArena() {
+    return arena;
   }
 }
