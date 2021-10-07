@@ -50,6 +50,7 @@ import java.util.logging.Level;
  * <p>
  * Created at 21.09.2021
  */
+//todo custom signs.yml
 public class SignManager implements Listener {
 
   private final Main plugin;
