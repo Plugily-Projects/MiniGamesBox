@@ -24,11 +24,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
+import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
+import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.party.PartySupportInitializer;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
+import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
@@ -56,6 +60,10 @@ public class Main extends JavaPlugin {
   private Debugger debugger;
   private UserManager userManager;
   private StatsStorage statsStorage;
+  private BukkitHelper bukkitHelper;
+  private SpecialItemManager specialItemManager;
+  private RewardsFactory rewardsHandler;
+  private KitMenuHandler kitMenuHandler;
   private boolean forceDisable = false;
 
   @TestOnly
@@ -112,10 +120,15 @@ public class Main extends JavaPlugin {
   }
 
   public void initializeDefaultClasses() {
+    bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
     statsStorage = new StatsStorage(this);
     userManager = new UserManager(this);
     new EventsInitializer(this);
+
+    specialItemManager = new SpecialItemManager(this);
+    kitMenuHandler = new KitMenuHandler(this);
+    rewardsHandler = new RewardsFactory(this);
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -214,6 +227,18 @@ public class Main extends JavaPlugin {
     return statsStorage;
   }
 
+  public BukkitHelper getBukkitHelper() {
+    return bukkitHelper;
+  }
+
+  public SpecialItemManager getSpecialItemManager() {
+    return specialItemManager;
+  }
+
+  public RewardsFactory getRewardsHandler() {
+    return rewardsHandler;
+  }
+
   private void setupPluginMetrics(int pluginMetricsId) {
     Metrics metrics = new Metrics(this, pluginMetricsId);
 
@@ -240,11 +265,10 @@ public class Main extends JavaPlugin {
 
   private ArgumentsRegistry registry;
   private SignManager signManager;
-  private SpecialItemManager specialItemManager;
-  private KitMenuHandler kitMenuHandler;
+
 
   private PowerupRegistry powerupRegistry;
-  private RewardsFactory rewardsHandler;
+
   private HolidayManager holidayManager;
   private FileConfiguration languageConfig;
   private HologramsRegistry hologramsRegistry;
@@ -315,11 +339,9 @@ public class Main extends JavaPlugin {
     new LobbyEvents(this);
     new SpectatorItemEvents(this);
     powerupRegistry = new PowerupRegistry(this);
-    rewardsHandler = new RewardsFactory(this);
+
     holidayManager = new HolidayManager(this);
-    specialItemManager = new SpecialItemManager(this);
-    specialItemManager.registerItems();
-    kitMenuHandler = new KitMenuHandler(this);
+
 
     enemySpawnerRegistry = new EnemySpawnerRegistry(this);
     KitRegistry.init(this);
@@ -380,13 +402,9 @@ public class Main extends JavaPlugin {
 
 
 
-  public SpecialItemManager getSpecialItemManager() {
-    return specialItemManager;
-  }
 
-  public RewardsFactory getRewardsHandler() {
-    return rewardsHandler;
-  }
+
+
 
   public HolidayManager getHolidayManager() {
     return holidayManager;

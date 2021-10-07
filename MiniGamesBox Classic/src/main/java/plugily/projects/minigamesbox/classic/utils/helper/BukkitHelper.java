@@ -28,12 +28,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionType;
 import org.bukkit.util.BlockIterator;
 import plugily.projects.minigamesbox.classic.Main;
-import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.ArrayList;
@@ -54,7 +50,7 @@ public class BukkitHelper {
 
   private final Main plugin;
 
-  private BukkitHelper(Main plugin) {
+  public BukkitHelper(Main plugin) {
     this.plugin = plugin;
   }
 
