@@ -102,7 +102,7 @@ public class RewardsFactory {
       return;
     }
     if(rewardType.isProtected()) {
-      throw new IllegalStateException("Protected options cannot be removed!");
+      throw new IllegalStateException("Protected rewardtype cannot be removed!");
     }
     rewardTypes.remove(key);
     rewards.clear();

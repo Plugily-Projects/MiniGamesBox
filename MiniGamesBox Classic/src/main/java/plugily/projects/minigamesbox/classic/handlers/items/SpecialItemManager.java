@@ -159,7 +159,7 @@ public class SpecialItemManager {
       return;
     }
     if(specialItem.isProtected()) {
-      throw new IllegalStateException("Protected options cannot be removed!");
+      throw new IllegalStateException("Protected specialitem cannot be removed!");
     }
     specialItems.remove(key);
   }
