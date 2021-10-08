@@ -20,6 +20,12 @@
 package plugily.projects.minigamesbox.classic.utils.hologram;
 
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +35,47 @@ import java.util.List;
  * <p>
  * Created at 31.05.2021
  */
-public class HologramManager {
+public class HologramManager implements Listener {
 
-  private static final List<ArmorStand> armorStands = new ArrayList<>();
+  private final Main plugin;
 
-  public static List<ArmorStand> getArmorStands() {
+  public HologramManager(Main plugin) {
+    this.plugin = plugin;
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+  }
+
+  private final List<ArmorStand> armorStands = new ArrayList<>();
+  private final List<ArmorStandHologram> holograms = new ArrayList<>();
+
+  public List<ArmorStand> getArmorStands() {
     return armorStands;
+  }
+
+  public List<ArmorStandHologram> getHolograms() {
+    return holograms;
+  }
+
+  @EventHandler
+  public void onItemPickup(CBEntityPickupItemEvent event) {
+    if(!(event.getEntity() instanceof Player)) {
+      return;
+    }
+    for(ArmorStandHologram hologram : holograms) {
+      if(!hologram.hasPickupHandler()) {
+        continue;
+      }
+      Item entityItem = hologram.getEntityItem();
+      Item item = event.getItem();
+      if(item.equals(entityItem)) {
+        Player player = (Player) event.getEntity();
+        if(plugin.getUserManager().getUser(player).isSpectator()) {
+          return;
+        }
+        event.setCancelled(true);
+        hologram.getPickupHandler().onPickup(player);
+        return;
+      }
+    }
   }
 
 }
