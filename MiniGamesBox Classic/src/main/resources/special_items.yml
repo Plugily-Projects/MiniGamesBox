@@ -23,7 +23,7 @@ Lobby-Leave:
   displayname: "&c&lReturn to Lobby &7(Right Click)"
   lore:
     - "&7Right-click to leave to the lobby"
-  material-name: BED
+  material: BED
   slot: 8
   stage: LOBBY
 
@@ -34,7 +34,7 @@ Spectator-Leave:
   displayname: "&c&lLeave the Game &7(Right Click)"
   lore:
     - "&7Right-click to leave to the lobby"
-  material-name: BED
+  material: BED
   slot: 8
   stage: SPECTATOR
 
@@ -45,7 +45,7 @@ Player-List:
   displayname: "&a&lAlive Players &7(Right Click)"
   lore:
     - "&7Right-click to see alive players list"
-  material-name: COMPASS
+  material: COMPASS
   slot: 0
   stage: SPECTATOR
 
@@ -56,7 +56,7 @@ Spectator-Option:
   displayname: "&b&lSpectator Settings &7(Right Click)"
   lore:
     - "&7Right-click to adjust spectator settings"
-  material-name: COMPASS
+  material: COMPASS
   slot: 4
   stage: SPECTATOR
 
@@ -68,7 +68,7 @@ Forcestart:
   lore:
     - "&7You need the following permission for it"
     - "&7plugily.projects.forcestart"
-  material-name: EMERALD
+  material: EMERALD
   slot: 0
   stage: ENOUGH_PLAYERS_TO_START
 
@@ -79,7 +79,7 @@ Arena-Selector:
   displayname: "&c&lClick to open the arena selector &7(Right Click)"
   lore:
     - "&7Right-click to see all arenas"
-  material-name: EMERALD
+  material: EMERALD
   slot: 0
   stage: SERVER_JOIN
 

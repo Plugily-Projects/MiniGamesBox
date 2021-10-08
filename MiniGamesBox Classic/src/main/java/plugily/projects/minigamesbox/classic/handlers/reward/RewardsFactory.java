@@ -124,12 +124,61 @@ public class RewardsFactory {
     }
   }
 
+
   public void performReward(Player player, RewardType type) {
     performReward(player, null, type);
   }
 
   public void performReward(Player player, Arena arena, RewardType type) {
     performReward(player, null, type, -1);
+  }
+
+  public void performReward(Player player, Set<Reward> rewards) {
+    performReward(player, null, rewards);
+  }
+
+  public void performReward(Player player, Arena arena, Set<Reward> rewards) {
+    if(arena == null && player != null)
+      arena = ArenaRegistry.getArena(player);
+
+    if(arena == null)
+      return;
+
+    for(Reward reward : rewards) {
+      //cannot execute if chance wasn't met
+      if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
+        continue;
+      }
+
+      String command = reward.getExecutableCode();
+
+      if(player != null)
+        command = StringUtils.replace(command, "%PLAYER%", player.getName());
+
+      command = formatCommandPlaceholders(command, arena);
+      switch(reward.getExecutor()) {
+        case CONSOLE:
+          Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+          break;
+        case PLAYER:
+          if(player != null)
+            player.performCommand(command);
+
+          break;
+        case SCRIPT:
+          ScriptEngine engine = new ScriptEngine();
+
+          if(player != null)
+            engine.setValue("player", player);
+
+          engine.setValue("server", Bukkit.getServer());
+          engine.setValue("arena", arena);
+          engine.execute(command);
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   public void performReward(Player player, Arena arena, RewardType type, int executeNumber) {
@@ -149,7 +198,7 @@ public class RewardsFactory {
 
     for(Reward reward : rewards) {
       if(reward.getType() == type) {
-        //reward isn't for this wave
+        //reward isn't a number executor
         if(type.getExecutorType() == RewardType.ExecutorType.NUMBER && reward.getNumberExecute() != executeNumber) {
           continue;
         }

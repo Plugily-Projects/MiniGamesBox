@@ -75,7 +75,7 @@ public class SpecialItemManager {
   }
 
   public void addItem(String key, String path) {
-    Material mat = XMaterial.matchXMaterial(config.getString(path + ".material-name", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
+    Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
     String name = plugin.getChatManager().colorRawMessage(config.getString(path + ".displayname"));
     List<String> lore = config.getStringList(path + ".lore").stream()
         .map(itemLore -> itemLore = plugin.getChatManager().colorRawMessage(itemLore))
@@ -92,6 +92,7 @@ public class SpecialItemManager {
     for(String reward : config.getStringList(path + ".execute")) {
       rewards.add(new Reward(new RewardType(path), reward));
     }
+
     specialItems.put(key, new SpecialItem(path, config.getString(path + ".permission", null), new ItemBuilder(mat).name(name).lore(lore).build(), config.getInt(path + ".slot", -1), stage, rewards));
 
   }

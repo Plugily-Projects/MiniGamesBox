@@ -70,14 +70,14 @@ public class SignManager implements Listener {
   }
 
   @EventHandler
-  public void onSignChange(SignChangeEvent e) {
-    if(!e.getPlayer().hasPermission("villagedefense.admin.sign.create")
-        || !ComplementAccessor.getComplement().getLine(e, 0).equalsIgnoreCase("[villagedefense]")) {
+  public void onSignChange(SignChangeEvent event) {
+    if(!event.getPlayer().hasPermission("villagedefense.admin.sign.create")
+        || !ComplementAccessor.getComplement().getLine(event, 0).equalsIgnoreCase("[villagedefense]")) {
       return;
     }
-    String line1 = ComplementAccessor.getComplement().getLine(e, 1);
+    String line1 = ComplementAccessor.getComplement().getLine(event, 1);
     if(line1.isEmpty()) {
-      e.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
+      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
       return;
     }
     for(Arena arena : ArenaRegistry.getArenas()) {
@@ -85,11 +85,11 @@ public class SignManager implements Listener {
         continue;
       }
       for(int i = 0; i < signLines.size(); i++) {
-        ComplementAccessor.getComplement().setLine(e, i, formatSign(signLines.get(i), arena));
+        ComplementAccessor.getComplement().setLine(event, i, formatSign(signLines.get(i), arena));
       }
-      arenaSigns.add(new ArenaSign((Sign) e.getBlock().getState(), arena));
-      e.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_CREATED));
-      String location = e.getBlock().getWorld().getName() + "," + e.getBlock().getX() + "," + e.getBlock().getY() + "," + e.getBlock().getZ() + ",0.0,0.0";
+      arenaSigns.add(new ArenaSign((Sign) event.getBlock().getState(), arena));
+      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_CREATED));
+      String location = event.getBlock().getWorld().getName() + "," + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + ",0.0,0.0";
       FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
       List<String> locs = config.getStringList("instances." + arena.getId() + ".signs");
       locs.add(location);
@@ -97,28 +97,28 @@ public class SignManager implements Listener {
       ConfigUtils.saveConfig(plugin, config, Constants.Files.ARENAS.getName());
       return;
     }
-    e.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_ARENA_DOESNT_EXISTS));
+    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_ARENA_DOESNT_EXISTS));
   }
 
-  private String formatSign(String msg, Arena a) {
+  private String formatSign(String msg, Arena arena) {
     String formatted = msg;
-    formatted = StringUtils.replace(formatted, "%mapname%", a.getMapName());
-    int maximumPlayers = a.getMaximumPlayers();
-    if(a.getPlayers().size() >= maximumPlayers) {
+    formatted = StringUtils.replace(formatted, "%mapname%", arena.getMapName());
+    int maximumPlayers = arena.getMaximumPlayers();
+    if(arena.getPlayers().size() >= maximumPlayers) {
       formatted = StringUtils.replace(formatted, "%state%", plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_FULL_GAME));
     } else {
-      formatted = StringUtils.replace(formatted, "%state%", gameStateToString.get(a.getArenaState()));
+      formatted = StringUtils.replace(formatted, "%state%", gameStateToString.get(arena.getArenaState()));
     }
-    formatted = StringUtils.replace(formatted, "%playersize%", Integer.toString(a.getPlayers().size()));
+    formatted = StringUtils.replace(formatted, "%playersize%", Integer.toString(arena.getPlayers().size()));
     formatted = StringUtils.replace(formatted, "%maxplayers%", Integer.toString(maximumPlayers));
     formatted = plugin.getChatManager().colorRawMessage(formatted);
     return formatted;
   }
 
   @EventHandler
-  public void onSignDestroy(BlockBreakEvent e) {
-    ArenaSign arenaSign = getArenaSignByBlock(e.getBlock());
-    if(!e.getPlayer().hasPermission("villagedefense.admin.sign.break") || arenaSign == null) {
+  public void onSignDestroy(BlockBreakEvent event) {
+    ArenaSign arenaSign = getArenaSignByBlock(event.getBlock());
+    if(!event.getPlayer().hasPermission("villagedefense.admin.sign.break") || arenaSign == null) {
       return;
     }
     arenaSigns.remove(arenaSign);
@@ -127,7 +127,7 @@ public class SignManager implements Listener {
       return;
     }
 
-    String location = e.getBlock().getWorld().getName() + "," + e.getBlock().getX() + "," + e.getBlock().getY() + "," + e.getBlock().getZ() + "," + "0.0,0.0";
+    String location = event.getBlock().getWorld().getName() + "," + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + "," + "0.0,0.0";
     for(String arena : config.getConfigurationSection("instances").getKeys(false)) {
       for(String sign : config.getStringList("instances." + arena + ".signs")) {
         if(!sign.equals(location)) {
@@ -137,20 +137,20 @@ public class SignManager implements Listener {
         signs.remove(location);
         config.set("instances." + arena + ".signs", signs);
         ConfigUtils.saveConfig(plugin, config, "arenas");
-        e.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_REMOVED));
+        event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_REMOVED));
         return;
       }
     }
-    e.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + ChatColor.RED + "Couldn't remove sign from configuration! Please do this manually!");
+    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + ChatColor.RED + "Couldn't remove sign from configuration! Please do this manually!");
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  public void onJoinAttempt(CBPlayerInteractEvent e) {
-    ArenaSign arenaSign = getArenaSignByBlock(e.getClickedBlock());
-    if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getState() instanceof Sign && arenaSign != null) {
+  public void onJoinAttempt(CBPlayerInteractEvent event) {
+    ArenaSign arenaSign = getArenaSignByBlock(event.getClickedBlock());
+    if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getState() instanceof Sign && arenaSign != null) {
       Arena arena = arenaSign.getArena();
       if(arena != null) {
-        ArenaManager.joinAttempt(e.getPlayer(), arena);
+        ArenaManager.joinAttempt(event.getPlayer(), arena);
       }
     }
   }

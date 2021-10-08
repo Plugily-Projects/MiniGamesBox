@@ -25,7 +25,9 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
+import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
+import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.party.PartySupportInitializer;
@@ -33,6 +35,7 @@ import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
+import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
@@ -64,6 +67,9 @@ public class Main extends JavaPlugin {
   private SpecialItemManager specialItemManager;
   private RewardsFactory rewardsHandler;
   private KitMenuHandler kitMenuHandler;
+  private HologramManager hologramManager;
+  private SignManager signManager;
+  private PowerupRegistry powerupRegistry;
   private boolean forceDisable = false;
 
   @TestOnly
@@ -129,6 +135,13 @@ public class Main extends JavaPlugin {
     specialItemManager = new SpecialItemManager(this);
     kitMenuHandler = new KitMenuHandler(this);
     rewardsHandler = new RewardsFactory(this);
+    hologramManager = new HologramManager(this);
+    powerupRegistry = new PowerupRegistry(this);
+    signManager = new SignManager(this);
+    ArenaRegistry.registerArenas();
+    signManager.loadSigns();
+    signManager.updateSigns();
+
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -235,6 +248,18 @@ public class Main extends JavaPlugin {
     return specialItemManager;
   }
 
+  public HologramManager getHologramManager() {
+    return hologramManager;
+  }
+
+  public PowerupRegistry getPowerupRegistry() {
+    return powerupRegistry;
+  }
+
+  public SignManager getSignManager() {
+    return signManager;
+  }
+
   public RewardsFactory getRewardsHandler() {
     return rewardsHandler;
   }
@@ -264,10 +289,10 @@ public class Main extends JavaPlugin {
   private ChatManager chatManager;
 
   private ArgumentsRegistry registry;
-  private SignManager signManager;
 
 
-  private PowerupRegistry powerupRegistry;
+
+
 
   private HolidayManager holidayManager;
   private FileConfiguration languageConfig;
@@ -282,9 +307,7 @@ public class Main extends JavaPlugin {
     return bungeeManager;
   }
 
-  public SignManager getSignManager() {
-    return signManager;
-  }
+
 
   public KitMenuHandler getKitMenuHandler() {
     return kitMenuHandler;
@@ -338,7 +361,7 @@ public class Main extends JavaPlugin {
     new Events(this);
     new LobbyEvents(this);
     new SpectatorItemEvents(this);
-    powerupRegistry = new PowerupRegistry(this);
+
 
     holidayManager = new HolidayManager(this);
 
@@ -372,10 +395,7 @@ public class Main extends JavaPlugin {
 
     new DoorBreakListener(this);
 
-    signManager = new SignManager(this);
-    ArenaRegistry.registerArenas();
-    signManager.loadSigns();
-    signManager.updateSigns();
+
     FastInvManager.register(this);
     MiscUtils.sendStartUpMessage(this, "VillageDefense", getDescription(), true, true);
   }
@@ -412,9 +432,7 @@ public class Main extends JavaPlugin {
 
 
 
-  public PowerupRegistry getPowerupRegistry() {
-    return powerupRegistry;
-  }
+
 
 
   public ArgumentsRegistry getArgumentsRegistry() {
