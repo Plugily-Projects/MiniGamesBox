@@ -44,9 +44,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 15.01.2019
+ * Created at 08.10.2021
  */
 public class PowerupRegistry {
 

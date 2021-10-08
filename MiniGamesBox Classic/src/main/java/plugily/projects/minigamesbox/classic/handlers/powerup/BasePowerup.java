@@ -16,38 +16,67 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package plugily.projects.minigamesbox.classic.handlers.powerup;
 
-import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
+import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 08.10.2021
  */
-public class PowerupPickupHandler {
+/**
+ * The interface for power-ups
+ */
+public interface BasePowerup {
+  /**
+   * Get the key of the power-up
+   *
+   * @return the key
+   */
+  String getKey();
 
-  private final BasePowerup powerup;
-  private final Arena arena;
-  private final Player player;
+  /**
+   * Get the name of the power-up
+   *
+   * @return the name
+   */
+  String getName();
 
-  public PowerupPickupHandler(BasePowerup powerup, Arena arena, Player player) {
-    this.powerup = powerup;
-    this.arena = arena;
-    this.player = player;
+  /**
+   * Get the description of the power-up
+   *
+   * @return the description
+   */
+  String getDescription();
+
+  /**
+   * Get the display material of the power-up
+   *
+   * @return the material
+   */
+  XMaterial getMaterial();
+
+
+  List<String> getEffects();
+
+  PotionType getPotionType();
+
+  /**
+   * Get the pickup consumer for the power-up
+   *
+   * @return the pickup consumer
+   */
+  Consumer<PowerupPickupHandler> getOnPickup();
+
+  Set<Reward> getRewards();
+
+  enum PotionType {
+    PLAYER, ALL
   }
-
-  public BasePowerup getPowerup() {
-    return powerup;
-  }
-
-  public Arena getArena() {
-    return arena;
-  }
-
-  public Player getPlayer() {
-    return player;
-  }
-
 }
+

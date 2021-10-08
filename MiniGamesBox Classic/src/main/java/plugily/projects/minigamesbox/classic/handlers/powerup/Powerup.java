@@ -29,9 +29,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 15.01.2019
+ * Created at 08.10.2021
  */
 public class Powerup implements BasePowerup {
 
