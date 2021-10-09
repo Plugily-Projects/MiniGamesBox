@@ -19,11 +19,15 @@
 
 package plugily.projects.minigamesbox.classic;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
+import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
@@ -39,6 +43,7 @@ import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
+import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 import plugily.projects.minigamesbox.classic.utils.services.metrics.Metrics;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -70,6 +75,7 @@ public class Main extends JavaPlugin {
   private HologramManager hologramManager;
   private SignManager signManager;
   private PowerupRegistry powerupRegistry;
+  private LeaderboardRegistry leaderboardRegistry;
   private boolean forceDisable = false;
 
   @TestOnly
@@ -141,6 +147,13 @@ public class Main extends JavaPlugin {
     ArenaRegistry.registerArenas();
     signManager.loadSigns();
     signManager.updateSigns();
+
+    if(configPreferences.getOption("HOLOGRAMS")) {
+      if(!new File(getDataFolder(), "internal/holograms_data.yml").exists()) {
+        new File(getDataFolder().getName() + "/internal").mkdir();
+      }
+      leaderboardRegistry = new LeaderboardRegistry(this);
+    }
 
   }
 
@@ -264,6 +277,10 @@ public class Main extends JavaPlugin {
     return rewardsHandler;
   }
 
+  public LeaderboardRegistry getHologramsRegistry() {
+    return leaderboardRegistry;
+  }
+
   private void setupPluginMetrics(int pluginMetricsId) {
     Metrics metrics = new Metrics(this, pluginMetricsId);
 
@@ -277,6 +294,45 @@ public class Main extends JavaPlugin {
 
       return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Beta notifier only" : "Disabled";
     }));
+  }
+
+
+  @Override
+  public void onDisable() {
+    if(forceDisable) {
+      return;
+    }
+    debugger.debug("System disable initialized");
+    long start = System.currentTimeMillis();
+
+    Bukkit.getLogger().removeHandler(exceptionLogHandler);
+    for(Arena arena : ArenaRegistry.getArenas()) {
+      arena.getScoreboardManager().stopAllScoreboards();
+
+      for(Player player : arena.getPlayers()) {
+        arena.teleportToEndLocation(player);
+        player.setFlySpeed(0.1f);
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
+        arena.doBarAction(Arena.BarAction.REMOVE, player);
+        if(configPreferences.getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
+          InventorySerializer.loadInventory(this, player);
+        }
+      }
+
+      arena.getMapRestorerManager().fullyRestoreArena();
+    }
+    userManager.getDatabase().disable();
+    if(configPreferences.getOption("HOLOGRAMS")) {
+      leaderboardRegistry.disableHolograms();
+    }
+    for(ArmorStand armorStand : hologramManager.getArmorStands()) {
+      armorStand.remove();
+      armorStand.setCustomNameVisible(false);
+    }
+    hologramManager.getArmorStands().clear();
+    debugger.debug("System disable finished took {0}ms", System.currentTimeMillis() - start);
   }
 
   /*
@@ -296,7 +352,7 @@ public class Main extends JavaPlugin {
 
   private HolidayManager holidayManager;
   private FileConfiguration languageConfig;
-  private HologramsRegistry hologramsRegistry;
+
   private FileConfiguration entityUpgradesConfig;
   private EnemySpawnerRegistry enemySpawnerRegistry;
 
@@ -313,9 +369,7 @@ public class Main extends JavaPlugin {
     return kitMenuHandler;
   }
 
-  public HologramsRegistry getHologramsRegistry() {
-    return hologramsRegistry;
-  }
+
 
   public FileConfiguration getLanguageConfig() {
     return languageConfig;
@@ -374,18 +428,7 @@ public class Main extends JavaPlugin {
       bungeeManager = new BungeeManager(this);
       new MiscEvents(this);
     }
-    if(configPreferences.getOption(ConfigPreferences.Option.HOLOGRAMS_ENABLED)) {
-      if(Bukkit.getServer().getPluginManager().isPluginEnabled("HolographicDisplays")) {
-        Debugger.debug("Hooking into HolographicDisplays");
-        if(!new File(getDataFolder(), "internal/holograms_data.yml").exists()) {
-          new File(getDataFolder().getName() + "/internal").mkdir();
-        }
-        holographicEnabled = true;
-        hologramsRegistry = new HologramsRegistry(this);
-      } else {
-        Debugger.sendConsoleMsg("&cYou need to install HolographicDisplays to use holograms!");
-      }
-    }
+
     if(configPreferences.getOption(ConfigPreferences.Option.UPGRADES_ENABLED)) {
       entityUpgradesConfig = ConfigUtils.getConfig(this, "entity_upgrades");
       Upgrade.init(this);
@@ -443,39 +486,5 @@ public class Main extends JavaPlugin {
     return enemySpawnerRegistry;
   }
 
-  @Override
-  public void onDisable() {
-    if(forceDisable) {
-      return;
-    }
-    Debugger.debug("System disable initialized");
-    long start = System.currentTimeMillis();
-
-    Bukkit.getLogger().removeHandler(exceptionLogHandler);
-    for(Arena arena : ArenaRegistry.getArenas()) {
-      arena.getScoreboardManager().stopAllScoreboards();
-
-      for(Player player : arena.getPlayers()) {
-        arena.teleportToEndLocation(player);
-        player.setFlySpeed(0.1f);
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
-        player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
-        arena.doBarAction(Arena.BarAction.REMOVE, player);
-        if(configPreferences.getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
-          InventorySerializer.loadInventory(this, player);
-        }
-      }
-
-      arena.getMapRestorerManager().fullyRestoreArena();
-    }
-    userManager.getDatabase().disable();
-    if(holographicEnabled) {
-      if(configPreferences.getOption(ConfigPreferences.Option.HOLOGRAMS_ENABLED)) {
-        hologramsRegistry.disableHolograms();
-      }
-      HologramsAPI.getHolograms(this).forEach(Hologram::delete);
-    }
-    Debugger.debug("System disable finished took {0}ms", System.currentTimeMillis() - start);
-  }*/
+*/
 }
