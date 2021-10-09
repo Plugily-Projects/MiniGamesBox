@@ -131,7 +131,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
   @Override
   public @NotNull String getIdentifier() {
-    return "villagedefense";
+    return plugin.getName();
   }
 
   @Override
