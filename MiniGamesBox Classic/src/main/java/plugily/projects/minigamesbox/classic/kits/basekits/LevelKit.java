@@ -17,32 +17,38 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.party;
+package plugily.projects.minigamesbox.classic.kits.basekits;
 
-import org.bukkit.entity.Player;
-
-import java.util.List;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
  */
-public class GameParty {
+public abstract class LevelKit extends Kit {
 
-  private final List<Player> players;
-  private final Player leader;
+  private int level;
 
-  public GameParty(List<Player> players, Player leader) {
-    this.players = players;
-    this.leader = leader;
+  public int getLevel() {
+    return level;
   }
 
-  public List<Player> getPlayers() {
-    return players;
+  public void setLevel(int level) {
+    this.level = level;
   }
 
-  public Player getLeader() {
-    return leader;
+  public abstract Material getMaterial();
+
+  @Override
+  public ItemStack getItemStack() {
+    return new ItemBuilder(getMaterial())
+        .name(getName())
+        .lore(getDescription())
+        .lore(getPlugin().getChatManager().colorMessage(Messages.KITS_MENU_LOCKED_UNLOCK_AT_LEVEL)
+            .replace("%NUMBER%", Integer.toString(level)))
+        .build();
   }
 }

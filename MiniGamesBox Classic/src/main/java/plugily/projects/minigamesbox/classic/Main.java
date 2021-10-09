@@ -27,16 +27,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
+import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsManager;
 import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
+import plugily.projects.minigamesbox.classic.handlers.party.PartyHandler;
+import plugily.projects.minigamesbox.classic.handlers.party.PartySupportInitializer;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.PlaceholderManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
-import plugily.projects.minigamesbox.classic.party.PartyHandler;
-import plugily.projects.minigamesbox.classic.party.PartySupportInitializer;
+import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -46,7 +48,9 @@ import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
+import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
+import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionLogHandler;
 import plugily.projects.minigamesbox.classic.utils.services.metrics.Metrics;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.EventsInitializer;
@@ -81,6 +85,8 @@ public class Main extends JavaPlugin {
   private HolidayManager holidayManager;
   private PlaceholderManager placeholderManager;
   private boolean forceDisable = false;
+  private ExceptionLogHandler exceptionLogHandler;
+  private PermissionsManager permissionsManager;
 
   @TestOnly
   public Main() {
@@ -100,6 +106,10 @@ public class Main extends JavaPlugin {
     if(!validateIfPluginShouldStart()) {
       return;
     }
+    if(!ServiceRegistry.registerService(this)) {
+      debugger.sendConsoleMsg(pluginPrefix + "&cSadly, we can't connect to Plugily Projects Services. Some functions may won't work. e.g. Translations, Automatic Error Report");
+    }
+    exceptionLogHandler = new ExceptionLogHandler(this);
     messageUtils = new MessageUtils(this);
 
     //run file creation
@@ -144,6 +154,7 @@ public class Main extends JavaPlugin {
 
     specialItemManager = new SpecialItemManager(this);
     kitMenuHandler = new KitMenuHandler(this);
+    new KitRegistry(this);
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);
@@ -161,9 +172,10 @@ public class Main extends JavaPlugin {
 
     holidayManager = new HolidayManager(this);
     if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      debugger.debug("Hooking into PlaceholderAPI");
+      debugger.debug(pluginPrefix + "Hooking into PlaceholderAPI");
       placeholderManager = new PlaceholderManager(this);
     }
+    permissionsManager = new PermissionsManager(this);
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -171,16 +183,16 @@ public class Main extends JavaPlugin {
       Class.forName("org.spigotmc.SpigotConfig");
     } catch(Exception e) {
       messageUtils.thisVersionIsNotSupported();
-      debugger.sendConsoleMsg("&cYour server software is not supported by " + getDescription().getName() + "!");
-      debugger.sendConsoleMsg("&cWe support Spigot and Spigot forks only! Shutting off...");
+      debugger.sendConsoleMsg(pluginPrefix + "&cYour server software is not supported by " + getDescription().getName() + "!");
+      debugger.sendConsoleMsg(pluginPrefix + "&cWe support Spigot and Spigot forks only! Shutting off...");
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
     }
     if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_8_R3)) {
       messageUtils.thisVersionIsNotSupported();
-      debugger.sendConsoleMsg("&cYour server version is not supported by " + getDescription().getName() + "!");
-      debugger.sendConsoleMsg("&cSadly, we must shut off. Maybe you consider changing your server version?");
+      debugger.sendConsoleMsg(pluginPrefix + "&cYour server version is not supported by " + getDescription().getName() + "!");
+      debugger.sendConsoleMsg(pluginPrefix + "&cSadly, we must shut off. Maybe you consider changing your server version?");
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
@@ -228,9 +240,9 @@ public class Main extends JavaPlugin {
         return;
       }
       messageUtils.updateIsHere();
-      debugger.sendConsoleMsg("&aYour " + getDescription().getName() + " plugin is outdated! Download it to keep with latest changes and fixes.");
-      debugger.sendConsoleMsg("&aDisable this option in config.yml if you wish.");
-      debugger.sendConsoleMsg("&eCurrent version: &c" + getDescription().getVersion() + " &eLatest version: &a" + result.getNewestVersion());
+      debugger.sendConsoleMsg(pluginPrefix + "&aYour " + getDescription().getName() + " plugin is outdated! Download it to keep with latest changes and fixes.");
+      debugger.sendConsoleMsg(pluginPrefix + "&aDisable this option in config.yml if you wish.");
+      debugger.sendConsoleMsg(pluginPrefix + "&eCurrent version: &c" + getDescription().getVersion() + " &eLatest version: &a" + result.getNewestVersion());
     });
   }
 
@@ -294,9 +306,20 @@ public class Main extends JavaPlugin {
     return holidayManager;
   }
 
+  public ExceptionLogHandler getExceptionLogHandler() {
+    return exceptionLogHandler;
+  }
+
+  public KitMenuHandler getKitMenuHandler() {
+    return kitMenuHandler;
+  }
 
   public PlaceholderManager getPlaceholderManager() {
     return placeholderManager;
+  }
+
+  public PermissionsManager getPermissionsManager() {
+    return permissionsManager;
   }
 
   private void setupPluginMetrics(int pluginMetricsId) {
@@ -350,7 +373,7 @@ public class Main extends JavaPlugin {
       armorStand.setCustomNameVisible(false);
     }
     hologramManager.getArmorStands().clear();
-    debugger.debug("System disable finished took {0}ms", System.currentTimeMillis() - start);
+    debugger.debug(pluginPrefix + "System disable finished took {0}ms", System.currentTimeMillis() - start);
   }
 
   /*
@@ -358,7 +381,7 @@ public class Main extends JavaPlugin {
    */
 
 /*
-  private ExceptionLogHandler exceptionLogHandler;
+
   private BungeeManager bungeeManager;
   private ChatManager chatManager;
 
@@ -400,8 +423,7 @@ public class Main extends JavaPlugin {
   @Override
   public void onEnable() {
 
-    ServiceRegistry.registerService(this);
-    exceptionLogHandler = new ExceptionLogHandler(this);
+
     Messages.init(this);
     LanguageManager.init(this);
 
@@ -436,7 +458,7 @@ public class Main extends JavaPlugin {
 
 
     enemySpawnerRegistry = new EnemySpawnerRegistry(this);
-    KitRegistry.init(this);
+
     User.cooldownHandlerTask();
     if(configPreferences.getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
       Debugger.debug("Bungee enabled");
@@ -465,7 +487,7 @@ public class Main extends JavaPlugin {
     CreatureUtils.init(this);
     User.init(this);
     ArenaManager.init(this);
-    PermissionsManager.init(this);
+
     SetupInventory.init(this);
     ArenaUtils.init(this);
     Arena.init(this);

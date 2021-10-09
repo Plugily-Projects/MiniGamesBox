@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.sign;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -38,7 +39,6 @@ import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAcc
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
-import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

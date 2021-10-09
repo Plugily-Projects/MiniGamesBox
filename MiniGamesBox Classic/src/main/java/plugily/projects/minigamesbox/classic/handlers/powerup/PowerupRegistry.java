@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.powerup;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,7 +34,6 @@ import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.hologram.ArmorStandHologram;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.util.ArrayList;
 import java.util.HashSet;

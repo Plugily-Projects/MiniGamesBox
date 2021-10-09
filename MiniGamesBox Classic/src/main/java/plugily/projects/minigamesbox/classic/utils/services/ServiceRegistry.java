@@ -27,13 +27,15 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
-
+/**
+ * @author Tigerpanzer_02
+ * <p>
+ * Created at 21.09.2021
+ */
 /**
  * Class for registering new services
  */
-public class
-
-ServiceRegistry {
+public class ServiceRegistry {
 
   private static JavaPlugin registeredService;
   private static boolean serviceEnabled;

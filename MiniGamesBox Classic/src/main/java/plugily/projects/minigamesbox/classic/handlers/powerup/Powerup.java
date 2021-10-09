@@ -21,8 +21,8 @@
 package plugily.projects.minigamesbox.classic.handlers.powerup;
 
 
+import com.cryptomorin.xseries.XMaterial;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
-import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.util.List;
 import java.util.Set;

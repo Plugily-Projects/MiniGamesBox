@@ -17,25 +17,13 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.party;
-
-import org.bukkit.entity.Player;
+package plugily.projects.minigamesbox.classic.kits.basekits;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
  */
-public interface PartyHandler {
-
-  GameParty getParty(Player player);
-
-  boolean partiesSupported();
-
-  PartyPluginType getPartyPluginType();
-
-  enum PartyPluginType {
-    PARTIES, PAFSpigot, PAFBungee, NONE
-  }
-
+//todo vault integration
+public class EconomyKit {
 }

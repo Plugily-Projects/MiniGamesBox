@@ -18,6 +18,7 @@
  */
 package plugily.projects.minigamesbox.classic.handlers.holiday;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +28,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.handlers.powerup.Powerup;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.time.LocalDateTime;
 import java.util.Set;
