@@ -539,7 +539,7 @@ public final class VersionUtils {
     return potion;
   }
 
-  public void playSound(Location loc, String sound) {
+  public static void playSound(Location loc, String sound) {
     XSound.matchXSound(sound).orElse(XSound.BLOCK_ANVIL_HIT).play(loc, 1, 1);
   }
 

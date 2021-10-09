@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
+import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
@@ -76,6 +77,7 @@ public class Main extends JavaPlugin {
   private SignManager signManager;
   private PowerupRegistry powerupRegistry;
   private LeaderboardRegistry leaderboardRegistry;
+  private HolidayManager holidayManager;
   private boolean forceDisable = false;
 
   @TestOnly
@@ -154,6 +156,8 @@ public class Main extends JavaPlugin {
       }
       leaderboardRegistry = new LeaderboardRegistry(this);
     }
+
+    holidayManager = new HolidayManager(this);
 
   }
 
@@ -277,8 +281,12 @@ public class Main extends JavaPlugin {
     return rewardsHandler;
   }
 
-  public LeaderboardRegistry getHologramsRegistry() {
+  public LeaderboardRegistry getLeaderboardRegistry() {
     return leaderboardRegistry;
+  }
+
+  public HolidayManager getHolidayManager() {
+    return holidayManager;
   }
 
   private void setupPluginMetrics(int pluginMetricsId) {
@@ -350,7 +358,7 @@ public class Main extends JavaPlugin {
 
 
 
-  private HolidayManager holidayManager;
+
   private FileConfiguration languageConfig;
 
   private FileConfiguration entityUpgradesConfig;
@@ -417,7 +425,7 @@ public class Main extends JavaPlugin {
     new SpectatorItemEvents(this);
 
 
-    holidayManager = new HolidayManager(this);
+
 
 
     enemySpawnerRegistry = new EnemySpawnerRegistry(this);
@@ -469,9 +477,7 @@ public class Main extends JavaPlugin {
 
 
 
-  public HolidayManager getHolidayManager() {
-    return holidayManager;
-  }
+
 
 
 
