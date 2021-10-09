@@ -30,6 +30,7 @@ import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
+import plugily.projects.minigamesbox.classic.handlers.placeholder.PlaceholderManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
@@ -78,6 +79,7 @@ public class Main extends JavaPlugin {
   private PowerupRegistry powerupRegistry;
   private LeaderboardRegistry leaderboardRegistry;
   private HolidayManager holidayManager;
+  private PlaceholderManager placeholderManager;
   private boolean forceDisable = false;
 
   @TestOnly
@@ -158,7 +160,10 @@ public class Main extends JavaPlugin {
     }
 
     holidayManager = new HolidayManager(this);
-
+    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+      debugger.debug("Hooking into PlaceholderAPI");
+      placeholderManager = new PlaceholderManager(this);
+    }
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -289,6 +294,11 @@ public class Main extends JavaPlugin {
     return holidayManager;
   }
 
+
+  public PlaceholderManager getPlaceholderManager() {
+    return placeholderManager;
+  }
+
   private void setupPluginMetrics(int pluginMetricsId) {
     Metrics metrics = new Metrics(this, pluginMetricsId);
 
@@ -416,10 +426,7 @@ public class Main extends JavaPlugin {
     new JoinEvent(this);
     new ChatEvents(this);
     setupPluginMetrics();
-    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      Debugger.debug("Hooking into PlaceholderAPI");
-      new PlaceholderManager().register();
-    }
+
     new Events(this);
     new LobbyEvents(this);
     new SpectatorItemEvents(this);
