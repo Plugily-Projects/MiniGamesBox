@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -27,12 +28,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
-import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsManager;
+import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
+import plugily.projects.minigamesbox.classic.events.ChatEvents;
+import plugily.projects.minigamesbox.classic.events.Events;
+import plugily.projects.minigamesbox.classic.events.JoinEvent;
+import plugily.projects.minigamesbox.classic.events.LobbyEvents;
+import plugily.projects.minigamesbox.classic.events.QuitEvent;
+import plugily.projects.minigamesbox.classic.events.bungee.MiscEvents;
+import plugily.projects.minigamesbox.classic.events.spectator.SpectatorEvents;
+import plugily.projects.minigamesbox.classic.events.spectator.SpectatorItemEvents;
 import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
+import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.handlers.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.handlers.party.PartySupportInitializer;
+import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsManager;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.PlaceholderManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
@@ -40,6 +51,7 @@ import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
+import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
@@ -54,6 +66,8 @@ import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionL
 import plugily.projects.minigamesbox.classic.utils.services.metrics.Metrics;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.EventsInitializer;
+import plugily.projects.minigamesbox.inventory.normal.FastInvManager;
+import plugily.projects.minigamesbox.inventory.paged.PagedFastInvManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,6 +101,9 @@ public class Main extends JavaPlugin {
   private boolean forceDisable = false;
   private ExceptionLogHandler exceptionLogHandler;
   private PermissionsManager permissionsManager;
+  private BungeeManager bungeeManager;
+  private FileConfiguration languageConfig;
+  private ChatManager chatManager;
 
   @TestOnly
   public Main() {
@@ -134,6 +151,13 @@ public class Main extends JavaPlugin {
     //start metrics
     setupPluginMetrics(ConfigUtils.getConfig(this, "/internal/data").getInt("PluginId.BStats", 0));
 
+    //setup InvManager
+    FastInvManager.register(this);
+    PagedFastInvManager.register(this);
+
+    //setup Scoreboard
+    //ScoreboardLib.setPluginInstance(this);
+
     //initialize default classes
     initializeDefaultClasses();
 
@@ -146,6 +170,8 @@ public class Main extends JavaPlugin {
   }
 
   public void initializeDefaultClasses() {
+    chatManager = new ChatManager(this);
+    languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
     statsStorage = new StatsStorage(this);
@@ -176,6 +202,21 @@ public class Main extends JavaPlugin {
       placeholderManager = new PlaceholderManager(this);
     }
     permissionsManager = new PermissionsManager(this);
+    User.init(this);
+    User.cooldownHandlerTask();
+    if(configPreferences.getOption("BUNGEE")) {
+      debugger.debug("Bungee enabled");
+      bungeeManager = new BungeeManager(this);
+      new MiscEvents(this);
+    }
+    new SpectatorEvents(this);
+    new QuitEvent(this);
+    new JoinEvent(this);
+    new ChatEvents(this);
+
+    new Events(this);
+    new LobbyEvents(this);
+    new SpectatorItemEvents(this);
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -322,6 +363,19 @@ public class Main extends JavaPlugin {
     return permissionsManager;
   }
 
+  public BungeeManager getBungeeManager() {
+    return bungeeManager;
+  }
+
+  public FileConfiguration getLanguageConfig() {
+    return languageConfig;
+  }
+
+  public ChatManager getChatManager() {
+    return chatManager;
+  }
+
+
   private void setupPluginMetrics(int pluginMetricsId) {
     Metrics metrics = new Metrics(this, pluginMetricsId);
 
@@ -382,110 +436,25 @@ public class Main extends JavaPlugin {
 
 /*
 
-  private BungeeManager bungeeManager;
-  private ChatManager chatManager;
 
   private ArgumentsRegistry registry;
 
-
-
-
-
-
-  private FileConfiguration languageConfig;
-
-  private FileConfiguration entityUpgradesConfig;
-  private EnemySpawnerRegistry enemySpawnerRegistry;
-
-  private boolean forceDisable = false, holographicEnabled = false;
-
-
-  public BungeeManager getBungeeManager() {
-    return bungeeManager;
-  }
-
-
-
-  public KitMenuHandler getKitMenuHandler() {
-    return kitMenuHandler;
-  }
-
-
-
-  public FileConfiguration getLanguageConfig() {
-    return languageConfig;
-  }
-
-  public FileConfiguration getEntityUpgradesConfig() {
-    return entityUpgradesConfig;
-  }
-
   @Override
   public void onEnable() {
-
-
     Messages.init(this);
     LanguageManager.init(this);
-
-
-    chatManager = new ChatManager(this);
-
-    languageConfig = ConfigUtils.getConfig(this, "language");
     initializeClasses();
-
   }
-
 
   //order matters
   private void initializeClasses() {
     startInitiableClasses();
-
-    ScoreboardLib.setPluginInstance(this);
     registry = new ArgumentsRegistry(this);
     new ArenaEvents(this);
-    new SpectatorEvents(this);
-    new QuitEvent(this);
-    new JoinEvent(this);
-    new ChatEvents(this);
-    setupPluginMetrics();
-
-    new Events(this);
-    new LobbyEvents(this);
-    new SpectatorItemEvents(this);
-
-
-
-
-
-    enemySpawnerRegistry = new EnemySpawnerRegistry(this);
-
-    User.cooldownHandlerTask();
-    if(configPreferences.getOption(ConfigPreferences.Option.BUNGEE_ENABLED)) {
-      Debugger.debug("Bungee enabled");
-      bungeeManager = new BungeeManager(this);
-      new MiscEvents(this);
-    }
-
-    if(configPreferences.getOption(ConfigPreferences.Option.UPGRADES_ENABLED)) {
-      entityUpgradesConfig = ConfigUtils.getConfig(this, "entity_upgrades");
-      Upgrade.init(this);
-      UpgradeBuilder.init(this);
-      new EntityUpgradeMenu(this);
-    }
-
-    new DoorBreakListener(this);
-
-
-    FastInvManager.register(this);
-    MiscUtils.sendStartUpMessage(this, "VillageDefense", getDescription(), true, true);
   }
 
   private void startInitiableClasses() {
-    StatsStorage.init(this);
     ArenaRegistry.init(this);
-    Utils.init(this);
-    CreatureUtils.init(this);
-    User.init(this);
     ArenaManager.init(this);
 
     SetupInventory.init(this);
@@ -493,32 +462,8 @@ public class Main extends JavaPlugin {
     Arena.init(this);
   }
 
-
-
-
-  public ChatManager getChatManager() {
-    return chatManager;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   public ArgumentsRegistry getArgumentsRegistry() {
     return registry;
-  }
-
-  public EnemySpawnerRegistry getEnemySpawnerRegistry() {
-    return enemySpawnerRegistry;
   }
 
 */
