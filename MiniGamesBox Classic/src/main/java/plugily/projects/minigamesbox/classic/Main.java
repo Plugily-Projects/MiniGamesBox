@@ -103,6 +103,7 @@ public class Main extends JavaPlugin {
   private PermissionsManager permissionsManager;
   private BungeeManager bungeeManager;
   private FileConfiguration languageConfig;
+  private FileConfiguration internalData;
   private ChatManager chatManager;
 
   @TestOnly
@@ -144,12 +145,15 @@ public class Main extends JavaPlugin {
 
       getConfig().getStringList("Performance-Listenable").forEach(debugger::monitorPerformance);
     }
-
+    if(!new File(getDataFolder(), "internal/data.yml").exists()) {
+      new File(getDataFolder().getName() + "/internal").mkdir();
+    }
+    internalData = ConfigUtils.getConfig(this, "/internal/data");
     //check for updates
-    checkUpdate(ConfigUtils.getConfig(this, "/internal/data").getInt("PluginId.Spigot", 0));
+    checkUpdate(internalData.getInt("PluginId.Spigot", 0));
 
     //start metrics
-    setupPluginMetrics(ConfigUtils.getConfig(this, "/internal/data").getInt("PluginId.BStats", 0));
+    setupPluginMetrics(internalData.getInt("PluginId.BStats", 0));
 
     //setup InvManager
     FastInvManager.register(this);
@@ -375,6 +379,9 @@ public class Main extends JavaPlugin {
     return chatManager;
   }
 
+  public FileConfiguration getInternalData() {
+    return internalData;
+  }
 
   private void setupPluginMetrics(int pluginMetricsId) {
     Metrics metrics = new Metrics(this, pluginMetricsId);

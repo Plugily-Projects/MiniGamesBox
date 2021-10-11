@@ -1,3 +1,6 @@
+CommandId:
+  default: plugily
+  default_long: plugilyprojects
 PluginId:
   Spigot: 0
   BStats: 0
