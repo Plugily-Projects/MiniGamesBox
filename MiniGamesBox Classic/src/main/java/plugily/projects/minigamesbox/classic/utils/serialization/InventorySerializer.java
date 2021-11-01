@@ -40,9 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 09.03.2019
+ * Created at 01.11.2021
  */
 public class InventorySerializer {
 

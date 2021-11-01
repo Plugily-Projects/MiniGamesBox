@@ -22,6 +22,7 @@ package plugily.projects.minigamesbox.classic.handlers.items;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.Main;
@@ -167,6 +168,16 @@ public class SpecialItemManager {
 
   public Map<String, SpecialItem> getSpecialItems() {
     return Collections.unmodifiableMap(specialItems);
+  }
+
+  public List<SpecialItem> getSpecialItemsOfStage(SpecialItem.DisplayStage stage) {
+    return Collections.unmodifiableList(getSpecialItems().values().stream().filter(specialItem -> specialItem.getDisplayStage() == stage).collect(Collectors.toList()));
+  }
+
+  public void setSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {
+    for(SpecialItem specialItem : getSpecialItemsOfStage(stage)) {
+      player.getInventory().setItem(specialItem.getSlot(), specialItem.getItemStack());
+    }
   }
 
   @NotNull

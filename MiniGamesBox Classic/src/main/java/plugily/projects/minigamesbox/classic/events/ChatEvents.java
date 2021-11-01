@@ -27,6 +27,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -48,10 +50,10 @@ public class ChatEvents implements Listener {
 
   @EventHandler
   public void onChatIngame(AsyncPlayerChatEvent event) {
-    Arena arena = ArenaRegistry.getArena(event.getPlayer());
+    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena == null) {
       if(!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
-        for(Arena loopArena : ArenaRegistry.getArenas()) {
+        for(Arena loopArena : plugin.getArenaRegistry().getArenas()) {
           for(Player player : loopArena.getPlayers()) {
             if(!plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player)) {
               event.getRecipients().remove(player);
@@ -82,7 +84,7 @@ public class ChatEvents implements Listener {
   private String formatChatPlaceholders(String message, User user) {
     String formatted = message;
     formatted = plugin.getChatManager().colorRawMessage(formatted);
-    formatted = StringUtils.replace(formatted, "%level%", Integer.toString(user.getStat(StatsStorage.StatisticType.LEVEL)));
+    formatted = StringUtils.replace(formatted, "%level%", Integer.toString(user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
     if(user.isSpectator()) {
       formatted = StringUtils.replace(formatted, "%kit%", plugin.getChatManager().colorMessage(Messages.DEAD_TAG_ON_DEATH));
     } else {

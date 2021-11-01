@@ -1,6 +1,6 @@
 /*
- * Village Defense - Protect villagers from hordes of zombies
- * Copyright (C) 2021  Plugily Projects - maintained by 2Wild4You, Tigerpanzer_02 and contributors
+ * MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package plugily.projects.minigamesbox.classic.user;
@@ -22,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.user.data.FileStats;
 import plugily.projects.minigamesbox.classic.user.data.MysqlManager;
 import plugily.projects.minigamesbox.classic.user.data.UserDatabase;
@@ -31,7 +33,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Tom on 27/07/2014.
+ * @author Tigerpanzer_02
+ * <p>
+ * Created at 01.11.2021
  */
 public class UserManager {
 
@@ -80,17 +84,8 @@ public class UserManager {
 
   public void addExperience(Player player, int i) {
     User user = getUser(player);
-    user.addStat(StatisticType.XP, i);
-    if(player.hasPermission(PermissionsManager.getVip())) {
-      user.addStat(StatisticType.XP, (int) Math.ceil(i / 2.0));
-    }
-    if(player.hasPermission(PermissionsManager.getMvp())) {
-      user.addStat(StatisticType.XP, (int) Math.ceil(i / 2.0));
-    }
-    if(player.hasPermission(PermissionsManager.getElite())) {
-      user.addStat(StatisticType.XP, (int) Math.ceil(i / 2.0));
-    }
-    updateLevelStat(user, ArenaRegistry.getArena(player));
+    user.addStat(plugin.getStatsStorage().getStatisticType("XP"), i);
+    updateLevelStat(user, plugin.getArenaRegistry().getArena(player));
   }
 
   public void addStat(Player player, StatisticType stat) {

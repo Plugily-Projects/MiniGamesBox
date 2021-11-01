@@ -57,7 +57,7 @@ public class AprilFoolsHoliday implements Holiday, Listener {
     this.random = new Random();
     this.plugin = plugin;
     Powerup powerup = new Powerup("APRIL_FOOL", plugin.getChatManager().colorRawMessage("&a&llololol"),
-        plugin.getChatManager().colorRawMessage("&a&lApril Fools!"), XMaterial.DIRT, pickup -> {
+        plugin.getChatManager().colorRawMessage("&a&lApril Fools!"), XMaterial.DIRT, null, null, null, pickup -> {
       pickup.getPlayer().damage(0);
       VersionUtils.sendTitle(pickup.getPlayer(), pickup.getPowerup().getDescription(), 5, 30, 5);
     });
@@ -85,7 +85,7 @@ public class AprilFoolsHoliday implements Holiday, Listener {
 
   @EventHandler
   public void onArrowShoot(EntityShootBowEvent e) {
-    if(e.getEntityType() != org.bukkit.entity.EntityType.PLAYER || ArenaRegistry.getArena((Player) e.getEntity()) == null) {
+    if(e.getEntityType() != org.bukkit.entity.EntityType.PLAYER || plugin.getArenaRegistry().getArena((Player) e.getEntity()) == null) {
       return;
     }
     if(random.nextInt(4) == 0) {

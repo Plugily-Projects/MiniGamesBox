@@ -61,7 +61,8 @@ public class ConfigOption {
     options.put("DROWNING_DAMAGE", new ConfigOption("Damage.Drowning", false, true));
     options.put("FIRE_DAMAGE", new ConfigOption("Damage.Fire", false, true));
 
-    options.put("WEATHER_CYCLE", new ConfigOption("Weather-Cycle", false, true));
+    options.put("WEATHER_CYCLE", new ConfigOption("Cycle.Weather", false, true));
+    options.put("DAYLIGHT_CYCLE", new ConfigOption("Cycle.Daylight", false, true));
 
     //Custom Permission
     //Basic Permission

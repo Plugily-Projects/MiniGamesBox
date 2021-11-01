@@ -111,8 +111,11 @@ Damage:
   # Should players get fire damage?
   Fire: false
 
-# Should we make clear weather without weather cycle on all worlds where our arenas are?
-Weather-Cycle: false
+Cycle:
+  # Should we make permanent clear weather on all worlds where our arenas are?
+  Weather: false
+  # Should the time on the world your arenas are modified to stay at the same time?
+  Daylight: false
 
 # You can create custom players permissions here.
 # Player with your custom permission will get int
@@ -123,13 +126,12 @@ Custom-Permissions:
 
 # Basic permissions for game, permissions explained here: https://wiki.plugily.xyz/
 Basic-Permissions:
-  Full-Games-Permission: "plugilyprojects.fullgames"
-  Vip-Permission: "plugilyprojects.vip"
-  Mvp-Permission: "plugilyprojects.mvp"
-  Elite-Permission: "plugilyprojects.elite"
+  Full-Games: "plugilyprojects.fullgames"
   # <arena> represents arena name (NOT MAP NAME!), for example: 'plugilyprojects.join.ARENAnice'
   # use 'plugilyprojects.join.*' to enable access to all arenas
-  Join-Permission: "plugilyprojects.join.<arena>"
+  Join: "plugilyprojects.join.<arena>"
+  Forcestart: "plugilyprojects.admin.forcestart"
+
 
 # How many seconds game should take to start.
 Time-Manager:

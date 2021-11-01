@@ -20,7 +20,6 @@
 
 package plugily.projects.minigamesbox.classic.handlers.permissions;
 
-import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.Main;
 
 /**
@@ -33,18 +32,14 @@ public class PermissionsManager {
 
   private final Main plugin;
   private String joinFullPerm;
-  private String vipPerm;
-  private String mvpPerm;
-  private String elitePerm;
   private String joinPerm;
+  private String forceStartPerm;
 
   public PermissionsManager(Main plugin) {
     this.plugin = plugin;
-    this.joinFullPerm = plugin.getName().toLowerCase() + ".fullgames";
-    this.vipPerm = plugin.getName().toLowerCase() + ".vip";
-    this.mvpPerm = plugin.getName().toLowerCase() + ".mvp";
-    this.elitePerm = plugin.getName().toLowerCase() + ".elite";
-    this.joinPerm = plugin.getName().toLowerCase() + ".join.<arena>";
+    this.joinFullPerm = plugin.getPluginNamePrefixLong() + ".fullgames";
+    this.joinPerm = plugin.getPluginNamePrefixLong() + ".join.<arena>";
+    this.forceStartPerm = plugin.getPluginNamePrefixLong() + ".admin.forcestart";
     setupPermissions();
   }
 
@@ -57,48 +52,26 @@ public class PermissionsManager {
     joinFullPerm = joinFullGames;
   }
 
-  public String getVip() {
-    return vipPerm;
-  }
-
-  private void setVip(String vip) {
-    vipPerm = vip;
-  }
-
-  public String getMvp() {
-    return mvpPerm;
-  }
-
-  private void setMvp(String mvp) {
-    mvpPerm = mvp;
-  }
-
-  public String getElite() {
-    return elitePerm;
-  }
-
-  private void setElite(String elite) {
-    elitePerm = elite;
-  }
-
   public String getJoinPerm() {
     return joinPerm;
   }
 
   private void setJoinPerm(String joinPerm) {
-    joinPerm = joinPerm;
+    this.joinPerm = joinPerm;
   }
 
-  public boolean isPremium(Player p) {
-    return p.hasPermission(vipPerm) || p.hasPermission(mvpPerm) || p.hasPermission(elitePerm);
+  public void setForceStartPerm(String forceStartPerm) {
+    this.forceStartPerm = forceStartPerm;
+  }
+
+  public String getForceStart() {
+    return forceStartPerm;
   }
 
   private void setupPermissions() {
-    setJoinFullGames(plugin.getConfig().getString("Basic-Permissions.Full-Games-Permission", plugin.getName().toLowerCase() + ".fullgames"));
-    setVip(plugin.getConfig().getString("Basic-Permissions.Vip-Permission", plugin.getName().toLowerCase() + ".vip"));
-    setMvp(plugin.getConfig().getString("Basic-Permissions.Mvp-Permission", plugin.getName().toLowerCase() + ".mvp"));
-    setElite(plugin.getConfig().getString("Basic-Permissions.Elite-Permission", plugin.getName().toLowerCase() + ".elite"));
-    setJoinPerm(plugin.getConfig().getString("Basic-Permissions.Join-Permission", plugin.getName().toLowerCase() + ".join.<arena>"));
+    setJoinFullGames(plugin.getConfig().getString("Basic-Permissions.Full-Games", plugin.getPluginNamePrefixLong() + ".fullgames"));
+    setJoinPerm(plugin.getConfig().getString("Basic-Permissions.Join", plugin.getPluginNamePrefixLong() + ".join.<arena>"));
+    setForceStartPerm(plugin.getConfig().getString("Basic-Permissions.Forcestart", plugin.getPluginNamePrefixLong() + ".admin.forcestart"));
     plugin.getDebugger().debug("Basic permissions registered");
   }
 

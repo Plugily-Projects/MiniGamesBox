@@ -25,6 +25,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngine;
 
@@ -244,7 +246,6 @@ public class RewardsFactory {
     formatted = StringUtils.replace(formatted, "%ARENA-ID%", arena.getId());
     formatted = StringUtils.replace(formatted, "%MAPNAME%", arena.getMapName());
     formatted = StringUtils.replace(formatted, "%PLAYERAMOUNT%", Integer.toString(arena.getPlayers().size()));
-    formatted = StringUtils.replace(formatted, "%WAVE%", Integer.toString(arena.getWave()));
     return formatted;
   }
 

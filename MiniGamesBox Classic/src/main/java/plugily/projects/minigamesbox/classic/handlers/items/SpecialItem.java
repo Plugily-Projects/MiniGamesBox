@@ -39,17 +39,17 @@ public class SpecialItem {
 
   static {
     //specialItems.put("KIT_SELECTOR", new SpecialItem("Kit-Selector", false));
-    specialItems.put("LOBBY_LEAVE_ITEM", new SpecialItem("Lobby-Leave", true, rewards));
-    specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, rewards));
-    specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, rewards));
-    specialItems.put("SPECTATOR_OPTIONS", new SpecialItem("Spectator-Option", true, rewards));
-    specialItems.put("SPECTATOR_LEAVE_ITEM", new SpecialItem("Spectator-Leave", true, rewards));
-    specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, rewards));
+    specialItems.put("LOBBY_LEAVE_ITEM", new SpecialItem("Lobby-Leave", true, null));
+    specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null));
+    specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null));
+    specialItems.put("SPECTATOR_OPTIONS", new SpecialItem("Spectator-Option", true, null));
+    specialItems.put("SPECTATOR_LEAVE_ITEM", new SpecialItem("Spectator-Leave", true, null));
+    specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null));
   }
 
   private final String path;
   private final String permission;
-  public static final SpecialItem INVALID_ITEM = new SpecialItem("INVALID", new ItemStack(Material.BEDROCK), -1, SpecialItem.DisplayStage.LOBBY, rewards);
+  public static final SpecialItem INVALID_ITEM = new SpecialItem("INVALID", new ItemStack(Material.BEDROCK), -1, SpecialItem.DisplayStage.LOBBY, null);
   private final ItemStack itemStack;
   private int slot;
   private final SpecialItem.DisplayStage displayStage;

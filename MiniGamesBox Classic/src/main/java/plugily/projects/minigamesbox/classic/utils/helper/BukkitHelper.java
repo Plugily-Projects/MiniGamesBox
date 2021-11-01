@@ -154,7 +154,7 @@ public class BukkitHelper {
   }
 
   public boolean checkIsInGameInstance(Player player) {
-    if(ArenaRegistry.getArena(player) == null) {
+    if(plugin.getArenaRegistry().getArena(player) == null) {
       player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_NOT_PLAYING));
       return false;
     }

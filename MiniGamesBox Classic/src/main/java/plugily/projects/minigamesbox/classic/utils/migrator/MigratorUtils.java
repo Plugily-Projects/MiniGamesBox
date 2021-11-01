@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 09.03.2019
+ * Created at 01.11.2021
  * <p>
  * Manage file strings without YamlConfiguration
  * and without losing comments

@@ -54,7 +54,7 @@ public class JoinEvent implements Listener {
   @EventHandler
   public void onJoinCheckVersion(PlayerJoinEvent event) {
     //we want to be the first :)
-    if(!plugin.getConfig().getBoolean("Update-Notifier.Enabled", true) || !event.getPlayer().hasPermission("villagedefense.updatenotify")) {
+    if(!plugin.getConfig().getBoolean("Update-Notifier.Enabled", true) || !event.getPlayer().hasPermission(plugin.getPluginNamePrefixLong() + ".updatenotify")) {
       return;
     }
     Bukkit.getScheduler().runTaskLater(plugin, () -> UpdateChecker.get().requestUpdateCheck().whenComplete((result, exception) -> {
@@ -63,14 +63,14 @@ public class JoinEvent implements Listener {
       }
       if(result.getNewestVersion().contains("b")) {
         event.getPlayer().sendMessage("");
-        event.getPlayer().sendMessage(ChatColor.BOLD + plugin.getPluginPrefix() + "UPDATE NOTIFY");
-        event.getPlayer().sendMessage(ChatColor.RED + plugin.getPluginPrefix() + "BETA version of software is ready for update! Proceed with caution.");
-        event.getPlayer().sendMessage(ChatColor.YELLOW + plugin.getPluginPrefix() + "Current version: " + ChatColor.RED + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Latest version: " + ChatColor.GREEN + result.getNewestVersion());
+        event.getPlayer().sendMessage(ChatColor.BOLD + plugin.getPluginMessagePrefix() + "UPDATE NOTIFY");
+        event.getPlayer().sendMessage(ChatColor.RED + plugin.getPluginMessagePrefix() + "BETA version of software is ready for update! Proceed with caution.");
+        event.getPlayer().sendMessage(ChatColor.YELLOW + plugin.getPluginMessagePrefix() + "Current version: " + ChatColor.RED + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Latest version: " + ChatColor.GREEN + result.getNewestVersion());
       } else {
         event.getPlayer().sendMessage("");
-        event.getPlayer().sendMessage(ChatColor.BOLD + plugin.getPluginPrefix() + "UPDATE NOTIFY");
-        event.getPlayer().sendMessage(ChatColor.GREEN + plugin.getPluginPrefix() + "Software is ready for update! Download it to keep with latest changes and fixes.");
-        event.getPlayer().sendMessage(ChatColor.YELLOW + plugin.getPluginPrefix() + "Current version: " + ChatColor.RED + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Latest version: " + ChatColor.GREEN + result.getNewestVersion());
+        event.getPlayer().sendMessage(ChatColor.BOLD + plugin.getPluginMessagePrefix() + "UPDATE NOTIFY");
+        event.getPlayer().sendMessage(ChatColor.GREEN + plugin.getPluginMessagePrefix() + "Software is ready for update! Download it to keep with latest changes and fixes.");
+        event.getPlayer().sendMessage(ChatColor.YELLOW + plugin.getPluginMessagePrefix() + "Current version: " + ChatColor.RED + plugin.getDescription().getVersion() + ChatColor.YELLOW + " Latest version: " + ChatColor.GREEN + result.getNewestVersion());
       }
     }), 25);
   }

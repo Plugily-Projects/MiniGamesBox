@@ -28,6 +28,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaRegistry;
 import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
 import plugily.projects.minigamesbox.classic.events.ChatEvents;
 import plugily.projects.minigamesbox.classic.events.Events;
@@ -81,7 +83,9 @@ import java.util.logging.Level;
  */
 public class Main extends JavaPlugin {
 
-  private final String pluginPrefix = "[" + getDescription().getName() + "] ";
+  private final String pluginMessagePrefix = "[" + getDescription().getName() + "] ";
+  private String pluginNamePrefix;
+  private String pluginNamePrefixLong;
   private MessageUtils messageUtils;
   private ConfigPreferences configPreferences;
   private PartyHandler partyHandler;
@@ -105,6 +109,8 @@ public class Main extends JavaPlugin {
   private FileConfiguration languageConfig;
   private FileConfiguration internalData;
   private ChatManager chatManager;
+  private ArenaRegistry arenaRegistry;
+  private KitRegistry kitRegistry;
 
   @TestOnly
   public Main() {
@@ -125,7 +131,7 @@ public class Main extends JavaPlugin {
       return;
     }
     if(!ServiceRegistry.registerService(this)) {
-      debugger.sendConsoleMsg(pluginPrefix + "&cSadly, we can't connect to Plugily Projects Services. Some functions may won't work. e.g. Translations, Automatic Error Report");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we can't connect to Plugily Projects Services. Some functions may won't work. e.g. Translations, Automatic Error Report");
     }
     exceptionLogHandler = new ExceptionLogHandler(this);
     messageUtils = new MessageUtils(this);
@@ -150,10 +156,14 @@ public class Main extends JavaPlugin {
     }
     internalData = ConfigUtils.getConfig(this, "/internal/data");
     //check for updates
-    checkUpdate(internalData.getInt("PluginId.Spigot", 0));
+    checkUpdate(internalData.getInt("Plugin.Id.Spigot", 0));
 
     //start metrics
-    setupPluginMetrics(internalData.getInt("PluginId.BStats", 0));
+    setupPluginMetrics(internalData.getInt("Plugin.Id.BStats", 0));
+
+    //set command prefixes
+    pluginNamePrefix = internalData.getString("Plugin.Prefix.Default", getName().toLowerCase());
+    pluginNamePrefixLong = internalData.getString("Plugin.Prefix.Default-Long", getName().toLowerCase());
 
     //setup InvManager
     FastInvManager.register(this);
@@ -184,12 +194,11 @@ public class Main extends JavaPlugin {
 
     specialItemManager = new SpecialItemManager(this);
     kitMenuHandler = new KitMenuHandler(this);
-    new KitRegistry(this);
+    kitRegistry = new KitRegistry(this);
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);
     signManager = new SignManager(this);
-    ArenaRegistry.registerArenas();
     signManager.loadSigns();
     signManager.updateSigns();
 
@@ -202,7 +211,7 @@ public class Main extends JavaPlugin {
 
     holidayManager = new HolidayManager(this);
     if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      debugger.debug(pluginPrefix + "Hooking into PlaceholderAPI");
+      debugger.debug(pluginMessagePrefix + "Hooking into PlaceholderAPI");
       placeholderManager = new PlaceholderManager(this);
     }
     permissionsManager = new PermissionsManager(this);
@@ -221,6 +230,11 @@ public class Main extends JavaPlugin {
     new Events(this);
     new LobbyEvents(this);
     new SpectatorItemEvents(this);
+
+
+    //arena
+    arenaRegistry = new ArenaRegistry(this);
+    arenaRegistry.registerArenas();
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -228,16 +242,16 @@ public class Main extends JavaPlugin {
       Class.forName("org.spigotmc.SpigotConfig");
     } catch(Exception e) {
       messageUtils.thisVersionIsNotSupported();
-      debugger.sendConsoleMsg(pluginPrefix + "&cYour server software is not supported by " + getDescription().getName() + "!");
-      debugger.sendConsoleMsg(pluginPrefix + "&cWe support Spigot and Spigot forks only! Shutting off...");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&cYour server software is not supported by " + getDescription().getName() + "!");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&cWe support Spigot and Spigot forks only! Shutting off...");
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
     }
     if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_8_R3)) {
       messageUtils.thisVersionIsNotSupported();
-      debugger.sendConsoleMsg(pluginPrefix + "&cYour server version is not supported by " + getDescription().getName() + "!");
-      debugger.sendConsoleMsg(pluginPrefix + "&cSadly, we must shut off. Maybe you consider changing your server version?");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&cYour server version is not supported by " + getDescription().getName() + "!");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we must shut off. Maybe you consider changing your server version?");
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
@@ -257,6 +271,7 @@ public class Main extends JavaPlugin {
       throw new IllegalStateException("Filename " + filename + " already on the list!");
     }
     fileNames.add(filename);
+    setupFiles();
   }
 
   private void setupFiles() {
@@ -278,21 +293,76 @@ public class Main extends JavaPlugin {
       }
       if(result.getNewestVersion().contains("b")) {
         if(getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true)) {
-          debugger.sendConsoleMsg(pluginPrefix + "Your software is ready for update! However it's a BETA VERSION. Proceed with caution.");
-          debugger.sendConsoleMsg(pluginPrefix + "Current version %old%, latest version %new%".replace("%old%", getDescription().getVersion()).replace("%new%",
+          debugger.sendConsoleMsg(pluginMessagePrefix + "Your software is ready for update! However it's a BETA VERSION. Proceed with caution.");
+          debugger.sendConsoleMsg(pluginMessagePrefix + "Current version %old%, latest version %new%".replace("%old%", getDescription().getVersion()).replace("%new%",
               result.getNewestVersion()));
         }
         return;
       }
       messageUtils.updateIsHere();
-      debugger.sendConsoleMsg(pluginPrefix + "&aYour " + getDescription().getName() + " plugin is outdated! Download it to keep with latest changes and fixes.");
-      debugger.sendConsoleMsg(pluginPrefix + "&aDisable this option in config.yml if you wish.");
-      debugger.sendConsoleMsg(pluginPrefix + "&eCurrent version: &c" + getDescription().getVersion() + " &eLatest version: &a" + result.getNewestVersion());
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&aYour " + getDescription().getName() + " plugin is outdated! Download it to keep with latest changes and fixes.");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&aDisable this option in config.yml if you wish.");
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&eCurrent version: &c" + getDescription().getVersion() + " &eLatest version: &a" + result.getNewestVersion());
     });
   }
 
-  public String getPluginPrefix() {
-    return pluginPrefix;
+  private void setupPluginMetrics(int pluginMetricsId) {
+    Metrics metrics = new Metrics(this, pluginMetricsId);
+
+    metrics.addCustomChart(new Metrics.SimplePie("database_enabled", () -> String.valueOf(configPreferences
+        .getOption("DATABASE"))));
+    metrics.addCustomChart(new Metrics.SimplePie("locale_used", () -> LanguageManager.getPluginLocale().getPrefix()));
+    metrics.addCustomChart(new Metrics.SimplePie("update_notifier", () -> {
+      if(getConfig().getBoolean("Update-Notifier.Enabled", true)) {
+        return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Enabled with beta notifier" : "Enabled";
+      }
+
+      return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Beta notifier only" : "Disabled";
+    }));
+  }
+
+
+  @Override
+  public void onDisable() {
+    if(forceDisable) {
+      return;
+    }
+    debugger.debug("System disable initialized");
+    long start = System.currentTimeMillis();
+
+    Bukkit.getLogger().removeHandler(exceptionLogHandler);
+    for(Arena arena : arenaRegistry.getArenas()) {
+      arena.getScoreboardManager().stopAllScoreboards();
+
+      for(Player player : arena.getPlayers()) {
+        arena.teleportToEndLocation(player);
+        player.setFlySpeed(0.1f);
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
+        arena.doBarAction(Arena.BarAction.REMOVE, player);
+        if(configPreferences.getOption("INVENTORY_MANAGER")) {
+          InventorySerializer.loadInventory(this, player);
+        }
+      }
+
+      arena.getMapRestorerManager().fullyRestoreArena();
+    }
+    userManager.getDatabase().disable();
+    if(configPreferences.getOption("HOLOGRAMS")) {
+      leaderboardRegistry.disableHolograms();
+    }
+    for(ArmorStand armorStand : hologramManager.getArmorStands()) {
+      armorStand.remove();
+      armorStand.setCustomNameVisible(false);
+    }
+    hologramManager.getArmorStands().clear();
+    debugger.debug(pluginMessagePrefix + "System disable finished took {0}ms", System.currentTimeMillis() - start);
+  }
+
+
+  public String getPluginMessagePrefix() {
+    return pluginMessagePrefix;
   }
 
   public Debugger getDebugger() {
@@ -383,58 +453,28 @@ public class Main extends JavaPlugin {
     return internalData;
   }
 
-  private void setupPluginMetrics(int pluginMetricsId) {
-    Metrics metrics = new Metrics(this, pluginMetricsId);
-
-    metrics.addCustomChart(new Metrics.SimplePie("database_enabled", () -> String.valueOf(configPreferences
-        .getOption("DATABASE"))));
-    metrics.addCustomChart(new Metrics.SimplePie("locale_used", () -> LanguageManager.getPluginLocale().getPrefix()));
-    metrics.addCustomChart(new Metrics.SimplePie("update_notifier", () -> {
-      if(getConfig().getBoolean("Update-Notifier.Enabled", true)) {
-        return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Enabled with beta notifier" : "Enabled";
-      }
-
-      return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Beta notifier only" : "Disabled";
-    }));
+  public String getPluginNamePrefix() {
+    return pluginNamePrefix;
   }
 
+  public String getPluginNamePrefixLong() {
+    return pluginNamePrefixLong;
+  }
 
-  @Override
-  public void onDisable() {
-    if(forceDisable) {
-      return;
-    }
-    debugger.debug("System disable initialized");
-    long start = System.currentTimeMillis();
+  public String getCommandAdminPrefix() {
+    return pluginNamePrefix + "a";
+  }
 
-    Bukkit.getLogger().removeHandler(exceptionLogHandler);
-    for(Arena arena : ArenaRegistry.getArenas()) {
-      arena.getScoreboardManager().stopAllScoreboards();
+  public String getCommandAdminPrefixLong() {
+    return pluginNamePrefixLong + "admin";
+  }
 
-      for(Player player : arena.getPlayers()) {
-        arena.teleportToEndLocation(player);
-        player.setFlySpeed(0.1f);
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
-        player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
-        arena.doBarAction(Arena.BarAction.REMOVE, player);
-        if(configPreferences.getOption(ConfigPreferences.Option.INVENTORY_MANAGER_ENABLED)) {
-          InventorySerializer.loadInventory(this, player);
-        }
-      }
+  public ArenaRegistry getArenaRegistry() {
+    return arenaRegistry;
+  }
 
-      arena.getMapRestorerManager().fullyRestoreArena();
-    }
-    userManager.getDatabase().disable();
-    if(configPreferences.getOption("HOLOGRAMS")) {
-      leaderboardRegistry.disableHolograms();
-    }
-    for(ArmorStand armorStand : hologramManager.getArmorStands()) {
-      armorStand.remove();
-      armorStand.setCustomNameVisible(false);
-    }
-    hologramManager.getArmorStands().clear();
-    debugger.debug(pluginPrefix + "System disable finished took {0}ms", System.currentTimeMillis() - start);
+  public KitRegistry getKitRegistry() {
+    return kitRegistry;
   }
 
   /*
@@ -461,7 +501,7 @@ public class Main extends JavaPlugin {
   }
 
   private void startInitiableClasses() {
-    ArenaRegistry.init(this);
+
     ArenaManager.init(this);
 
     SetupInventory.init(this);

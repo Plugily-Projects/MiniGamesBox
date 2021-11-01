@@ -20,16 +20,19 @@
 package plugily.projects.minigamesbox.classic.api.event;
 
 import org.bukkit.event.Event;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 
 /**
- * Represents Village Defense game related events.
+ * Represents Plugily Projects game related events.
  */
 public abstract class PlugilyEvent extends Event {
 
   protected Arena arena;
+  protected String pluginName;
 
   public PlugilyEvent(Arena eventArena) {
     arena = eventArena;
+    pluginName = eventArena.getPlugin().getName();
   }
 
   /**
@@ -39,5 +42,9 @@ public abstract class PlugilyEvent extends Event {
    */
   public Arena getArena() {
     return arena;
+  }
+
+  public String getPluginName() {
+    return pluginName;
   }
 }

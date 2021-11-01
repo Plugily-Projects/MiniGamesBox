@@ -19,17 +19,15 @@
 
 package plugily.projects.minigamesbox.classic.events;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,13 +35,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityCombustByBlockEvent;
-import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -52,6 +46,10 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaManager;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -80,7 +78,7 @@ public class Events implements Listener {
       return;
     }
 
-    for(Arena arena : ArenaRegistry.getArenas()) {
+    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
       Location startLoc = arena.getStartLocation();
 
       if(startLoc != null && event.getEntity().getWorld().equals(startLoc.getWorld())
@@ -94,14 +92,14 @@ public class Events implements Listener {
 
   @EventHandler
   public void onDrop(PlayerDropItemEvent event) {
-    if(ArenaRegistry.getArena(event.getPlayer()) != null && (plugin.getUserManager().getUser(event.getPlayer()).isSpectator() || event.getItemDrop().getItemStack().getType() == Material.SADDLE)) {
+    if(plugin.getArenaRegistry().getArena(event.getPlayer()) != null && (plugin.getUserManager().getUser(event.getPlayer()).isSpectator() || event.getItemDrop().getItemStack().getType() == Material.SADDLE)) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler
   public void onExplosionCancel(EntityExplodeEvent event) {
-    for(Arena arena : ArenaRegistry.getArenas()) {
+    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
       Location start = arena.getStartLocation();
       if(start.getWorld().getName().equals(event.getLocation().getWorld().getName())
           && start.distance(event.getLocation()) < 300) {
@@ -113,7 +111,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onCommandExecute(PlayerCommandPreprocessEvent event) {
-    Arena arena = ArenaRegistry.getArena(event.getPlayer());
+    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena == null || !plugin.getConfig().getBoolean("Block-Commands-In-Game", true)) {
       return;
     }
@@ -144,7 +142,7 @@ public class Events implements Listener {
     if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.PHYSICAL) {
       return;
     }
-    Arena arena = ArenaRegistry.getArena(event.getPlayer());
+    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena == null) {
       return;
     }
@@ -177,7 +175,7 @@ public class Events implements Listener {
     if(!ItemUtils.isItemStackNamed(itemStack)) {
       return false;
     }
-    Arena arena = ArenaRegistry.getArena(player);
+    Arena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       return false;
     }
@@ -187,12 +185,17 @@ public class Events implements Listener {
 
   @EventHandler
   public void onItemMove(InventoryClickEvent e) {
-    if(e.getWhoClicked() instanceof Player && ArenaRegistry.isInArena((Player) e.getWhoClicked())) {
-      if(ArenaRegistry.getArena(((Player) e.getWhoClicked())).getArenaState() != ArenaState.IN_GAME) {
-        if(e.getClickedInventory() == e.getWhoClicked().getInventory()) {
-          if(e.getView().getType() == InventoryType.CRAFTING || e.getView().getType() == InventoryType.PLAYER) {
-            e.setResult(Event.Result.DENY);
-          }
+    if(!(e.getWhoClicked() instanceof Player)) {
+      return;
+    }
+    Arena arena = plugin.getArenaRegistry().getArena(((Player) e.getWhoClicked()));
+    if(arena == null) {
+      return;
+    }
+    if(arena.getArenaState() != ArenaState.IN_GAME) {
+      if(e.getClickedInventory() == e.getWhoClicked().getInventory()) {
+        if(e.getView().getType() == InventoryType.CRAFTING || e.getView().getType() == InventoryType.PLAYER) {
+          e.setResult(Event.Result.DENY);
         }
       }
     }
@@ -207,7 +210,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onDecay(LeavesDecayEvent event) {
-    for(Arena arena : ArenaRegistry.getArenas()) {
+    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
       Location startLoc = arena.getStartLocation();
 
       if(startLoc != null && event.getBlock().getWorld().equals(startLoc.getWorld()) && event.getBlock().getLocation().distance(startLoc) < 150) {
@@ -218,18 +221,11 @@ public class Events implements Listener {
   }
 
   @EventHandler
-  public void onEntityLeash(PlayerLeashEntityEvent event) {
-    if(event.getEntity() instanceof Villager) {
-      ((Villager) event.getEntity()).setLeashHolder(event.getPlayer());
-    }
-  }
-
-  @EventHandler
   public void onFoodLevelChange(FoodLevelChangeEvent event) {
     if(event.getEntity().getType() != EntityType.PLAYER) {
       return;
     }
-    Arena arena = ArenaRegistry.getArena((Player) event.getEntity());
+    Arena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
     if(arena == null) {
       return;
     }
@@ -241,37 +237,15 @@ public class Events implements Listener {
 
   @EventHandler
   public void onCraft(CBPlayerInteractEvent event) {
-    if(ArenaRegistry.isInArena(event.getPlayer()) && event.getPlayer().getTargetBlock(null, 7).getType() == XMaterial.CRAFTING_TABLE.parseMaterial()) {
+    if(plugin.getArenaRegistry().isInArena(event.getPlayer()) && event.getPlayer().getTargetBlock(null, 7).getType() == XMaterial.CRAFTING_TABLE.parseMaterial()) {
       event.setCancelled(true);
     }
   }
 
-  /**
-   * Triggers when something combusts in the world.
-   * Thanks to @HomieDion for part of this class!
-   */
-  @EventHandler(ignoreCancelled = true)
-  public void onCombust(EntityCombustEvent e) {
-    // Ignore if this is caused by an event lower down the chain.
-    if(e instanceof EntityCombustByEntityEvent || e instanceof EntityCombustByBlockEvent
-        || !(e.getEntity() instanceof Creature)
-        || e.getEntity().getWorld().getEnvironment() != World.Environment.NORMAL) {
-      return;
-    }
-
-    for(Arena arena : ArenaRegistry.getArenas()) {
-      if(arena.getEnemies().contains(e.getEntity())) {
-        e.setCancelled(true);
-        break;
-      }
-    }
-  }
-
   @EventHandler(priority = EventPriority.HIGH)
-  //highest priority to fully protect our game (i didn't set it because my test server was destroyed, n-no......)
   public void onHangingBreakEvent(HangingBreakByEntityEvent event) {
     if(event.getEntity() instanceof ItemFrame || event.getEntity() instanceof Painting) {
-      if(event.getRemover() instanceof Player && ArenaRegistry.isInArena((Player) event.getRemover())) {
+      if(event.getRemover() instanceof Player && plugin.getArenaRegistry().isInArena((Player) event.getRemover())) {
         event.setCancelled(true);
         return;
       }
@@ -279,7 +253,7 @@ public class Events implements Listener {
         return;
       }
       Projectile projectile = (Projectile) event.getRemover();
-      if(projectile.getShooter() instanceof Player && ArenaRegistry.isInArena((Player) projectile.getShooter())) {
+      if(projectile.getShooter() instanceof Player && plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
         event.setCancelled(true);
       }
     }
@@ -294,11 +268,11 @@ public class Events implements Listener {
     if(livingEntity.getType() != EntityType.ARMOR_STAND) {
       return;
     }
-    if(e.getDamager() instanceof Player && ArenaRegistry.isInArena((Player) e.getDamager())) {
+    if(e.getDamager() instanceof Player && plugin.getArenaRegistry().isInArena((Player) e.getDamager())) {
       e.setCancelled(true);
     } else if(e.getDamager() instanceof Projectile) {
       Projectile projectile = (Projectile) e.getDamager();
-      if(projectile.getShooter() instanceof Player && ArenaRegistry.isInArena((Player) projectile.getShooter())) {
+      if(projectile.getShooter() instanceof Player && plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
         e.setCancelled(true);
         return;
       }
@@ -308,7 +282,7 @@ public class Events implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onInteractWithArmorStand(PlayerArmorStandManipulateEvent event) {
-    if(ArenaRegistry.isInArena(event.getPlayer())) {
+    if(plugin.getArenaRegistry().isInArena(event.getPlayer())) {
       event.setCancelled(true);
     }
   }

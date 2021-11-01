@@ -43,6 +43,8 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
@@ -143,7 +145,7 @@ public class SpectatorEvents implements Listener {
     if(!plugin.getUserManager().getUser(player).isSpectator()) {
       return;
     }
-    Arena arena = ArenaRegistry.getArena(player);
+    Arena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       return;
     }
@@ -203,7 +205,7 @@ public class SpectatorEvents implements Listener {
 
   @EventHandler
   public void onSpectate(PlayerDropItemEvent event) {
-    Arena arena = ArenaRegistry.getArena(event.getPlayer());
+    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena != null && (arena.getArenaState() != ArenaState.IN_GAME || plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
       event.setCancelled(true);
     }
@@ -218,7 +220,7 @@ public class SpectatorEvents implements Listener {
 
   @EventHandler
   public void onRightClick(CBPlayerInteractEvent event) {
-    if(ArenaRegistry.getArena(event.getPlayer()) != null && plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
+    if(plugin.getArenaRegistry().getArena(event.getPlayer()) != null && plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
       event.setCancelled(true);
     }
   }
@@ -227,7 +229,7 @@ public class SpectatorEvents implements Listener {
   public void onInventoryClick(InventoryClickEvent event) {
     org.bukkit.inventory.Inventory clicked = event.getClickedInventory();
     Player who = (Player) event.getWhoClicked();
-    if(clicked != null && clicked.getType() == InventoryType.PLAYER && clicked.getType() == InventoryType.CRAFTING && ArenaRegistry.getArena(who) != null && plugin.getUserManager().getUser(who).isSpectator()) {
+    if(clicked != null && clicked.getType() == InventoryType.PLAYER && clicked.getType() == InventoryType.CRAFTING && plugin.getArenaRegistry().getArena(who) != null && plugin.getUserManager().getUser(who).isSpectator()) {
       event.setCancelled(true);
     }
   }

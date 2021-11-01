@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -57,19 +58,19 @@ public class SpectatorItemEvents implements Listener {
     if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.PHYSICAL) {
       return;
     }
-    Arena arena = ArenaRegistry.getArena(e.getPlayer());
+    Arena arena = plugin.getArenaRegistry().getArena(e.getPlayer());
     ItemStack stack = VersionUtils.getItemInHand(e.getPlayer());
     if(arena == null || !ItemUtils.isItemStackNamed(stack)) {
       return;
     }
-    String key = plugin.getSpecialItemManager().getRelatedSpecialItem(stack).getName();
+    ItemStack key = plugin.getSpecialItemManager().getRelatedSpecialItem(stack).getItemStack();
     if(key == null) {
       return;
     }
-    if(plugin.getSpecialItemManager().getRelatedSpecialItem(stack).getName().equals(SpecialItemManager.SpecialItems.PLAYERS_LIST.getName())) {
+    if(key == plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").getItemStack()) {
       e.setCancelled(true);
       openSpectatorMenu(e.getPlayer(), arena);
-    } else if(plugin.getSpecialItemManager().getRelatedSpecialItem(stack).getName().equals(SpecialItemManager.SpecialItems.SPECTATOR_OPTIONS.getName())) {
+    } else if(key == plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_OPTIONS").getItemStack()) {
       e.setCancelled(true);
       spectatorSettingsMenu.openSpectatorSettingsMenu(e.getPlayer());
     }

@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.powerup;
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 
 /**
  * @author Tigerpanzer_02

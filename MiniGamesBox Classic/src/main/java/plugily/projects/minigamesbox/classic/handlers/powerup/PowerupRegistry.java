@@ -23,11 +23,11 @@ import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerPowerupPickupEvent;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
@@ -78,11 +78,11 @@ public class PowerupRegistry {
 
 
     for(String key : config.getKeys(false)) {
-      if("Version".equals(key)) {
+      if("Version" .equals(key)) {
         continue;
       }
 
-      Material mat = XMaterial.matchXMaterial(config.getString(key + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
+      XMaterial mat = XMaterial.matchXMaterial(config.getString(key + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK);
       String name = chatManager.colorRawMessage(config.getString(key + ".name"));
       String description = chatManager.colorRawMessage(config.getString(key + ".description"));
 
@@ -137,7 +137,7 @@ public class PowerupRegistry {
         .appendItem(powerup.getMaterial().parseItem()).appendLine(powerup.getName());
 
     hologram.setPickupHandler(player -> {
-      if(ArenaRegistry.getArena(player) != arena) {
+      if(plugin.getArenaRegistry().getArena(player) != arena) {
         return;
       }
 

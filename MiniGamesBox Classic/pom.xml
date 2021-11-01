@@ -75,6 +75,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>me.tigerhix.lib</groupId>
+            <artifactId>scoreboard</artifactId>
+            <version>1.0.9</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>8.4.0</version>
@@ -156,6 +162,10 @@
                         <relocation>
                             <pattern>plugily.projects.commonsbox</pattern>
                             <shadedPattern>plugily.projects.minigamesbox.classic.commonsbox</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.tigerhix.lib.scoreboard</pattern>
+                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.scoreboard</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

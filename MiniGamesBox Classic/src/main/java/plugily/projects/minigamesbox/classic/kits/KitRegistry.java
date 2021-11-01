@@ -34,13 +34,13 @@ import java.util.logging.Level;
  */
 public class KitRegistry {
 
-  private static final List<Kit> kits = new java.util.ArrayList<>();
-  private static Kit defaultKit;
-  private static Main plugin;
+  private final List<Kit> kits = new java.util.ArrayList<>();
+  private Kit defaultKit;
+  private final Main plugin;
 
 
   public KitRegistry(Main plugin) {
-    KitRegistry.plugin = plugin;
+    this.plugin = plugin;
     setupGameKits();
   }
 
@@ -49,7 +49,7 @@ public class KitRegistry {
    *
    * @param kit Kit to register
    */
-  public static void registerKit(Kit kit) {
+  public void registerKit(Kit kit) {
     kits.add(kit);
   }
 
@@ -58,7 +58,7 @@ public class KitRegistry {
    *
    * @return default game kit
    */
-  public static Kit getDefaultKit() {
+  public Kit getDefaultKit() {
     return defaultKit;
   }
 
@@ -67,8 +67,8 @@ public class KitRegistry {
    *
    * @param defaultKit default kit to set, must be FreeKit
    */
-  public static void setDefaultKit(Kit defaultKit) {
-    KitRegistry.defaultKit = defaultKit;
+  public void setDefaultKit(Kit defaultKit) {
+    this.defaultKit = defaultKit;
   }
 
   /**
@@ -76,12 +76,12 @@ public class KitRegistry {
    *
    * @return list of all registered kits
    */
-  public static List<Kit> getKits() {
+  public List<Kit> getKits() {
     return kits;
   }
 
   //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
-  private static void setupGameKits() {
+  private void setupGameKits() {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "kits");
     for(Class<?> kitClass : classKitNames) {
       if(config.getBoolean("Enabled-Game-Kits." + kitClass.getSimpleName().replace("Kit", ""))) {

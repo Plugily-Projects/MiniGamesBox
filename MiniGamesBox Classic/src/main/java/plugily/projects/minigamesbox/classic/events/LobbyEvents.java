@@ -31,15 +31,21 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 09.10.2021
  */
-public final class LobbyEvents implements Listener {
+public class LobbyEvents implements Listener {
+
+  private final Main plugin;
 
   public LobbyEvents(Main plugin) {
+    this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
@@ -49,10 +55,10 @@ public final class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    if(ArenaRegistry.getArena(player) == null) {
+    Arena arena = plugin.getArenaRegistry().getArena(player);
+    if(arena == null) {
       return;
     }
-    Arena arena = ArenaRegistry.getArena(player);
     if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
       event.setCancelled(true);
     }
@@ -64,7 +70,7 @@ public final class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    Arena arena = ArenaRegistry.getArena(player);
+    Arena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
       return;
     }
@@ -75,7 +81,7 @@ public final class LobbyEvents implements Listener {
   @EventHandler
   public void onItemFrameRotate(PlayerInteractEntityEvent event) {
     Player player = event.getPlayer();
-    Arena arena = ArenaRegistry.getArena(player);
+    Arena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
       return;
     }
@@ -90,7 +96,7 @@ public final class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    Arena arena = ArenaRegistry.getArena(player);
+    Arena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
       return;
     }

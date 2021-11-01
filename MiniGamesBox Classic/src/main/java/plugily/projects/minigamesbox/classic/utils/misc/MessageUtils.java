@@ -22,9 +22,9 @@ package plugily.projects.minigamesbox.classic.utils.misc;
 import plugily.projects.minigamesbox.classic.Main;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 11.02.2018
+ * Created at 01.11.2021
  */
 public class MessageUtils {
 

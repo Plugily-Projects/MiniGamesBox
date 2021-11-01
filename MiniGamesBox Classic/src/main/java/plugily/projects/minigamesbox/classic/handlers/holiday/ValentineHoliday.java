@@ -31,6 +31,7 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -50,7 +51,7 @@ public class ValentineHoliday implements Holiday, Listener {
   public void enable(Main plugin) {
     this.plugin = plugin;
     Powerup powerup = new Powerup("VALENTINES_HEALING", plugin.getChatManager().colorRawMessage("&c&l<3"),
-        plugin.getChatManager().colorRawMessage("&d&lHappy Valentine's Day!"), XMaterial.POPPY, pickup -> {
+        plugin.getChatManager().colorRawMessage("&d&lHappy Valentine's Day!"), XMaterial.POPPY, null, null, null, pickup -> {
       pickup.getPlayer().setHealth(VersionUtils.getMaxHealth(pickup.getPlayer()));
       VersionUtils.sendTitle(pickup.getPlayer(), pickup.getPowerup().getDescription(), 5, 30, 5);
     });
@@ -60,14 +61,14 @@ public class ValentineHoliday implements Holiday, Listener {
 
   @EventHandler
   public void onArrowShoot(EntityShootBowEvent e) {
-    if (e.getEntityType() != org.bukkit.entity.EntityType.PLAYER || ArenaRegistry.getArena((Player) e.getEntity()) == null) {
+    if(e.getEntityType() != org.bukkit.entity.EntityType.PLAYER || plugin.getArenaRegistry().getArena((Player) e.getEntity()) == null) {
       return;
     }
     Entity en = e.getProjectile();
     new BukkitRunnable() {
       @Override
       public void run() {
-        if (en.isOnGround() || en.isDead()) {
+        if(en.isOnGround() || en.isDead()) {
           cancel();
           return;
         }

@@ -1,6 +1,6 @@
 /*
- * Village Defense - Protect villagers from hordes of zombies
- * Copyright (C) 2021  Plugily Projects - maintained by 2Wild4You, Tigerpanzer_02 and contributors
+ * MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package plugily.projects.minigamesbox.classic.user;
@@ -23,13 +24,17 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by Tom on 27/07/2014.
+ * @author Tigerpanzer_02
+ * <p>
+ * Created at 01.11.2021
  */
 public class User {
 
@@ -38,7 +43,7 @@ public class User {
   private final UUID uuid;
   private boolean spectator = false;
   private boolean permanentSpectator = false;
-  private Kit kit = KitRegistry.getDefaultKit();
+  private Kit kit = plugin.getKitRegistry().getDefaultKit();
   private final Map<StatisticType, Integer> stats = new HashMap<>();
   private final Map<String, Long> cooldowns = new HashMap<>();
 
@@ -72,7 +77,7 @@ public class User {
   }
 
   public Arena getArena() {
-    return ArenaRegistry.getArena(getPlayer());
+    return plugin.getArenaRegistry().getArena(getPlayer());
   }
 
   public Player getPlayer() {
@@ -105,7 +110,7 @@ public class User {
     //statistics manipulation events are called async when using mysql
     Bukkit.getScheduler().runTask(plugin, () -> {
       Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(ArenaRegistry.getArena(player), player, s, i));
+      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, s, i));
     });
   }
 
@@ -115,7 +120,7 @@ public class User {
     //statistics manipulation events are called async when using mysql
     Bukkit.getScheduler().runTask(plugin, () -> {
       Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(ArenaRegistry.getArena(player), player, s, getStat(s)));
+      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, s, getStat(s)));
     });
   }
 

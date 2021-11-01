@@ -34,6 +34,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaManager;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -45,6 +48,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -71,8 +75,8 @@ public class SignManager implements Listener {
 
   @EventHandler
   public void onSignChange(SignChangeEvent event) {
-    if(!event.getPlayer().hasPermission("villagedefense.admin.sign.create")
-        || !ComplementAccessor.getComplement().getLine(event, 0).equalsIgnoreCase("[villagedefense]")) {
+    if(!event.getPlayer().hasPermission(plugin.getPluginNamePrefixLong() + ".admin.sign.create")
+        || !ComplementAccessor.getComplement().getLine(event, 0).equalsIgnoreCase("[" + plugin.getPluginNamePrefixLong() + "]")) {
       return;
     }
     String line1 = ComplementAccessor.getComplement().getLine(event, 1);
@@ -80,7 +84,7 @@ public class SignManager implements Listener {
       event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
       return;
     }
-    for(Arena arena : ArenaRegistry.getArenas()) {
+    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
       if(!arena.getId().equalsIgnoreCase(line1)) {
         continue;
       }
@@ -94,7 +98,7 @@ public class SignManager implements Listener {
       List<String> locs = config.getStringList("instances." + arena.getId() + ".signs");
       locs.add(location);
       config.set("instances." + arena.getId() + ".signs", locs);
-      ConfigUtils.saveConfig(plugin, config, Constants.Files.ARENAS.getName());
+      ConfigUtils.saveConfig(plugin, config, "arenas");
       return;
     }
     event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_ARENA_DOESNT_EXISTS));
@@ -118,7 +122,7 @@ public class SignManager implements Listener {
   @EventHandler
   public void onSignDestroy(BlockBreakEvent event) {
     ArenaSign arenaSign = getArenaSignByBlock(event.getBlock());
-    if(!event.getPlayer().hasPermission("villagedefense.admin.sign.break") || arenaSign == null) {
+    if(!event.getPlayer().hasPermission(plugin.getPluginNamePrefixLong() + ".admin.sign.break") || arenaSign == null) {
       return;
     }
     arenaSigns.remove(arenaSign);
@@ -186,7 +190,7 @@ public class SignManager implements Listener {
       for(String sign : section.getStringList(path + ".signs")) {
         Location loc = LocationSerializer.getLocation(sign);
         if(loc.getBlock().getState() instanceof Sign) {
-          arenaSigns.add(new ArenaSign((Sign) loc.getBlock().getState(), ArenaRegistry.getArena(path)));
+          arenaSigns.add(new ArenaSign((Sign) loc.getBlock().getState(), plugin.getArenaRegistry().getArena(path)));
           continue;
         }
         plugin.getDebugger().debug(Level.WARNING, "Block at location {0} for arena {1} is not a sign!", LocationSerializer.locationToString(loc), path);

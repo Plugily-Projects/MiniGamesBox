@@ -30,6 +30,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaManager;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 
@@ -76,10 +79,10 @@ public class BungeeManager implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onServerListPing(ServerListPingEvent event) {
-    if(ArenaRegistry.getArenas().isEmpty() || !config.getBoolean("MOTD.Manager")) {
+    if(plugin.getArenaRegistry().getArenas().isEmpty() || !config.getBoolean("MOTD.Manager")) {
       return;
     }
-    Arena arena = ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena());
+    Arena arena = plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena());
     event.setMaxPlayers(arena.getMaximumPlayers());
     ComplementAccessor.getComplement().setMotd(event, motd.replace("%state%", gameStateToString.get(arena.getArenaState())));
   }
@@ -88,16 +91,16 @@ public class BungeeManager implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onJoin(PlayerJoinEvent event) {
     ComplementAccessor.getComplement().setJoinMessage(event, "");
-    if(!ArenaRegistry.getArenas().isEmpty()) {
-      ArenaManager.joinAttempt(event.getPlayer(), ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena()));
+    if(!plugin.getArenaRegistry().getArenas().isEmpty()) {
+      ArenaManager.joinAttempt(event.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
     }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onQuit(PlayerQuitEvent event) {
     ComplementAccessor.getComplement().setQuitMessage(event, "");
-    if(!ArenaRegistry.getArenas().isEmpty() && ArenaRegistry.isInArena(event.getPlayer())) {
-      ArenaManager.leaveAttempt(event.getPlayer(), ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena()));
+    if(!plugin.getArenaRegistry().getArenas().isEmpty() && plugin.getArenaRegistry().isInArena(event.getPlayer())) {
+      ArenaManager.leaveAttempt(event.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
     }
 
   }

@@ -22,6 +22,7 @@ package plugily.projects.minigamesbox.classic.api.event.game;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 
 /**
  * @author Tigerpanzer_02

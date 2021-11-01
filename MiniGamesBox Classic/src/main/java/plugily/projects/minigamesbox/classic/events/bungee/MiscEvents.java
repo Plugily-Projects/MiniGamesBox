@@ -23,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 
 /**
  * @author Tigerpanzer_02
@@ -47,8 +48,8 @@ public class MiscEvents implements Listener {
       e.setResult(PlayerLoginEvent.Result.ALLOWED);
     }
 
-    if(!ArenaRegistry.getArenas().isEmpty()) {
-      e.getPlayer().teleport(ArenaRegistry.getArenas().get(ArenaRegistry.getBungeeArena()).getLobbyLocation());
+    if(!plugin.getArenaRegistry().getArenas().isEmpty()) {
+      e.getPlayer().teleport(plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()).getLobbyLocation());
     }
   }
 

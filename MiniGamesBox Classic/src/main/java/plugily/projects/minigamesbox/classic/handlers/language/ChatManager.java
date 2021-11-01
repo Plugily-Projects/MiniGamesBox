@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
