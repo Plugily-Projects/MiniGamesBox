@@ -29,13 +29,16 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
+import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +98,24 @@ public class InventorySerializer {
       for(int i = 0; i < invContents.length; i++) {
         ItemStack itemInInv = invContents[i];
         if(itemInInv != null && itemInInv.getType() != Material.AIR) {
+          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3) && itemInInv.getItemMeta() instanceof SkullMeta) {
+            SkullMeta skullMeta = ((SkullMeta) itemInInv.getItemMeta());
+            if(skullMeta.getOwner() == null) {
+              try {
+                Field profileField = skullMeta.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                Object profile = profileField.get(skullMeta);
+
+                Field name = profile.getClass().getDeclaredField("name");
+                name.setAccessible(true);
+                name.set(profile, "plugily");
+
+                itemInInv.setItemMeta(skullMeta);
+              } catch(NoSuchFieldException | IllegalAccessException e) {
+                itemInInv = XMaterial.BEDROCK.parseItem();
+              }
+            }
+          }
           invConfig.set("Slot " + i, itemInInv);
         }
       }
