@@ -62,7 +62,7 @@ public class SetupInventory {
   }
 
   private void prepareGui() {
-    gui = new FastInv(18, "Village Defense Arena Setup");
+    gui = new FastInv(18, plugin.getPluginMessagePrefix() + "Arena Setup");
 
     prepareComponents(gui);
   }
