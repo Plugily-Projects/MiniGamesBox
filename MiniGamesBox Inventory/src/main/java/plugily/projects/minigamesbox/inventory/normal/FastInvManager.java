@@ -85,8 +85,9 @@ public final class FastInvManager {
         FastInv inv = (FastInv) e.getInventory().getHolder();
 
         boolean wasCancelled = e.isCancelled();
-        e.setCancelled(true);
-
+        if(wasCancelled) {
+          e.setCancelled(true);
+        }
         inv.handleClick(e);
 
         // This prevents un-canceling the event if another plugin canceled it before

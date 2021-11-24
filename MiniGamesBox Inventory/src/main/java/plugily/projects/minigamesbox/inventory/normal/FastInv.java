@@ -20,7 +20,6 @@
 package plugily.projects.minigamesbox.inventory.normal;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -29,7 +28,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -358,7 +356,7 @@ public class FastInv implements InventoryHolder {
    */
   public void fill(ItemStack stack) {
     while(this.inventory.firstEmpty() != -1) {
-      this.inventory.setItem(this.inventory.firstEmpty(), stack);
+      setItem(this.inventory.firstEmpty(), stack, inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
     }
   }
 

@@ -575,7 +575,7 @@ public class PagedFastInv implements InventoryHolder {
    */
   public void fill(ItemStack stack, int page) {
     while(getInventory(page).firstEmpty() != -1) {
-      getInventory(page).setItem(getInventory(page).firstEmpty(), stack);
+      setItem(getInventory(page), getInventory(page).firstEmpty(), stack, inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
     }
   }
 
@@ -587,7 +587,7 @@ public class PagedFastInv implements InventoryHolder {
   public void fill(ItemStack stack) {
     for(Inventory inventory : pagedInventories.values())
       while(inventory.firstEmpty() != -1) {
-        inventory.setItem(inventory.firstEmpty(), stack);
+        setItem(inventory, inventory.firstEmpty(), stack, inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
       }
   }
 
