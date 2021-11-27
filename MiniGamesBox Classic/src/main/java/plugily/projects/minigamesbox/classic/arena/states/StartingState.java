@@ -47,10 +47,7 @@ public class StartingState implements ArenaStateHandler {
     double startWaiting = plugin.getConfig().getDouble("Starting-Waiting-Time", 60);
     int timer = arena.getTimer();
 
-    if(arena.getGameBar() != null) {
-      arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_STARTING_IN).replace("%time%", Integer.toString(timer)));
-      arena.getGameBar().setProgress(timer / startWaiting);
-    }
+    arena.getBossbarManager().setProgress(timer / startWaiting);
 
     float exp = (float) (timer / startWaiting);
 
@@ -62,14 +59,12 @@ public class StartingState implements ArenaStateHandler {
     int minPlayers;
 
     if(!arena.isForceStart() && arena.getPlayers().size() < (minPlayers = arena.getMinimumPlayers())) {
-      if(arena.getGameBar() != null) {
-        arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_WAITING_FOR_PLAYERS));
-        arena.getGameBar().setProgress(1.0);
-      }
-      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.LOBBY_MESSAGES_WAITING_FOR_PLAYERS), minPlayers));
+      arena.getBossbarManager().setProgress(1.0);
+
+      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
       arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
       Bukkit.getPluginManager().callEvent(new PlugilyGameStartEvent(arena));
-      arena.setTimer(15);
+      arena.setTimer(plugin.getConfig().getInt("Time-Manager.Waiting", 60));
       for(Player player : arena.getPlayers()) {
         player.setExp(1);
         player.setLevel(0);
@@ -79,13 +74,8 @@ public class StartingState implements ArenaStateHandler {
     if(arena.getTimer() == 0 || arena.isForceStart()) {
       Bukkit.getPluginManager().callEvent(new PlugilyGameStartEvent(arena));
       arena.setArenaState(ArenaState.IN_GAME);
-      if(arena.getGameBar() != null) {
-        arena.getGameBar().setProgress(1.0);
-      }
-      arena.setTimer(5);
-
+      arena.getBossbarManager().setProgress(1.0);
       org.bukkit.Location arenaLoc = arena.getStartLocation();
-
       for(Player player : arena.getPlayers()) {
         player.teleport(arenaLoc);
         player.setExp(0);
@@ -96,11 +86,9 @@ public class StartingState implements ArenaStateHandler {
         user.getKit().giveKitItems(player);
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);
-        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.LOBBY_MESSAGES_GAME_STARTED));
+        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_GAME_START"));
       }
-      //todo
-      arena.setTimer(60);
-      arena.setFighting(false);
+      arena.setTimer(plugin.getConfig().getInt("Time-Manager.In-Game", 270));
     }
     if(arena.isForceStart()) {
       arena.setForceStart(false);

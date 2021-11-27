@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -49,18 +48,16 @@ public class BungeeManager implements Listener {
 
   private final Main plugin;
   private final FileConfiguration config;
-  private final Map<ArenaState, String> gameStateToString = new EnumMap<>(ArenaState.class);
-  private final String motd;
+  private final Map<ArenaState, String> motd = new EnumMap<>(ArenaState.class);
 
   public BungeeManager(Main plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "bungee");
-    gameStateToString.put(ArenaState.WAITING_FOR_PLAYERS, plugin.getChatManager().colorRawMessage(config.getString("MOTD.Game-States.Inactive", "Inactive")));
-    gameStateToString.put(ArenaState.STARTING, plugin.getChatManager().colorRawMessage(config.getString("MOTD.Game-States.Starting", "Starting")));
-    gameStateToString.put(ArenaState.IN_GAME, plugin.getChatManager().colorRawMessage(config.getString("MOTD.Game-States.In-Game", "In-Game")));
-    gameStateToString.put(ArenaState.ENDING, plugin.getChatManager().colorRawMessage(config.getString("MOTD.Game-States.Ending", "Ending")));
-    gameStateToString.put(ArenaState.RESTARTING, plugin.getChatManager().colorRawMessage(config.getString("MOTD.Game-States.Restarting", "Restarting")));
-    motd = plugin.getChatManager().colorRawMessage(config.getString("MOTD.Message", "The actual game state of vd is %state%"));
+
+    for(ArenaState arenaState : ArenaState.values()) {
+      motd.put(arenaState, plugin.getLanguageManager().getLanguageMessage("Placeholders.Motd." + arenaState.getFormattedName()));
+    }
+
     plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
@@ -84,7 +81,7 @@ public class BungeeManager implements Listener {
     }
     Arena arena = plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena());
     event.setMaxPlayers(arena.getMaximumPlayers());
-    ComplementAccessor.getComplement().setMotd(event, motd.replace("%state%", gameStateToString.get(arena.getArenaState())));
+    ComplementAccessor.getComplement().setMotd(event, plugin.getChatManager().formatMessage(motd.get(arena.getArenaState()), arena));
   }
 
 
@@ -92,7 +89,7 @@ public class BungeeManager implements Listener {
   public void onJoin(PlayerJoinEvent event) {
     ComplementAccessor.getComplement().setJoinMessage(event, "");
     if(!plugin.getArenaRegistry().getArenas().isEmpty()) {
-      ArenaManager.joinAttempt(event.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
+      plugin.getArenaManager().joinAttempt(event.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
     }
   }
 
@@ -100,7 +97,7 @@ public class BungeeManager implements Listener {
   public void onQuit(PlayerQuitEvent event) {
     ComplementAccessor.getComplement().setQuitMessage(event, "");
     if(!plugin.getArenaRegistry().getArenas().isEmpty() && plugin.getArenaRegistry().isInArena(event.getPlayer())) {
-      ArenaManager.leaveAttempt(event.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
+      plugin.getArenaManager().leaveAttempt(event.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
     }
 
   }

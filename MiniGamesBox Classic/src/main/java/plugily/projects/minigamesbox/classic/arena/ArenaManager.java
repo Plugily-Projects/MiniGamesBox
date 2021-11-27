@@ -48,13 +48,10 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
  */
 public class ArenaManager {
 
-  private static Main plugin;
+  private final Main plugin;
 
-  private ArenaManager() {
-  }
-
-  public static void init(Main plugin) {
-    ArenaManager.plugin = plugin;
+  public ArenaManager(Main plugin) {
+    this.plugin = plugin;
   }
 
   /**
@@ -66,7 +63,7 @@ public class ArenaManager {
    * @param arena  arena to join
    * @see plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent
    */
-  public static void joinAttempt(@NotNull Player player, @NotNull Arena arena) {
+  public void joinAttempt(@NotNull Player player, @NotNull Arena arena) {
     plugin.getDebugger().debug("[{0}] Initial join attempt for {1}", arena.getId(), player.getName());
     if(!canJoinArenaAndMessage(player, arena) || !checkFullGamePermission(player, arena)) {
       return;
@@ -74,7 +71,7 @@ public class ArenaManager {
     plugin.getDebugger().debug("[{0}] Checked join attempt for {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
     if(plugin.getArenaRegistry().isInArena(player)) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.ALREADY_PLAYING));
+      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_ALREADY_PLAYING"));
       return;
     }
 
@@ -98,11 +95,11 @@ public class ArenaManager {
             leaveAttempt(partyPlayer, partyPlayerGame);
           }
 
-          partyPlayer.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.JOIN_AS_PARTY_MEMBER), partyPlayer));
+          partyPlayer.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_JOIN_AS_PARTY_MEMBER"), partyPlayer));
           joinAttempt(partyPlayer, arena);
         }
       } else {
-        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.NOT_ENOUGH_SPACE_FOR_PARTY), player));
+        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY"), player));
         return;
       }
     }
@@ -117,7 +114,7 @@ public class ArenaManager {
         InventorySerializer.saveInventoryToFile(plugin, player);
       }
       player.teleport(arena.getStartLocation());
-      player.sendMessage(plugin.getChatManager().colorMessage(Messages.YOU_ARE_SPECTATOR));
+      player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR"));
       player.getInventory().clear();
 
       plugin.getSpecialItemManager().setSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
@@ -153,7 +150,7 @@ public class ArenaManager {
     player.setFlying(false);
     player.setAllowFlight(false);
     player.getInventory().clear();
-    arena.doBarAction(Arena.BarAction.ADD, player);
+    arena.getBossbarManager().doBarAction(Arena.BarAction.ADD, player);
     if(!user.isSpectator()) {
       plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.JOIN);
     }
@@ -169,12 +166,12 @@ public class ArenaManager {
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
 
-  private static boolean checkFullGamePermission(Player player, Arena arena) {
+  private boolean checkFullGamePermission(Player player, Arena arena) {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
     if(!player.hasPermission(plugin.getPermissionsManager().getJoinFullGames())) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.FULL_GAME_NO_PERMISSION));
+      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_FULL_GAME"));
       return false;
     }
     for(Player players : arena.getPlayers()) {
@@ -183,31 +180,31 @@ public class ArenaManager {
       }
       if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
         leaveAttempt(players, arena);
-        players.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.LOBBY_MESSAGES_YOU_WERE_KICKED_FOR_PREMIUM_SLOT));
-        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.LOBBY_MESSAGES_KICKED_FOR_PREMIUM_SLOT), players));
+        players.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM"));
+        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM"), players));
       }
       return true;
     }
-    player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.NO_SLOTS_FOR_PREMIUM));
+    player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_NO_SLOTS_FOR_PREMIUM"));
     return false;
   }
 
-  private static boolean canJoinArenaAndMessage(Player player, Arena arena) {
+  private boolean canJoinArenaAndMessage(Player player, Arena arena) {
     if(!arena.isReady()) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.ARENA_NOT_CONFIGURED));
+      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_ARENA_NOT_CONFIGURED"));
       return false;
     }
 
     PlugilyGameJoinAttemptEvent event = new PlugilyGameJoinAttemptEvent(player, arena);
     Bukkit.getPluginManager().callEvent(event);
     if(event.isCancelled()) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.JOIN_CANCELLED_VIA_API));
+      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_CANCEL_API"));
       return false;
     }
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       String perm = plugin.getPermissionsManager().getJoinPerm();
       if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
-        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.JOIN_NO_PERMISSION)
+        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_NO_PERMISSION")
             .replace("%permission%", perm.replace("<arena>", arena.getId())));
         return false;
       }
@@ -223,7 +220,7 @@ public class ArenaManager {
    * @param arena  arena to leave
    * @see PlugilyGameLeaveAttemptEvent
    */
-  public static void leaveAttempt(@NotNull Player player, @NotNull Arena arena) {
+  public void leaveAttempt(@NotNull Player player, @NotNull Arena arena) {
     plugin.getDebugger().debug("[{0}] Initial leave attempt of {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
 
@@ -243,7 +240,7 @@ public class ArenaManager {
     user.setSpectator(false);
     user.setPermanentSpectator(false);
 
-    arena.doBarAction(Arena.BarAction.REMOVE, player);
+    arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
       arena.setArenaState(ArenaState.ENDING);
       arena.setTimer(0);
@@ -263,7 +260,7 @@ public class ArenaManager {
    * @param arena     which arena should stop
    * @see PlugilyGameStopEvent
    */
-  public static void stopGame(boolean quickStop, @NotNull Arena arena) {
+  public void stopGame(boolean quickStop, @NotNull Arena arena) {
     plugin.getDebugger().debug("[{0}] Game stop event start", arena.getId());
     long start = System.currentTimeMillis();
 
@@ -285,13 +282,13 @@ public class ArenaManager {
     plugin.getDebugger().debug("[{0}] Game stop event finished took {1}ms", arena.getId(), System.currentTimeMillis() - start);
   }
 
-  private static String formatSummaryPlaceholders(String msg, Arena arena, User user, String summary) {
+  private String formatSummaryPlaceholders(String msg, Arena arena, User user, String summary) {
     String formatted = msg;
     formatted = StringUtils.replace(formatted, "%summary%", summary);
     return formatted;
   }
 
-  private static void spawnFireworks(Arena arena, Player player) {
+  private void spawnFireworks(Arena arena, Player player) {
     if(!plugin.getConfigPreferences().getOption("FIREWORK")) {
       return;
     }

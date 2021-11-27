@@ -105,7 +105,7 @@ public class HologramArgument {
 
     LeaderboardHologram leaderboard = new LeaderboardHologram(registry.getPlugin(), nextValue, statistic, amount, player.getLocation());
     leaderboard.initUpdateTask();
-    registry.getPlugin().getHologramsRegistry().registerHologram(leaderboard);
+    registry.getPlugin().getLeaderboardRegistry().registerHologram(leaderboard);
 
     player.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&aHologram with ID " + nextValue + " with statistic " + statistic.getName() + " added!"));
   }
@@ -149,7 +149,7 @@ public class HologramArgument {
     }
     config.set("holograms." + args[2], null);
     ConfigUtils.saveConfig(registry.getPlugin(), config, "internal/holograms_data");
-    registry.getPlugin().getHologramsRegistry().disableHologram(opt.get());
+    registry.getPlugin().getLeaderboardRegistry().disableHologram(opt.get());
     sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&aLeaderboard with ID " + args[2] + " sucessfully deleted!"));
   }
 

@@ -21,7 +21,6 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -48,12 +47,12 @@ public class JoinArguments {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
           return;
         }
         if(!registry.getPlugin().getArenaRegistry().getArenas().isEmpty() && args[1].equalsIgnoreCase("maxplayers") && registry.getPlugin().getArenaRegistry().getArena("maxplayers") == null) {
           if(registry.getPlugin().getArenaRegistry().getArenaPlayersOnline() == 0) {
-            ArenaManager.joinAttempt((Player) sender, registry.getPlugin().getArenaRegistry().getArenas().get(random.nextInt(registry.getPlugin().getArenaRegistry().getArenas().size())));
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, registry.getPlugin().getArenaRegistry().getArenas().get(random.nextInt(registry.getPlugin().getArenaRegistry().getArenas().size())));
             return;
           }
 
@@ -67,18 +66,18 @@ public class JoinArguments {
               .stream()
               .max(Map.Entry.comparingByValue(Comparator.reverseOrder()))
               .map(Map.Entry::getKey)
-              .ifPresent(arena -> ArenaManager.joinAttempt((Player) sender, arena));
+              .ifPresent(arena -> registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arena));
           return;
         }
         for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) || arena.getPlayers().size() >= arena.getMaximumPlayers())
             continue;
           if(args[1].equalsIgnoreCase(arena.getId())) {
-            ArenaManager.joinAttempt((Player) sender, arena);
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arena);
             return;
           }
         }
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_NO_ARENA_LIKE_THAT));
+        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
       }
     });
 
@@ -91,17 +90,17 @@ public class JoinArguments {
           //check starting arenas -> random
           List<Arena> arenas = registry.getPlugin().getArenaRegistry().getArenas().stream().filter(arena -> arena.getArenaState() == ArenaState.STARTING && arena.getPlayers().size() < arena.getMaximumPlayers()).collect(Collectors.toList());
           if(!arenas.isEmpty()) {
-            ArenaManager.joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
             return;
           }
           //check waiting arenas -> random
           arenas = registry.getPlugin().getArenaRegistry().getArenas().stream().filter(arena -> (arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING)
               && arena.getPlayers().size() < arena.getMaximumPlayers()).collect(Collectors.toList());
           if(!arenas.isEmpty()) {
-            ArenaManager.joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
             return;
           }
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_NO_FREE_ARENAS));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_FREE_ARENAS"));
         }
       });
     }

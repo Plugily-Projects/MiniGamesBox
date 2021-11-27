@@ -35,7 +35,6 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -64,12 +63,11 @@ public class SignManager implements Listener {
 
   public SignManager(Main plugin) {
     this.plugin = plugin;
-    gameStateToString.put(ArenaState.WAITING_FOR_PLAYERS, plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_INACTIVE));
-    gameStateToString.put(ArenaState.STARTING, plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_STARTING));
-    gameStateToString.put(ArenaState.IN_GAME, plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_IN_GAME));
-    gameStateToString.put(ArenaState.ENDING, plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_ENDING));
-    gameStateToString.put(ArenaState.RESTARTING, plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_RESTARTING));
-    signLines = LanguageManager.getLanguageList("Signs.Lines");
+    for(ArenaState arenaState : ArenaState.values()) {
+      gameStateToString.put(arenaState, plugin.getLanguageManager().getLanguageMessage("Placeholders.Game-States." + arenaState.getFormattedName()));
+    }
+
+    signLines = plugin.getLanguageManager().getLanguageList("Signs.Lines");
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
@@ -81,7 +79,7 @@ public class SignManager implements Listener {
     }
     String line1 = ComplementAccessor.getComplement().getLine(event, 1);
     if(line1.isEmpty()) {
-      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
+      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
       return;
     }
     for(Arena arena : plugin.getArenaRegistry().getArenas()) {
@@ -92,7 +90,7 @@ public class SignManager implements Listener {
         ComplementAccessor.getComplement().setLine(event, i, formatSign(signLines.get(i), arena));
       }
       arenaSigns.add(new ArenaSign((Sign) event.getBlock().getState(), arena));
-      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_CREATED));
+      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_CREATED"));
       String location = event.getBlock().getWorld().getName() + "," + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + ",0.0,0.0";
       FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
       List<String> locs = config.getStringList("instances." + arena.getId() + ".signs");
@@ -101,18 +99,14 @@ public class SignManager implements Listener {
       ConfigUtils.saveConfig(plugin, config, "arenas");
       return;
     }
-    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_ARENA_DOESNT_EXISTS));
+    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_ARENA_NOT_FOUND"));
   }
 
   private String formatSign(String msg, Arena arena) {
     String formatted = msg;
     formatted = StringUtils.replace(formatted, "%mapname%", arena.getMapName());
     int maximumPlayers = arena.getMaximumPlayers();
-    if(arena.getPlayers().size() >= maximumPlayers) {
-      formatted = StringUtils.replace(formatted, "%state%", plugin.getChatManager().colorMessage(Messages.SIGNS_GAME_STATES_FULL_GAME));
-    } else {
-      formatted = StringUtils.replace(formatted, "%state%", gameStateToString.get(arena.getArenaState()));
-    }
+    formatted = StringUtils.replace(formatted, "%state%", gameStateToString.get(arena.getArenaState()));
     formatted = StringUtils.replace(formatted, "%playersize%", Integer.toString(arena.getPlayers().size()));
     formatted = StringUtils.replace(formatted, "%maxplayers%", Integer.toString(maximumPlayers));
     formatted = plugin.getChatManager().colorRawMessage(formatted);
@@ -141,7 +135,7 @@ public class SignManager implements Listener {
         signs.remove(location);
         config.set("instances." + arena + ".signs", signs);
         ConfigUtils.saveConfig(plugin, config, "arenas");
-        event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_REMOVED));
+        event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_REMOVED"));
         return;
       }
     }
@@ -154,7 +148,7 @@ public class SignManager implements Listener {
     if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getState() instanceof Sign && arenaSign != null) {
       Arena arena = arenaSign.getArena();
       if(arena != null) {
-        ArenaManager.joinAttempt(event.getPlayer(), arena);
+        plugin.getArenaManager().joinAttempt(event.getPlayer(), arena);
       }
     }
   }

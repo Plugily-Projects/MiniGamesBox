@@ -48,7 +48,7 @@ public class SpyChatArgument {
           spyChatters.add(player);
         }
         sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() +
-            registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_ADMIN_SPYCHAT_TOGGLED)
+            registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_SPYCHAT_TOGGLE")
                 .replace("%value%", String.valueOf(isSpyChatEnabled(player))));
       }
     });

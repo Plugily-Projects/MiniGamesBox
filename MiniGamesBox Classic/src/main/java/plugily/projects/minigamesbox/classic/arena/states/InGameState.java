@@ -38,27 +38,8 @@ public class InGameState implements ArenaStateHandler {
 
   @Override
   public void handleCall(Arena arena) {
-    bossBarUpdate(arena);
-
     arena.setTimer(arena.getTimer() - 1);
   }
 
-  private void bossBarUpdate(Arena arena) {
-    if(arena.getArenaOption("BAR_TOGGLE_VALUE") > 5) {
-      if(arena.getGameBar() != null) {
-        //arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_IN_GAME_WAVE).replace("%wave%", Integer.toString(arena.getWave())));
-      }
-      arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
-      if(arena.getArenaOption("BAR_TOGGLE_VALUE") > 10) {
-        arena.setArenaOption("BAR_TOGGLE_VALUE", 0);
-      }
-    } else {
-      if(arena.getGameBar() != null) {
-
-        //arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_IN_GAME_INFO).replace("%wave%", Integer.toString(arena.getWave())));
-      }
-      arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
-    }
-  }
 
 }

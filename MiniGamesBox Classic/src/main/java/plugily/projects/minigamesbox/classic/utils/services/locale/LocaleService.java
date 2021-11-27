@@ -125,7 +125,7 @@ public class LocaleService {
     if(localeData == null) {
       return DownloadStatus.FAIL;
     }
-    File localeFile = new File(plugin.getDataFolder() + "/locales/" + locale.getPrefix() + ".properties");
+    File localeFile = new File(plugin.getDataFolder() + "/locales/" + locale.getPrefix() + ".yml");
     if(!localeFile.exists() || !isExact(locale, localeFile)) {
       return writeFile(locale);
     }
@@ -135,7 +135,7 @@ public class LocaleService {
   private DownloadStatus writeFile(Locale locale) {
     try(Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
-      try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(new File(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".properties")), StandardCharsets.UTF_8)) {
+      try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(new File(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml")), StandardCharsets.UTF_8)) {
         writer.write(data);
       }
       return DownloadStatus.SUCCESS;

@@ -41,7 +41,7 @@ public class ForceStartArgument {
             "&7Force starts arena you're in\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.forcestart")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        ArenaUtils.arenaForceStart((Player) sender);
+        ArenaUtils.arenaForceStart((Player) sender, 0);
       }
     });
   }

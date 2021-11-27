@@ -27,6 +27,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerChooseKitEvent;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
@@ -50,15 +51,15 @@ public class KitMenuHandler implements Listener {
 
   public KitMenuHandler(Main plugin) {
     this.plugin = plugin;
-    this.kitItem = plugin.getSpecialItemManager().getSpecialItem(SpecialItemManager.SpecialItems.KIT_SELECTOR.getName());
-    unlockedString = plugin.getChatManager().colorMessage(Messages.KITS_MENU_UNLOCKED_LORE);
-    lockedString = plugin.getChatManager().colorMessage(Messages.KITS_MENU_LOCKED_LORE);
+    this.kitItem = plugin.getSpecialItemManager().getSpecialItem("KIT_OPEN_MENU");
+    unlockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCKED");
+    lockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_LOCKED");
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   public void createMenu(Player player) {
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(KitRegistry.getKits().size()), plugin.getChatManager().colorMessage(Messages.KITS_OPEN_KIT_MENU));
-    for(Kit kit : KitRegistry.getKits()) {
+    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), plugin.getChatManager().colorMessage("KIT_KIT_MENU_TITLE"));
+    for(Kit kit : plugin.getKitRegistry().getKits()) {
       ItemStack itemStack = kit.getItemStack();
       itemStack = new ItemBuilder(itemStack)
           .lore(kit.isUnlockedByPlayer(player) ? unlockedString : lockedString)
@@ -69,7 +70,7 @@ public class KitMenuHandler implements Listener {
         if(!(e.isLeftClick() || e.isRightClick()) || !(e.getWhoClicked() instanceof Player) || !ItemUtils.isItemStackNamed(e.getCurrentItem())) {
           return;
         }
-        Arena arena = ArenaRegistry.getArena(player);
+        Arena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }
@@ -79,11 +80,11 @@ public class KitMenuHandler implements Listener {
           return;
         }
         if(!kit.isUnlockedByPlayer(player)) {
-          player.sendMessage(plugin.getChatManager().colorMessage(Messages.KITS_NOT_UNLOCKED_MESSAGE).replace("%KIT%", kit.getName()));
+          player.sendMessage(plugin.getChatManager().colorMessage("KIT_NOT_UNLOCKED").replace("%kit%", kit.getName()));
           return;
         }
         plugin.getUserManager().getUser(player).setKit(kit);
-        player.sendMessage(plugin.getChatManager().colorMessage(Messages.KITS_CHOOSE_MESSAGE).replace("%KIT%", kit.getName()));
+        player.sendMessage(plugin.getChatManager().colorMessage("KIT_CHOOSE").replace("%kit%", kit.getName()));
       });
     }
     gui.open(player);

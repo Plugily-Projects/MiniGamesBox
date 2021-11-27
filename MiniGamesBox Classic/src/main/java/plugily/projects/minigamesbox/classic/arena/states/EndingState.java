@@ -48,15 +48,11 @@ public class EndingState implements ArenaStateHandler {
     int timer = arena.getTimer();
 
     if(timer <= 0) {
-      if(arena.getGameBar() != null) {
-        arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_GAME_ENDED));
-      }
-
-      String teleportedToLobby = plugin.getChatManager().getPrefix() + Messages.COMMANDS_TELEPORTED_TO_THE_LOBBY.getMessage();
+      String teleportedToLobby = plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY");
 
       for(Player player : arena.getPlayers()) {
         ArenaUtils.resetPlayerAfterGame(player);
-        arena.doBarAction(Arena.BarAction.REMOVE, player);
+        arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
         arena.teleportToEndLocation(player);
 
         User user = plugin.getUserManager().getUser(player);

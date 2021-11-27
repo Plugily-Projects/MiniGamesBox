@@ -23,7 +23,10 @@
 locale: default
 
 # Should we display a boss bar with additional arena information?
-Bossbar: true
+Bossbar:
+  Display: true
+  # Interval in seconds between messages
+  Interval: 10
 
 # Should we hook into bungeecord? (If you wanna use arena per server option)
 # This option will let you access bungee.yml and its options.
@@ -60,7 +63,7 @@ Database: false
 # You should also check out our script engine tutorial for rewards! https://tutorial.plugily.xyz
 Rewards: true
 
-# Enable in game (eg. '[KIT][LEVEL] Plajer: hey') special formatting?
+# Enable in game (eg. '[KIT][LEVEL] Tigerpanzer_02: hey') special formatting?
 # Formatting is configurable in language.yml
 # You can use PlaceholderAPI placeholders in chat format!
 Plugin-Chat-Format: true
@@ -135,10 +138,11 @@ Basic-Permissions:
 
 # How many seconds game should take to start.
 Time-Manager:
-  Waiting-For-Players: 30
-  Shorten-Waiting-For-Players: 5
+  Waiting: 20
+  Starting: 60
+  Shorten-Waiting: 5
   In-Game: 270
-  End: 10
+  Ending: 10
   Restarting: 5
 
 Update-Notifier:

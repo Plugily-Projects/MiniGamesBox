@@ -51,6 +51,7 @@ public class ArenaOption {
      * Value for toggling boss bar message status.
      */
     options.put("BAR_TOGGLE_VALUE", new ArenaOption("null", 0, true));
+    options.put("BOSSBAR_INTERVAL", new ArenaOption("null", 10, true));
   }
 
   private final String path;

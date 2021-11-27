@@ -49,8 +49,8 @@ public class SpectatorItemEvents implements Listener {
   public SpectatorItemEvents(Main plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    spectatorSettingsMenu = new SpectatorSettingsMenu(plugin, plugin.getChatManager().colorMessage(Messages.SPECTATOR_SETTINGS_MENU_INVENTORY_NAME),
-        plugin.getChatManager().colorMessage(Messages.SPECTATOR_SETTINGS_MENU_SPEED_NAME));
+    spectatorSettingsMenu = new SpectatorSettingsMenu(plugin, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SETTINGS_MENU_INVENTORY_NAME"),
+        plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SETTINGS_MENU_SPEED_NAME"));
   }
 
   @EventHandler
@@ -77,7 +77,7 @@ public class SpectatorItemEvents implements Listener {
   }
 
   private void openSpectatorMenu(Player player, Arena arena) {
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), plugin.getChatManager().colorMessage(Messages.SPECTATOR_MENU_NAME));
+    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME"));
 
     ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
 
@@ -88,11 +88,11 @@ public class SpectatorItemEvents implements Listener {
       ItemStack cloneSkull = skull.clone();
       SkullMeta meta = VersionUtils.setPlayerHead(arenaPlayer, (SkullMeta) cloneSkull.getItemMeta());
       ComplementAccessor.getComplement().setDisplayName(meta, arenaPlayer.getName());
-      ComplementAccessor.getComplement().setLore(meta, Collections.singletonList(plugin.getChatManager().colorMessage(Messages.SPECTATOR_TARGET_PLAYER_HEALTH)
+      ComplementAccessor.getComplement().setLore(meta, Collections.singletonList(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH")
           .replace("%health%", Double.toString(NumberUtils.round(arenaPlayer.getHealth(), 2)))));
       cloneSkull.setItemMeta(meta);
       gui.addItem(cloneSkull, e -> {
-        e.getWhoClicked().sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.KITS_TELEPORTER_TELEPORTED_TO_PLAYER), arenaPlayer));
+        e.getWhoClicked().sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT"), arenaPlayer));
         e.getWhoClicked().closeInventory();
         e.getWhoClicked().teleport(arenaPlayer);
       });

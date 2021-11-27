@@ -74,24 +74,24 @@ public class ArenaUtils {
     }
   }
 
-  public static void arenaForceStart(Player player) {
+  public static void arenaForceStart(Player player, int timer) {
     //Todo
     if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPermissionsManager().getForceStart())) {
-      player.sendMessage(plugin.getChatManager().colorMessage(Messages.COMMANDS_NO_PERMISSION));
+      player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NO_PERMISSION"));
       return;
     }
 
     Arena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
-      player.sendMessage(plugin.getChatManager().colorMessage(Messages.COMMANDS_NOT_PLAYING));
+      player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NOT_PLAYING"));
       return;
     }
 
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) {
       arena.setArenaState(ArenaState.STARTING);
       arena.setForceStart(true);
-      arena.setTimer(0);
-      plugin.getChatManager().broadcast(arena, Messages.ADMIN_MESSAGES_SET_STARTING_IN_TO_0);
+      arena.setTimer(timer);
+      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
     }
   }
 

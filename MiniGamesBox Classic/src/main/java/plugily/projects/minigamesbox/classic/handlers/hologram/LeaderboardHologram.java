@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
+import plugily.projects.minigamesbox.classic.handlers.language.Message;
 import plugily.projects.minigamesbox.classic.utils.hologram.ArmorStandHologram;
 
 import java.util.ArrayList;
@@ -55,11 +56,11 @@ public class LeaderboardHologram extends BukkitRunnable {
     this.location = location;
     this.hologram = new ArmorStandHologram(location);
 
-    String header = color(plugin.getLanguageConfig().getString(LanguageMessage.HOLOGRAMS_HEADER.getAccessor()));
+    String header = color(plugin.getLanguageConfig().getString("LEADERBOARD_HEADER"));
     header = StringUtils.replace(header, "%amount%", Integer.toString(topAmount));
 
-    LanguageMessage lm = statisticToMessage();
-    header = StringUtils.replace(header, "%statistic%", lm != null ? color(plugin.getLanguageConfig().getString(lm.getAccessor())) : "null");
+    Message lm = statisticToMessage();
+    header = StringUtils.replace(header, "%statistic%", lm != null ? color(plugin.getLanguageConfig().getString(lm.getPath())) : "null");
     hologram.appendLine(header);
 
 
@@ -87,11 +88,11 @@ public class LeaderboardHologram extends BukkitRunnable {
       String text;
       if(i < reverseKeys.size()) {
         UUID uuid = reverseKeys.get(i);
-        text = color(plugin.getLanguageConfig().getString(LanguageMessage.HOLOGRAMS_FORMAT.getAccessor()));
+        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_FORMAT"));
         text = StringUtils.replace(text, "%nickname%", getPlayerNameSafely(uuid));
         text = StringUtils.replace(text, "%value%", String.valueOf(values.get(uuid)));
       } else {
-        text = color(plugin.getLanguageConfig().getString(LanguageMessage.HOLOGRAMS_FORMAT_EMPTY.getAccessor()));
+        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_EMPTY_FORMAT"));
       }
       text = StringUtils.replace(text, "%place%", Integer.toString(i + 1));
       update.add(text);
@@ -108,24 +109,11 @@ public class LeaderboardHologram extends BukkitRunnable {
 
   private String getPlayerNameSafely(UUID uuid) {
     String name = plugin.getUserManager().getDatabase().getPlayerName(uuid);
-    return name != null ? name : color(plugin.getLanguageConfig().getString(LanguageMessage.HOLOGRAMS_UNKNOWN_PLAYER.getAccessor()));
+    return name != null ? name : color(plugin.getLanguageConfig().getString("LEADERBOARD_UNKNOWN_PLAYER"));
   }
 
-  private LanguageMessage statisticToMessage() {
-    switch(statistic.getName()) {
-      case "KILLS":
-        return LanguageMessage.STATISTIC_KILLS;
-      case "DEATHS":
-        return LanguageMessage.STATISTIC_DEATHS;
-      case "GAMES_PLAYED":
-        return LanguageMessage.STATISTIC_GAMES_PLAYED;
-      case "LEVEL":
-        return LanguageMessage.STATISTIC_LEVEL;
-      case "XP":
-        return LanguageMessage.STATISTIC_EXP;
-      default:
-        return null;
-    }
+  private Message statisticToMessage() {
+    return plugin.getMessageManager().getMessage("LEADERBOARD_STATISTICS_" + statistic.getName());
   }
 
   public int getId() {

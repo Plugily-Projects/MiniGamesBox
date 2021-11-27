@@ -21,15 +21,13 @@ package plugily.projects.minigamesbox.classic.arena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
+import plugily.projects.minigamesbox.classic.arena.managers.BossbarManager;
 import plugily.projects.minigamesbox.classic.arena.managers.ScoreboardManager;
 import plugily.projects.minigamesbox.classic.arena.options.ArenaOption;
 import plugily.projects.minigamesbox.classic.arena.states.ArenaStateHandler;
@@ -40,7 +38,6 @@ import plugily.projects.minigamesbox.classic.arena.states.StartingState;
 import plugily.projects.minigamesbox.classic.arena.states.WaitingState;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
-import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,11 +68,10 @@ public class Arena extends BukkitRunnable {
   private final Map<ArenaState, ArenaStateHandler> gameStateHandlers = new EnumMap<>(ArenaState.class);
 
   private ScoreboardManager scoreboardManager;
+  private BossbarManager bossbarManager;
 
   private ArenaState arenaState = ArenaState.WAITING_FOR_PLAYERS;
-  private BossBar gameBar;
   private String mapName = "";
-  private boolean fighting = false;
   private boolean forceStart = false;
   private boolean ready = true;
 
@@ -163,9 +159,7 @@ public class Arena extends BukkitRunnable {
 
   public Arena(String id) {
     this.id = id == null ? "" : id;
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1) && plugin.getConfigPreferences().getOption("BOSSBAR")) {
-      gameBar = Bukkit.createBossBar(plugin.getChatManager().colorMessage(Messages.BOSSBAR_MAIN_TITLE), BarColor.BLUE, BarStyle.SOLID);
-    }
+    bossbarManager = new BossbarManager(this);
     scoreboardManager = new ScoreboardManager(this);
     setDefaultValues();
     gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new WaitingState());
@@ -198,28 +192,6 @@ public class Arena extends BukkitRunnable {
     this.ready = ready;
   }
 
-  /**
-   * Executes boss bar action for arena
-   *
-   * @param action add or remove a player from boss bar
-   * @param p      player
-   */
-  public void doBarAction(BarAction action, Player p) {
-    if(gameBar == null) {
-      return;
-    }
-
-    switch(action) {
-      case ADD:
-        gameBar.addPlayer(p);
-        break;
-      case REMOVE:
-        gameBar.removePlayer(p);
-        break;
-      default:
-        break;
-    }
-  }
 
   @Override
   public void run() {
@@ -229,7 +201,7 @@ public class Arena extends BukkitRunnable {
     }
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Running game task", id);
     long start = System.currentTimeMillis();
-
+    bossbarManager.bossBarUpdate();
     gameStateHandlers.get(arenaState).handleCall(this);
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Game task finished took {1}ms", id, System.currentTimeMillis() - start);
   }
@@ -242,23 +214,9 @@ public class Arena extends BukkitRunnable {
     this.forceStart = forceStart;
   }
 
-  public boolean isFighting() {
-    return fighting;
-  }
 
-  public void setFighting(boolean fighting) {
-    this.fighting = fighting;
-  }
-
-  /**
-   * Returns boss bar of the game.
-   * Please use doBarAction if possible
-   *
-   * @return game boss bar
-   * @see Arena#doBarAction(BarAction, Player)
-   */
-  public BossBar getGameBar() {
-    return gameBar;
+  public BossbarManager getBossbarManager() {
+    return bossbarManager;
   }
 
   /**

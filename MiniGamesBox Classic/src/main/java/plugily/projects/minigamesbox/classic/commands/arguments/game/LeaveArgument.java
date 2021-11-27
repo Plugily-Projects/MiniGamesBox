@@ -44,7 +44,7 @@ public class LeaveArgument {
           if(!registry.getPlugin().getBukkitHelper().checkIsInGameInstance(player)) {
             return;
           }
-          player.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TELEPORTED_TO_THE_LOBBY));
+          player.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY"));
           Arena arena = registry.getPlugin().getArenaRegistry().getArena(player);
 
           if(arena == null) {
@@ -56,7 +56,7 @@ public class LeaveArgument {
             registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), arena.getId());
           } else {
             arena.teleportToEndLocation(player);
-            ArenaManager.leaveAttempt(player, arena);
+            registry.getPlugin().getArenaManager().leaveAttempt(player, arena);
             registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to end location.", player.getName(), arena.getId());
           }
         }

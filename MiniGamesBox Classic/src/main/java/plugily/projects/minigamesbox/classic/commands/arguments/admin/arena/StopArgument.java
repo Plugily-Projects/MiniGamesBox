@@ -49,8 +49,8 @@ public class StopArgument {
             return;
           }
           if(arena.getArenaState() != ArenaState.ENDING) {
-            ArenaManager.stopGame(false, arena);
-            sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_COMMAND_EXECUTED));
+            registry.getPlugin().getArenaManager().stopGame(false, arena);
+            sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_COMMAND_EXECUTED"));
           }
         }
       }

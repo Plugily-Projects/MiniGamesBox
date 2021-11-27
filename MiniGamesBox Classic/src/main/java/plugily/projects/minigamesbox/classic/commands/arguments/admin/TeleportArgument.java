@@ -44,7 +44,7 @@ public class TeleportArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
           return;
         }
         if(args.length == 2) {
@@ -55,7 +55,7 @@ public class TeleportArgument {
         try {
           type = Arena.GameLocation.valueOf(args[2].toUpperCase());
         } catch(IllegalArgumentException e) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TELEPORT_LOCATION_INVALID));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_INVALID_LOCATION_TELEPORT"));
           return;
         }
         for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {

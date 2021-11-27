@@ -29,8 +29,12 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.ArenaEvents;
+import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.arena.ArenaRegistry;
+import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
 import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
+import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.events.ChatEvents;
 import plugily.projects.minigamesbox.classic.events.Events;
 import plugily.projects.minigamesbox.classic.events.JoinEvent;
@@ -43,12 +47,15 @@ import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
+import plugily.projects.minigamesbox.classic.handlers.language.LanguageManager;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageManager;
 import plugily.projects.minigamesbox.classic.handlers.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.handlers.party.PartySupportInitializer;
 import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsManager;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.PlaceholderManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
@@ -111,6 +118,10 @@ public class Main extends JavaPlugin {
   private ChatManager chatManager;
   private ArenaRegistry arenaRegistry;
   private KitRegistry kitRegistry;
+  private MessageManager messageManager;
+  private LanguageManager languageManager;
+  private ArgumentsRegistry argumentsRegistry;
+  private ArenaManager arenaManager;
 
   @TestOnly
   public Main() {
@@ -184,6 +195,8 @@ public class Main extends JavaPlugin {
   }
 
   public void initializeDefaultClasses() {
+    messageManager = new MessageManager(this);
+    languageManager = new LanguageManager(this);
     chatManager = new ChatManager(this);
     languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
@@ -235,6 +248,13 @@ public class Main extends JavaPlugin {
     //arena
     arenaRegistry = new ArenaRegistry(this);
     arenaRegistry.registerArenas();
+    argumentsRegistry = new ArgumentsRegistry(this);
+    new ArenaEvents(this);
+    arenaManager = new ArenaManager(this);
+
+    SetupInventory.init(this);
+    ArenaUtils.init(this);
+    Arena.init(this);
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -311,7 +331,7 @@ public class Main extends JavaPlugin {
 
     metrics.addCustomChart(new Metrics.SimplePie("database_enabled", () -> String.valueOf(configPreferences
         .getOption("DATABASE"))));
-    metrics.addCustomChart(new Metrics.SimplePie("locale_used", () -> LanguageManager.getPluginLocale().getPrefix()));
+    metrics.addCustomChart(new Metrics.SimplePie("locale_used", () -> languageManager.getPluginLocale().getPrefix()));
     metrics.addCustomChart(new Metrics.SimplePie("update_notifier", () -> {
       if(getConfig().getBoolean("Update-Notifier.Enabled", true)) {
         return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Enabled with beta notifier" : "Enabled";
@@ -333,20 +353,18 @@ public class Main extends JavaPlugin {
     Bukkit.getLogger().removeHandler(exceptionLogHandler);
     for(Arena arena : arenaRegistry.getArenas()) {
       arena.getScoreboardManager().stopAllScoreboards();
-
       for(Player player : arena.getPlayers()) {
         arena.teleportToEndLocation(player);
         player.setFlySpeed(0.1f);
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
-        arena.doBarAction(Arena.BarAction.REMOVE, player);
+        arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
         if(configPreferences.getOption("INVENTORY_MANAGER")) {
           InventorySerializer.loadInventory(this, player);
         }
       }
-
-      arena.getMapRestorerManager().fullyRestoreArena();
+      // arena.getMapRestorerManager().fullyRestoreArena();
     }
     userManager.getDatabase().disable();
     if(configPreferences.getOption("HOLOGRAMS")) {
@@ -477,41 +495,19 @@ public class Main extends JavaPlugin {
     return kitRegistry;
   }
 
-  /*
-      old normal Main to be removed over time
-   */
-
-/*
-
-
-  private ArgumentsRegistry registry;
-
-  @Override
-  public void onEnable() {
-    Messages.init(this);
-    LanguageManager.init(this);
-    initializeClasses();
+  public MessageManager getMessageManager() {
+    return messageManager;
   }
 
-  //order matters
-  private void initializeClasses() {
-    startInitiableClasses();
-    registry = new ArgumentsRegistry(this);
-    new ArenaEvents(this);
-  }
-
-  private void startInitiableClasses() {
-
-    ArenaManager.init(this);
-
-    SetupInventory.init(this);
-    ArenaUtils.init(this);
-    Arena.init(this);
+  public LanguageManager getLanguageManager() {
+    return languageManager;
   }
 
   public ArgumentsRegistry getArgumentsRegistry() {
-    return registry;
+    return argumentsRegistry;
   }
 
-*/
+  public ArenaManager getArenaManager() {
+    return arenaManager;
+  }
 }

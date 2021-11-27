@@ -50,12 +50,12 @@ public class DeleteArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
           return;
         }
         Arena arena = registry.getPlugin().getArenaRegistry().getArena(args[1]);
         if(arena == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_NO_ARENA_LIKE_THAT));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
           return;
         }
         if(!confirmations.contains(sender)) {
@@ -66,12 +66,12 @@ public class DeleteArgument {
           return;
         }
         confirmations.remove(sender);
-        ArenaManager.stopGame(false, arena);
+        registry.getPlugin().getArenaManager().stopGame(false, arena);
         FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "arenas");
         config.set("instances." + args[1], null);
         ConfigUtils.saveConfig(registry.getPlugin(), config, "arenas");
         registry.getPlugin().getArenaRegistry().unregisterArena(arena);
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_REMOVED_GAME_INSTANCE));
+        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_REMOVED_GAME_INSTANCE"));
       }
     });
   }

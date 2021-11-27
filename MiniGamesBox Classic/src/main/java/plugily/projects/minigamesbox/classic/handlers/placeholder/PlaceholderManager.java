@@ -24,6 +24,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.arena.Arena;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
     registerPlaceholder(new Placeholder("arena_players_online") {
       @Override
       public String getValue(Player player) {
-        return Integer.toString(ArenaRegistry.getArenaPlayersOnline());
+        return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
       }
     });
     registerPlaceholder(new Placeholder("exp_to_next_level") {
@@ -161,7 +162,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
     if(data.length < 2) {
       return null;
     }
-    Arena arena = ArenaRegistry.getArena(data[0]);
+    Arena arena = plugin.getArenaRegistry().getArena(data[0]);
     if(arena == null) {
       return null;
     }

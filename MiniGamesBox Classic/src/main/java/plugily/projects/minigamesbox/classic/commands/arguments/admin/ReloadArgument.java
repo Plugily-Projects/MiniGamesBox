@@ -24,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -58,11 +57,11 @@ public class ReloadArgument {
         confirmations.remove(sender);
 
         registry.getPlugin().reloadConfig();
-        LanguageManager.reloadConfig();
+        registry.getPlugin().getLanguageManager().reloadLanguage();
 
         for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           for(Player player : arena.getPlayers()) {
-            arena.doBarAction(Arena.BarAction.REMOVE, player);
+            arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
             arena.teleportToEndLocation(player);
             if(registry.getPlugin().getConfigPreferences().getOption("INVENTORY_MANAGER")) {
               InventorySerializer.loadInventory(registry.getPlugin(), player);
@@ -74,10 +73,10 @@ public class ReloadArgument {
               }
             }
           }
-          ArenaManager.stopGame(true, arena);
+          registry.getPlugin().getArenaManager().stopGame(true, arena);
         }
         registry.getPlugin().getArenaRegistry().registerArenas();
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_ADMIN_SUCCESS_RELOAD));
+        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_RELOAD_SUCCESS"));
       }
     });
   }

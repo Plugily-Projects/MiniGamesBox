@@ -131,8 +131,8 @@ public class User {
       return true;
     }
 
-    String message = plugin.getChatManager().colorMessage(Messages.KITS_ABILITY_STILL_ON_COOLDOWN);
-    message = message.replaceFirst("%COOLDOWN%", Long.toString(time));
+    String message = plugin.getChatManager().colorMessage("KIT_COOLDOWN");
+    message = message.replaceFirst("%cooldown%", Long.toString(time));
     getPlayer().sendMessage(message);
     return false;
   }

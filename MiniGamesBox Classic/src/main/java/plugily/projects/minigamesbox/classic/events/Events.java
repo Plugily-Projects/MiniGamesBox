@@ -134,7 +134,7 @@ public class Events implements Listener {
       return;
     }
     event.setCancelled(true);
-    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.ONLY_COMMAND_IN_GAME_IS_LEAVE));
+    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_COMMANDS_BLOCKED"));
   }
 
   @EventHandler
@@ -158,7 +158,7 @@ public class Events implements Listener {
     }
     if(key.equalsIgnoreCase(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").getPath())) {
       event.setCancelled(true);
-      ArenaUtils.arenaForceStart(event.getPlayer());
+      ArenaUtils.arenaForceStart(event.getPlayer(), plugin.getConfig().getInt("Time-Manager.Shorten-Waiting"));
       return;
     }
     if(key.equals(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").getPath()) || key.equals(plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").getPath())) {
@@ -166,7 +166,7 @@ public class Events implements Listener {
       if(plugin.getConfigPreferences().getOption("BUNGEE")) {
         plugin.getBungeeManager().connectToHub(event.getPlayer());
       } else {
-        ArenaManager.leaveAttempt(event.getPlayer(), arena);
+        plugin.getArenaManager().leaveAttempt(event.getPlayer(), arena);
       }
     }
   }

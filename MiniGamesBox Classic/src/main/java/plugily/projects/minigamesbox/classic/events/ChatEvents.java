@@ -72,7 +72,7 @@ public class ChatEvents implements Listener {
       }
       event.setMessage(ChatColor.stripColor(eventMessage));
 
-      String format = formatChatPlaceholders(LanguageManager.getLanguageMessage("In-Game.Game-Chat-Format"), plugin.getUserManager().getUser(event.getPlayer()));
+      String format = formatChatPlaceholders(plugin.getChatManager().colorMessage("IN_GAME_GAME_CHAT_FORMAT"), plugin.getUserManager().getUser(event.getPlayer()));
       event.setFormat(format);
     }
     if(!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
@@ -86,7 +86,7 @@ public class ChatEvents implements Listener {
     formatted = plugin.getChatManager().colorRawMessage(formatted);
     formatted = StringUtils.replace(formatted, "%level%", Integer.toString(user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
     if(user.isSpectator()) {
-      formatted = StringUtils.replace(formatted, "%kit%", plugin.getChatManager().colorMessage(Messages.DEAD_TAG_ON_DEATH));
+      formatted = StringUtils.replace(formatted, "%kit%", plugin.getChatManager().colorMessage("IN_GAME_DEATH_TAG"));
     } else {
       formatted = StringUtils.replace(formatted, "%kit%", user.getKit().getName());
     }

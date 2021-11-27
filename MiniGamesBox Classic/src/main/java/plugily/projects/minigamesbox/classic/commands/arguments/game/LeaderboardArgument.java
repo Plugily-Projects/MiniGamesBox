@@ -53,18 +53,18 @@ public class LeaderboardArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.LEADERBOARD_TYPE_NAME));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_TOP_TYPE_NAME"));
           return;
         }
         try {
           StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
           if(statisticType == registry.getPlugin().getStatsStorage().getStatisticType("XP")) {
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.LEADERBOARD_INVALID_NAME));
+            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_TOP_INVALID_NAME"));
             return;
           }
           printLeaderboard(sender, statisticType);
         } catch(IllegalArgumentException e) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.LEADERBOARD_INVALID_NAME));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_TOP_INVALID_NAME"));
         }
       }
     });
@@ -72,7 +72,7 @@ public class LeaderboardArgument {
 
   private void printLeaderboard(CommandSender sender, StatisticType statisticType) {
     java.util.Map<UUID, Integer> stats = registry.getPlugin().getStatsStorage().getStats(statisticType);
-    sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.LEADERBOARD_HEADER));
+    sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_HEADER"));
     String statistic = StringUtils.capitalize(statisticType.toString().toLowerCase().replace('_', ' '));
     UUID[] array = stats.keySet().toArray(new UUID[0]);
     for(int position = 1; position <= 10; position++) {
@@ -90,7 +90,7 @@ public class LeaderboardArgument {
   }
 
   private String formatMessage(String statisticName, String playerName, int position, int value) {
-    String message = registry.getPlugin().getChatManager().colorMessage(Messages.LEADERBOARD_FORMAT);
+    String message = registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_FORMAT");
     message = StringUtils.replace(message, "%position%", Integer.toString(position));
     message = StringUtils.replace(message, "%name%", playerName);
     message = StringUtils.replace(message, "%value%", Integer.toString(value));

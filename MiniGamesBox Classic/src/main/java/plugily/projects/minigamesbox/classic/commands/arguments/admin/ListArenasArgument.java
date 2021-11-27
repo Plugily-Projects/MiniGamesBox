@@ -39,16 +39,16 @@ public class ListArenasArgument {
             "&7Shows list with all loaded arenas\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.list")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_ADMIN_LIST_HEADER));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_HEADER"));
 
         if(registry.getPlugin().getArenaRegistry().getArenas().isEmpty()) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_ADMIN_LIST_NO_ARENAS));
-          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&e&lTIP: &7You can get free maps with configs at our wiki! Just head to https://wiki.plugily.xyz/villagedefense/setup/maps"));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_NO_ARENAS"));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&e&lTIP: &7You can get free maps with configs at our wiki! Just head to https://wiki.plugily.xyz/"+ registry.getPlugin().getPluginNamePrefixLong().toLowerCase() +"/setup/maps"));
           return;
         }
 
         for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_ADMIN_LIST_FORMAT).replace("%arena%", arena.getId())
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_FORMAT").replace("%arena%", arena.getId())
               .replace("%status%", arena.getArenaState().getFormattedName()).replace("%players%", Integer.toString(arena.getPlayers().size()))
               .replace("%maxplayers%", Integer.toString(arena.getMaximumPlayers())));
         }

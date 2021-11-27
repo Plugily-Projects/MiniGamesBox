@@ -43,7 +43,7 @@ public class RestartingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(Arena arena) {
-    arena.getMapRestorerManager().fullyRestoreArena();
+    //arena.getMapRestorerManager().fullyRestoreArena();
     arena.getPlayers().clear();
     arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
 
@@ -54,11 +54,8 @@ public class RestartingState implements ArenaStateHandler {
       }
       plugin.getArenaRegistry().shuffleBungeeArena();
       for(Player player : Bukkit.getOnlinePlayers()) {
-        ArenaManager.joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
+        plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
       }
-    }
-    if(arena.getGameBar() != null) {
-      arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_WAITING_FOR_PLAYERS));
     }
   }
 

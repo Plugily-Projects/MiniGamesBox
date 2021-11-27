@@ -56,7 +56,7 @@ public class SetLevelArgument {
         }
 
         if(target == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TARGET_PLAYER_NOT_FOUND));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_PLAYER_NOT_FOUND"));
           return;
         }
 
@@ -65,9 +65,9 @@ public class SetLevelArgument {
         if(opt.isPresent()) {
           User user = registry.getPlugin().getUserManager().getUser(target);
           user.setStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL"), opt.get());
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_ADMIN_ADDED_LEVEL));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_ADDED_LEVEL"));
         } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_WRONG_USAGE)
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE")
               .replace("%correct%", "/" + registry.getPlugin().getCommandAdminPrefix() + " setlevel <amount> [player]"));
         }
       }

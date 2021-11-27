@@ -31,7 +31,7 @@
 #
 #                               All script provided objects:
 #            player - Player object (API methods https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html)
-#    arena - Plugin arena (API methods https://jd.plugily.xyz/apidocs/minecraft/PLUGILYPROJECTS/plugily/projects/villagedefense/arena/Arena.html)
+#    arena - Plugin arena (API methods https://jd.plugily.xyz/apidocs/minecraft/PLUGILYPROJECTS/plugily/projects/PLUGILYPROJECTS/arena/Arena.html)
 #            server - Bukkit server object (API methods https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Server.html)
 #
 #                            Whole documentation of scripts soon!

@@ -144,7 +144,7 @@ public class ArenaRegistry {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
     ConfigurationSection section = config.getConfigurationSection("instances");
     if(section == null) {
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage(Messages.VALIDATOR_NO_INSTANCES_CREATED));
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_NO_INSTANCES_CREATED"));
       return;
     }
 
@@ -162,7 +162,7 @@ public class ArenaRegistry {
       if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
           || endLoc == null || endLoc.getWorld() == null) {
         section.set(id + ".isdone", false);
-        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage(Messages.VALIDATOR_INVALID_ARENA_CONFIGURATION).replace("%arena%", id).replace("%error%", "Location world is invalid"));
+        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "Location world is invalid"));
         arena.setReady(false);
         registerArena(arena);
         continue;
@@ -176,7 +176,7 @@ public class ArenaRegistry {
       arena.setEndLocation(endLoc);
 
       if(!section.getBoolean(id + ".isdone")) {
-        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage(Messages.VALIDATOR_INVALID_ARENA_CONFIGURATION).replace("%arena%", id).replace("%error%", "NOT VALIDATED"));
+        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "NOT VALIDATED"));
         arena.setReady(false);
         registerArena(arena);
         continue;
@@ -190,7 +190,7 @@ public class ArenaRegistry {
       }
 
       if(startLocWorld.getDifficulty() == Difficulty.PEACEFUL) {
-        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage(Messages.VALIDATOR_INVALID_ARENA_CONFIGURATION).replace("%arena%", id).replace("%error%", "THERE IS A WRONG " +
+        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "THERE IS A WRONG " +
             "DIFFICULTY -> SET IT TO ANOTHER ONE THAN PEACEFUL"));
         arena.setReady(false);
         registerArena(arena);
@@ -199,7 +199,7 @@ public class ArenaRegistry {
 
       registerArena(arena);
       arena.start();
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage(Messages.VALIDATOR_INSTANCE_STARTED).replace("%arena%", id));
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INSTANCE_STARTED").replace("%arena%", id));
     }
     ConfigUtils.saveConfig(plugin, config, "arenas");
     plugin.getDebugger().debug("[ArenaRegistry] Arenas registration completed took {0}ms", System.currentTimeMillis() - start);

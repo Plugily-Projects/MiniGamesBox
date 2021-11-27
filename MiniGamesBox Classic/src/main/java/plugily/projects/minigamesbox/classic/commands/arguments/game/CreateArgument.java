@@ -52,7 +52,7 @@ public class CreateArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage(Messages.COMMANDS_TYPE_ARENA_NAME));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
           return;
         }
         Player player = (Player) sender;

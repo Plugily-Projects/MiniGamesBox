@@ -102,7 +102,7 @@ public class UserManager {
       user.addStat(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);
       //Arena can be null when player has left the arena before this message the arean is retrieved.
       if(arena != null)
-        user.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.YOU_LEVELED_UP), user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
+        user.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_LEVEL_UP"), user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
     }
   }
 

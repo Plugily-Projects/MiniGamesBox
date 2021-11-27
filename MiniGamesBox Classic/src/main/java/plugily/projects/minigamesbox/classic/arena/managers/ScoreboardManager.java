@@ -19,19 +19,16 @@
 
 package plugily.projects.minigamesbox.classic.arena.managers;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.tigerhix.lib.scoreboard.ScoreboardLib;
 import me.tigerhix.lib.scoreboard.common.EntryBuilder;
 import me.tigerhix.lib.scoreboard.type.Entry;
 import me.tigerhix.lib.scoreboard.type.Scoreboard;
 import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.handlers.language.LanguageManager;
 import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.List;
@@ -57,7 +54,7 @@ public class ScoreboardManager {
   public ScoreboardManager(Arena arena) {
     this.arena = arena;
     this.plugin = arena.getPlugin();
-    this.boardTitle = plugin.getChatManager().colorRawMessage(LanguageManager.getLanguageMessage("Scoreboard.Title"));
+    this.boardTitle = plugin.getChatManager().colorMessage("SCOREBOARD_TITLE");
   }
 
   /**
@@ -108,15 +105,10 @@ public class ScoreboardManager {
   private List<Entry> formatScoreboard(User user) {
     EntryBuilder builder = new EntryBuilder();
     List<String> lines;
-    if(arena.getArenaState() == ArenaState.IN_GAME) {
-      lines = LanguageManager.getLanguageList("Scoreboard.Content.Playing" + (arena.isFighting() ? "" : "-Waiting"));
+    if(arena.getArenaState() == ArenaState.FULL_GAME) {
+      lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content.In-Game");
     } else {
-      //apply fix
-      if(arena.getArenaState() == ArenaState.ENDING) {
-        lines = LanguageManager.getLanguageList("Scoreboard.Content.Playing");
-      } else {
-        lines = LanguageManager.getLanguageList("Scoreboard.Content." + arena.getArenaState().getFormattedName());
-      }
+      lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content." + arena.getArenaState().getFormattedName());
     }
     for(String line : lines) {
       builder.next(formatScoreboardLine(line, user));
@@ -126,16 +118,7 @@ public class ScoreboardManager {
 
   private String formatScoreboardLine(String line, User user) {
     String formattedLine = line;
-    formattedLine = StringUtils.replace(formattedLine, "%TIME%", Integer.toString(arena.getTimer()));
-    formattedLine = StringUtils.replace(formattedLine, "%PLAYERS%", Integer.toString(arena.getPlayers().size()));
-    formattedLine = StringUtils.replace(formattedLine, "%MIN_PLAYERS%", Integer.toString(arena.getMinimumPlayers()));
-    formattedLine = StringUtils.replace(formattedLine, "%PLAYERS_LEFT%", Integer.toString(arena.getPlayersLeft().size()));
-    formattedLine = StringUtils.replace(formattedLine, "%ARENA_NAME%", arena.getMapName());
-    formattedLine = StringUtils.replace(formattedLine, "%ARENA_ID%", arena.getId());
-    formattedLine = plugin.getChatManager().colorRawMessage(formattedLine);
-    if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      formattedLine = PlaceholderAPI.setPlaceholders(user.getPlayer(), formattedLine);
-    }
+    formattedLine = plugin.getChatManager().formatMessage(arena, formattedLine, user.getPlayer());
     return formattedLine;
   }
 

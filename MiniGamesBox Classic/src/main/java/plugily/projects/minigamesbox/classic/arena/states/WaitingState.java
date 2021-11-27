@@ -44,17 +44,14 @@ public class WaitingState implements ArenaStateHandler {
 
     if(arena.getPlayers().size() < minPlayers) {
       if(arena.getTimer() <= 0) {
-        arena.setTimer(45);
-        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage(Messages.LOBBY_MESSAGES_WAITING_FOR_PLAYERS), minPlayers));
+        arena.setTimer(plugin.getConfig().getInt("Time-Manager.Waiting", 20));
+        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
         return;
       }
     } else {
-      if(arena.getGameBar() != null) {
-        arena.getGameBar().setTitle(plugin.getChatManager().colorMessage(Messages.BOSSBAR_WAITING_FOR_PLAYERS));
-      }
-      plugin.getChatManager().broadcast(arena, Messages.LOBBY_MESSAGES_ENOUGH_PLAYERS_TO_START);
+      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
       arena.setArenaState(ArenaState.STARTING);
-      arena.setTimer(plugin.getConfig().getInt("Starting-Waiting-Time", 60));
+      arena.setTimer(plugin.getConfig().getInt("Time-Manager.Starting", 60));
     }
     arena.setTimer(arena.getTimer() - 1);
   }

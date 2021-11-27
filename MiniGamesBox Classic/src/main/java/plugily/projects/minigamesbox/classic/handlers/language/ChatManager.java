@@ -42,7 +42,7 @@ public class ChatManager {
 
   public ChatManager(Main plugin) {
     this.plugin = plugin;
-    this.pluginPrefix = colorMessage(Messages.PLUGIN_PREFIX);
+    this.pluginPrefix = colorMessage("IN_GAME_PLUGIN_PREFIX");
   }
 
   /**
@@ -52,18 +52,38 @@ public class ChatManager {
     return pluginPrefix;
   }
 
-  public String colorMessage(Messages message) {
-    return colorRawMessage(LanguageManager.getLanguageMessage(message.getAccessor()));
+  public String colorMessage(String key) {
+    return colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key)));
+  }
+
+  public String colorMessage(Message message) {
+    return colorRawMessage(plugin.getLanguageManager().getLanguageMessage(message.getPath()));
+  }
+
+  public void sendMessage(Message message, Player player, String prefix) {
+    String colorMessage = colorMessage(message);
+    if(colorMessage != null && !colorMessage.isEmpty()) {
+      player.sendMessage(prefix + colorMessage);
+    }
+  }
+
+  public void sendMessage(Message message, Player player) {
+    String colorMessage = colorMessage(message);
+    if(colorMessage != null && !colorMessage.isEmpty()) {
+      player.sendMessage(pluginPrefix + colorMessage);
+    }
   }
 
   public String colorRawMessage(String message) {
-    if(message == null) {
+    if(message == null || message.isEmpty()) {
       return "";
     }
 
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && message.indexOf('#') >= 0) {
       message = MiscUtils.matchColorRegex(message);
     }
+
+    message = formatMessage(message);
 
     return ChatColor.translateAlternateColorCodes('&', message);
   }
@@ -75,10 +95,11 @@ public class ChatManager {
    * @param arena   arena to get players from
    * @param message constant message to broadcast
    */
-  public void broadcast(Arena arena, Messages message) {
-    if (message != null && !message.getMessage().isEmpty()) {
+  public void broadcast(Arena arena, String key) {
+    String colorMessage = colorMessage(key);
+    if(colorMessage != null && !colorMessage.isEmpty()) {
       for(Player p : arena.getPlayers()) {
-        p.sendMessage(pluginPrefix + message.getMessage());
+        p.sendMessage(pluginPrefix + colorMessage);
       }
     }
   }
@@ -91,23 +112,46 @@ public class ChatManager {
    * @param message message to broadcast
    */
   public void broadcastMessage(Arena arena, String message) {
-    if (message != null && !message.isEmpty()) {
+    if(message != null && !message.isEmpty()) {
       for(Player p : arena.getPlayers()) {
         p.sendMessage(pluginPrefix + message);
       }
     }
   }
 
+  public String formatMessage(String message) {
+    String returnString = message;
+    returnString = colorRawMessage(formatPlaceholders(returnString));
+    if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+      returnString = PlaceholderAPI.setPlaceholders(null, returnString);
+    }
+    return returnString;
+  }
+
+  public String formatMessage(String message, Arena arena) {
+    String returnString = message;
+    returnString = colorRawMessage(formatPlaceholders(returnString, arena));
+    return returnString;
+  }
+
   public String formatMessage(Arena arena, String message, int integer) {
     String returnString = message;
-    returnString = StringUtils.replace(returnString, "%NUMBER%", Integer.toString(integer));
+    returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
+    returnString = colorRawMessage(formatPlaceholders(returnString, arena));
+    return returnString;
+  }
+
+  public String formatMessage(Arena arena, String message, int integer, Player player) {
+    String returnString = message;
+    returnString = StringUtils.replace(returnString, "%player%", player.getName());
+    returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     return returnString;
   }
 
   public String formatMessage(Arena arena, String message, Player player) {
     String returnString = message;
-    returnString = StringUtils.replace(returnString, "%PLAYER%", player.getName());
+    returnString = StringUtils.replace(returnString, "%player%", player.getName());
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       returnString = PlaceholderAPI.setPlaceholders(player, returnString);
@@ -115,34 +159,36 @@ public class ChatManager {
     return returnString;
   }
 
+  private String formatPlaceholders(String message) {
+    String returnString = message;
+    returnString = StringUtils.replace(returnString, "%plugin_name%", plugin.getName());
+    returnString = StringUtils.replace(returnString, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
+    returnString = StringUtils.replace(returnString, "%plugin_short_command%", plugin.getPluginNamePrefix());
+    return returnString;
+  }
+
   private String formatPlaceholders(String message, Arena arena) {
     int timer = arena.getTimer();
-
     String returnString = message;
-    returnString = StringUtils.replace(returnString, "%ARENANAME%", arena.getMapName());
-    returnString = StringUtils.replace(returnString, "%TIME%", Integer.toString(timer));
-    returnString = StringUtils.replace(returnString, "%FORMATTEDTIME%", StringFormatUtils.formatIntoMMSS(timer));
-    returnString = StringUtils.replace(returnString, "%PLAYERSIZE%", Integer.toString(arena.getPlayers().size()));
-    returnString = StringUtils.replace(returnString, "%MAXPLAYERS%", Integer.toString(arena.getMaximumPlayers()));
-    returnString = StringUtils.replace(returnString, "%MINPLAYERS%", Integer.toString(arena.getMinimumPlayers()));
+    returnString = StringUtils.replace(returnString, "%plugin_name%", plugin.getName());
+    returnString = StringUtils.replace(returnString, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
+    returnString = StringUtils.replace(returnString, "%plugin_short_command%", plugin.getPluginNamePrefix());
+    returnString = StringUtils.replace(returnString, "%arena_min_players%", Integer.toString(arena.getMinimumPlayers()));
+    returnString = StringUtils.replace(returnString, "%arena_players%", String.valueOf(arena.getPlayers()));
+    returnString = StringUtils.replace(returnString, "%arena_max_players%", Integer.toString(arena.getMaximumPlayers()));
+    returnString = StringUtils.replace(returnString, "%arena_players_size%", Integer.toString(arena.getPlayers().size()));
+    returnString = StringUtils.replace(returnString, "%arena_name%", arena.getMapName());
+    returnString = StringUtils.replace(returnString, "%arena_id%", arena.getId());
+    returnString = StringUtils.replace(returnString, "%arena_state%", String.valueOf(arena.getArenaState()));
+    returnString = StringUtils.replace(returnString, "%arena_state_formatted%", arena.getArenaState().getFormattedName());
+    returnString = StringUtils.replace(returnString, "%arena_state_placeholder%", arena.getArenaState().getPlaceholder());
+    returnString = StringUtils.replace(returnString, "%arena_time%", Integer.toString(timer));
+    returnString = StringUtils.replace(returnString, "%arena_formatted_time%", StringFormatUtils.formatIntoMMSS(timer));
     return returnString;
   }
 
   public void broadcastAction(Arena arena, Player player, ActionType action) {
-    Messages message;
-    switch(action) {
-      case JOIN:
-        message = Messages.JOIN;
-        break;
-      case LEAVE:
-        message = Messages.LEAVE;
-        break;
-      case DEATH:
-        message = Messages.DEATH;
-        break;
-      default:
-        return; //likely won't ever happen
-    }
+    Message message = plugin.getMessageManager().getMessage("IN_GAME_MESSAGES_" + action.toString());
     broadcastMessage(arena, formatMessage(arena, colorMessage(message), player));
   }
 
