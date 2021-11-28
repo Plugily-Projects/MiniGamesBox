@@ -181,13 +181,19 @@ public class SignManager implements Listener {
     }
 
     for(String path : section.getKeys(false)) {
-      for(String sign : section.getStringList(path + ".signs")) {
-        Location loc = LocationSerializer.getLocation(sign);
-        if(loc.getBlock().getState() instanceof Sign) {
-          arenaSigns.add(new ArenaSign((Sign) loc.getBlock().getState(), plugin.getArenaRegistry().getArena(path)));
-          continue;
+      Arena arena = plugin.getArenaRegistry().getArena(path);
+      if(arena != null) {
+        for(String sign : section.getStringList(path + ".signs")) {
+          Location loc = LocationSerializer.getLocation(sign);
+          if(loc != null) {
+            org.bukkit.block.BlockState state = loc.getBlock().getState();
+            if(state instanceof Sign) {
+              arenaSigns.add(new ArenaSign((Sign) state, arena));
+              continue;
+            }
+          }
+          plugin.getDebugger().debug(Level.WARNING, "Block at location {0} for arena {1} is not a sign!", sign, path);
         }
-        plugin.getDebugger().debug(Level.WARNING, "Block at location {0} for arena {1} is not a sign!", LocationSerializer.locationToString(loc), path);
       }
     }
     plugin.getDebugger().debug("Sign load event finished took {0}ms", System.currentTimeMillis() - start);

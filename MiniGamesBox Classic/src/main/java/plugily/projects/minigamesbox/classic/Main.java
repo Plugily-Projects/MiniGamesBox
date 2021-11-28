@@ -235,21 +235,20 @@ public class Main extends JavaPlugin {
       bungeeManager = new BungeeManager(this);
       new MiscEvents(this);
     }
-    new SpectatorEvents(this);
-    new QuitEvent(this);
-    new JoinEvent(this);
-    new ChatEvents(this);
 
+    new ArenaEvents(this);
+    new SpectatorEvents(this);
+    new JoinEvent(this);
+    new QuitEvent(this);
+    new ChatEvents(this);
     new Events(this);
     new LobbyEvents(this);
     new SpectatorItemEvents(this);
-
 
     //arena
     arenaRegistry = new ArenaRegistry(this);
     arenaRegistry.registerArenas();
     argumentsRegistry = new ArgumentsRegistry(this);
-    new ArenaEvents(this);
     arenaManager = new ArenaManager(this);
 
     SetupInventory.init(this);
