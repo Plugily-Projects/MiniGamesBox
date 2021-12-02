@@ -28,6 +28,7 @@ import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.managers.BossbarManager;
+import plugily.projects.minigamesbox.classic.arena.managers.MapRestorerManager;
 import plugily.projects.minigamesbox.classic.arena.managers.ScoreboardManager;
 import plugily.projects.minigamesbox.classic.arena.options.ArenaOption;
 import plugily.projects.minigamesbox.classic.arena.states.ArenaStateHandler;
@@ -69,6 +70,7 @@ public class Arena extends BukkitRunnable {
 
   private ScoreboardManager scoreboardManager;
   private BossbarManager bossbarManager;
+  private MapRestorerManager mapRestorerManager;
 
   private ArenaState arenaState = ArenaState.WAITING_FOR_PLAYERS;
   private String mapName = "";
@@ -87,11 +89,10 @@ public class Arena extends BukkitRunnable {
     for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
-    loadOptions();
+    loadArenaOptions();
   }
 
-  //todo
-  private void loadOptions() {
+  public void loadArenaOptions() {
     ArenaOption.getOptions().forEach((s, option) -> arenaOptions.put(s, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected())));
   }
 
@@ -161,6 +162,7 @@ public class Arena extends BukkitRunnable {
     this.id = id == null ? "" : id;
     bossbarManager = new BossbarManager(this);
     scoreboardManager = new ScoreboardManager(this);
+    mapRestorerManager = new MapRestorerManager(this);
     setDefaultValues();
     gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new WaitingState());
     gameStateHandlers.put(ArenaState.STARTING, new StartingState());
@@ -170,7 +172,7 @@ public class Arena extends BukkitRunnable {
     for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
-    loadOptions();
+    loadArenaOptions();
   }
 
   public static void init(Main plugin) {
@@ -282,6 +284,10 @@ public class Arena extends BukkitRunnable {
     setArenaOption("MAXIMUM_PLAYERS", maximumPlayers);
   }
 
+  public MapRestorerManager getMapRestorerManager() {
+    return mapRestorerManager;
+  }
+
   @NotNull
   public ArenaState getArenaState() {
     return arenaState;
@@ -372,10 +378,6 @@ public class Arena extends BukkitRunnable {
 
   public Main getPlugin() {
     return plugin;
-  }
-
-  public void resetOptionValues() {
-
   }
 
   public enum BarAction {

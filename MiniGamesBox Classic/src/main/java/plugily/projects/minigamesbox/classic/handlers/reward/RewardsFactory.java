@@ -141,7 +141,7 @@ public class RewardsFactory {
 
   public void performReward(Player player, Arena arena, Set<Reward> rewards) {
     if(arena == null && player != null)
-      arena = ArenaRegistry.getArena(player);
+      arena = plugin.getArenaRegistry().getArena(player);
 
     if(arena == null)
       return;
@@ -193,7 +193,7 @@ public class RewardsFactory {
     }
 
     if(arena == null && player != null)
-      arena = ArenaRegistry.getArena(player);
+      arena = plugin.getArenaRegistry().getArena(player);
 
     if(arena == null)
       return;

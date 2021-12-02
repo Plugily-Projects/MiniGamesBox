@@ -363,7 +363,7 @@ public class Main extends JavaPlugin {
           InventorySerializer.loadInventory(this, player);
         }
       }
-      // arena.getMapRestorerManager().fullyRestoreArena();
+      arena.getMapRestorerManager().fullyRestoreArena();
     }
     userManager.getDatabase().disable();
     if(configPreferences.getOption("HOLOGRAMS")) {

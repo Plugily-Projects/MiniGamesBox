@@ -43,11 +43,10 @@ public class RestartingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(Arena arena) {
-    //arena.getMapRestorerManager().fullyRestoreArena();
+    arena.getMapRestorerManager().fullyRestoreArena();
     arena.getPlayers().clear();
     arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
 
-    arena.resetOptionValues();
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
         plugin.getServer().shutdown();

@@ -17,7 +17,6 @@
  *
  */
 
-
 package plugily.projects.minigamesbox.classic.handlers.language;
 
 import plugily.projects.minigamesbox.classic.Main;
@@ -38,7 +37,6 @@ import java.util.Map;
 public class MessageManager {
   private final Main plugin;
   private final Map<String, Message> options = new HashMap<>();
-  private final Map<String, Integer> customPermissions = new HashMap<>();
 
   public MessageManager(Main plugin) {
     this.plugin = plugin;
@@ -75,7 +73,6 @@ public class MessageManager {
     return options.get(name).getPath();
   }
 
-
   /**
    * Register a new messages
    *
@@ -108,5 +105,4 @@ public class MessageManager {
   public Map<String, Message> getAllMessages() {
     return Collections.unmodifiableMap(options);
   }
-
 }

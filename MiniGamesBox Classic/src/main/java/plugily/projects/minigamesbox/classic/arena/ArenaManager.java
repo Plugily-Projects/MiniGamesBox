@@ -275,7 +275,6 @@ public class ArenaManager {
       }
     }
     arena.getScoreboardManager().stopAllScoreboards();
-    arena.resetOptionValues();
     arena.setTimer(5);
     arena.getMapRestorerManager().fullyRestoreArena();
     arena.setArenaState(ArenaState.ENDING);

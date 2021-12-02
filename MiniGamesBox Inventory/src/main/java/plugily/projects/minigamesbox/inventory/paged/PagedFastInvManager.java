@@ -85,9 +85,7 @@ public final class PagedFastInvManager {
         PagedFastInv inv = (PagedFastInv) e.getInventory().getHolder();
 
         boolean wasCancelled = e.isCancelled();
-        if(wasCancelled) {
-          e.setCancelled(true);
-        }
+        e.setCancelled(true);
 
         inv.handleClick(e);
 

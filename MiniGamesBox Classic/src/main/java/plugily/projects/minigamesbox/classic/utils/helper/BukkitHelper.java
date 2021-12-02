@@ -155,7 +155,7 @@ public class BukkitHelper {
 
   public boolean checkIsInGameInstance(Player player) {
     if(plugin.getArenaRegistry().getArena(player) == null) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_NOT_PLAYING));
+      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NOT_PLAYING"));
       return false;
     }
     return true;
@@ -165,7 +165,7 @@ public class BukkitHelper {
     if(sender.hasPermission(perm)) {
       return true;
     }
-    sender.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.COMMANDS_NO_PERMISSION));
+    sender.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NO_PERMISSION"));
     return false;
   }
 

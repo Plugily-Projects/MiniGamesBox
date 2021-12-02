@@ -107,7 +107,7 @@ public class MiscComponents implements SetupComponent {
       }
 
       plugin.getSignManager().getArenaSigns().add(new ArenaSign((Sign) block.getState(), arena));
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage(Messages.SIGNS_SIGN_CREATED));
+      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_CREATED"));
 
       List<String> locs = config.getStringList("instances." + arena.getId() + ".signs");
       locs.add(location.getWorld().getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ() + ",0.0,0.0");
