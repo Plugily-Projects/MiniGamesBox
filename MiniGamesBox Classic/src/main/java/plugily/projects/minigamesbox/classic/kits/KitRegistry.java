@@ -22,6 +22,7 @@ package plugily.projects.minigamesbox.classic.kits;
 import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.Main;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
+import plugily.projects.minigamesbox.classic.kits.free.ExampleKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class KitRegistry {
   private final List<Kit> kits = new java.util.ArrayList<>();
   private Kit defaultKit;
   private final Main plugin;
+  private static final Class<?>[] classKitNames = new Class[]{ExampleKit.class};
 
 
   public KitRegistry(Main plugin) {
@@ -93,7 +95,7 @@ public class KitRegistry {
         }
       }
     }
-    setDefaultKit(new KnightKit());
+    setDefaultKit(new ExampleKit());
   }
 
 }
