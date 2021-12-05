@@ -24,9 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngine;
 
@@ -49,9 +48,9 @@ public class RewardsFactory {
   private final Map<String, RewardType> rewardTypes = new HashMap<>();
   private final FileConfiguration config;
   private final boolean enabled;
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public RewardsFactory(Main plugin) {
+  public RewardsFactory(PluginMain plugin) {
     enabled = plugin.getConfig().getBoolean("Rewards-Enabled");
     config = ConfigUtils.getConfig(plugin, "rewards");
     this.plugin = plugin;

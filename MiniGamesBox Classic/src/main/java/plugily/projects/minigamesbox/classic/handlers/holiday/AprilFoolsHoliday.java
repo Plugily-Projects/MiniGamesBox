@@ -27,7 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.util.Vector;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.powerup.Powerup;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -43,7 +43,7 @@ import java.util.Random;
  */
 public class AprilFoolsHoliday implements Holiday, Listener {
   private Random random;
-  private Main plugin;
+  private PluginMain plugin;
 
   @Override
   public boolean isHoliday(LocalDateTime dateTime) {
@@ -53,7 +53,7 @@ public class AprilFoolsHoliday implements Holiday, Listener {
   }
 
   @Override
-  public void enable(Main plugin) {
+  public void enable(PluginMain plugin) {
     this.random = new Random();
     this.plugin = plugin;
     Powerup powerup = new Powerup("APRIL_FOOL", plugin.getChatManager().colorRawMessage("&a&llololol"),

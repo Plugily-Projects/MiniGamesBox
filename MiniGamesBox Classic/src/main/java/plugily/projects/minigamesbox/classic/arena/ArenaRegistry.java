@@ -27,7 +27,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
@@ -44,12 +44,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ArenaRegistry {
 
   private final List<Arena> arenas = new ArrayList<>();
-  private final Main plugin;
+  private final PluginMain plugin;
   private final List<World> arenaIngameWorlds = new ArrayList<>();
 
   private int bungeeArena = -999;
 
-  public ArenaRegistry(Main plugin) {
+  public ArenaRegistry(PluginMain plugin) {
     this.plugin = plugin;
   }
 

@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.setup.components.ArenaRegisterComponent;
 import plugily.projects.minigamesbox.classic.handlers.setup.components.MiscComponents;
@@ -42,7 +42,7 @@ public class SetupInventory {
 
   public static final String VIDEO_LINK = "https://tutorial.plugily.xyz";
   private static final Random random = new Random();
-  private static Main plugin;
+  private static PluginMain plugin;
   private final FileConfiguration config;
   private final Arena arena;
   private final Player player;
@@ -57,7 +57,7 @@ public class SetupInventory {
     prepareGui();
   }
 
-  public static void init(Main plugin) {
+  public static void init(PluginMain plugin) {
     SetupInventory.plugin = plugin;
   }
 
@@ -121,7 +121,7 @@ public class SetupInventory {
     gui.open(player);
   }
 
-  public Main getPlugin() {
+  public PluginMain getPlugin() {
     return plugin;
   }
 

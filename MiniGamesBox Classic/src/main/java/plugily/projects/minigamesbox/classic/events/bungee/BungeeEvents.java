@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.events.bungee;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 
@@ -30,11 +30,11 @@ import plugily.projects.minigamesbox.classic.arena.ArenaState;
  * <p>
  * Created at 09.10.2021
  */
-public class MiscEvents implements Listener {
+public class BungeeEvents implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public MiscEvents(Main plugin) {
+  public BungeeEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

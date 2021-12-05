@@ -21,7 +21,7 @@
 package plugily.projects.minigamesbox.classic.handlers.hologram;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
@@ -36,9 +36,9 @@ import java.util.List;
 public class LeaderboardRegistry {
 
   private final List<LeaderboardHologram> leaderboardHolograms = new ArrayList<>();
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public LeaderboardRegistry(Main plugin) {
+  public LeaderboardRegistry(PluginMain plugin) {
     this.plugin = plugin;
     registerHolograms();
   }

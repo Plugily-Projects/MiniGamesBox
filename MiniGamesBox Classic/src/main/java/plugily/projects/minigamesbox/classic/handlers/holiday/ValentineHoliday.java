@@ -25,7 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.powerup.Powerup;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -38,7 +38,7 @@ import java.util.Set;
  * Created at 09.10.2021
  */
 public class ValentineHoliday implements Holiday, Listener {
-  private Main plugin;
+  private PluginMain plugin;
 
   @Override
   public boolean isHoliday(LocalDateTime dateTime) {
@@ -48,7 +48,7 @@ public class ValentineHoliday implements Holiday, Listener {
   }
 
   @Override
-  public void enable(Main plugin) {
+  public void enable(PluginMain plugin) {
     this.plugin = plugin;
     Powerup powerup = new Powerup("VALENTINES_HEALING", plugin.getChatManager().colorRawMessage("&c&l<3"),
         plugin.getChatManager().colorRawMessage("&d&lHappy Valentine's Day!"), XMaterial.POPPY, null, null, null, pickup -> {

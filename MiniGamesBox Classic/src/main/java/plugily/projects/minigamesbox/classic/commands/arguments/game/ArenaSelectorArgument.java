@@ -28,7 +28,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -49,7 +49,7 @@ public class ArenaSelectorArgument implements Listener {
 
   private final ChatManager chatManager;
   private final Map<Integer, Arena> arenas = new HashMap<>();
-  private final Main plugin;
+  private final PluginMain plugin;
 
   public ArenaSelectorArgument(ArgumentsRegistry registry) {
     this.chatManager = registry.getPlugin().getChatManager();

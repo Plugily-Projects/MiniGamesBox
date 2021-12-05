@@ -51,7 +51,8 @@ public class ConfigOption {
     options.put("FIREWORK", new ConfigOption("Firework", true, true));
     options.put("SIGN_BLOCK_STATES", new ConfigOption("Sign-Block-States", true, true));
     options.put("HOLIDAYS", new ConfigOption("Holidays", true, true));
-    options.put("HOLOGRAMS", new ConfigOption("Hologram", true, true));
+    options.put("POWERUPS", new ConfigOption("Powerups", false, false));
+    options.put("KITS", new ConfigOption("Kits", false, false));
     options.put("LEADERBOARDS", new ConfigOption("Leaderboard", true, true));
 
 

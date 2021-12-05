@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.arena.states;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEvent;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
@@ -35,10 +35,10 @@ import plugily.projects.minigamesbox.classic.user.User;
  */
 public class StartingState implements ArenaStateHandler {
 
-  private Main plugin;
+  private PluginMain plugin;
 
   @Override
-  public void init(Main plugin) {
+  public void init(PluginMain plugin) {
     this.plugin = plugin;
   }
 

@@ -26,7 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import plugily.projects.commonsbox.number.NumberUtils;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -43,10 +43,10 @@ import java.util.Collections;
  */
 public class SpectatorItemEvents implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final SpectatorSettingsMenu spectatorSettingsMenu;
 
-  public SpectatorItemEvents(Main plugin) {
+  public SpectatorItemEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
     spectatorSettingsMenu = new SpectatorSettingsMenu(plugin, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SETTINGS_MENU_INVENTORY_NAME"),

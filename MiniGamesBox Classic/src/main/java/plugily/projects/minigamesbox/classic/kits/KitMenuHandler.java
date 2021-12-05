@@ -25,11 +25,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerChooseKitEvent;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
-import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
@@ -44,12 +43,12 @@ import plugily.projects.minigamesbox.inventory.normal.FastInv;
  */
 public class KitMenuHandler implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final String unlockedString;
   private final String lockedString;
   private final SpecialItem kitItem;
 
-  public KitMenuHandler(Main plugin) {
+  public KitMenuHandler(PluginMain plugin) {
     this.plugin = plugin;
     this.kitItem = plugin.getSpecialItemManager().getSpecialItem("KIT_OPEN_MENU");
     unlockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCKED");

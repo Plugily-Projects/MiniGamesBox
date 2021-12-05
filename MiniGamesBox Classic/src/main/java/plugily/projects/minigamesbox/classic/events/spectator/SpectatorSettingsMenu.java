@@ -28,7 +28,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -40,13 +40,13 @@ import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAcc
  */
 public class SpectatorSettingsMenu implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final String inventoryName;
   private final String speedOptionName;
   private final Inventory inv;
 
   public SpectatorSettingsMenu(JavaPlugin plugin, String inventoryName, String speedOptionName) {
-    this.plugin = (Main) plugin;
+    this.plugin = (PluginMain) plugin;
     this.inventoryName = inventoryName;
     this.speedOptionName = speedOptionName;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

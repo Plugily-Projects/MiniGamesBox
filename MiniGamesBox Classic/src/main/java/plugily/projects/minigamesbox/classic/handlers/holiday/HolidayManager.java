@@ -22,7 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class HolidayManager {
   private final List<Holiday> enabledHolidays = new ArrayList<>();
   private boolean enabled = true;
 
-  public HolidayManager(Main plugin) {
+  public HolidayManager(PluginMain plugin) {
     if(!plugin.getConfig().getBoolean("Holidays-Enabled", true)) {
       enabled = false;
       return;

@@ -29,7 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -46,11 +46,11 @@ import java.util.logging.Level;
  */
 public class BungeeManager implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final FileConfiguration config;
   private final Map<ArenaState, String> motd = new EnumMap<>(ArenaState.class);
 
-  public BungeeManager(Main plugin) {
+  public BungeeManager(PluginMain plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "bungee");
 

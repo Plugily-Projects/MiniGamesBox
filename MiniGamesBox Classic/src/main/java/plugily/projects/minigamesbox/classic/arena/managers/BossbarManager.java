@@ -24,7 +24,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class BossbarManager {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final Arena arena;
   private final int interval;
   private int currentLine;

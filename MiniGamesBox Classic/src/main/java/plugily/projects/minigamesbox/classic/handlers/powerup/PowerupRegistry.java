@@ -25,7 +25,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerPowerupPickupEvent;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
@@ -54,10 +54,10 @@ public class PowerupRegistry {
   private final List<BasePowerup> registeredPowerups = new ArrayList<>();
   private FileConfiguration config;
   private boolean enabled = false;
-  private Main plugin;
+  private PluginMain plugin;
 
-  public PowerupRegistry(Main plugin) {
-    if(!plugin.getConfig().getBoolean("Powerups.Enabled", true)) {
+  public PowerupRegistry(PluginMain plugin) {
+    if(!plugin.getConfig().getBoolean("Powerups", false)) {
       return;
     }
     config = ConfigUtils.getConfig(plugin, "powerups");

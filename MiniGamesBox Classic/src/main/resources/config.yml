@@ -92,6 +92,15 @@ Sign-Block-States: true
 # Wiki: -
 Holidays: true
 
+
+# Should the plugin enable special powerups which can be found in powerups.yml
+Powerups: false
+
+
+# Should the plugin enable kits which can be found in kits.yml
+Kits: false
+
+
 # The plugin will be able to spawn holograms with armorstands! (no additional plugin required!)
 Hologram: true
 

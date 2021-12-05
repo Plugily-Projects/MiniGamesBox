@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.preferences;
 
 import org.bukkit.configuration.ConfigurationSection;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,11 +33,11 @@ import java.util.Map;
  */
 public class ConfigPreferences {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final Map<String, ConfigOption> options = new HashMap<>();
   private final Map<String, Integer> customPermissions = new HashMap<>();
 
-  public ConfigPreferences(Main plugin) {
+  public ConfigPreferences(PluginMain plugin) {
     this.plugin = plugin;
     loadOptions();
 

@@ -21,9 +21,8 @@ package plugily.projects.minigamesbox.classic.arena.states;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
@@ -34,10 +33,10 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
  */
 public class RestartingState implements ArenaStateHandler {
 
-  private Main plugin;
+  private PluginMain plugin;
 
   @Override
-  public void init(Main plugin) {
+  public void init(PluginMain plugin) {
     this.plugin = plugin;
   }
 

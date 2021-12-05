@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.handlers.language;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.configuration.file.FileConfiguration;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.migrator.MigratorUtils;
 
@@ -44,11 +44,11 @@ public class LanguageMigrator {
 
   public static final int LANGUAGE_FILE_VERSION = 19;
   public static final int CONFIG_FILE_VERSION = 19;
-  private final Main plugin;
+  private final PluginMain plugin;
   private final List<String> migratable = Arrays.asList("config", "kits",
       "language", "special_items", "bungee", "mysql");
 
-  public LanguageMigrator(Main plugin) {
+  public LanguageMigrator(PluginMain plugin) {
     this.plugin = plugin;
 
     //checks if file architecture don't need to be updated to 3.x format

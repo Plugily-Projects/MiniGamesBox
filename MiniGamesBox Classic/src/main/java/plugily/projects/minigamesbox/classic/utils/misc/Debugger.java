@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.utils.misc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.HashSet;
@@ -41,7 +41,7 @@ public class Debugger {
   private final String debuggerPrefix;
   private final Logger logger;
 
-  public Debugger(Main plugin, boolean enable) {
+  public Debugger(PluginMain plugin, boolean enable) {
     logger = Logger.getLogger(plugin.getName());
     debuggerPrefix = "[" + plugin.getDescription().getName() + " Debug] ";
     enabled = enable;

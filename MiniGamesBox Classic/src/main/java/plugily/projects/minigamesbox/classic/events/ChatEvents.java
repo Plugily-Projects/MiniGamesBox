@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.user.User;
 
@@ -40,10 +40,10 @@ import java.util.regex.Pattern;
  */
 public class ChatEvents implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final String[] regexChars = {"$", "\\"};
 
-  public ChatEvents(Main plugin) {
+  public ChatEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

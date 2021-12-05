@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
@@ -33,11 +33,11 @@ import plugily.projects.minigamesbox.classic.utils.serialization.LocationSeriali
  */
 public class SetupUtilities {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final FileConfiguration config;
   private final Arena arena;
 
-  SetupUtilities(Main plugin, FileConfiguration config, Arena arena) {
+  SetupUtilities(PluginMain plugin, FileConfiguration config, Arena arena) {
     this.plugin = plugin;
     this.config = config;
     this.arena = arena;

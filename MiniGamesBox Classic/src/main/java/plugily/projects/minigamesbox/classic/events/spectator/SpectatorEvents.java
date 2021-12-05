@@ -42,7 +42,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
@@ -57,9 +57,9 @@ import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerPi
  */
 public class SpectatorEvents implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public SpectatorEvents(Main plugin) {
+  public SpectatorEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

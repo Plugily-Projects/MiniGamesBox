@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.services.exception;
 
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -33,14 +33,14 @@ import java.util.logging.Level;
  */
 public class ReporterService {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final String pluginName;
   private final String pluginVersion;
   private final String serverVersion;
   private final String error;
 
   //don't create it outside core
-  ReporterService(Main plugin, String pluginName, String pluginVersion, String serverVersion, String error) {
+  ReporterService(PluginMain plugin, String pluginName, String pluginVersion, String serverVersion, String error) {
     this.plugin = plugin;
     this.pluginName = pluginName;
     this.pluginVersion = pluginVersion;

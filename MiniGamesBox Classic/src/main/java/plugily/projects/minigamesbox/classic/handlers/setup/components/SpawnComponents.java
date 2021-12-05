@@ -24,7 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -53,7 +53,7 @@ public class SpawnComponents implements SetupComponent {
     }
     Player player = setupInventory.getPlayer();
     FileConfiguration config = setupInventory.getConfig();
-    Main plugin = setupInventory.getPlugin();
+    PluginMain plugin = setupInventory.getPlugin();
     String serializedLocation = player.getLocation().getWorld().getName() + "," + player.getLocation().getX() + "," + player.getLocation().getY() + ","
         + player.getLocation().getZ() + "," + player.getLocation().getYaw() + ",0.0";
     pane.setItem(0, new ItemBuilder(Material.REDSTONE_BLOCK)

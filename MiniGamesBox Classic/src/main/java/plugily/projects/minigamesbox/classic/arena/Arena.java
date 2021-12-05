@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.managers.BossbarManager;
 import plugily.projects.minigamesbox.classic.arena.managers.MapRestorerManager;
@@ -56,7 +56,7 @@ import java.util.Set;
  */
 public class Arena extends BukkitRunnable {
 
-  private static Main plugin;
+  private static PluginMain plugin;
   private final String id;
 
   private final Set<Player> players = new HashSet<>();
@@ -175,7 +175,7 @@ public class Arena extends BukkitRunnable {
     loadArenaOptions();
   }
 
-  public static void init(Main plugin) {
+  public static void init(PluginMain plugin) {
     Arena.plugin = plugin;
   }
 
@@ -376,7 +376,7 @@ public class Arena extends BukkitRunnable {
     return list;
   }
 
-  public Main getPlugin() {
+  public PluginMain getPlugin() {
     return plugin;
   }
 

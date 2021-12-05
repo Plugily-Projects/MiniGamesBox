@@ -27,7 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.sign.ArenaSign;
@@ -56,7 +56,7 @@ public class ArenaRegisterComponent implements SetupComponent {
   @Override
   public void injectComponents(FastInv gui) {
     FileConfiguration config = setupInventory.getConfig();
-    Main plugin = setupInventory.getPlugin();
+    PluginMain plugin = setupInventory.getPlugin();
     ItemStack registeredItem;
     if(!setupInventory.getArena().isReady()) {
       registeredItem = new ItemBuilder(XMaterial.FIREWORK_ROCKET.parseItem())

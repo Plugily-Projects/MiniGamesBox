@@ -25,7 +25,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -49,9 +49,9 @@ public class SpecialItemManager {
 
   private final Map<String, SpecialItem> specialItems = new HashMap<>();
   private final FileConfiguration config;
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public SpecialItemManager(Main plugin) {
+  public SpecialItemManager(PluginMain plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "special_items");
     loadSpecialItems();

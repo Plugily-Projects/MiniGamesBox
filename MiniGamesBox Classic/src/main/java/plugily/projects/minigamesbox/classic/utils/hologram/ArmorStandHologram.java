@@ -26,7 +26,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -46,7 +46,7 @@ public class ArmorStandHologram {
   private List<String> lines = new ArrayList<>();
   private Location location;
   private PickupHandler pickupHandler = null;
-  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
   private final List<ArmorStand> armorStands = new ArrayList<>();
 

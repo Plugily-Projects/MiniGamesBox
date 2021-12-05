@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.misc;
 
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 /**
  * @author Tigerpanzer_02
@@ -28,9 +28,9 @@ import plugily.projects.minigamesbox.classic.Main;
  */
 public class MessageUtils {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public MessageUtils(Main plugin) {
+  public MessageUtils(PluginMain plugin) {
     this.plugin = plugin;
   }
 

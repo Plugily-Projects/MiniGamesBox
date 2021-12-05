@@ -23,7 +23,7 @@ package plugily.projects.minigamesbox.classic.handlers.placeholder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 
 import java.util.ArrayList;
@@ -36,10 +36,10 @@ import java.util.List;
  */
 public class PlaceholderManager extends PlaceholderExpansion {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private List<Placeholder> registeredPlaceholders = new ArrayList<>();
 
-  public PlaceholderManager(Main plugin) {
+  public PlaceholderManager(PluginMain plugin) {
     this.plugin = plugin;
     insertDefaultPlaceholders();
     register();

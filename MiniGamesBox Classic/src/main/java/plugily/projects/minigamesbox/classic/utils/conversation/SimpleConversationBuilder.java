@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 /**
  * @author Tigerpanzer_02
@@ -34,7 +34,7 @@ public class SimpleConversationBuilder {
 
   private final ConversationFactory conversationFactory;
 
-  public SimpleConversationBuilder(Main plugin) {
+  public SimpleConversationBuilder(PluginMain plugin) {
     conversationFactory = new ConversationFactory(plugin)
         .withModality(true)
         .withLocalEcho(false)

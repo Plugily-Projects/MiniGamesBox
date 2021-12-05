@@ -25,7 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 /**
  * @author Tigerpanzer_02
@@ -34,9 +34,9 @@ import plugily.projects.minigamesbox.classic.Main;
  */
 public class ArenaEvents implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public ArenaEvents(Main plugin) {
+  public ArenaEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

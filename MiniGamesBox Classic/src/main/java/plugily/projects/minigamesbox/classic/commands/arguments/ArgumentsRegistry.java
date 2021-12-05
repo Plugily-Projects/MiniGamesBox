@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.string.StringMatcher;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.HologramArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.ListArenasArgument;
@@ -71,11 +71,11 @@ import java.util.stream.Collectors;
 public class ArgumentsRegistry implements CommandExecutor {
 
   private final SpyChatArgument spyChat;
-  private final Main plugin;
+  private final PluginMain plugin;
   private final TabCompletion tabCompletion;
   private final Map<String, List<CommandArgument>> mappedArguments = new HashMap<>();
 
-  public ArgumentsRegistry(Main plugin) {
+  public ArgumentsRegistry(PluginMain plugin) {
     this.plugin = plugin;
     tabCompletion = new TabCompletion(this);
     Optional.ofNullable(plugin.getCommand(plugin.getPluginNamePrefixLong())).ifPresent(plugily -> {
@@ -265,7 +265,7 @@ public class ArgumentsRegistry implements CommandExecutor {
     return mappedArguments;
   }
 
-  public Main getPlugin() {
+  public PluginMain getPlugin() {
     return plugin;
   }
 

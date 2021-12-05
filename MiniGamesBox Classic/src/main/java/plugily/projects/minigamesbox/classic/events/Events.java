@@ -45,9 +45,8 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
@@ -64,9 +63,9 @@ import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerSw
  */
 public class Events implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public Events(Main plugin) {
+  public Events(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
@@ -163,7 +162,7 @@ public class Events implements Listener {
     }
     if(key.equals(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").getPath()) || key.equals(plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").getPath())) {
       event.setCancelled(true);
-      if(plugin.getConfigPreferences().getOption("BUNGEE")) {
+      if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         plugin.getBungeeManager().connectToHub(event.getPlayer());
       } else {
         plugin.getArenaManager().leaveAttempt(event.getPlayer(), arena);

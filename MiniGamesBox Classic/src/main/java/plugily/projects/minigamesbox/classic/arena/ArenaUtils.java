@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.arena;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -32,12 +32,12 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
  */
 public class ArenaUtils {
 
-  private static Main plugin;
+  private static PluginMain plugin;
 
   private ArenaUtils() {
   }
 
-  public static void init(Main plugin) {
+  public static void init(PluginMain plugin) {
     ArenaUtils.plugin = plugin;
   }
 

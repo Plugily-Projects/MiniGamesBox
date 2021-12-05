@@ -29,7 +29,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameLeaveAttemptEvent;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStopEvent;
@@ -48,9 +48,9 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
  */
 public class ArenaManager {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public ArenaManager(Main plugin) {
+  public ArenaManager(PluginMain plugin) {
     this.plugin = plugin;
   }
 

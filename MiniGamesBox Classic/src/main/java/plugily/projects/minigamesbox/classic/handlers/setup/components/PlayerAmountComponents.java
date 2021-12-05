@@ -24,7 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -55,7 +55,7 @@ public class PlayerAmountComponents implements SetupComponent {
     if(config == null) {
       return;
     }
-    Main plugin = setupInventory.getPlugin();
+    PluginMain plugin = setupInventory.getPlugin();
     pane.setItem(3, new ItemBuilder(Material.COAL).amount(setupInventory.getSetupUtilities().getMinimumValueHigherThanZero("minimumplayers"))
         .name(plugin.getChatManager().colorRawMessage("&e&lSet Minimum Players Amount"))
         .lore(ChatColor.GRAY + "LEFT click to decrease")

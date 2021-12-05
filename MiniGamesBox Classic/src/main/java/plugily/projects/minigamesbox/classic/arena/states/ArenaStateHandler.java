@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.arena.states;
 
 
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 
 /**
@@ -35,7 +35,7 @@ public interface ArenaStateHandler {
    *
    * @param plugin class to inject
    */
-  void init(Main plugin);
+  void init(PluginMain plugin);
 
   /**
    * Handle call for the current arena state for arena.

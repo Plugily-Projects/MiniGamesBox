@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.handlers.party;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 /**
  * @author Tigerpanzer_02
@@ -31,7 +31,7 @@ import plugily.projects.minigamesbox.classic.Main;
 public class PartySupportInitializer {
 
   //todo internal party manager
-  public PartyHandler initialize(Main plugin) {
+  public PartyHandler initialize(PluginMain plugin) {
     PartyHandler partyHandler;
     if(!plugin.getConfigPreferences().getOption("EXTERNAL_PARTIES")) {
       if(Bukkit.getServer().getPluginManager().getPlugin("Parties") != null) {

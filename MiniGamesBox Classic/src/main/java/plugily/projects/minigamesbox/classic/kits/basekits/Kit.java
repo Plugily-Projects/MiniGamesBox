@@ -23,7 +23,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 /**
@@ -33,7 +33,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
  */
 public abstract class Kit {
 
-  private static final Main plugin = JavaPlugin.getPlugin(Main.class);
+  private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
   private final FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
 
@@ -61,7 +61,7 @@ public abstract class Kit {
   /**
    * @return main plugin
    */
-  public Main getPlugin() {
+  public PluginMain getPlugin() {
     return plugin;
   }
 

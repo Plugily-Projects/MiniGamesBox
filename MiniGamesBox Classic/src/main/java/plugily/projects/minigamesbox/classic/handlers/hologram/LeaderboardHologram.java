@@ -23,7 +23,7 @@ package plugily.projects.minigamesbox.classic.handlers.hologram;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.handlers.language.Message;
 import plugily.projects.minigamesbox.classic.utils.hologram.ArmorStandHologram;
@@ -41,14 +41,14 @@ import java.util.UUID;
 //todo enhanced leaderboards management with leaderboards.yml such as top stats over x amount of time
 public class LeaderboardHologram extends BukkitRunnable {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final int id;
   private final StatisticType statistic;
   private final int topAmount;
   private final ArmorStandHologram hologram;
   private final Location location;
 
-  public LeaderboardHologram(Main plugin, int id, StatisticType statistic, int amount, Location location) {
+  public LeaderboardHologram(PluginMain plugin, int id, StatisticType statistic, int amount, Location location) {
     this.plugin = plugin;
     this.id = id;
     this.statistic = statistic;

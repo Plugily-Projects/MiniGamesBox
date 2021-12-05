@@ -30,7 +30,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -42,9 +42,9 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
  */
 public class LobbyEvents implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public LobbyEvents(Main plugin) {
+  public LobbyEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

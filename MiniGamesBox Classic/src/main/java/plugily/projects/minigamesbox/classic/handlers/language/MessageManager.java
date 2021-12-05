@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.language;
 
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,10 +35,10 @@ import java.util.Map;
  * @author Tigerpanzer
  */
 public class MessageManager {
-  private final Main plugin;
+  private final PluginMain plugin;
   private final Map<String, Message> options = new HashMap<>();
 
-  public MessageManager(Main plugin) {
+  public MessageManager(PluginMain plugin) {
     this.plugin = plugin;
     loadMessages();
   }

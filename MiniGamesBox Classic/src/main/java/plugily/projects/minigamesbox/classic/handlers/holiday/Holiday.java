@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.handlers.holiday;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.time.LocalDateTime;
 /**
@@ -46,7 +46,7 @@ public interface Holiday {
    *
    * @param plugin the plugin
    */
-  void enable(Main plugin);
+  void enable(PluginMain plugin);
 
   /**
    * Apply creature effects

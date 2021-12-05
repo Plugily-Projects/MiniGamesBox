@@ -20,7 +20,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.permissions;
 
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 /**
  * @author Tigerpanzer_02
@@ -30,12 +30,12 @@ import plugily.projects.minigamesbox.classic.Main;
 //todo more possibilities aka permissions.yml
 public class PermissionsManager {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private String joinFullPerm;
   private String joinPerm;
   private String forceStartPerm;
 
-  public PermissionsManager(Main plugin) {
+  public PermissionsManager(PluginMain plugin) {
     this.plugin = plugin;
     this.joinFullPerm = plugin.getPluginNamePrefixLong() + ".fullgames";
     this.joinPerm = plugin.getPluginNamePrefixLong() + ".join.<arena>";

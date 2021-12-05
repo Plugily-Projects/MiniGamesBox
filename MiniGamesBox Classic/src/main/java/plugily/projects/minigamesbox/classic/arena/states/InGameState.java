@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.arena.states;
 
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 
 /**
@@ -29,10 +29,10 @@ import plugily.projects.minigamesbox.classic.arena.Arena;
  */
 public class InGameState implements ArenaStateHandler {
 
-  private Main plugin;
+  private PluginMain plugin;
 
   @Override
-  public void init(Main plugin) {
+  public void init(PluginMain plugin) {
     this.plugin = plugin;
   }
 

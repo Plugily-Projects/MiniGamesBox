@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.utils.services.exception;
 
 import org.bukkit.Bukkit;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,9 @@ public class ExceptionLogHandler extends Handler {
 
   private final List<String> blacklistedClasses = new ArrayList<>();
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public ExceptionLogHandler(Main plugin) {
+  public ExceptionLogHandler(PluginMain plugin) {
     this.plugin = plugin;
     Bukkit.getLogger().addHandler(this);
     addBlacklistedClass("plugily.projects." + plugin.getDescription().getName().toLowerCase() + ".user.data.MysqlManager");

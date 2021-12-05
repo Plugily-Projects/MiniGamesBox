@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.utils.services.exception;
 
 import org.bukkit.scheduler.BukkitRunnable;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 
 import java.util.logging.Level;
@@ -32,7 +32,7 @@ public class ReportedException {
 
   private ReporterService reporterService;
 
-  public ReportedException(Main plugin, Throwable e) {
+  public ReportedException(PluginMain plugin, Throwable e) {
     Throwable exception = e.getCause() != null ? e.getCause() : e;
     StringBuilder stacktrace = new StringBuilder(exception.getClass().getSimpleName());
     if(exception.getMessage() != null) {

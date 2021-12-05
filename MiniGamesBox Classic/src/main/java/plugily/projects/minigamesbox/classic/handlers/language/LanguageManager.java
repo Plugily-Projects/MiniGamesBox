@@ -23,7 +23,7 @@ package plugily.projects.minigamesbox.classic.handlers.language;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.locale.Locale;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  */
 public class LanguageManager {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private Locale pluginLocale;
   private FileConfiguration localeFile;
   private FileConfiguration languageConfig;
@@ -59,7 +59,7 @@ public class LanguageManager {
    * @param plugin plugin instance
    * @see LanguageMigrator
    */
-  public LanguageManager(Main plugin) {
+  public LanguageManager(PluginMain plugin) {
     this.plugin = plugin;
     if(!new File(plugin.getDataFolder() + File.separator + "language.yml").exists()) {
       plugin.saveResource("language.yml", false);

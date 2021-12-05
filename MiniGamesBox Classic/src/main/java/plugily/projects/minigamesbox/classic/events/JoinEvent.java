@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 
@@ -34,9 +34,9 @@ import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
  */
 public class JoinEvent implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public JoinEvent(Main plugin) {
+  public JoinEvent(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

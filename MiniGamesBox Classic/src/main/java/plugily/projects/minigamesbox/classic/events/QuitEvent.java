@@ -21,9 +21,8 @@ package plugily.projects.minigamesbox.classic.events;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
 import plugily.projects.minigamesbox.classic.user.User;
 
 /**
@@ -33,9 +32,9 @@ import plugily.projects.minigamesbox.classic.user.User;
  */
 public class QuitEvent implements Listener {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public QuitEvent(Main plugin) {
+  public QuitEvent(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }

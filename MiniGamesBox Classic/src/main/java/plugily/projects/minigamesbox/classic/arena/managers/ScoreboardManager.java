@@ -26,7 +26,7 @@ import me.tigerhix.lib.scoreboard.type.Scoreboard;
 import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -47,7 +47,7 @@ public class ScoreboardManager {
   private final Map<UUID, Scoreboard> boardMap = new ConcurrentHashMap<>();
   private final Map<UUID, org.bukkit.scoreboard.Scoreboard> lastBoardMap = new ConcurrentHashMap<>();
   private final org.bukkit.scoreboard.Scoreboard dummyBoard = Bukkit.getScoreboardManager().getNewScoreboard();
-  private final Main plugin;
+  private final PluginMain plugin;
   private final String boardTitle;
   private final Arena arena;
 

@@ -25,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.string.StringFormatUtils;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -38,9 +38,9 @@ import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 public class ChatManager {
 
   private final String pluginPrefix;
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public ChatManager(Main plugin) {
+  public ChatManager(PluginMain plugin) {
     this.plugin = plugin;
     this.pluginPrefix = colorMessage("IN_GAME_PLUGIN_PREFIX");
   }
@@ -93,7 +93,7 @@ public class ChatManager {
    * Includes game prefix!
    *
    * @param arena   arena to get players from
-   * @param message constant message to broadcast
+   * @param key message to broadcast
    */
   public void broadcast(Arena arena, String key) {
     String colorMessage = colorMessage(key);

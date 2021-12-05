@@ -34,7 +34,7 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.sign.ArenaSign;
@@ -67,7 +67,7 @@ public class MiscComponents implements SetupComponent {
     }
     Player player = setupInventory.getPlayer();
     FileConfiguration config = setupInventory.getConfig();
-    Main plugin = setupInventory.getPlugin();
+    PluginMain plugin = setupInventory.getPlugin();
     ItemStack bungeeItem;
     if(!plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       ItemBuilder itemBuilder = new ItemBuilder(XMaterial.OAK_SIGN.parseMaterial());
