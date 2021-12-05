@@ -83,7 +83,7 @@ public class ConfigPreferences {
     if(options.containsKey(name)) {
       throw new IllegalStateException("Option with path " + name + " was already registered");
     }
-    options.put(name, option);
+    options.put(name, new ConfigOption(option.getPath(), plugin.getConfig().getBoolean(option.getPath(), option.getValue()), option.isProtected()));
   }
 
   /**
