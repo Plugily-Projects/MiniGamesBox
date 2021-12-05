@@ -108,7 +108,7 @@ public class StatsStorage {
    * @param key           The key of the statistic
    * @param statisticType Contains the name and the persistent
    */
-  public void registerOption(String key, StatisticType statisticType) {
+  public void registerStatistic(String key, StatisticType statisticType) {
     if(statistics.containsKey(key)) {
       throw new IllegalStateException("Statistic with key " + key + " was already registered");
     }
@@ -123,7 +123,7 @@ public class StatsStorage {
    *
    * @param name The name of the Option
    */
-  public void unregisterOption(String name) {
+  public void unregisterStatistic(String name) {
     StatisticType statisticType = statistics.get(name);
     if(statisticType == null) {
       return;
