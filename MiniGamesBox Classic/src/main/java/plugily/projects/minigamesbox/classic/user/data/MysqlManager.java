@@ -24,7 +24,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.commonsbox.database.MysqlDatabase;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -46,10 +46,14 @@ import java.util.logging.Level;
  */
 public class MysqlManager implements UserDatabase {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final MysqlDatabase database;
+  private String createTableStatement = "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (\n"
+      + "  `UUID` char(36) NOT NULL PRIMARY KEY,\n"
+      + "  `name` varchar(32) NOT NULL\n"
+      + ");";
 
-  public MysqlManager(Main plugin) {
+  public MysqlManager(PluginMain plugin) {
     this.plugin = plugin;
 
     FileConfiguration config = ConfigUtils.getConfig(plugin, "mysql");
@@ -59,17 +63,7 @@ public class MysqlManager implements UserDatabase {
           Statement statement = connection.createStatement()) {
         plugin.getDebugger().debug("Database enabled");
 
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (\n"
-            + "  `UUID` char(36) NOT NULL PRIMARY KEY,\n"
-            + "  `name` varchar(32) NOT NULL,\n"
-            + "  `kills` int(11) NOT NULL DEFAULT '0',\n"
-            + "  `deaths` int(11) NOT NULL DEFAULT '0',\n"
-            + "  `highestwave` int(11) NOT NULL DEFAULT '0',\n"
-            + "  `gamesplayed` int(11) NOT NULL DEFAULT '0',\n"
-            + "  `level` int(11) NOT NULL DEFAULT '0',\n"
-            + "  `xp` int(11) NOT NULL DEFAULT '0',\n"
-            + "  `orbs` int(11) NOT NULL DEFAULT '0'\n"
-            + ");");
+        statement.executeUpdate(createTableStatement);
 
         //temporary workaround
         try {
@@ -90,6 +84,28 @@ public class MysqlManager implements UserDatabase {
 
   public String getTableName() {
     return ConfigUtils.getConfig(plugin, "mysql").getString("table", "playerstats");
+  }
+
+  @Override
+  public void addColumn(String columnName, String columnProperties) {
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+      try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
+        try {
+          statement.executeUpdate("ALTER TABLE " + getTableName() + " ADD COLUMN " + columnName + " " + columnProperties + ";");
+        } catch(SQLException e) {
+          if(!e.getMessage().contains("Duplicate column name")) {
+            plugin.getLogger().log(Level.WARNING, "Could not connect to MySQL database! Cause: {0} ({1})", new Object[]{e.getSQLState(), e.getErrorCode()});
+          }
+        }
+      } catch(SQLException e) {
+        plugin.getLogger().log(Level.WARNING, "Could not connect to MySQL database! Cause: {0} ({1})", new Object[]{e.getSQLState(), e.getErrorCode()});
+      }
+    });
+  }
+
+  @Override
+  public void dropColumn(String columnName) {
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> database.executeUpdate("ALTER TABLE " + getTableName() + " DROP COLUMN " + columnName + ";"));
   }
 
   @Override

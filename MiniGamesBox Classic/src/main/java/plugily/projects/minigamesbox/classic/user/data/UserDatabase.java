@@ -58,6 +58,21 @@ public interface UserDatabase {
   void loadStatistics(User user);
 
   /**
+   * Add a column on mysql database instances, skips for file stats
+   *
+   * @param columnName       The name of the column
+   * @param columnProperties The column specification
+   */
+  void addColumn(String columnName, String columnProperties);
+
+  /**
+   * Drop a column on mysql database instances, skips for file stats
+   *
+   * @param columnName The name of the column
+   */
+  void dropColumn(String columnName);
+
+  /**
    * Get all UUID's sorted ascending by Statistic Type
    *
    * @param stat Statistic type to get (kills, deaths etc.)
@@ -74,6 +89,7 @@ public interface UserDatabase {
 
   /**
    * Get the MySQL Database if there is any
+   *
    * @return MySQL database
    */
   MysqlDatabase getMySQLDatabase();

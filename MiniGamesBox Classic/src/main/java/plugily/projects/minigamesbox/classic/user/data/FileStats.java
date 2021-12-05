@@ -25,7 +25,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.commonsbox.database.MysqlDatabase;
 import plugily.projects.commonsbox.sorter.SortUtils;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -43,12 +43,12 @@ import java.util.logging.Level;
  */
 public class FileStats implements UserDatabase, Runnable {
 
-  private final Main plugin;
+  private final PluginMain plugin;
   private final FileConfiguration config;
   private final BukkitTask updateTask;
   private final AtomicBoolean updateRequired = new AtomicBoolean(false);
 
-  public FileStats(Main plugin) {
+  public FileStats(PluginMain plugin) {
     this.plugin = plugin;
     this.config = ConfigUtils.getConfig(plugin, "stats");
     this.updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, 40, 40);
@@ -70,6 +70,16 @@ public class FileStats implements UserDatabase, Runnable {
   public void loadStatistics(User user) {
     String uuid = user.getUniqueId().toString();
     plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> user.setStat(statisticType, config.getInt(uuid + "." + statisticType.getName())));
+  }
+
+  @Override
+  public void addColumn(String columnName, String columnProperties) {
+    //skip
+  }
+
+  @Override
+  public void dropColumn(String columnName) {
+    //skip
   }
 
   @NotNull
@@ -127,8 +137,8 @@ public class FileStats implements UserDatabase, Runnable {
   @Override
   public void run() {
     if(updateRequired.get()) {
-      ConfigUtils.saveConfig(plugin, config, "stats");
       updateRequired.set(false);
+      Bukkit.getScheduler().runTask(plugin, () -> ConfigUtils.saveConfig(plugin, config, "stats"));
     }
   }
 }

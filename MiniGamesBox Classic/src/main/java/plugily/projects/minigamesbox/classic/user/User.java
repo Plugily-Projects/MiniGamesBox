@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.user;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.Arena;
@@ -38,7 +38,7 @@ import java.util.UUID;
  */
 public class User {
 
-  private static Main plugin;
+  private static PluginMain plugin;
   private static long cooldownCounter = 0;
   private final UUID uuid;
   private boolean spectator = false;
@@ -60,7 +60,7 @@ public class User {
     return uuid;
   }
 
-  public static void init(Main plugin) {
+  public static void init(PluginMain plugin) {
     User.plugin = plugin;
   }
 

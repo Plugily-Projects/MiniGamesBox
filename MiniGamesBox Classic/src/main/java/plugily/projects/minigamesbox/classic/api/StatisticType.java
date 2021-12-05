@@ -34,30 +34,37 @@ public class StatisticType {
 
 
   static {
-    statistics.put("GAMES_PLAYED", new StatisticType("gamesplayed", true, true));
-    statistics.put("LEVEL", new StatisticType("level", true, true));
-    statistics.put("XP", new StatisticType("xp", true, true));
+    statistics.put("GAMES_PLAYED", new StatisticType("gamesplayed", true, "int(11) NOT NULL DEFAULT '0'", true));
+    statistics.put("LEVEL", new StatisticType("level", true, "int(11) NOT NULL DEFAULT '0'", true));
+    statistics.put("XP", new StatisticType("xp", true, "int(11) NOT NULL DEFAULT '0'", true));
   }
 
   private final String name;
   private final boolean persistent;
+  private final String databaseParameters;
   private final boolean protectedStatistic;
 
 
-  public StatisticType(String name, boolean persistent, boolean protectedStatistic) {
+  public StatisticType(String name, boolean persistent, String databaseParameters, boolean protectedStatistic) {
     this.name = name;
     this.persistent = persistent;
+    this.databaseParameters = databaseParameters;
     this.protectedStatistic = protectedStatistic;
   }
 
-  public StatisticType(String name, boolean persistent) {
+  public StatisticType(String name, boolean persistent, String databaseParameters) {
     this.name = name;
     this.persistent = persistent;
+    this.databaseParameters = databaseParameters;
     this.protectedStatistic = false;
   }
 
   public String getName() {
     return name;
+  }
+
+  public String getDatabaseParameters() {
+    return databaseParameters;
   }
 
   /**

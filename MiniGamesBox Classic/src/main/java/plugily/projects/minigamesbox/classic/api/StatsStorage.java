@@ -19,7 +19,7 @@
 package plugily.projects.minigamesbox.classic.api;
 
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,12 +34,22 @@ import java.util.UUID;
  */
 public class StatsStorage {
 
-  private final Main plugin;
+  private final PluginMain plugin;
 
   private final Map<String, StatisticType> statistics = new HashMap<>();
 
-  public StatsStorage(Main plugin) {
+  public StatsStorage(PluginMain plugin) {
     this.plugin = plugin;
+    loadStats();
+  }
+
+  private void loadStats() {
+    StatisticType.getStatistics().forEach((s, statisticType) -> {
+      statistics.put(s, new StatisticType(statisticType.getName(), statisticType.isPersistent(), statisticType.getDatabaseParameters(), statisticType.isProtected()));
+      if(statisticType.isPersistent()) {
+        plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
+      }
+    });
   }
 
   /**
@@ -102,6 +112,9 @@ public class StatsStorage {
     if(statistics.containsKey(key)) {
       throw new IllegalStateException("Statistic with key " + key + " was already registered");
     }
+    if(statisticType.isPersistent()) {
+      plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
+    }
     statistics.put(key, statisticType);
   }
 
@@ -117,6 +130,9 @@ public class StatsStorage {
     }
     if(statisticType.isProtected()) {
       throw new IllegalStateException("Protected statistics cannot be removed!");
+    }
+    if(statisticType.isPersistent()) {
+      plugin.getUserManager().getDatabase().dropColumn(statisticType.getName());
     }
     statistics.remove(name);
   }

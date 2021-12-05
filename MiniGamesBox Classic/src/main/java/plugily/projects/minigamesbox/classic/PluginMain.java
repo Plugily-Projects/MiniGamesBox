@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic;
 
+import me.tigerhix.lib.scoreboard.ScoreboardLib;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
@@ -40,7 +41,7 @@ import plugily.projects.minigamesbox.classic.events.Events;
 import plugily.projects.minigamesbox.classic.events.JoinEvent;
 import plugily.projects.minigamesbox.classic.events.LobbyEvents;
 import plugily.projects.minigamesbox.classic.events.QuitEvent;
-import plugily.projects.minigamesbox.classic.events.bungee.MiscEvents;
+import plugily.projects.minigamesbox.classic.events.bungee.BungeeEvents;
 import plugily.projects.minigamesbox.classic.events.spectator.SpectatorEvents;
 import plugily.projects.minigamesbox.classic.events.spectator.SpectatorItemEvents;
 import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
@@ -88,7 +89,7 @@ import java.util.logging.Level;
  * <p>
  * Created at 12.09.2021
  */
-public class Main extends JavaPlugin {
+public class PluginMain extends JavaPlugin {
 
   private final String pluginMessagePrefix = "[" + getDescription().getName() + "] ";
   private String pluginNamePrefix;
@@ -122,14 +123,15 @@ public class Main extends JavaPlugin {
   private LanguageManager languageManager;
   private ArgumentsRegistry argumentsRegistry;
   private ArenaManager arenaManager;
+  private Metrics metrics;
 
   @TestOnly
-  public Main() {
+  public PluginMain() {
     super();
   }
 
   @TestOnly
-  protected Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+  protected PluginMain(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
     super(loader, description, dataFolder, file);
   }
 
@@ -181,10 +183,13 @@ public class Main extends JavaPlugin {
     PagedFastInvManager.register(this);
 
     //setup Scoreboard
-    //ScoreboardLib.setPluginInstance(this);
+    ScoreboardLib.setPluginInstance(this);
 
     //initialize default classes
     initializeDefaultClasses();
+
+    //load plugin classes
+    initializePluginClasses();
 
     //send console message
     MiscUtils.sendStartUpMessage(this);
@@ -230,10 +235,10 @@ public class Main extends JavaPlugin {
     permissionsManager = new PermissionsManager(this);
     User.init(this);
     User.cooldownHandlerTask();
-    if(configPreferences.getOption("BUNGEE")) {
+    if(configPreferences.getOption("BUNGEEMODE")) {
       debugger.debug("Bungee enabled");
       bungeeManager = new BungeeManager(this);
-      new MiscEvents(this);
+      new BungeeEvents(this);
     }
 
     new ArenaEvents(this);
@@ -278,7 +283,16 @@ public class Main extends JavaPlugin {
     return true;
   }
 
-  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("arenas", "rewards", "stats", "special_items", "mysql"));
+
+  public void initializePluginClasses() {
+    //space for additional classes
+  }
+
+  public void addAdditionalValues() {
+    //space for additional values e.g. configoptions
+  }
+
+  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("arenas", "arena_selector", "bungee", "leaderboards", "rewards", "stats", "special_items", "mysql", "signs"));
 
   public ArrayList<String> getFileNames() {
     return fileNames;
@@ -326,7 +340,7 @@ public class Main extends JavaPlugin {
   }
 
   private void setupPluginMetrics(int pluginMetricsId) {
-    Metrics metrics = new Metrics(this, pluginMetricsId);
+    metrics = new Metrics(this, pluginMetricsId);
 
     metrics.addCustomChart(new Metrics.SimplePie("database_enabled", () -> String.valueOf(configPreferences
         .getOption("DATABASE"))));
@@ -508,5 +522,9 @@ public class Main extends JavaPlugin {
 
   public ArenaManager getArenaManager() {
     return arenaManager;
+  }
+
+  public Metrics getMetrics() {
+    return metrics;
   }
 }

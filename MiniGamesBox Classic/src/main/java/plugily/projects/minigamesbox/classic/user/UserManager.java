@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.user;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.Main;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.user.data.FileStats;
@@ -41,9 +41,9 @@ public class UserManager {
 
   private final UserDatabase database;
   private final List<User> users = new ArrayList<>();
-  private final Main plugin;
+  private final PluginMain plugin;
 
-  public UserManager(Main main) {
+  public UserManager(PluginMain main) {
     this.plugin = main;
     if(plugin.getConfigPreferences().getOption("DATABASE")) {
       database = new MysqlManager(plugin);
@@ -82,6 +82,7 @@ public class UserManager {
     }
   }
 
+  //todo different permissions based experience
   public void addExperience(Player player, int i) {
     User user = getUser(player);
     user.addStat(plugin.getStatsStorage().getStatisticType("XP"), i);
