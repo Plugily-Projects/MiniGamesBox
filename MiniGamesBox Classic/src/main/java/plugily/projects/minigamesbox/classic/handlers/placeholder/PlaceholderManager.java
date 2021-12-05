@@ -46,36 +46,6 @@ public class PlaceholderManager extends PlaceholderExpansion {
   }
 
   private void insertDefaultPlaceholders() {
-    registerPlaceholder(new Placeholder("kills") {
-      @Override
-      public String getValue(Player player) {
-        return Integer.toString(plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("KILLS")));
-      }
-    });
-    registerPlaceholder(new Placeholder("deaths") {
-      @Override
-      public String getValue(Player player) {
-        return Integer.toString(plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("DEATHS")));
-      }
-    });
-    registerPlaceholder(new Placeholder("games_played") {
-      @Override
-      public String getValue(Player player) {
-        return Integer.toString(plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED")));
-      }
-    });
-    registerPlaceholder(new Placeholder("level") {
-      @Override
-      public String getValue(Player player) {
-        return Integer.toString(plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("LEVEL")));
-      }
-    });
-    registerPlaceholder(new Placeholder("exp") {
-      @Override
-      public String getValue(Player player) {
-        return Integer.toString(plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("XP")));
-      }
-    });
     registerPlaceholder(new Placeholder("arena_players_online") {
       @Override
       public String getValue(Player player) {
@@ -132,7 +102,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
   @Override
   public @NotNull String getIdentifier() {
-    return plugin.getName();
+    return plugin.getPluginNamePrefixLong();
   }
 
   @Override
@@ -142,7 +112,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
   @Override
   public @NotNull String getVersion() {
-    return "1.1.0";
+    return "2.0.0";
   }
 
   @Override

@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.api;
 
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,8 +47,18 @@ public class StatsStorage {
   private void loadStats() {
     StatisticType.getStatistics().forEach((s, statisticType) -> {
       statistics.put(s, new StatisticType(statisticType.getName(), statisticType.isPersistent(), statisticType.getDatabaseParameters(), statisticType.isProtected()));
-      if(statisticType.isPersistent()) {
-        plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
+      loadExternals(statisticType);
+    });
+  }
+
+  private void loadExternals(StatisticType statisticType) {
+    if(statisticType.isPersistent()) {
+      plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
+    }
+    plugin.getPlaceholderManager().registerPlaceholder(new Placeholder(statisticType.getName()) {
+      @Override
+      public String getValue(Player player) {
+        return Integer.toString(plugin.getStatsStorage().getUserStats(player, statisticType));
       }
     });
   }
@@ -112,9 +123,7 @@ public class StatsStorage {
     if(statistics.containsKey(key)) {
       throw new IllegalStateException("Statistic with key " + key + " was already registered");
     }
-    if(statisticType.isPersistent()) {
-      plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
-    }
+    loadExternals(statisticType);
     statistics.put(key, statisticType);
   }
 
