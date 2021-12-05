@@ -38,16 +38,16 @@ public class KitRegistry {
   private final List<Kit> kits = new java.util.ArrayList<>();
   private Kit defaultKit;
   private final PluginMain plugin;
-  private static final Class<?>[] classKitNames = new Class[]{ExampleKit.class};
   private FileConfiguration config;
 
+  //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
     if(!plugin.getConfig().getBoolean("Kits", false)) {
       return;
     }
     config = ConfigUtils.getConfig(plugin, "kits");
-    setupGameKits();
+    setDefaultKit(new ExampleKit());
   }
 
   /**
@@ -56,6 +56,14 @@ public class KitRegistry {
    * @param kit Kit to register
    */
   public void registerKit(Kit kit) {
+    if(kits.contains(kit)) {
+      plugin.getDebugger().debug("Kit " + kit.getName() + " can't be added as its already registered");
+      return;
+    }
+    if(config.getBoolean("Enabled-Game-Kits." + kit.getName())) {
+      plugin.getDebugger().debug("Kit " + kit.getName() + " is disabled by kits.yml");
+      return;
+    }
     kits.add(kit);
   }
 
@@ -84,22 +92,6 @@ public class KitRegistry {
    */
   public List<Kit> getKits() {
     return kits;
-  }
-
-  //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
-  private void setupGameKits() {
-    FileConfiguration config = ConfigUtils.getConfig(plugin, "kits");
-    for(Class<?> kitClass : classKitNames) {
-      if(config.getBoolean("Enabled-Game-Kits." + kitClass.getSimpleName().replace("Kit", ""))) {
-        try {
-          kitClass.getDeclaredConstructor().newInstance();
-        } catch(Exception e) {
-          plugin.getLogger().log(Level.SEVERE, "Fatal error while registering existing game kit! Report this error to the developer!");
-          plugin.getLogger().log(Level.SEVERE, "Cause: " + e.getMessage() + " (kitClass " + kitClass.getName() + ")");
-        }
-      }
-    }
-    setDefaultKit(new ExampleKit());
   }
 
 }

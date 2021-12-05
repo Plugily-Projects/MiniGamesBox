@@ -100,6 +100,11 @@ public class User {
     this.permanentSpectator = permanentSpectator;
   }
 
+  public int getStat(String statistic) {
+    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    return stats.computeIfAbsent(statisticType, t -> 0);
+  }
+
   public int getStat(StatisticType s) {
     return stats.computeIfAbsent(s, t -> 0);
   }
