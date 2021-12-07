@@ -10,6 +10,9 @@
 * Refactored messages and language.yml
 * Removed some static methods
 * Made it plugin unspecific to allow the core to work on its own with variables
+* Added arena timer placeholder
+* All stat placeholder will now automatically also registered with papi
+* Added permissions.yml with custom permissions such as exp boost
 
 --- TODO --- 
 - Bring all classes that are used on all projects into this box
