@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.preferences;
 
-import org.bukkit.configuration.ConfigurationSection;
 import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.util.Collections;
@@ -35,20 +34,10 @@ public class ConfigPreferences {
 
   private final PluginMain plugin;
   private final Map<String, ConfigOption> options = new HashMap<>();
-  private final Map<String, Integer> customPermissions = new HashMap<>();
 
   public ConfigPreferences(PluginMain plugin) {
     this.plugin = plugin;
     loadOptions();
-
-    //load custom permissions
-    ConfigurationSection section = plugin.getConfig().getConfigurationSection("Custom-Permissions");
-    if(section != null) {
-      for(String key : section.getKeys(false)) {
-        customPermissions.put(key, section.getInt(key));
-        plugin.getDebugger().debug("Loaded custom permission {0}", key);
-      }
-    }
   }
 
   private void loadOptions() {
@@ -66,10 +55,6 @@ public class ConfigPreferences {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
     return options.get(name).getValue();
-  }
-
-  public Map<String, Integer> getCustomPermissions() {
-    return customPermissions;
   }
 
 

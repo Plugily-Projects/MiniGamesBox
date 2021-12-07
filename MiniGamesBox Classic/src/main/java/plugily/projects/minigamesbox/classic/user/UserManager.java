@@ -82,9 +82,9 @@ public class UserManager {
     }
   }
 
-  //todo different permissions based experience
   public void addExperience(Player player, int i) {
     User user = getUser(player);
+    i = i + (i * (plugin.getPermissionsManager().getPermissionCategoryValue("EXP_BOOSTER", player) / 100));
     user.addStat(plugin.getStatsStorage().getStatisticType("XP"), i);
     updateLevelStat(user, plugin.getArenaRegistry().getArena(player));
   }
@@ -101,7 +101,7 @@ public class UserManager {
   public void updateLevelStat(User user, Arena arena) {
     if(Math.pow(50.0 * user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5) < user.getStat(plugin.getStatsStorage().getStatisticType("XP"))) {
       user.addStat(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);
-      //Arena can be null when player has left the arena before this message the arean is retrieved.
+      //Arena can be null when player has left the arena before this message is retrieved.
       if(arena != null)
         user.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_LEVEL_UP"), user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
     }
