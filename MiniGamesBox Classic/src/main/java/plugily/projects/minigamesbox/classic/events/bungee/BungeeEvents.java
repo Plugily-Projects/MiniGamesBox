@@ -44,7 +44,7 @@ public class BungeeEvents implements Listener {
     if(!plugin.getServer().hasWhitelist() || e.getResult() != PlayerLoginEvent.Result.KICK_WHITELIST) {
       return;
     }
-    if(e.getPlayer().hasPermission(plugin.getPermissionsManager().getJoinFullGames())) {
+    if(e.getPlayer().hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
       e.setResult(PlayerLoginEvent.Result.ALLOWED);
     }
 

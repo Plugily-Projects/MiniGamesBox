@@ -75,8 +75,7 @@ public class ArenaUtils {
   }
 
   public static void arenaForceStart(Player player, int timer) {
-    //Todo
-    if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPermissionsManager().getForceStart())) {
+    if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPermissionsManager().getPermissionString("FORCESTART_GAME"))) {
       player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NO_PERMISSION"));
       return;
     }

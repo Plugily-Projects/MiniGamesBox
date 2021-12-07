@@ -170,12 +170,12 @@ public class ArenaManager {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
-    if(!player.hasPermission(plugin.getPermissionsManager().getJoinFullGames())) {
+    if(!player.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
       player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_FULL_GAME"));
       return false;
     }
     for(Player players : arena.getPlayers()) {
-      if(players.hasPermission(plugin.getPermissionsManager().getJoinFullGames())) {
+      if(players.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
         continue;
       }
       if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
@@ -202,7 +202,7 @@ public class ArenaManager {
       return false;
     }
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
-      String perm = plugin.getPermissionsManager().getJoinPerm();
+      String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
       if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
         player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_NO_PERMISSION")
             .replace("%permission%", perm.replace("<arena>", arena.getId())));
