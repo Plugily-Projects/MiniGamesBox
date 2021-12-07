@@ -82,6 +82,19 @@ public class PermissionsManager {
   }
 
   /**
+   * Returns permission value
+   *
+   * @param key option to get value from
+   * @return String the permission
+   */
+  public boolean hasPermissionString(String key, Player player) {
+    if(!permissions.containsKey(key)) {
+      throw new IllegalStateException("Permission with key " + key + " does not exist");
+    }
+    return player.hasPermission(permissions.get(key).getPermission());
+  }
+
+  /**
    * Register a new permission
    *
    * @param key        The key of the permission
