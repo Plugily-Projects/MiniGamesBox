@@ -88,7 +88,12 @@ public class PlaceholderManager extends PlaceholderExpansion {
         return arena.getMapName();
       }
     });
-
+    registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA) {
+      @Override
+      public String getValue(Player player, Arena arena) {
+        return Integer.toString(arena.getTimer());
+      }
+    });
   }
 
   public void registerPlaceholder(Placeholder command) {
