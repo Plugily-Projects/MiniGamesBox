@@ -39,49 +39,91 @@ public class PermissionsManager {
 
   private final PluginMain plugin;
   private final FileConfiguration config;
-  private String joinFullPerm;
-  private String joinPerm;
-  private String forceStartPerm;
+  private final Map<String, Permission> permissions = new HashMap<>();
   private final Map<String, PermissionCategory> permissionCategories = new HashMap<>();
 
   public PermissionsManager(PluginMain plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "permissions");
-    this.joinFullPerm = plugin.getPluginNamePrefixLong() + ".fullgames";
-    this.joinPerm = plugin.getPluginNamePrefixLong() + ".join.<arena>";
-    this.forceStartPerm = plugin.getPluginNamePrefixLong() + ".admin.forcestart";
-    setupPermissions();
     loadCustomPermissions();
+    loadPermissions();
   }
+
+  public void loadPermissions() {
+    Permission.getPermissions().forEach(this::loadPermissions);
+  }
+
+
+  /**
+   * Returns permission value
+   *
+   * @param key option to get value from
+   * @return Permission
+   */
+  public Permission getPermission(String key) {
+    if(!permissions.containsKey(key)) {
+      throw new IllegalStateException("Permission with key " + key + " does not exist");
+    }
+    return permissions.get(key);
+  }
+
+
+  /**
+   * Returns permission value
+   *
+   * @param key option to get value from
+   * @return String the permission
+   */
+  public String getPermissionString(String key) {
+    if(!permissions.containsKey(key)) {
+      throw new IllegalStateException("Permission with key " + key + " does not exist");
+    }
+    return permissions.get(key).getPermission();
+  }
+
+  /**
+   * Register a new permission
+   *
+   * @param key        The key of the permission
+   * @param permission Contains the permission
+   */
+  public void registerPermission(String key, Permission permission) {
+    if(permissions.containsKey(key)) {
+      throw new IllegalStateException("Permission with key " + key + " was already registered");
+    }
+    loadPermissions(key, permission);
+    permissions.put(key, permission);
+  }
+
+  private void loadPermissions(String key, Permission permission) {
+    permissions.put(key, new Permission(permission.getPath(), config.getString(permission.getPath(), permission.getPermission()), permission.isProtected()));
+    plugin.getDebugger().debug("Loaded permission {0} for key {1}", config.getString(permission.getPath(), permission.getPermission()), key);
+  }
+
+  /**
+   * Remove permission that is not protected
+   *
+   * @param key The name of the permission
+   */
+  public void unregisterPermission(String key) {
+    Permission permissionCategory = permissions.get(key);
+    if(permissionCategory == null) {
+      return;
+    }
+    if(permissionCategory.isProtected()) {
+      throw new IllegalStateException("Protected permission cannot be removed!");
+    }
+    permissions.remove(key);
+  }
+
+  public Map<String, Permission> getPermissions() {
+    return Collections.unmodifiableMap(permissions);
+  }
+
 
   public void loadCustomPermissions() {
     PermissionCategory.getPermissionsCategories().forEach(this::loadPermissionCategory);
   }
-
-  public String getJoinFullGames() {
-    return joinFullPerm;
-  }
-
-  private void setJoinFullGames(String joinFullGames) {
-    joinFullPerm = joinFullGames;
-  }
-
-  public String getJoinPerm() {
-    return joinPerm;
-  }
-
-  private void setJoinPerm(String joinPerm) {
-    this.joinPerm = joinPerm;
-  }
-
-  public void setForceStartPerm(String forceStartPerm) {
-    this.forceStartPerm = forceStartPerm;
-  }
-
-  public String getForceStart() {
-    return forceStartPerm;
-  }
-
 
   /**
    * Returns permission value
@@ -172,13 +214,6 @@ public class PermissionsManager {
 
   public Map<String, PermissionCategory> getPermissionsCategories() {
     return Collections.unmodifiableMap(permissionCategories);
-  }
-
-  private void setupPermissions() {
-    setJoinFullGames(config.getString("Basic.Full-Games", plugin.getPluginNamePrefixLong() + ".fullgames"));
-    setJoinPerm(config.getString("Basic.Join", plugin.getPluginNamePrefixLong() + ".join.<arena>"));
-    setForceStartPerm(config.getString("Basic.Forcestart", plugin.getPluginNamePrefixLong() + ".admin.forcestart"));
-    plugin.getDebugger().debug("Basic permissions registered");
   }
 
 }
