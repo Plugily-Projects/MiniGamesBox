@@ -49,7 +49,7 @@ Player-List:
   slot: 0
   stage: SPECTATOR
 
-Spectator-Option:
+Spectator-Settings:
   permission: ""
   execute:
     - ""
@@ -84,4 +84,4 @@ Arena-Selector:
   stage: SERVER_JOIN
 
 # Don't touch this
-Version: 0
+Version: 1

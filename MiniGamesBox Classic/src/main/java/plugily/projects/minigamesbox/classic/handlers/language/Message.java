@@ -115,8 +115,15 @@ public class Message {
     messages.put("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH", new Message("In-Game.Spectator.Target-Player-Health", "", true));
     messages.put("IN_GAME_SPECTATOR_SPECTATOR_WARNING", new Message("In-Game.Spectator.Spectator-Warning", "", true));
     messages.put("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT", new Message("In-Game.Spectator.Teleport", "", true));
-    messages.put("IN_GAME_SPECTATOR_SETTINGS_MENU_INVENTORY_NAME", new Message("In-Game.Spectator.Settings-Menu.Inventory-Name", "", true));
-    messages.put("IN_GAME_SPECTATOR_SETTINGS_MENU_SPEED_NAME", new Message("In-Game.Spectator.Settings-Menu.Speed-Name", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED", new Message("In-Game.Spectator.Menu.Settings.Status.Enabled", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED", new Message("In-Game.Spectator.Menu.Settings.Status.Disabled", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED", new Message("In-Game.Spectator.Menu.Settings.Changed-Speed", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT", new Message("In-Game.Spectator.Menu.Settings.Auto-Teleport", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR", new Message("In-Game.Spectator.Menu.Settings.Target-Player.Action-Bar", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION", new Message("In-Game.Spectator.Menu.Settings.Night-Vision", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR", new Message("In-Game.Spectator.Menu.Settings.First-Person-Mode.Action-Bar", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE", new Message("In-Game.Spectator.Menu.Settings.First-Person-Mode.Title", "", true));
+    messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY", new Message("In-Game.Spectator.Menu.Settings.Visibility", "", true));
     // in-game.messages
     messages.put("IN_GAME_MESSAGES_JOIN", new Message("In-Game.Messages.Join", "", true));
     messages.put("IN_GAME_MESSAGES_LEAVE", new Message("In-Game.Messages.Leave", "", true));

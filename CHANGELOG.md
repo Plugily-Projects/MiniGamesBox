@@ -13,6 +13,9 @@
 * Added arena timer placeholder
 * All stat placeholder will now automatically also registered with papi
 * Added permissions.yml with custom permissions such as exp boost
+* Refactored spectator gui to match functions from hypixel
+(speed, nightvision, auto teleport, first person mode, visibility)
+* Its possible to add more items into spectator settings menu (own permissions and commands supported)
 
 --- TODO --- 
 - Bring all classes that are used on all projects into this box

@@ -1,3 +1,12 @@
+###############################[IMPORTANT]###############################
+#
+#   Leave this file as it is! It is kinda an internal file!
+#
+### !!!Do not change anything here!!!
+#
+### THIS FILE AUTOMATICALLY REGENERATES ON SERVER RESTART
+#
+###############################[IMPORTANT]###############################
 Plugin:
   Prefix:
     Default: plugily

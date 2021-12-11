@@ -28,6 +28,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.events.spectator.settings.SpectatorSettingsMenu;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -49,8 +50,7 @@ public class SpectatorItemEvents implements Listener {
   public SpectatorItemEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    spectatorSettingsMenu = new SpectatorSettingsMenu(plugin, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SETTINGS_MENU_INVENTORY_NAME"),
-        plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SETTINGS_MENU_SPEED_NAME"));
+    spectatorSettingsMenu = new SpectatorSettingsMenu(plugin);
   }
 
   @EventHandler
@@ -70,9 +70,9 @@ public class SpectatorItemEvents implements Listener {
     if(key == plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").getItemStack()) {
       e.setCancelled(true);
       openSpectatorMenu(e.getPlayer(), arena);
-    } else if(key == plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_OPTIONS").getItemStack()) {
+    } else if(key == plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_SETTINGS").getItemStack()) {
       e.setCancelled(true);
-      spectatorSettingsMenu.openSpectatorSettingsMenu(e.getPlayer());
+      spectatorSettingsMenu.getInventory().open(e.getPlayer());
     }
   }
 

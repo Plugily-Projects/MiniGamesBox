@@ -176,9 +176,20 @@ In-Game:
     Target-Player-Health: "&cHealth: &7%number%"
     Spectator-Warning: "&cYou are a spectator!"
     Teleport: "&cTeleported to %player%"
-    Settings-Menu:
-      Inventory-Name: "&7Spectator settings"
-      Speed-Name: "&aSpeed %number%"
+    Menu:
+      Settings:
+        Status:
+          Enabled: "Enabled"
+          Disabled: "Disabled"
+        Changed-Speed: "Changed Speed to %number%"
+        Auto-Teleport: "%status% auto teleport"
+        Target-Player:
+          Action-Bar: "%number% blocks away | Target %player%"
+        Night-Vision: "%status% night vision"
+        First-Person-Mode:
+          Action-Bar: "&eSNEAK &cto leave! | Target %player%"
+          Title: "&eSNEAK &cto leave!"
+        Visibility: "%status% other spectator players"
   Messages:
     Join: "&b%player%&7 joined the game (%arena_players_size%/%arena_max_players%)!"
     Leave: "&b%player% &7left the game (%arena_players_size%/%arena_max_players%)!"

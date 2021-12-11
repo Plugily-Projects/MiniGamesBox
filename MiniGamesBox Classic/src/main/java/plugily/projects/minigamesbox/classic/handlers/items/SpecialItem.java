@@ -42,7 +42,7 @@ public class SpecialItem {
     specialItems.put("LOBBY_LEAVE_ITEM", new SpecialItem("Lobby-Leave", true, null));
     specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null));
     specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null));
-    specialItems.put("SPECTATOR_OPTIONS", new SpecialItem("Spectator-Option", true, null));
+    specialItems.put("SPECTATOR_SETTINGS", new SpecialItem("Spectator-Settings", true, null));
     specialItems.put("SPECTATOR_LEAVE_ITEM", new SpecialItem("Spectator-Leave", true, null));
     specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null));
   }

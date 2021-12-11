@@ -92,8 +92,8 @@ public class ChatManager {
    * Broadcasts constant message to all players in arena
    * Includes game prefix!
    *
-   * @param arena   arena to get players from
-   * @param key message to broadcast
+   * @param arena arena to get players from
+   * @param key   message to broadcast
    */
   public void broadcast(Arena arena, String key) {
     String colorMessage = colorMessage(key);
@@ -131,6 +131,13 @@ public class ChatManager {
   public String formatMessage(String message, Arena arena) {
     String returnString = message;
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
+    return returnString;
+  }
+
+  public String formatMessage(String message, int integer) {
+    String returnString = message;
+    returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
+    returnString = colorRawMessage(formatPlaceholders(returnString));
     return returnString;
   }
 

@@ -292,7 +292,7 @@ public class PluginMain extends JavaPlugin {
     //space for additional values e.g. configoptions
   }
 
-  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("arenas", "arena_selector", "bungee", "leaderboards", "rewards", "stats", "permissions", "special_items", "mysql", "signs"));
+  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("arenas", "arena_selector", "bungee", "leaderboards", "rewards", "spectator", "stats", "permissions", "special_items", "mysql", "signs"));
 
   public ArrayList<String> getFileNames() {
     return fileNames;
