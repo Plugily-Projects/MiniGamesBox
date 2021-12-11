@@ -54,7 +54,6 @@ public class SpecialItem {
   private int slot;
   private final SpecialItem.DisplayStage displayStage;
   private final boolean protectedOption;
-  //todo perform reward!
   private final Set<Reward> rewards;
 
   public SpecialItem(String path, boolean protectedOption, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards) {
@@ -125,6 +124,14 @@ public class SpecialItem {
 
   public SpecialItem.DisplayStage getDisplayStage() {
     return displayStage;
+  }
+
+  public Set<Reward> getRewards() {
+    return rewards;
+  }
+
+  public String getPermission() {
+    return permission;
   }
 
   public enum DisplayStage {

@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 
@@ -49,6 +50,7 @@ public class JoinEvent implements Listener {
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.loadInventory(plugin, event.getPlayer());
     }
+    plugin.getSpecialItemManager().addSpecialItemsOfStage(event.getPlayer(), SpecialItem.DisplayStage.SERVER_JOIN);
   }
 
   @EventHandler

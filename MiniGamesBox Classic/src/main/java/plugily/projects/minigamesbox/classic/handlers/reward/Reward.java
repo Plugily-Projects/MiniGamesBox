@@ -37,9 +37,9 @@ public class Reward {
   private final double chance;
   private int numberExecute = -1;
 
-  public Reward(RewardType type, String rawCode, int waveExecute) {
+  public Reward(RewardType type, String rawCode, int numberExecute) {
     this(type, rawCode);
-    this.numberExecute = waveExecute;
+    this.numberExecute = numberExecute;
   }
 
   public Reward(RewardType type, String rawCode) {

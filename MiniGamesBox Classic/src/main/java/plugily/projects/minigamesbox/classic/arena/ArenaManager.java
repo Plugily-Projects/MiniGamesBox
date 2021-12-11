@@ -117,7 +117,7 @@ public class ArenaManager {
       player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR"));
       player.getInventory().clear();
 
-      plugin.getSpecialItemManager().setSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
 
       player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
       VersionUtils.setMaxHealth(player, VersionUtils.getMaxHealth(player));
@@ -155,7 +155,13 @@ public class ArenaManager {
       plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.JOIN);
     }
     user.setKit(plugin.getKitRegistry().getDefaultKit());
-    plugin.getSpecialItemManager().setSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
+    plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
+    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+    } else if(arena.getArenaState() == ArenaState.STARTING) {
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+    }
+
     player.updateInventory();
     for(Player arenaPlayer : arena.getPlayers()) {
       ArenaUtils.showPlayer(arenaPlayer, arena);
@@ -242,6 +248,10 @@ public class ArenaManager {
 
     arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
+      for(Player players : arena.getPlayers()) {
+        plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);
+      }
       arena.setArenaState(ArenaState.ENDING);
       arena.setTimer(0);
       //needed as no players online and else it is auto canceled
@@ -278,6 +288,10 @@ public class ArenaManager {
     arena.setTimer(5);
     arena.getMapRestorerManager().fullyRestoreArena();
     arena.setArenaState(ArenaState.ENDING);
+    for(Player players : arena.getPlayers()) {
+      plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);
+    }
     plugin.getDebugger().debug("[{0}] Game stop event finished took {1}ms", arena.getId(), System.currentTimeMillis() - start);
   }
 

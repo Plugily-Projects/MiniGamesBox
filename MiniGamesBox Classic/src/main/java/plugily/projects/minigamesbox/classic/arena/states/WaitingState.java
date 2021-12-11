@@ -20,9 +20,11 @@
 package plugily.projects.minigamesbox.classic.arena.states;
 
 
+import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 
 /**
  * @author Tigerpanzer_02
@@ -52,6 +54,10 @@ public class WaitingState implements ArenaStateHandler {
       plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
       arena.setArenaState(ArenaState.STARTING);
       arena.setTimer(plugin.getConfig().getInt("Time-Manager.Starting", 60));
+      for(Player player : arena.getPlayers()) {
+        plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+      }
     }
     arena.setTimer(arena.getTimer() - 1);
   }

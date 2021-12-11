@@ -6,7 +6,8 @@
 * Powerups don't need HolographicDisplays anymore
 * language.properties files are depreciated and all files are now yml
 * General file overhaul
-* Specialitems can now have rewards
+* Specialitems can now have rewards and permissions
+* Its possible to add own specialitems on different stages
 * Refactored messages and language.yml
 * Removed some static methods
 * Made it plugin unspecific to allow the core to work on its own with variables

@@ -174,9 +174,20 @@ public class SpecialItemManager {
     return Collections.unmodifiableList(getSpecialItems().values().stream().filter(specialItem -> specialItem.getDisplayStage() == stage).collect(Collectors.toList()));
   }
 
-  public void setSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {
+  public void addSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {
     for(SpecialItem specialItem : getSpecialItemsOfStage(stage)) {
+      if(specialItem.getPermission() != null && !specialItem.getPermission().equalsIgnoreCase("")) {
+        if(!plugin.getBukkitHelper().hasPermission(player, specialItem.getPermission())) {
+          continue;
+        }
+      }
       player.getInventory().setItem(specialItem.getSlot(), specialItem.getItemStack());
+    }
+  }
+
+  public void removeSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {
+    for(SpecialItem specialItem : getSpecialItemsOfStage(stage)) {
+      player.getInventory().remove(specialItem.getItemStack());
     }
   }
 

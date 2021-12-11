@@ -134,7 +134,8 @@ Cycle:
 Time-Manager:
   Waiting: 20
   Starting: 60
-  Shorten-Waiting: 5
+  Shorten-Waiting-Full: 15
+  Shorten-Waiting-Force: 5
   In-Game: 270
   Ending: 10
   Restarting: 5

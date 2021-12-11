@@ -20,19 +20,15 @@ package plugily.projects.minigamesbox.classic.events.spectator;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.events.spectator.settings.SpectatorSettingsMenu;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
 import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 import java.util.Collections;
@@ -42,41 +38,18 @@ import java.util.Collections;
  * <p>
  * Created at 09.10.2021
  */
-public class SpectatorItemEvents implements Listener {
+public class SpectatorItemsManager implements Listener {
 
   private final PluginMain plugin;
   private final SpectatorSettingsMenu spectatorSettingsMenu;
 
-  public SpectatorItemEvents(PluginMain plugin) {
+  public SpectatorItemsManager(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
     spectatorSettingsMenu = new SpectatorSettingsMenu(plugin);
   }
 
-  @EventHandler
-  public void onSpecialItem(CBPlayerInteractEvent e) {
-    if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.PHYSICAL) {
-      return;
-    }
-    Arena arena = plugin.getArenaRegistry().getArena(e.getPlayer());
-    ItemStack stack = VersionUtils.getItemInHand(e.getPlayer());
-    if(arena == null || !ItemUtils.isItemStackNamed(stack)) {
-      return;
-    }
-    ItemStack key = plugin.getSpecialItemManager().getRelatedSpecialItem(stack).getItemStack();
-    if(key == null) {
-      return;
-    }
-    if(key == plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").getItemStack()) {
-      e.setCancelled(true);
-      openSpectatorMenu(e.getPlayer(), arena);
-    } else if(key == plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_SETTINGS").getItemStack()) {
-      e.setCancelled(true);
-      spectatorSettingsMenu.getInventory().open(e.getPlayer());
-    }
-  }
-
-  private void openSpectatorMenu(Player player, Arena arena) {
+  public void openSpectatorMenu(Player player, Arena arena) {
     FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME"));
 
     ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
@@ -98,5 +71,9 @@ public class SpectatorItemEvents implements Listener {
       });
     }
     gui.open(player);
+  }
+
+  public SpectatorSettingsMenu getSpectatorSettingsMenu() {
+    return spectatorSettingsMenu;
   }
 }

@@ -43,7 +43,7 @@ import plugily.projects.minigamesbox.classic.events.LobbyEvents;
 import plugily.projects.minigamesbox.classic.events.QuitEvent;
 import plugily.projects.minigamesbox.classic.events.bungee.BungeeEvents;
 import plugily.projects.minigamesbox.classic.events.spectator.SpectatorEvents;
-import plugily.projects.minigamesbox.classic.events.spectator.SpectatorItemEvents;
+import plugily.projects.minigamesbox.classic.events.spectator.SpectatorItemsManager;
 import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
@@ -124,6 +124,7 @@ public class PluginMain extends JavaPlugin {
   private ArgumentsRegistry argumentsRegistry;
   private ArenaManager arenaManager;
   private Metrics metrics;
+  private SpectatorItemsManager spectatorItemsManager;
 
   @TestOnly
   public PluginMain() {
@@ -248,7 +249,7 @@ public class PluginMain extends JavaPlugin {
     new ChatEvents(this);
     new Events(this);
     new LobbyEvents(this);
-    new SpectatorItemEvents(this);
+    spectatorItemsManager = new SpectatorItemsManager(this);
 
     //arena
     arenaRegistry = new ArenaRegistry(this);
@@ -526,5 +527,9 @@ public class PluginMain extends JavaPlugin {
 
   public Metrics getMetrics() {
     return metrics;
+  }
+
+  public SpectatorItemsManager getSpectatorItemsManager() {
+    return spectatorItemsManager;
   }
 }

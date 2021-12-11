@@ -131,7 +131,7 @@ public class RewardsFactory {
   }
 
   public void performReward(Player player, Arena arena, RewardType type) {
-    performReward(player, null, type, -1);
+    performReward(player, arena, type, -1);
   }
 
   public void performReward(Player player, Set<Reward> rewards) {
@@ -146,39 +146,42 @@ public class RewardsFactory {
       return;
 
     for(Reward reward : rewards) {
-      //cannot execute if chance wasn't met
-      if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
-        continue;
-      }
+      executeReward(player, arena, reward);
+    }
+  }
 
-      String command = reward.getExecutableCode();
+  private void executeReward(Player player, Arena arena, Reward reward) {
+    //cannot execute if chance wasn't met
+    if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
+      return;
+    }
+    String command = reward.getExecutableCode();
 
-      if(player != null)
-        command = StringUtils.replace(command, "%PLAYER%", player.getName());
+    if(player != null) {
+      command = StringUtils.replace(command, "%PLAYER%", player.getName());
+    }
 
-      command = formatCommandPlaceholders(command, arena);
-      switch(reward.getExecutor()) {
-        case CONSOLE:
-          Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
-          break;
-        case PLAYER:
-          if(player != null)
-            player.performCommand(command);
-
-          break;
-        case SCRIPT:
-          ScriptEngine engine = new ScriptEngine();
-
-          if(player != null)
-            engine.setValue("player", player);
-
-          engine.setValue("server", Bukkit.getServer());
-          engine.setValue("arena", arena);
-          engine.execute(command);
-          break;
-        default:
-          break;
-      }
+    command = plugin.getChatManager().formatMessage(command, arena);
+    switch(reward.getExecutor()) {
+      case CONSOLE:
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+        break;
+      case PLAYER:
+        if(player != null) {
+          player.performCommand(command);
+        }
+        break;
+      case SCRIPT:
+        ScriptEngine engine = new ScriptEngine();
+        if(player != null) {
+          engine.setValue("player", player);
+        }
+        engine.setValue("server", Bukkit.getServer());
+        engine.setValue("arena", arena);
+        engine.execute(command);
+        break;
+      default:
+        break;
     }
   }
 
@@ -194,8 +197,9 @@ public class RewardsFactory {
     if(arena == null && player != null)
       arena = plugin.getArenaRegistry().getArena(player);
 
-    if(arena == null)
+    if(arena == null) {
       return;
+    }
 
     for(Reward reward : rewards) {
       if(reward.getType() == type) {
@@ -203,49 +207,9 @@ public class RewardsFactory {
         if(type.getExecutorType() == RewardType.ExecutorType.NUMBER && reward.getNumberExecute() != executeNumber) {
           continue;
         }
-        //cannot execute if chance wasn't met
-        if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
-          continue;
-        }
-
-        String command = reward.getExecutableCode();
-
-        if(player != null)
-          command = StringUtils.replace(command, "%PLAYER%", player.getName());
-
-        command = formatCommandPlaceholders(command, arena);
-        switch(reward.getExecutor()) {
-          case CONSOLE:
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
-            break;
-          case PLAYER:
-            if(player != null)
-              player.performCommand(command);
-
-            break;
-          case SCRIPT:
-            ScriptEngine engine = new ScriptEngine();
-
-            if(player != null)
-              engine.setValue("player", player);
-
-            engine.setValue("server", Bukkit.getServer());
-            engine.setValue("arena", arena);
-            engine.execute(command);
-            break;
-          default:
-            break;
-        }
+        executeReward(player, arena, reward);
       }
     }
-  }
-
-  private String formatCommandPlaceholders(String command, Arena arena) {
-    String formatted = command;
-    formatted = StringUtils.replace(formatted, "%ARENA-ID%", arena.getId());
-    formatted = StringUtils.replace(formatted, "%MAPNAME%", arena.getMapName());
-    formatted = StringUtils.replace(formatted, "%PLAYERAMOUNT%", Integer.toString(arena.getPlayers().size()));
-    return formatted;
   }
 
   private void registerRewards() {

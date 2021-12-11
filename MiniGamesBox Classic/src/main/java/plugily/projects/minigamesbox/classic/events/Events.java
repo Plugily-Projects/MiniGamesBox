@@ -136,51 +136,6 @@ public class Events implements Listener {
     event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_COMMANDS_BLOCKED"));
   }
 
-  @EventHandler
-  public void onSpecialItem(CBPlayerInteractEvent event) {
-    if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.PHYSICAL) {
-      return;
-    }
-    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
-    if(arena == null) {
-      return;
-    }
-
-    ItemStack itemStack = VersionUtils.getItemInHand(event.getPlayer());
-    if(!ItemUtils.isItemStackNamed(itemStack)) {
-      return;
-    }
-
-    String key = plugin.getSpecialItemManager().getRelatedSpecialItem(itemStack).getPath();
-    if(key == null) {
-      return;
-    }
-    if(key.equalsIgnoreCase(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").getPath())) {
-      event.setCancelled(true);
-      ArenaUtils.arenaForceStart(event.getPlayer(), plugin.getConfig().getInt("Time-Manager.Shorten-Waiting"));
-      return;
-    }
-    if(key.equals(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").getPath()) || key.equals(plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").getPath())) {
-      event.setCancelled(true);
-      if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
-        plugin.getBungeeManager().connectToHub(event.getPlayer());
-      } else {
-        plugin.getArenaManager().leaveAttempt(event.getPlayer(), arena);
-      }
-    }
-  }
-
-  private boolean checkSpecialItem(ItemStack itemStack, Player player) {
-    if(!ItemUtils.isItemStackNamed(itemStack)) {
-      return false;
-    }
-    Arena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null) {
-      return false;
-    }
-    SpecialItem key = plugin.getSpecialItemManager().getRelatedSpecialItem(itemStack);
-    return key != SpecialItem.INVALID_ITEM;
-  }
 
   @EventHandler
   public void onItemMove(InventoryClickEvent e) {
@@ -200,12 +155,6 @@ public class Events implements Listener {
     }
   }
 
-  @EventHandler
-  public void onSwap(CBPlayerSwapHandItemsEvent event) {
-    if(checkSpecialItem(event.getOffHandItem(), event.getPlayer())) {
-      event.setCancelled(true);
-    }
-  }
 
   @EventHandler
   public void onDecay(LeavesDecayEvent event) {

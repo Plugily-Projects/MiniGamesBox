@@ -26,6 +26,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEvent;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.user.User;
 
 /**
@@ -60,10 +61,12 @@ public class StartingState implements ArenaStateHandler {
 
     if(!arena.isForceStart() && arena.getPlayers().size() < (minPlayers = arena.getMinimumPlayers())) {
       arena.getBossbarManager().setProgress(1.0);
-
       plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
       arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
-      Bukkit.getPluginManager().callEvent(new PlugilyGameStartEvent(arena));
+      for(Player player : arena.getPlayers()) {
+        plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+      }
       arena.setTimer(plugin.getConfig().getInt("Time-Manager.Waiting", 60));
       for(Player player : arena.getPlayers()) {
         player.setExp(1);
@@ -87,6 +90,7 @@ public class StartingState implements ArenaStateHandler {
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);
         player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_GAME_START"));
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
       }
       arena.setTimer(plugin.getConfig().getInt("Time-Manager.In-Game", 270));
     }
@@ -94,6 +98,11 @@ public class StartingState implements ArenaStateHandler {
       arena.setForceStart(false);
     }
     arena.setTimer(arena.getTimer() - 1);
+    int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
+    if(arena.getMaximumPlayers() == arena.getPlayers().size() && arena.getTimer() > shorter) {
+      arena.setTimer(shorter);
+      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS"));
+    }
   }
 
 }
