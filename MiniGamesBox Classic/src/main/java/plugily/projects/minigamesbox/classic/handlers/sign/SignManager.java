@@ -20,7 +20,6 @@
 package plugily.projects.minigamesbox.classic.handlers.sign;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -53,7 +52,7 @@ import java.util.logging.Level;
  * <p>
  * Created at 21.09.2021
  */
-//todo custom signs.yml
+//todo custom signs.yml (e.g. block behind sign)
 public class SignManager implements Listener {
 
   private final PluginMain plugin;
@@ -87,7 +86,7 @@ public class SignManager implements Listener {
         continue;
       }
       for(int i = 0; i < signLines.size(); i++) {
-        ComplementAccessor.getComplement().setLine(event, i, formatSign(signLines.get(i), arena));
+        ComplementAccessor.getComplement().setLine(event, i, plugin.getChatManager().formatMessage(signLines.get(i), arena));
       }
       arenaSigns.add(new ArenaSign((Sign) event.getBlock().getState(), arena));
       event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_CREATED"));
@@ -100,17 +99,6 @@ public class SignManager implements Listener {
       return;
     }
     event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_ARENA_NOT_FOUND"));
-  }
-
-  private String formatSign(String msg, Arena arena) {
-    String formatted = msg;
-    formatted = StringUtils.replace(formatted, "%mapname%", arena.getMapName());
-    int maximumPlayers = arena.getMaximumPlayers();
-    formatted = StringUtils.replace(formatted, "%state%", gameStateToString.get(arena.getArenaState()));
-    formatted = StringUtils.replace(formatted, "%playersize%", Integer.toString(arena.getPlayers().size()));
-    formatted = StringUtils.replace(formatted, "%maxplayers%", Integer.toString(maximumPlayers));
-    formatted = plugin.getChatManager().colorRawMessage(formatted);
-    return formatted;
   }
 
   @EventHandler
@@ -144,13 +132,18 @@ public class SignManager implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onJoinAttempt(CBPlayerInteractEvent event) {
-    ArenaSign arenaSign = getArenaSignByBlock(event.getClickedBlock());
-    if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getState() instanceof Sign && arenaSign != null) {
-      Arena arena = arenaSign.getArena();
-      if(arena != null) {
-        plugin.getArenaManager().joinAttempt(event.getPlayer(), arena);
-      }
+    if(event.getAction() != Action.RIGHT_CLICK_BLOCK || !(event.getClickedBlock().getState() instanceof Sign)) {
+      return;
     }
+    ArenaSign arenaSign = getArenaSignByBlock(event.getClickedBlock());
+    if(arenaSign == null) {
+      return;
+    }
+    Arena arena = arenaSign.getArena();
+    if(arena == null) {
+      return;
+    }
+    plugin.getArenaManager().joinAttempt(event.getPlayer(), arena);
   }
 
   @Nullable
@@ -158,13 +151,11 @@ public class SignManager implements Listener {
     if(block == null) {
       return null;
     }
-
     for(ArenaSign sign : arenaSigns) {
       if(sign.getSign().getLocation().equals(block.getLocation())) {
         return sign;
       }
     }
-
     return null;
   }
 
@@ -205,7 +196,7 @@ public class SignManager implements Listener {
 
     for(ArenaSign arenaSign : arenaSigns) {
       for(int i = 0; i < signLines.size(); i++) {
-        ComplementAccessor.getComplement().setLine(arenaSign.getSign(), i, formatSign(signLines.get(i), arenaSign.getArena()));
+        ComplementAccessor.getComplement().setLine(arenaSign.getSign(), i, plugin.getChatManager().formatMessage(signLines.get(i), arenaSign.getArena()));
       }
       if(plugin.getConfig().getBoolean("Signs-Block-States-Enabled", true) && arenaSign.getBehind() != null) {
         Block behind = arenaSign.getBehind();
