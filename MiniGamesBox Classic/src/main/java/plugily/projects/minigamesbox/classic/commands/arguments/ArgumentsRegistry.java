@@ -114,6 +114,11 @@ public class ArgumentsRegistry implements CommandExecutor {
     if(plugin.getConfigPreferences().getOption("HOLOGRAMS")) {
       new HologramArgument(this);
     }
+    registerPluginCommands();
+  }
+
+  public void registerPluginCommands() {
+    // can be used by the plugin
   }
 
   @Override

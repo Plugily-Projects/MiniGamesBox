@@ -32,7 +32,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -44,17 +43,11 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
-import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerSwapHandItemsEvent;
 
 /**
  * @author Tigerpanzer_02
@@ -126,10 +119,10 @@ public class Events implements Listener {
         return;
       }
     }
-    if(command.equalsIgnoreCase("plugily") || event.getMessage().contains("leave") || event.getMessage().contains("stats") || command.equalsIgnoreCase("plugilyadmin")) {
+    if(command.equalsIgnoreCase(plugin.getPluginNamePrefixLong()) || event.getMessage().contains("leave") || event.getMessage().contains("stats") || command.equalsIgnoreCase(plugin.getCommandAdminPrefix()) || command.equalsIgnoreCase(plugin.getCommandAdminPrefixLong()) || command.equalsIgnoreCase(plugin.getPluginNamePrefixLong())) {
       return;
     }
-    if(event.getPlayer().isOp() || event.getPlayer().hasPermission("plugily.command.override")) {
+    if(event.getPlayer().isOp() || event.getPlayer().hasPermission(plugin.getPluginNamePrefixLong() + ".command.override")) {
       return;
     }
     event.setCancelled(true);
