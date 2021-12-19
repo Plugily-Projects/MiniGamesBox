@@ -214,8 +214,6 @@ public class ChatManager {
   private String formatPlaceholders(String message, PluginArena arena) {
     int timer = arena.getTimer();
     String returnString = message;
-    //todo possibility to add custom placeholders from the plugin itself, such as waves from vd
-    //Example formatted = StringUtils.replace(formatted, "%WAVE%", Integer.toString(arena.getWave()));
     returnString = StringUtils.replace(returnString, "%plugin_name%", plugin.getName());
     returnString = StringUtils.replace(returnString, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
     returnString = StringUtils.replace(returnString, "%plugin_short_command%", plugin.getPluginNamePrefix());
