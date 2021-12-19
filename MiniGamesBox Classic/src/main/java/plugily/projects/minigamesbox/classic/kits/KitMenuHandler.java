@@ -27,7 +27,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerChooseKitEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
@@ -69,7 +69,7 @@ public class KitMenuHandler implements Listener {
         if(!(e.isLeftClick() || e.isRightClick()) || !(e.getWhoClicked() instanceof Player) || !ItemUtils.isItemStackNamed(e.getCurrentItem())) {
           return;
         }
-        Arena arena = plugin.getArenaRegistry().getArena(player);
+        PluginArena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }

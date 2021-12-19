@@ -25,7 +25,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -41,13 +41,13 @@ import java.util.Map;
 public class BossbarManager {
 
   private final PluginMain plugin;
-  private final Arena arena;
+  private final PluginArena arena;
   private final int interval;
   private int currentLine;
   private final Map<ArenaState, List<String>> bossbar = new EnumMap<>(ArenaState.class);
   private BossBar gameBar;
 
-  public BossbarManager(Arena arena) {
+  public BossbarManager(PluginArena arena) {
     this.arena = arena;
     this.plugin = arena.getPlugin();
     arena.setArenaOption("BOSSBAR_INTERVAL", plugin.getConfig().getInt("Bossbar.Interval", 10));
@@ -92,7 +92,7 @@ public class BossbarManager {
    * @param action add or remove a player from boss bar
    * @param player player
    */
-  public void doBarAction(Arena.BarAction action, Player player) {
+  public void doBarAction(PluginArena.BarAction action, Player player) {
     if(gameBar == null) {
       return;
     }
@@ -113,7 +113,7 @@ public class BossbarManager {
    * Please use doBarAction if possible
    *
    * @return game boss bar
-   * @see #doBarAction(Arena.BarAction, Player)
+   * @see #doBarAction(PluginArena.BarAction, Player)
    */
   public BossBar getGameBar() {
     return gameBar;

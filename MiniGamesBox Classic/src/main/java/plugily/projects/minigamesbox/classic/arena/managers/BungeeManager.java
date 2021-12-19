@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -79,7 +79,7 @@ public class BungeeManager implements Listener {
     if(plugin.getArenaRegistry().getArenas().isEmpty() || !config.getBoolean("MOTD.Manager")) {
       return;
     }
-    Arena arena = plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena());
+    PluginArena arena = plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena());
     event.setMaxPlayers(arena.getMaximumPlayers());
     ComplementAccessor.getComplement().setMotd(event, plugin.getChatManager().formatMessage(motd.get(arena.getArenaState()), arena));
   }

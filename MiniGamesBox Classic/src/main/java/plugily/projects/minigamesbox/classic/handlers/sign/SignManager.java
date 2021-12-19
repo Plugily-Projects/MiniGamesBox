@@ -33,7 +33,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -81,7 +81,7 @@ public class SignManager implements Listener {
       event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
       return;
     }
-    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
+    for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {
       if(!arena.getId().equalsIgnoreCase(line1)) {
         continue;
       }
@@ -139,7 +139,7 @@ public class SignManager implements Listener {
     if(arenaSign == null) {
       return;
     }
-    Arena arena = arenaSign.getArena();
+    PluginArena arena = arenaSign.getArena();
     if(arena == null) {
       return;
     }
@@ -172,7 +172,7 @@ public class SignManager implements Listener {
     }
 
     for(String path : section.getKeys(false)) {
-      Arena arena = plugin.getArenaRegistry().getArena(path);
+      PluginArena arena = plugin.getArenaRegistry().getArena(path);
       if(arena != null) {
         for(String sign : section.getStringList(path + ".signs")) {
           Location loc = LocationSerializer.getLocation(sign);

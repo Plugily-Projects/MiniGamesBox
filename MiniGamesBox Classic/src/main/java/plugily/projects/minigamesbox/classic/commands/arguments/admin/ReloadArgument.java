@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -59,9 +59,9 @@ public class ReloadArgument {
         registry.getPlugin().reloadConfig();
         registry.getPlugin().getLanguageManager().reloadLanguage();
 
-        for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           for(Player player : arena.getPlayers()) {
-            arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
+            arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
             arena.teleportToEndLocation(player);
             if(registry.getPlugin().getConfigPreferences().getOption("INVENTORY_MANAGER")) {
               InventorySerializer.loadInventory(registry.getPlugin(), player);

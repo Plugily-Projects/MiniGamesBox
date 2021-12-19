@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -51,14 +51,14 @@ public class TeleportArgument {
           sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + ChatColor.RED + "Please type location type: END, START, LOBBY");
           return;
         }
-        Arena.GameLocation type;
+        PluginArena.GameLocation type;
         try {
-          type = Arena.GameLocation.valueOf(args[2].toUpperCase());
+          type = PluginArena.GameLocation.valueOf(args[2].toUpperCase());
         } catch(IllegalArgumentException e) {
           sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_INVALID_LOCATION_TELEPORT"));
           return;
         }
-        for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           if(arena.getId().equalsIgnoreCase(args[1])) {
             teleport((Player) sender, arena, type);
             break;
@@ -68,7 +68,7 @@ public class TeleportArgument {
     });
   }
 
-  private void teleport(Player player, Arena arena, Arena.GameLocation gameLocation) {
+  private void teleport(Player player, PluginArena arena, PluginArena.GameLocation gameLocation) {
 
     Location location = arena.getLocation(gameLocation);
     if(location == null) {

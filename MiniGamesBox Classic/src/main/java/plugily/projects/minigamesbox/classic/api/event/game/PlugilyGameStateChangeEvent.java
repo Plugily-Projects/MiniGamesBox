@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.api.event.game;
 
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 
 /**
@@ -35,7 +35,7 @@ public class PlugilyGameStateChangeEvent extends PlugilyEvent {
   private static final HandlerList HANDLERS = new HandlerList();
   private final ArenaState arenaState;
 
-  public PlugilyGameStateChangeEvent(Arena eventArena, ArenaState arenaState) {
+  public PlugilyGameStateChangeEvent(PluginArena eventArena, ArenaState arenaState) {
     super(eventArena);
     this.arenaState = arenaState;
   }

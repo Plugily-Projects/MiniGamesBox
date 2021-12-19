@@ -19,19 +19,15 @@
 
 package plugily.projects.minigamesbox.classic.arena.states;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 01.11.2021
  */
-public class RestartingState implements ArenaStateHandler {
+public class PluginInGameState implements ArenaStateHandler {
 
   private PluginMain plugin;
 
@@ -41,20 +37,11 @@ public class RestartingState implements ArenaStateHandler {
   }
 
   @Override
-  public void handleCall(Arena arena) {
-    arena.getMapRestorerManager().fullyRestoreArena();
-    arena.getPlayers().clear();
-    arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
-
-    if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
-      if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
-        plugin.getServer().shutdown();
-      }
-      plugin.getArenaRegistry().shuffleBungeeArena();
-      for(Player player : Bukkit.getOnlinePlayers()) {
-        plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
-      }
-    }
+  public void handleCall(PluginArena arena) {
+    arena.setTimer(arena.getTimer() - 1);
   }
 
+  public PluginMain getPlugin() {
+    return plugin;
+  }
 }

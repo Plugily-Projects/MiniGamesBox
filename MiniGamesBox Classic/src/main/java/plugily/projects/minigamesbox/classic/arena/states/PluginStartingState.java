@@ -24,8 +24,8 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.user.User;
 
@@ -34,7 +34,7 @@ import plugily.projects.minigamesbox.classic.user.User;
  * <p>
  * Created at 01.11.2021
  */
-public class StartingState implements ArenaStateHandler {
+public class PluginStartingState implements ArenaStateHandler {
 
   private PluginMain plugin;
 
@@ -44,7 +44,7 @@ public class StartingState implements ArenaStateHandler {
   }
 
   @Override
-  public void handleCall(Arena arena) {
+  public void handleCall(PluginArena arena) {
     double startWaiting = plugin.getConfig().getDouble("Starting-Waiting-Time", 60);
     int timer = arena.getTimer();
 
@@ -105,4 +105,7 @@ public class StartingState implements ArenaStateHandler {
     }
   }
 
+  public PluginMain getPlugin() {
+    return plugin;
+  }
 }

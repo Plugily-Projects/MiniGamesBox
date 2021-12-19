@@ -29,7 +29,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -48,7 +48,7 @@ import java.util.Map;
 public class ArenaSelectorArgument implements Listener {
 
   private final ChatManager chatManager;
-  private final Map<Integer, Arena> arenas = new HashMap<>();
+  private final Map<Integer, PluginArena> arenas = new HashMap<>();
   private final PluginMain plugin;
 
   public ArenaSelectorArgument(ArgumentsRegistry registry) {
@@ -70,7 +70,7 @@ public class ArenaSelectorArgument implements Listener {
 
         Inventory inventory = ComplementAccessor.getComplement().createInventory(player, registry.getPlugin().getBukkitHelper().serializeInt(registry.getPlugin().getArenaRegistry().getArenas().size()), chatManager.colorMessage("ARENA_SELECTOR_INVENTORY_TITLE"));
 
-        for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           arenas.put(slot, arena);
           ItemStack itemStack = XMaterial.matchXMaterial(registry.getPlugin().getConfig().getString("Arena-Selector.State-Item." + arena.getArenaState().getFormattedName(), "YELLOW_WOOL").toUpperCase()).orElse(XMaterial.YELLOW_WOOL).parseItem();
 
@@ -98,7 +98,7 @@ public class ArenaSelectorArgument implements Listener {
 
   }
 
-  private String formatItem(String string, Arena arena) {
+  private String formatItem(String string, PluginArena arena) {
     String formatted = string;
     formatted = StringUtils.replace(formatted, "%mapname%", arena.getMapName());
     int maxPlayers = arena.getMaximumPlayers();
@@ -123,7 +123,7 @@ public class ArenaSelectorArgument implements Listener {
     Player player = (Player) e.getWhoClicked();
     player.closeInventory();
 
-    Arena arena = arenas.get(e.getRawSlot());
+    PluginArena arena = arenas.get(e.getRawSlot());
     if(arena != null) {
       plugin.getArenaManager().joinAttempt(player, arena);
     } else {

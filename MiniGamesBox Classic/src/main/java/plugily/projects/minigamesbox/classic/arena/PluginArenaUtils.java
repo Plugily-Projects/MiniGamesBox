@@ -30,24 +30,24 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
  * <p>
  * Created at 01.11.2021
  */
-public class ArenaUtils {
+public class PluginArenaUtils {
 
   private static PluginMain plugin;
 
-  private ArenaUtils() {
+  public PluginArenaUtils() {
   }
 
   public static void init(PluginMain plugin) {
-    ArenaUtils.plugin = plugin;
+    PluginArenaUtils.plugin = plugin;
   }
 
-  public static void hidePlayer(Player p, Arena arena) {
+  public static void hidePlayer(Player p, PluginArena arena) {
     for(Player player : arena.getPlayers()) {
       VersionUtils.hidePlayer(plugin, player, p);
     }
   }
 
-  public static void showPlayer(Player p, Arena arena) {
+  public static void showPlayer(Player p, PluginArena arena) {
     for(Player player : arena.getPlayers()) {
       VersionUtils.showPlayer(plugin, player, p);
     }
@@ -80,7 +80,7 @@ public class ArenaUtils {
       return;
     }
 
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NOT_PLAYING"));
       return;

@@ -17,33 +17,31 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.arena.states;
+package plugily.projects.minigamesbox.classic.handlers.setup.components;
 
-
-import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 /**
  * @author Tigerpanzer_02
  * <p>
- * Created at 01.11.2021
+ * Created at 17.12.2021
  */
-public interface ArenaStateHandler {
+public class PluginAdditionalComponents implements SetupComponent {
 
-  /**
-   * Initiate class with injecting the main plugin class
-   *
-   * @param plugin class to inject
-   */
-  void init(PluginMain plugin);
+  private SetupInventory setupInventory;
 
-  /**
-   * Handle call for the current arena state for arena.
-   * Basically when arena state is IN_GAME, the in game
-   * state will be handled and called via that method.
-   *
-   * @param arena arena to call state update for
-   */
-  void handleCall(PluginArena arena);
+  @Override
+  public void prepare(SetupInventory setupInventory) {
+    this.setupInventory = setupInventory;
+  }
 
+  @Override
+  public void injectComponents(FastInv gui) {
+
+  }
+
+  public SetupInventory getSetupInventory() {
+    return setupInventory;
+  }
 }

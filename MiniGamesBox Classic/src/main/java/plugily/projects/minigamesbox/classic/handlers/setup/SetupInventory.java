@@ -23,8 +23,9 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.handlers.setup.components.ArenaRegisterComponent;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.setup.components.PluginAdditionalComponents;
+import plugily.projects.minigamesbox.classic.handlers.setup.components.PluginArenaRegisterComponent;
 import plugily.projects.minigamesbox.classic.handlers.setup.components.MiscComponents;
 import plugily.projects.minigamesbox.classic.handlers.setup.components.PlayerAmountComponents;
 import plugily.projects.minigamesbox.classic.handlers.setup.components.SpawnComponents;
@@ -44,12 +45,12 @@ public class SetupInventory {
   private static final Random random = new Random();
   private static PluginMain plugin;
   private final FileConfiguration config;
-  private final Arena arena;
+  private final PluginArena arena;
   private final Player player;
   private FastInv gui;
   private final SetupUtilities setupUtilities;
 
-  public SetupInventory(Arena arena, Player player) {
+  public SetupInventory(PluginArena arena, Player player) {
     config = ConfigUtils.getConfig(plugin, "arenas");
     this.arena = arena;
     this.player = player;
@@ -62,6 +63,7 @@ public class SetupInventory {
   }
 
   private void prepareGui() {
+    //size changeable
     gui = new FastInv(18, plugin.getPluginMessagePrefix() + "Arena Setup");
 
     prepareComponents(gui);
@@ -80,9 +82,13 @@ public class SetupInventory {
     miscComponents.prepare(this);
     miscComponents.injectComponents(gui);
 
-    ArenaRegisterComponent arenaRegisterComponent = new ArenaRegisterComponent();
+    PluginArenaRegisterComponent arenaRegisterComponent = new PluginArenaRegisterComponent();
     arenaRegisterComponent.prepare(this);
     arenaRegisterComponent.injectComponents(gui);
+
+    PluginAdditionalComponents additionalComponents = new PluginAdditionalComponents();
+    additionalComponents.prepare(this);
+    additionalComponents.injectComponents(gui);
   }
 
   private void sendProTip(Player p) {
@@ -129,7 +135,7 @@ public class SetupInventory {
     return config;
   }
 
-  public Arena getArena() {
+  public PluginArena getArena() {
     return arena;
   }
 

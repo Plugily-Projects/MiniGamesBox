@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -41,16 +40,18 @@ import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 01.11.2021
  */
-public class ArenaManager {
+public class PluginArenaManager {
 
   private final PluginMain plugin;
 
-  public ArenaManager(PluginMain plugin) {
+  public PluginArenaManager(PluginMain plugin) {
     this.plugin = plugin;
   }
 
@@ -63,7 +64,7 @@ public class ArenaManager {
    * @param arena  arena to join
    * @see plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent
    */
-  public void joinAttempt(@NotNull Player player, @NotNull Arena arena) {
+  public void joinAttempt(@NotNull Player player, @NotNull PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial join attempt for {1}", arena.getId(), player.getName());
     if(!canJoinArenaAndMessage(player, arena) || !checkFullGamePermission(player, arena)) {
       return;
@@ -85,7 +86,7 @@ public class ArenaManager {
             continue;
           }
 
-          Arena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
+          PluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
 
           if(partyPlayerGame != null) {
             if(partyPlayerGame.getArenaState() == ArenaState.IN_GAME) {
@@ -128,7 +129,7 @@ public class ArenaManager {
       player.setFlying(true);
       user.setSpectator(true);
       player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
-      ArenaUtils.hidePlayer(player, arena);
+      PluginArenaUtils.hidePlayer(player, arena);
 
       for(Player spectator : arena.getPlayers()) {
         if(plugin.getUserManager().getUser(spectator).isSpectator()) {
@@ -137,6 +138,9 @@ public class ArenaManager {
           VersionUtils.showPlayer(plugin, player, spectator);
         }
       }
+
+      additionalSpectatorSettings(player, arena);
+
       plugin.getDebugger().debug("[{0}] Final join attempt as spectator for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
       return;
     }
@@ -150,7 +154,7 @@ public class ArenaManager {
     player.setFlying(false);
     player.setAllowFlight(false);
     player.getInventory().clear();
-    arena.getBossbarManager().doBarAction(Arena.BarAction.ADD, player);
+    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
     if(!user.isSpectator()) {
       plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.JOIN);
     }
@@ -164,7 +168,7 @@ public class ArenaManager {
 
     player.updateInventory();
     for(Player arenaPlayer : arena.getPlayers()) {
-      ArenaUtils.showPlayer(arenaPlayer, arena);
+      PluginArenaUtils.showPlayer(arenaPlayer, arena);
       arenaPlayer.setExp(1);
       arenaPlayer.setLevel(0);
     }
@@ -172,7 +176,11 @@ public class ArenaManager {
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
 
-  private boolean checkFullGamePermission(Player player, Arena arena) {
+  public void additionalSpectatorSettings(Player player, PluginArena arena) {
+
+  }
+
+  private boolean checkFullGamePermission(Player player, PluginArena arena) {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
@@ -195,7 +203,7 @@ public class ArenaManager {
     return false;
   }
 
-  private boolean canJoinArenaAndMessage(Player player, Arena arena) {
+  private boolean canJoinArenaAndMessage(Player player, PluginArena arena) {
     if(!arena.isReady()) {
       player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_ARENA_NOT_CONFIGURED"));
       return false;
@@ -226,7 +234,7 @@ public class ArenaManager {
    * @param arena  arena to leave
    * @see PlugilyGameLeaveAttemptEvent
    */
-  public void leaveAttempt(@NotNull Player player, @NotNull Arena arena) {
+  public void leaveAttempt(@NotNull Player player, @NotNull PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial leave attempt of {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
 
@@ -246,7 +254,7 @@ public class ArenaManager {
     user.setSpectator(false);
     user.setPermanentSpectator(false);
 
-    arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
+    arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
       for(Player players : arena.getPlayers()) {
         plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
@@ -257,7 +265,7 @@ public class ArenaManager {
       //needed as no players online and else it is auto canceled
       arena.getMapRestorerManager().fullyRestoreArena();
     }
-    ArenaUtils.resetPlayerAfterGame(player);
+    PluginArenaUtils.resetPlayerAfterGame(player);
     arena.teleportToEndLocation(player);
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
@@ -270,7 +278,7 @@ public class ArenaManager {
    * @param arena     which arena should stop
    * @see PlugilyGameStopEvent
    */
-  public void stopGame(boolean quickStop, @NotNull Arena arena) {
+  public void stopGame(boolean quickStop, @NotNull PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Game stop event start", arena.getId());
     long start = System.currentTimeMillis();
 
@@ -282,6 +290,10 @@ public class ArenaManager {
 
       if(!quickStop) {
         spawnFireworks(arena, player);
+      }
+      List<String> summaryMessages = plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary");
+      for(String msg : summaryMessages) {
+        MiscUtils.sendCenteredMessage(player, plugin.getChatManager().formatMessage(arena, msg, user.getPlayer()));
       }
     }
     arena.getScoreboardManager().stopAllScoreboards();
@@ -295,13 +307,7 @@ public class ArenaManager {
     plugin.getDebugger().debug("[{0}] Game stop event finished took {1}ms", arena.getId(), System.currentTimeMillis() - start);
   }
 
-  private String formatSummaryPlaceholders(String msg, Arena arena, User user, String summary) {
-    String formatted = msg;
-    formatted = StringUtils.replace(formatted, "%summary%", summary);
-    return formatted;
-  }
-
-  private void spawnFireworks(Arena arena, Player player) {
+  private void spawnFireworks(PluginArena arena, Player player) {
     if(!plugin.getConfigPreferences().getOption("FIREWORK")) {
       return;
     }

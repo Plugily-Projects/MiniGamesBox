@@ -29,11 +29,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
-import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaEvents;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
-import plugily.projects.minigamesbox.classic.arena.ArenaRegistry;
-import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaEvents;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaManager;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaRegistry;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.events.ChatEvents;
@@ -117,12 +117,12 @@ public class PluginMain extends JavaPlugin {
   private FileConfiguration languageConfig;
   private FileConfiguration internalData;
   private ChatManager chatManager;
-  private ArenaRegistry arenaRegistry;
+  private PluginArenaRegistry arenaRegistry;
   private KitRegistry kitRegistry;
   private MessageManager messageManager;
   private LanguageManager languageManager;
   private ArgumentsRegistry argumentsRegistry;
-  private ArenaManager arenaManager;
+  private PluginArenaManager arenaManager;
   private Metrics metrics;
   private SpectatorItemsManager spectatorItemsManager;
 
@@ -242,7 +242,7 @@ public class PluginMain extends JavaPlugin {
       new BungeeEvents(this);
     }
 
-    new ArenaEvents(this);
+    new PluginArenaEvents(this);
     new SpectatorEvents(this);
     new JoinEvent(this);
     new QuitEvent(this);
@@ -252,14 +252,14 @@ public class PluginMain extends JavaPlugin {
     spectatorItemsManager = new SpectatorItemsManager(this);
 
     //arena
-    arenaRegistry = new ArenaRegistry(this);
+    arenaRegistry = new PluginArenaRegistry(this);
     arenaRegistry.registerArenas();
     argumentsRegistry = new ArgumentsRegistry(this);
-    arenaManager = new ArenaManager(this);
+    arenaManager = new PluginArenaManager(this);
 
     SetupInventory.init(this);
-    ArenaUtils.init(this);
-    Arena.init(this);
+    PluginArenaUtils.init(this);
+    PluginArena.init(this);
   }
 
   private boolean validateIfPluginShouldStart() {
@@ -365,7 +365,7 @@ public class PluginMain extends JavaPlugin {
     long start = System.currentTimeMillis();
 
     Bukkit.getLogger().removeHandler(exceptionLogHandler);
-    for(Arena arena : arenaRegistry.getArenas()) {
+    for(PluginArena arena : arenaRegistry.getArenas()) {
       arena.getScoreboardManager().stopAllScoreboards();
       for(Player player : arena.getPlayers()) {
         arena.teleportToEndLocation(player);
@@ -373,7 +373,7 @@ public class PluginMain extends JavaPlugin {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
-        arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
+        arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
         if(configPreferences.getOption("INVENTORY_MANAGER")) {
           InventorySerializer.loadInventory(this, player);
         }
@@ -501,7 +501,7 @@ public class PluginMain extends JavaPlugin {
     return pluginNamePrefixLong + "admin";
   }
 
-  public ArenaRegistry getArenaRegistry() {
+  public PluginArenaRegistry getArenaRegistry() {
     return arenaRegistry;
   }
 
@@ -521,7 +521,7 @@ public class PluginMain extends JavaPlugin {
     return argumentsRegistry;
   }
 
-  public ArenaManager getArenaManager() {
+  public PluginArenaManager getArenaManager() {
     return arenaManager;
   }
 

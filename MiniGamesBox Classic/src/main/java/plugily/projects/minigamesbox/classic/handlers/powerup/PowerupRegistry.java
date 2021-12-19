@@ -27,7 +27,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerPowerupPickupEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
@@ -125,7 +125,7 @@ public class PowerupRegistry {
     return registeredPowerups.get(registeredPowerups.size() == 1 ? 0 : random.nextInt(registeredPowerups.size()));
   }
 
-  public void spawnPowerup(Location loc, Arena arena) {
+  public void spawnPowerup(Location loc, PluginArena arena) {
     if(!enabled || ThreadLocalRandom.current().nextDouble(0.0, 100.0) > plugin.getConfig().getDouble("Powerups.Drop-Chance", 1.0)) {
       return;
     }

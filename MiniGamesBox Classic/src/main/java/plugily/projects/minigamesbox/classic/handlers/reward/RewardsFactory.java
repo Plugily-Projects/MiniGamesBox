@@ -25,7 +25,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngine;
 
@@ -116,7 +116,7 @@ public class RewardsFactory {
   }
 
 
-  public void performReward(Arena arena, RewardType type) {
+  public void performReward(PluginArena arena, RewardType type) {
     if(!enabled) {
       return;
     }
@@ -130,7 +130,7 @@ public class RewardsFactory {
     performReward(player, null, type);
   }
 
-  public void performReward(Player player, Arena arena, RewardType type) {
+  public void performReward(Player player, PluginArena arena, RewardType type) {
     performReward(player, arena, type, -1);
   }
 
@@ -138,7 +138,7 @@ public class RewardsFactory {
     performReward(player, null, rewards);
   }
 
-  public void performReward(Player player, Arena arena, Set<Reward> rewards) {
+  public void performReward(Player player, PluginArena arena, Set<Reward> rewards) {
     if(arena == null && player != null)
       arena = plugin.getArenaRegistry().getArena(player);
 
@@ -150,7 +150,7 @@ public class RewardsFactory {
     }
   }
 
-  private void executeReward(Player player, Arena arena, Reward reward) {
+  private void executeReward(Player player, PluginArena arena, Reward reward) {
     //cannot execute if chance wasn't met
     if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
       return;
@@ -185,7 +185,7 @@ public class RewardsFactory {
     }
   }
 
-  public void performReward(Player player, Arena arena, RewardType type, int executeNumber) {
+  public void performReward(Player player, PluginArena arena, RewardType type, int executeNumber) {
     if(!enabled) {
       return;
     }

@@ -24,7 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -56,7 +56,7 @@ public class CreateArgument {
           return;
         }
         Player player = (Player) sender;
-        for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           if(arena.getId().equalsIgnoreCase(args[1])) {
             player.sendMessage(ChatColor.DARK_RED + "Arena with that ID already exists!");
             player.sendMessage(ChatColor.DARK_RED + "Usage: /vd create <ID>");
@@ -94,7 +94,7 @@ public class CreateArgument {
     config.set(path + "world", worldName);
     ConfigUtils.saveConfig(registry.getPlugin(), config, "arenas");
 
-    Arena arena = new Arena(id);
+    PluginArena arena = new PluginArena(id);
 
     arena.setMinimumPlayers(config.getInt(path + "minimumplayers"));
     arena.setMaximumPlayers(config.getInt(path + "maximumplayers"));

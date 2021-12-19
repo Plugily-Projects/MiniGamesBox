@@ -41,15 +41,15 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>
  * Created at 01.11.2021
  */
-public class ArenaRegistry {
+public class PluginArenaRegistry {
 
-  private final List<Arena> arenas = new ArrayList<>();
+  private final List<PluginArena> arenas = new ArrayList<>();
   private final PluginMain plugin;
   private final List<World> arenaIngameWorlds = new ArrayList<>();
 
   private int bungeeArena = -999;
 
-  public ArenaRegistry(PluginMain plugin) {
+  public PluginArenaRegistry(PluginMain plugin) {
     this.plugin = plugin;
   }
 
@@ -71,14 +71,14 @@ public class ArenaRegistry {
    * @see #isInArena(Player) to check if player is playing
    */
   @Nullable
-  public Arena getArena(Player player) {
+  public PluginArena getArena(Player player) {
     if(player == null) {
       return null;
     }
 
     java.util.UUID playerId = player.getUniqueId();
 
-    for(Arena loopArena : arenas) {
+    for(PluginArena loopArena : arenas) {
       for(Player arenaPlayer : loopArena.getPlayers()) {
         if(arenaPlayer.getUniqueId().equals(playerId)) {
           return loopArena;
@@ -96,8 +96,8 @@ public class ArenaRegistry {
    * @return Arena or null if not found
    */
   @Nullable
-  public Arena getArena(String id) {
-    for(Arena loopArena : arenas) {
+  public PluginArena getArena(String id) {
+    for(PluginArena loopArena : arenas) {
       if(loopArena.getId().equalsIgnoreCase(id)) {
         return loopArena;
       }
@@ -107,13 +107,13 @@ public class ArenaRegistry {
 
   public int getArenaPlayersOnline() {
     int players = 0;
-    for(Arena arena : arenas) {
+    for(PluginArena arena : arenas) {
       players += arena.getPlayers().size();
     }
     return players;
   }
 
-  public void registerArena(Arena arena) {
+  public void registerArena(PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Instance registered", arena.getId());
     arenas.add(arena);
 
@@ -122,7 +122,7 @@ public class ArenaRegistry {
       arenaIngameWorlds.add(startLocWorld);
   }
 
-  public void unregisterArena(Arena arena) {
+  public void unregisterArena(PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Instance unregistered", arena.getId());
     arenas.remove(arena);
 
@@ -131,12 +131,16 @@ public class ArenaRegistry {
       arenaIngameWorlds.remove(startLocWorld);
   }
 
+  public PluginArena getNewArena(String id) {
+    return new PluginArena(id);
+  }
+
   public void registerArenas() {
     plugin.getDebugger().debug("[ArenaRegistry] Initial arenas registration");
     long start = System.currentTimeMillis();
 
     if(!arenas.isEmpty()) {
-      for(Arena arena : new ArrayList<>(arenas)) {
+      for(PluginArena arena : new ArrayList<>(arenas)) {
         unregisterArena(arena);
       }
     }
@@ -153,16 +157,9 @@ public class ArenaRegistry {
         continue;
       }
 
-      Arena arena = new Arena(id);
+      PluginArena arena = getNewArena(id);
 
-      Location startLoc = LocationSerializer.getLocation(section.getString(id + ".Startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-      Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-      Location endLoc = LocationSerializer.getLocation(section.getString(id + ".Endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-
-      if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
-          || endLoc == null || endLoc.getWorld() == null) {
-        section.set(id + ".isdone", false);
-        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "Location world is invalid"));
+      if(!additionalValidatorChecks(section, arena, id)) {
         arena.setReady(false);
         registerArena(arena);
         continue;
@@ -171,42 +168,51 @@ public class ArenaRegistry {
       arena.setMapName(section.getString(id + ".mapname", "none"));
       arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 1));
       arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 2));
-      arena.setLobbyLocation(lobbyLoc);
-      arena.setStartLocation(startLoc);
-      arena.setEndLocation(endLoc);
 
-      if(!section.getBoolean(id + ".isdone")) {
-        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "NOT VALIDATED"));
-        arena.setReady(false);
-        registerArena(arena);
-        continue;
-      }
-
-      World startLocWorld = arena.getStartLocation().getWorld();
-      if(startLocWorld == null) {
-        plugin.getDebugger().sendConsoleMsg("Arena world of " + id + " does not exist or not loaded.");
-        arena.setReady(false);
-        continue;
-      }
-
-      if(startLocWorld.getDifficulty() == Difficulty.PEACEFUL) {
-        plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "THERE IS A WRONG " +
-            "DIFFICULTY -> SET IT TO ANOTHER ONE THAN PEACEFUL"));
-        arena.setReady(false);
-        registerArena(arena);
-        continue;
-      }
 
       registerArena(arena);
       arena.start();
       plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INSTANCE_STARTED").replace("%arena%", id));
     }
     ConfigUtils.saveConfig(plugin, config, "arenas");
+
     plugin.getDebugger().debug("[ArenaRegistry] Arenas registration completed took {0}ms", System.currentTimeMillis() - start);
   }
 
+  public boolean additionalValidatorChecks(ConfigurationSection section, PluginArena arena, String id) {
+    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".Startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
+    Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", "world,364.0,63.0,-72.0,0.0,0.0"));
+    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".Endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
+
+    if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
+        || endLoc == null || endLoc.getWorld() == null) {
+      section.set(id + ".isdone", false);
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "Location world is invalid"));
+      return false;
+    }
+
+    if(!section.getBoolean(id + ".isdone")) {
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "NOT VALIDATED"));
+      return false;
+    }
+    World startLocWorld = arena.getStartLocation().getWorld();
+    if(startLocWorld == null) {
+      plugin.getDebugger().sendConsoleMsg("Arena world of " + id + " does not exist or not loaded.");
+      return false;
+    }
+    if(startLocWorld.getDifficulty() == Difficulty.PEACEFUL) {
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "THERE IS A WRONG " +
+          "DIFFICULTY -> SET IT TO ANOTHER ONE THAN PEACEFUL"));
+      return false;
+    }
+    arena.setLobbyLocation(lobbyLoc);
+    arena.setStartLocation(startLoc);
+    arena.setEndLocation(endLoc);
+    return true;
+  }
+
   @NotNull
-  public List<Arena> getArenas() {
+  public List<PluginArena> getArenas() {
     return arenas;
   }
 

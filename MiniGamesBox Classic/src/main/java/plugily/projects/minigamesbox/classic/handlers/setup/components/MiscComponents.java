@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.sign.ArenaSign;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -61,7 +61,7 @@ public class MiscComponents implements SetupComponent {
 
   @Override
   public void injectComponents(FastInv gui) {
-    Arena arena = setupInventory.getArena();
+    PluginArena arena = setupInventory.getArena();
     if(arena == null) {
       return;
     }

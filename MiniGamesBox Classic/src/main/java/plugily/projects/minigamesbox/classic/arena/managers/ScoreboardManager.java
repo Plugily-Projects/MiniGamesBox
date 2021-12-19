@@ -27,7 +27,7 @@ import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.user.User;
 
@@ -49,9 +49,9 @@ public class ScoreboardManager {
   private final org.bukkit.scoreboard.Scoreboard dummyBoard = Bukkit.getScoreboardManager().getNewScoreboard();
   private final PluginMain plugin;
   private final String boardTitle;
-  private final Arena arena;
+  private final PluginArena arena;
 
-  public ScoreboardManager(Arena arena) {
+  public ScoreboardManager(PluginArena arena) {
     this.arena = arena;
     this.plugin = arena.getPlugin();
     this.boardTitle = plugin.getChatManager().colorMessage("SCOREBOARD_TITLE");

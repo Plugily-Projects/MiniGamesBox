@@ -125,7 +125,7 @@ public class BukkitHelper {
     return matchList;
   }
 
-  public static byte getDoorByte(BlockFace face) {
+  public byte getDoorByte(BlockFace face) {
     switch(face) {
       case NORTH:
         return 3;
@@ -139,7 +139,7 @@ public class BukkitHelper {
     }
   }
 
-  public static BlockFace getFacingByByte(byte bt) {
+  public BlockFace getFacingByByte(byte bt) {
     switch(bt) {
       case 2:
         return BlockFace.WEST;

@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.api.event.game;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -35,7 +35,7 @@ public class PlugilyGameLeaveAttemptEvent extends PlugilyEvent {
   private static final HandlerList HANDLERS = new HandlerList();
   private final Player player;
 
-  public PlugilyGameLeaveAttemptEvent(Player player, Arena arena) {
+  public PlugilyGameLeaveAttemptEvent(Player player, PluginArena arena) {
     super(arena);
     this.player = player;
   }

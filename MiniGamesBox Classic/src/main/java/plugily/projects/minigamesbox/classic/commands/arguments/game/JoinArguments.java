@@ -20,7 +20,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -56,8 +56,8 @@ public class JoinArguments {
             return;
           }
 
-          Map<Arena, Integer> arenas = new HashMap<>();
-          for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+          Map<PluginArena, Integer> arenas = new HashMap<>();
+          for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
             if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) || arena.getPlayers().size() >= arena.getMaximumPlayers())
               continue;
             arenas.put(arena, arena.getPlayers().size());
@@ -69,7 +69,7 @@ public class JoinArguments {
               .ifPresent(arena -> registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arena));
           return;
         }
-        for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) || arena.getPlayers().size() >= arena.getMaximumPlayers())
             continue;
           if(args[1].equalsIgnoreCase(arena.getId())) {
@@ -88,7 +88,7 @@ public class JoinArguments {
         @Override
         public void execute(CommandSender sender, String[] args) {
           //check starting arenas -> random
-          List<Arena> arenas = registry.getPlugin().getArenaRegistry().getArenas().stream().filter(arena -> arena.getArenaState() == ArenaState.STARTING && arena.getPlayers().size() < arena.getMaximumPlayers()).collect(Collectors.toList());
+          List<PluginArena> arenas = registry.getPlugin().getArenaRegistry().getArenas().stream().filter(arena -> arena.getArenaState() == ArenaState.STARTING && arena.getPlayers().size() < arena.getMaximumPlayers()).collect(Collectors.toList());
           if(!arenas.isEmpty()) {
             registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
             return;

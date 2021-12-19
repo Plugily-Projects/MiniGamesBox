@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.user.data.FileStats;
 import plugily.projects.minigamesbox.classic.user.data.MysqlManager;
 import plugily.projects.minigamesbox.classic.user.data.UserDatabase;
@@ -72,7 +72,7 @@ public class UserManager {
     return user;
   }
 
-  public List<User> getUsers(Arena arena) {
+  public List<User> getUsers(PluginArena arena) {
     return arena.getPlayers().stream().map(this::getUser).collect(Collectors.toList());
   }
 
@@ -98,7 +98,7 @@ public class UserManager {
     updateLevelStat(user, user.getArena());
   }
 
-  public void updateLevelStat(User user, Arena arena) {
+  public void updateLevelStat(User user, PluginArena arena) {
     if(Math.pow(50.0 * user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5) < user.getStat(plugin.getStatsStorage().getStatisticType("XP"))) {
       user.addStat(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);
       //Arena can be null when player has left the arena before this message is retrieved.

@@ -44,7 +44,7 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
@@ -70,7 +70,7 @@ public class Events implements Listener {
       return;
     }
 
-    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
+    for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {
       Location startLoc = arena.getStartLocation();
 
       if(startLoc != null && event.getEntity().getWorld().equals(startLoc.getWorld())
@@ -91,7 +91,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onExplosionCancel(EntityExplodeEvent event) {
-    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
+    for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {
       Location start = arena.getStartLocation();
       if(start.getWorld().getName().equals(event.getLocation().getWorld().getName())
           && start.distance(event.getLocation()) < 300) {
@@ -103,7 +103,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onCommandExecute(PlayerCommandPreprocessEvent event) {
-    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
+    PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena == null || !plugin.getConfig().getBoolean("Block-Commands-In-Game", true)) {
       return;
     }
@@ -135,7 +135,7 @@ public class Events implements Listener {
     if(!(e.getWhoClicked() instanceof Player)) {
       return;
     }
-    Arena arena = plugin.getArenaRegistry().getArena(((Player) e.getWhoClicked()));
+    PluginArena arena = plugin.getArenaRegistry().getArena(((Player) e.getWhoClicked()));
     if(arena == null) {
       return;
     }
@@ -151,7 +151,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onDecay(LeavesDecayEvent event) {
-    for(Arena arena : plugin.getArenaRegistry().getArenas()) {
+    for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {
       Location startLoc = arena.getStartLocation();
 
       if(startLoc != null && event.getBlock().getWorld().equals(startLoc.getWorld()) && event.getBlock().getLocation().distance(startLoc) < 150) {
@@ -166,7 +166,7 @@ public class Events implements Listener {
     if(event.getEntity().getType() != EntityType.PLAYER) {
       return;
     }
-    Arena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
+    PluginArena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
     if(arena == null) {
       return;
     }

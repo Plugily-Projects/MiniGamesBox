@@ -32,11 +32,11 @@ import plugily.projects.minigamesbox.classic.PluginMain;
  * <p>
  * Created at 01.11.2021
  */
-public class ArenaEvents implements Listener {
+public class PluginArenaEvents implements Listener {
 
   private final PluginMain plugin;
 
-  public ArenaEvents(PluginMain plugin) {
+  public PluginArenaEvents(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
@@ -63,7 +63,7 @@ public class ArenaEvents implements Listener {
       return;
     }
     Player victim = (Player) e.getEntity();
-    Arena arena = plugin.getArenaRegistry().getArena(victim);
+    PluginArena arena = plugin.getArenaRegistry().getArena(victim);
     if(arena == null) {
       return;
     }

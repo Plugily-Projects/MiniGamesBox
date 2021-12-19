@@ -24,7 +24,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,37 +60,37 @@ public class PlaceholderManager extends PlaceholderExpansion {
     });
     registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA) {
       @Override
-      public String getValue(Player player, Arena arena) {
+      public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getPlayers().size());
       }
     });
     registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA) {
       @Override
-      public String getValue(Player player, Arena arena) {
+      public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getMaximumPlayers());
       }
     });
     registerPlaceholder(new Placeholder("state", Placeholder.PlaceholderType.ARENA) {
       @Override
-      public String getValue(Player player, Arena arena) {
+      public String getValue(Player player, PluginArena arena) {
         return arena.getArenaState().toString().toLowerCase();
       }
     });
     registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA) {
       @Override
-      public String getValue(Player player, Arena arena) {
+      public String getValue(Player player, PluginArena arena) {
         return arena.getArenaState().getPlaceholder();
       }
     });
     registerPlaceholder(new Placeholder("mapname", Placeholder.PlaceholderType.ARENA) {
       @Override
-      public String getValue(Player player, Arena arena) {
+      public String getValue(Player player, PluginArena arena) {
         return arena.getMapName();
       }
     });
     registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA) {
       @Override
-      public String getValue(Player player, Arena arena) {
+      public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getTimer());
       }
     });
@@ -137,7 +137,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
     if(data.length < 2) {
       return null;
     }
-    Arena arena = plugin.getArenaRegistry().getArena(data[0]);
+    PluginArena arena = plugin.getArenaRegistry().getArena(data[0]);
     if(arena == null) {
       return null;
     }

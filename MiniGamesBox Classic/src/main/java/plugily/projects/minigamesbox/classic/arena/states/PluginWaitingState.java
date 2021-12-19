@@ -19,20 +19,19 @@
 
 package plugily.projects.minigamesbox.classic.arena.states;
 
+
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
-import plugily.projects.minigamesbox.classic.user.User;
-
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 01.11.2021
  */
-public class EndingState implements ArenaStateHandler {
+public class PluginWaitingState implements ArenaStateHandler {
 
   private PluginMain plugin;
 
@@ -42,34 +41,28 @@ public class EndingState implements ArenaStateHandler {
   }
 
   @Override
-  public void handleCall(Arena arena) {
-    arena.getScoreboardManager().stopAllScoreboards();
+  public void handleCall(PluginArena arena) {
+    int minPlayers = arena.getMinimumPlayers();
 
-    int timer = arena.getTimer();
-
-    if(timer <= 0) {
-      String teleportedToLobby = plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY");
-
-      for(Player player : arena.getPlayers()) {
-        ArenaUtils.resetPlayerAfterGame(player);
-        arena.getBossbarManager().doBarAction(Arena.BarAction.REMOVE, player);
-        arena.teleportToEndLocation(player);
-
-        User user = plugin.getUserManager().getUser(player);
-
-        plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
-        user.setSpectator(false);
-        arena.getScoreboardManager().removeScoreboard(user);
-        plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("END_GAME"));
-
-        if(!teleportedToLobby.isEmpty()) {
-          player.sendMessage(teleportedToLobby);
-        }
+    if(arena.getPlayers().size() < minPlayers) {
+      if(arena.getTimer() <= 0) {
+        arena.setTimer(plugin.getConfig().getInt("Time-Manager.Waiting", 20));
+        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
+        return;
       }
-
-      arena.setArenaState(ArenaState.RESTARTING);
+    } else {
+      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
+      arena.setArenaState(ArenaState.STARTING);
+      arena.setTimer(plugin.getConfig().getInt("Time-Manager.Starting", 60));
+      for(Player player : arena.getPlayers()) {
+        plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+      }
     }
-    arena.setTimer(timer - 1);
+    arena.setTimer(arena.getTimer() - 1);
   }
 
+  public PluginMain getPlugin() {
+    return plugin;
+  }
 }

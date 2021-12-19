@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 
 import java.util.HashMap;
@@ -76,7 +76,7 @@ public class User {
     this.kit = kit;
   }
 
-  public Arena getArena() {
+  public PluginArena getArena() {
     return plugin.getArenaRegistry().getArena(getPlayer());
   }
 
@@ -126,6 +126,28 @@ public class User {
     Bukkit.getScheduler().runTask(plugin, () -> {
       Player player = getPlayer();
       Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, s, getStat(s)));
+    });
+  }
+
+  public void setStat(String statistic, int i) {
+    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    stats.put(statisticType, i);
+
+    //statistics manipulation events are called async when using mysql
+    Bukkit.getScheduler().runTask(plugin, () -> {
+      Player player = getPlayer();
+      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, i));
+    });
+  }
+
+  public void addStat(String statistic, int i) {
+    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    stats.put(statisticType, getStat(statisticType) + i);
+
+    //statistics manipulation events are called async when using mysql
+    Bukkit.getScheduler().runTask(plugin, () -> {
+      Player player = getPlayer();
+      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, getStat(statisticType)));
     });
   }
 

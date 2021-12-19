@@ -31,7 +31,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.string.StringMatcher;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.HologramArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.ListArenasArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.ReloadArgument;
@@ -137,7 +137,7 @@ public class ArgumentsRegistry implements CommandExecutor {
               || !plugin.getBukkitHelper().hasPermission(sender, plugin.getPluginNamePrefixLong() + ".admin.create")) {
             return true;
           }
-          Arena arena = plugin.getArenaRegistry().getArena(args[0]);
+          PluginArena arena = plugin.getArenaRegistry().getArena(args[0]);
           if(arena == null) {
             sender.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
             return true;

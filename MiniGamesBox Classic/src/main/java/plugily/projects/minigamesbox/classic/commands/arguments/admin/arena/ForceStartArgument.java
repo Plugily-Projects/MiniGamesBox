@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -41,7 +41,7 @@ public class ForceStartArgument {
             "&7Force starts arena you're in\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.forcestart")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        ArenaUtils.arenaForceStart((Player) sender, 0);
+        PluginArenaUtils.arenaForceStart((Player) sender, 0);
       }
     });
   }

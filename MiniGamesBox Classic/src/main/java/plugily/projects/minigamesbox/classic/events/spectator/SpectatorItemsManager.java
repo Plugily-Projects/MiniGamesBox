@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.events.spectator.settings.SpectatorSettingsMenu;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -49,7 +49,7 @@ public class SpectatorItemsManager implements Listener {
     spectatorSettingsMenu = new SpectatorSettingsMenu(plugin);
   }
 
-  public void openSpectatorMenu(Player player, Arena arena) {
+  public void openSpectatorMenu(Player player, PluginArena arena) {
     FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME"));
 
     ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();

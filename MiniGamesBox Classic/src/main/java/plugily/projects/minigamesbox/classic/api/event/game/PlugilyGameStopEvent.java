@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.api.event.game;
 
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -33,7 +33,7 @@ public class PlugilyGameStopEvent extends PlugilyEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
 
-  public PlugilyGameStopEvent(Arena arena) {
+  public PlugilyGameStopEvent(PluginArena arena) {
     super(arena);
   }
 

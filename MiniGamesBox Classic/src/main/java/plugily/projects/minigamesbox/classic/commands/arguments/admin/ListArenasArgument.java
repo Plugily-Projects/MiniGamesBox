@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
 import org.bukkit.command.CommandSender;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -47,7 +47,7 @@ public class ListArenasArgument {
           return;
         }
 
-        for(Arena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_FORMAT").replace("%arena%", arena.getId())
               .replace("%status%", arena.getArenaState().getFormattedName()).replace("%players%", Integer.toString(arena.getPlayers().size()))
               .replace("%maxplayers%", Integer.toString(arena.getMaximumPlayers())));

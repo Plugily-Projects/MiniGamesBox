@@ -32,11 +32,11 @@ import plugily.projects.minigamesbox.classic.arena.managers.MapRestorerManager;
 import plugily.projects.minigamesbox.classic.arena.managers.ScoreboardManager;
 import plugily.projects.minigamesbox.classic.arena.options.ArenaOption;
 import plugily.projects.minigamesbox.classic.arena.states.ArenaStateHandler;
-import plugily.projects.minigamesbox.classic.arena.states.EndingState;
-import plugily.projects.minigamesbox.classic.arena.states.InGameState;
-import plugily.projects.minigamesbox.classic.arena.states.RestartingState;
-import plugily.projects.minigamesbox.classic.arena.states.StartingState;
-import plugily.projects.minigamesbox.classic.arena.states.WaitingState;
+import plugily.projects.minigamesbox.classic.arena.states.PluginEndingState;
+import plugily.projects.minigamesbox.classic.arena.states.PluginInGameState;
+import plugily.projects.minigamesbox.classic.arena.states.PluginRestartingState;
+import plugily.projects.minigamesbox.classic.arena.states.PluginStartingState;
+import plugily.projects.minigamesbox.classic.arena.states.PluginWaitingState;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
@@ -54,7 +54,7 @@ import java.util.Set;
  * <p>
  * Created at 01.11.2021
  */
-public class Arena extends BukkitRunnable {
+public class PluginArena extends BukkitRunnable {
 
   private static PluginMain plugin;
   private final String id;
@@ -78,19 +78,20 @@ public class Arena extends BukkitRunnable {
   private boolean ready = true;
 
   @TestOnly
-  protected Arena(String id, String mapName) {
+  protected PluginArena(String id, String mapName) {
     this.id = id;
     this.mapName = mapName;
-    gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new WaitingState());
-    gameStateHandlers.put(ArenaState.STARTING, new StartingState());
-    gameStateHandlers.put(ArenaState.IN_GAME, new InGameState());
-    gameStateHandlers.put(ArenaState.ENDING, new EndingState());
-    gameStateHandlers.put(ArenaState.RESTARTING, new RestartingState());
+    gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new PluginWaitingState());
+    gameStateHandlers.put(ArenaState.STARTING, new PluginStartingState());
+    gameStateHandlers.put(ArenaState.IN_GAME, new PluginInGameState());
+    gameStateHandlers.put(ArenaState.ENDING, new PluginEndingState());
+    gameStateHandlers.put(ArenaState.RESTARTING, new PluginRestartingState());
     for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
     loadArenaOptions();
   }
+
 
   public void loadArenaOptions() {
     ArenaOption.getOptions().forEach((s, option) -> arenaOptions.put(s, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected())));
@@ -134,7 +135,7 @@ public class Arena extends BukkitRunnable {
     if(arenaOptions.containsKey(name)) {
       throw new IllegalStateException("Option with path " + name + " was already registered");
     }
-    arenaOptions.put(name, option);
+    arenaOptions.put(name, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected()));
   }
 
   /**
@@ -158,29 +159,36 @@ public class Arena extends BukkitRunnable {
   }
 
 
-  public Arena(String id) {
+  public PluginArena(String id) {
     this.id = id == null ? "" : id;
     bossbarManager = new BossbarManager(this);
     scoreboardManager = new ScoreboardManager(this);
     mapRestorerManager = new MapRestorerManager(this);
     setDefaultValues();
-    gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new WaitingState());
-    gameStateHandlers.put(ArenaState.STARTING, new StartingState());
-    gameStateHandlers.put(ArenaState.IN_GAME, new InGameState());
-    gameStateHandlers.put(ArenaState.ENDING, new EndingState());
-    gameStateHandlers.put(ArenaState.RESTARTING, new RestartingState());
+    gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new PluginWaitingState());
+    gameStateHandlers.put(ArenaState.STARTING, new PluginStartingState());
+    gameStateHandlers.put(ArenaState.IN_GAME, new PluginInGameState());
+    gameStateHandlers.put(ArenaState.ENDING, new PluginEndingState());
+    gameStateHandlers.put(ArenaState.RESTARTING, new PluginRestartingState());
     for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
-    loadArenaOptions();
+  }
+
+  public void removeGameStateHandler(ArenaState arenaState) {
+    gameStateHandlers.remove(arenaState);
+  }
+
+  public void addGameStateHandler(ArenaState arenaState, ArenaStateHandler arenaStateHandler) {
+    gameStateHandlers.put(arenaState, arenaStateHandler);
   }
 
   public static void init(PluginMain plugin) {
-    Arena.plugin = plugin;
+    PluginArena.plugin = plugin;
   }
 
   private void setDefaultValues() {
-    //see loadArenaOptions / may switch locations..
+    loadArenaOptions();
     for(GameLocation location : GameLocation.values()) {
       gameLocations.put(location, Bukkit.getWorlds().get(0).getSpawnLocation());
     }
@@ -216,7 +224,13 @@ public class Arena extends BukkitRunnable {
     this.forceStart = forceStart;
   }
 
-
+  /**
+   * Returns boss bar of the game.
+   * Please use doBarAction if possible
+   *
+   * @return game boss bar manager
+   * @see BossbarManager
+   */
   public BossbarManager getBossbarManager() {
     return bossbarManager;
   }
@@ -225,7 +239,7 @@ public class Arena extends BukkitRunnable {
    * Get arena identifier used to get arenas by string.
    *
    * @return arena name
-   * @see ArenaRegistry#getArena(String)
+   * @see PluginArenaRegistry#getArena(String)
    */
   public String getId() {
     return id;
@@ -360,6 +374,10 @@ public class Arena extends BukkitRunnable {
 
   public ScoreboardManager getScoreboardManager() {
     return scoreboardManager;
+  }
+
+  public void setMapRestorerManager(MapRestorerManager mapRestorerManager) {
+    this.mapRestorerManager = mapRestorerManager;
   }
 
   @NotNull

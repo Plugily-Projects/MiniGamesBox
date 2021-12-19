@@ -20,17 +20,17 @@
 package plugily.projects.minigamesbox.classic.api.event;
 
 import org.bukkit.event.Event;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * Represents Plugily Projects game related events.
  */
 public abstract class PlugilyEvent extends Event {
 
-  protected Arena arena;
+  protected PluginArena arena;
   protected String pluginName;
 
-  public PlugilyEvent(Arena eventArena) {
+  public PlugilyEvent(PluginArena eventArena) {
     arena = eventArena;
     pluginName = eventArena.getPlugin().getName();
   }
@@ -40,7 +40,7 @@ public abstract class PlugilyEvent extends Event {
    *
    * @return event arena
    */
-  public Arena getArena() {
+  public PluginArena getArena() {
     return arena;
   }
 

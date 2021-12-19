@@ -27,7 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.ArrayList;
@@ -50,10 +50,10 @@ public class ChatEvents implements Listener {
 
   @EventHandler
   public void onChatIngame(AsyncPlayerChatEvent event) {
-    Arena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
+    PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena == null) {
       if(!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
-        for(Arena loopArena : plugin.getArenaRegistry().getArenas()) {
+        for(PluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
           for(Player player : loopArena.getPlayers()) {
             if(!plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player)) {
               event.getRecipients().remove(player);

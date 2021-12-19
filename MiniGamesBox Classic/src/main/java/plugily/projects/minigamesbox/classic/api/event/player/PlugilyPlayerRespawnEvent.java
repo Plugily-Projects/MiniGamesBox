@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * Called when the player respawns on wave end
@@ -34,7 +34,7 @@ public class PlugilyPlayerRespawnEvent extends PlugilyEvent implements Cancellab
     private final Player player;
     private boolean isCancelled = false;
 
-    public PlugilyPlayerRespawnEvent(Player player, Arena arena) {
+    public PlugilyPlayerRespawnEvent(Player player, PluginArena arena) {
         super(arena);
         this.player = player;
     }

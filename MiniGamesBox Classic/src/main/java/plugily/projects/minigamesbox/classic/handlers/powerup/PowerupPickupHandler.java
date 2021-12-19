@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.powerup;
 
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -30,10 +30,10 @@ import plugily.projects.minigamesbox.classic.arena.Arena;
 public class PowerupPickupHandler {
 
   private final BasePowerup powerup;
-  private final Arena arena;
+  private final PluginArena arena;
   private final Player player;
 
-  public PowerupPickupHandler(BasePowerup powerup, Arena arena, Player player) {
+  public PowerupPickupHandler(BasePowerup powerup, PluginArena arena, Player player) {
     this.powerup = powerup;
     this.arena = arena;
     this.player = player;
@@ -43,7 +43,7 @@ public class PowerupPickupHandler {
     return powerup;
   }
 
-  public Arena getArena() {
+  public PluginArena getArena() {
     return arena;
   }
 

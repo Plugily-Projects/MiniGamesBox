@@ -25,8 +25,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaUtils;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
@@ -52,7 +52,7 @@ public class SpecialItemEvent implements Listener {
     if(!ItemUtils.isItemStackNamed(itemStack)) {
       return false;
     }
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       return false;
     }
@@ -73,7 +73,7 @@ public class SpecialItemEvent implements Listener {
       return;
     }
     Player player = event.getPlayer();
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       return;
     }
@@ -95,7 +95,7 @@ public class SpecialItemEvent implements Listener {
     plugin.getRewardsHandler().performReward(player, arena, relatedSpecialItem.getRewards());
     if(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").equals(relatedSpecialItem)) {
       event.setCancelled(true);
-      ArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
+      PluginArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
       return;
     }
     if(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").equals(relatedSpecialItem) || plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").equals(relatedSpecialItem)) {

@@ -31,7 +31,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -55,7 +55,7 @@ public class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       return;
     }
@@ -70,7 +70,7 @@ public class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
       return;
     }
@@ -81,7 +81,7 @@ public class LobbyEvents implements Listener {
   @EventHandler
   public void onItemFrameRotate(PlayerInteractEntityEvent event) {
     Player player = event.getPlayer();
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
       return;
     }
@@ -96,7 +96,7 @@ public class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    Arena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
       return;
     }

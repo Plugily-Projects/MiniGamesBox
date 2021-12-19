@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -37,7 +37,7 @@ public class PlugilyGameJoinAttemptEvent extends PlugilyEvent implements Cancell
   private final Player player;
   private boolean isCancelled;
 
-  public PlugilyGameJoinAttemptEvent(Player player, Arena targetArena) {
+  public PlugilyGameJoinAttemptEvent(Player player, PluginArena targetArena) {
     super(targetArena);
     this.player = player;
     isCancelled = false;

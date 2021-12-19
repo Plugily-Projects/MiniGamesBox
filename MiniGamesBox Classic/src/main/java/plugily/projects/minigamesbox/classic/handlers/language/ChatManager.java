@@ -26,7 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -95,7 +95,7 @@ public class ChatManager {
    * @param arena arena to get players from
    * @param key   message to broadcast
    */
-  public void broadcast(Arena arena, String key) {
+  public void broadcast(PluginArena arena, String key) {
     String colorMessage = colorMessage(key);
     if(colorMessage != null && !colorMessage.isEmpty()) {
       for(Player p : arena.getPlayers()) {
@@ -111,7 +111,7 @@ public class ChatManager {
    * @param arena   arena to get players from
    * @param message message to broadcast
    */
-  public void broadcastMessage(Arena arena, String message) {
+  public void broadcastMessage(PluginArena arena, String message) {
     if(message != null && !message.isEmpty()) {
       for(Player p : arena.getPlayers()) {
         p.sendMessage(pluginPrefix + message);
@@ -128,7 +128,7 @@ public class ChatManager {
     return returnString;
   }
 
-  public String formatMessage(String message, Arena arena) {
+  public String formatMessage(String message, PluginArena arena) {
     String returnString = message;
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     return returnString;
@@ -141,14 +141,14 @@ public class ChatManager {
     return returnString;
   }
 
-  public String formatMessage(Arena arena, String message, int integer) {
+  public String formatMessage(PluginArena arena, String message, int integer) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     return returnString;
   }
 
-  public String formatMessage(Arena arena, String message, int integer, Player player) {
+  public String formatMessage(PluginArena arena, String message, int integer, Player player) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%player%", player.getName());
     returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
@@ -156,7 +156,7 @@ public class ChatManager {
     return returnString;
   }
 
-  public String formatMessage(Arena arena, String message, Player player) {
+  public String formatMessage(PluginArena arena, String message, Player player) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%player%", player.getName());
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
@@ -174,9 +174,11 @@ public class ChatManager {
     return returnString;
   }
 
-  private String formatPlaceholders(String message, Arena arena) {
+  private String formatPlaceholders(String message, PluginArena arena) {
     int timer = arena.getTimer();
     String returnString = message;
+    //todo possibility to add custom placeholders from the plugin itself, such as waves from vd
+    //Example formatted = StringUtils.replace(formatted, "%WAVE%", Integer.toString(arena.getWave()));
     returnString = StringUtils.replace(returnString, "%plugin_name%", plugin.getName());
     returnString = StringUtils.replace(returnString, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
     returnString = StringUtils.replace(returnString, "%plugin_short_command%", plugin.getPluginNamePrefix());
@@ -194,7 +196,7 @@ public class ChatManager {
     return returnString;
   }
 
-  public void broadcastAction(Arena arena, Player player, ActionType action) {
+  public void broadcastAction(PluginArena arena, Player player, ActionType action) {
     Message message = plugin.getMessageManager().getMessage("IN_GAME_MESSAGES_" + action.toString());
     broadcastMessage(arena, formatMessage(arena, colorMessage(message), player));
   }

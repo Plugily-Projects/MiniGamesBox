@@ -93,6 +93,13 @@ public class LanguageManager {
   }
 
   private void registerLocales() {
+    //todo after import into poeditor!
+    //BB + Basque, Belarusian, Estonian, Greek, Japanese, Slovenian, Ukrainian
+    //BB - Thai
+    //MM + Afrikaans, Danish, Japanese, Slovak, Ukrainian
+    //MM -
+    //TB +
+    //TB - Chinese (Traditional), Chinese (Simplified), Indonesian, Korean, Lithuanian, Thai, Turkish, Vietnamese
     Arrays.asList(new Locale("Chinese (Traditional)", "简体中文", "zh_HK", "POEditor contributors", Arrays.asList("中文(傳統)", "中國傳統", "chinese_traditional", "zh")),
             new Locale("Chinese (Simplified)", "简体中文", "zh_CN", "POEditor contributors", Arrays.asList("简体中文", "中文", "chinese", "chinese_simplified", "cn")),
             new Locale("Czech", "Český", "cs_CZ", "POEditor contributors", Arrays.asList("czech", "cesky", "český", "cs")),

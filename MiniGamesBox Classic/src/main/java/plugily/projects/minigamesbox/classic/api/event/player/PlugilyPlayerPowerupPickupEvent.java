@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.powerup.BasePowerup;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 
@@ -41,7 +41,7 @@ public class PlugilyPlayerPowerupPickupEvent extends PlugilyEvent implements Can
   private final BasePowerup powerup;
   private boolean isCancelled = false;
 
-  public PlugilyPlayerPowerupPickupEvent(Arena eventArena, Player player, BasePowerup powerup) {
+  public PlugilyPlayerPowerupPickupEvent(PluginArena eventArena, Player player, BasePowerup powerup) {
     super(eventArena);
     this.player = player;
     this.powerup = powerup;

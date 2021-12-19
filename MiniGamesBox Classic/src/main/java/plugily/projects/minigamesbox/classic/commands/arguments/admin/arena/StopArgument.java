@@ -21,8 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.Arena;
-import plugily.projects.minigamesbox.classic.arena.ArenaManager;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -44,7 +43,7 @@ public class StopArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(registry.getPlugin().getBukkitHelper().checkIsInGameInstance((Player) sender)) {
-          Arena arena = registry.getPlugin().getArenaRegistry().getArena((Player) sender);
+          PluginArena arena = registry.getPlugin().getArenaRegistry().getArena((Player) sender);
           if(arena == null) {
             return;
           }

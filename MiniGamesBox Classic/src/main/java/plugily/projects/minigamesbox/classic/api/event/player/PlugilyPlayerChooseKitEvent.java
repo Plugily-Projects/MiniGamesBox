@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 
 /**
@@ -39,7 +39,7 @@ public class PlugilyPlayerChooseKitEvent extends PlugilyEvent implements Cancell
   private final Kit kit;
   private boolean isCancelled;
 
-  public PlugilyPlayerChooseKitEvent(Player player, Kit kit, Arena arena) {
+  public PlugilyPlayerChooseKitEvent(Player player, Kit kit, PluginArena arena) {
     super(arena);
     this.player = player;
     this.kit = kit;

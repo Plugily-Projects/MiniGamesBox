@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.placeholder;
 
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.Arena;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -56,7 +56,7 @@ public class Placeholder {
     throw new UnsupportedOperationException("Method must be overridden");
   }
 
-  public String getValue(Player player, Arena arena) {
+  public String getValue(Player player, PluginArena arena) {
     // EMPTY
     throw new UnsupportedOperationException("Method must be overridden");
   }
