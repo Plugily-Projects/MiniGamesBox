@@ -101,6 +101,7 @@ public class PluginStartingState implements ArenaStateHandler {
     int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
     if(arena.getMaximumPlayers() == arena.getPlayers().size() && arena.getTimer() > shorter) {
       arena.setTimer(shorter);
+      arena.setArenaState(ArenaState.FULL_GAME);
       plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS"));
     }
   }

@@ -84,7 +84,7 @@ public class PluginArenaEvents implements Listener {
     }
     //kill the player on void
     if(e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-      if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) {
+      if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
         victim.damage(0);
         victim.teleport(arena.getLobbyLocation());
       } else {

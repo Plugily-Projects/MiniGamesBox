@@ -20,8 +20,8 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 
@@ -58,7 +58,7 @@ public class JoinArguments {
 
           Map<PluginArena, Integer> arenas = new HashMap<>();
           for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-            if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) || arena.getPlayers().size() >= arena.getMaximumPlayers())
+            if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) || arena.getPlayers().size() >= arena.getMaximumPlayers())
               continue;
             arenas.put(arena, arena.getPlayers().size());
           }
@@ -70,7 +70,7 @@ public class JoinArguments {
           return;
         }
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING) || arena.getPlayers().size() >= arena.getMaximumPlayers())
+          if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) || arena.getPlayers().size() >= arena.getMaximumPlayers())
             continue;
           if(args[1].equalsIgnoreCase(arena.getId())) {
             registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arena);

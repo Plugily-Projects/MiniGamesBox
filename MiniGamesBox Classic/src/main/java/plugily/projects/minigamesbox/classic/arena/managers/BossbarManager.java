@@ -25,8 +25,8 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.EnumMap;
@@ -70,7 +70,12 @@ public class BossbarManager {
     if(gameBar == null) {
       return;
     }
-    List<String> values = bossbar.get(arena.getArenaState());
+    List<String> values;
+    if(arena.getArenaState() == ArenaState.FULL_GAME) {
+      values = bossbar.get(ArenaState.STARTING);
+    } else {
+      values = bossbar.get(arena.getArenaState());
+    }
     int lines = values.size() - 1;
     if(currentLine >= lines) {
       currentLine = 0;

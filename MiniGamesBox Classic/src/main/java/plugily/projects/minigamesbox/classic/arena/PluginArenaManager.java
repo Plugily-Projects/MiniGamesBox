@@ -110,7 +110,7 @@ public class PluginArenaManager {
 
     arena.getScoreboardManager().createScoreboard(user);
 
-    if((arena.getArenaState() == ArenaState.IN_GAME || (arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || arena.getArenaState() == ArenaState.ENDING)) {
+    if((arena.getArenaState() == ArenaState.IN_GAME || ((arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || (arena.getArenaState() == ArenaState.FULL_GAME && arena.getTimer() <= 3)) || arena.getArenaState() == ArenaState.ENDING)) {
       if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
         InventorySerializer.saveInventoryToFile(plugin, player);
       }
@@ -162,7 +162,7 @@ public class PluginArenaManager {
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
-    } else if(arena.getArenaState() == ArenaState.STARTING) {
+    } else if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
 
@@ -192,7 +192,7 @@ public class PluginArenaManager {
       if(players.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
         continue;
       }
-      if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+      if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
         leaveAttempt(players, arena);
         players.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM"));
         plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM"), players));

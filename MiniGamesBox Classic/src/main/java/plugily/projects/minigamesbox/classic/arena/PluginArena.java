@@ -212,7 +212,11 @@ public class PluginArena extends BukkitRunnable {
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Running game task", id);
     long start = System.currentTimeMillis();
     bossbarManager.bossBarUpdate();
-    gameStateHandlers.get(arenaState).handleCall(this);
+    if(arenaState != ArenaState.FULL_GAME) {
+      gameStateHandlers.get(arenaState).handleCall(this);
+    } else {
+      gameStateHandlers.get(ArenaState.STARTING).handleCall(this);
+    }
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Game task finished took {1}ms", id, System.currentTimeMillis() - start);
   }
 
