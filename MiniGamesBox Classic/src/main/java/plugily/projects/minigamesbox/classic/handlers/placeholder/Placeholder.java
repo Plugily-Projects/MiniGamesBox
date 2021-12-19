@@ -32,15 +32,18 @@ public class Placeholder {
 
   private final String id;
   private final PlaceholderType placeholderType;
+  private final PlaceholderExecutor placeholderExecutor;
 
-  public Placeholder(String id) {
+  public Placeholder(String id, PlaceholderExecutor placeholderExecutor) {
     this.id = id;
     this.placeholderType = PlaceholderType.GLOBAL;
+    this.placeholderExecutor = placeholderExecutor;
   }
 
-  public Placeholder(String id, PlaceholderType placeholderType) {
+  public Placeholder(String id, PlaceholderType placeholderType, PlaceholderExecutor placeholderExecutor) {
     this.id = id;
     this.placeholderType = placeholderType;
+    this.placeholderExecutor = placeholderExecutor;
   }
 
   public String getId() {
@@ -49,6 +52,10 @@ public class Placeholder {
 
   public PlaceholderType getPlaceholderType() {
     return placeholderType;
+  }
+
+  public PlaceholderExecutor getPlaceholderExecutor() {
+    return placeholderExecutor;
   }
 
   public String getValue(Player player) {
@@ -61,8 +68,18 @@ public class Placeholder {
     throw new UnsupportedOperationException("Method must be overridden");
   }
 
+  public String getValue(PluginArena arena) {
+    // EMPTY
+    throw new UnsupportedOperationException("Method must be overridden");
+  }
+
+
   public enum PlaceholderType {
     GLOBAL, ARENA
+  }
+
+  public enum PlaceholderExecutor {
+    INTERNAL, PLACEHOLDER_API
   }
 
 }

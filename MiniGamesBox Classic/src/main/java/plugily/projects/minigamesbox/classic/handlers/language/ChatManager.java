@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -130,6 +131,7 @@ public class ChatManager {
 
   public String formatMessage(String message, PluginArena arena) {
     String returnString = message;
+    returnString = formatExternalPlaceholders(returnString, arena);
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     return returnString;
   }
@@ -144,6 +146,7 @@ public class ChatManager {
   public String formatMessage(PluginArena arena, String message, int integer) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
+    returnString = formatExternalPlaceholders(returnString, arena);
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     return returnString;
   }
@@ -151,6 +154,7 @@ public class ChatManager {
   public String formatMessage(PluginArena arena, String message, int integer, Player player) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%player%", player.getName());
+    returnString = formatExternalPlaceholders(returnString, player, arena);
     returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     return returnString;
@@ -159,9 +163,42 @@ public class ChatManager {
   public String formatMessage(PluginArena arena, String message, Player player) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%player%", player.getName());
+    returnString = formatExternalPlaceholders(returnString, player, arena);
     returnString = colorRawMessage(formatPlaceholders(returnString, arena));
     if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       returnString = PlaceholderAPI.setPlaceholders(player, returnString);
+    }
+    return returnString;
+  }
+
+  private String formatExternalPlaceholders(String returnString, Player player) {
+    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
+        continue;
+      }
+      returnString = StringUtils.replace(returnString, "%" + placeholder.getId() + "%", placeholder.getValue(player));
+    }
+    return returnString;
+  }
+
+  private String formatExternalPlaceholders(String returnString, PluginArena arena) {
+    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
+        continue;
+      }
+      returnString = StringUtils.replace(returnString, "%" + placeholder.getId() + "%", placeholder.getValue(arena));
+    }
+    return returnString;
+  }
+
+  private String formatExternalPlaceholders(String returnString, Player player, PluginArena arena) {
+    returnString = formatExternalPlaceholders(returnString, player);
+    returnString = formatExternalPlaceholders(returnString, arena);
+    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
+        continue;
+      }
+      returnString = StringUtils.replace(returnString, "%" + placeholder.getId() + "%", placeholder.getValue(player, arena));
     }
     return returnString;
   }

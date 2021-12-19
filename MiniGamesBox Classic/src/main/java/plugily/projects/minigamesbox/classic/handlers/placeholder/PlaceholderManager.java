@@ -20,13 +20,12 @@
 
 package plugily.projects.minigamesbox.classic.handlers.placeholder;
 
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,61 +33,62 @@ import java.util.List;
  * <p>
  * Created at 09.10.2021
  */
-public class PlaceholderManager extends PlaceholderExpansion {
+public class PlaceholderManager {
 
   private final PluginMain plugin;
-  private List<Placeholder> registeredPlaceholders = new ArrayList<>();
+  private List<Placeholder> registeredPAPIPlaceholders = new ArrayList<>();
+  private List<Placeholder> registeredInternalPlaceholders = new ArrayList<>();
 
   public PlaceholderManager(PluginMain plugin) {
     this.plugin = plugin;
+    new PAPIPlaceholders(plugin);
     insertDefaultPlaceholders();
-    register();
   }
 
   private void insertDefaultPlaceholders() {
-    registerPlaceholder(new Placeholder("arena_players_online") {
+    registerPlaceholder(new Placeholder("arena_players_online", Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player) {
         return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
       }
     });
-    registerPlaceholder(new Placeholder("exp_to_next_level") {
+    registerPlaceholder(new Placeholder("exp_to_next_level", Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player) {
         return Double.toString(Math.ceil(Math.pow(50 * plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5)));
       }
     });
-    registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA) {
+    registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getPlayers().size());
       }
     });
-    registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA) {
+    registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getMaximumPlayers());
       }
     });
-    registerPlaceholder(new Placeholder("state", Placeholder.PlaceholderType.ARENA) {
+    registerPlaceholder(new Placeholder("state", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getArenaState().toString().toLowerCase();
       }
     });
-    registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA) {
+    registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getArenaState().getPlaceholder();
       }
     });
-    registerPlaceholder(new Placeholder("mapname", Placeholder.PlaceholderType.ARENA) {
+    registerPlaceholder(new Placeholder("mapname", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getMapName();
       }
     });
-    registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA) {
+    registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getTimer());
@@ -97,59 +97,23 @@ public class PlaceholderManager extends PlaceholderExpansion {
   }
 
   public void registerPlaceholder(Placeholder command) {
-    registeredPlaceholders.add(command);
+    switch(command.getPlaceholderExecutor()) {
+      case PLACEHOLDER_API:
+        registeredPAPIPlaceholders.add(command);
+        break;
+      case INTERNAL:
+        registeredInternalPlaceholders.add(command);
+        break;
+      default:
+        break;
+    }
   }
 
-  @Override
-  public boolean persist() {
-    return true;
+  public List<Placeholder> getRegisteredInternalPlaceholders() {
+    return Collections.unmodifiableList(registeredInternalPlaceholders);
   }
 
-  @Override
-  public @NotNull String getIdentifier() {
-    return plugin.getPluginNamePrefixLong();
-  }
-
-  @Override
-  public @NotNull String getAuthor() {
-    return "Plugily Projects";
-  }
-
-  @Override
-  public @NotNull String getVersion() {
-    return "2.0.0";
-  }
-
-  @Override
-  public String onPlaceholderRequest(Player player, @NotNull String id) {
-    if(player == null) {
-      return null;
-    }
-    for(Placeholder placeholder : registeredPlaceholders) {
-      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
-        continue;
-      }
-      if(id.toLowerCase().equalsIgnoreCase(placeholder.getId())) {
-        return placeholder.getValue(player);
-      }
-    }
-    String[] data = id.split(":", 2);
-    if(data.length < 2) {
-      return null;
-    }
-    PluginArena arena = plugin.getArenaRegistry().getArena(data[0]);
-    if(arena == null) {
-      return null;
-    }
-    for(Placeholder placeholder : registeredPlaceholders) {
-      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
-        continue;
-      }
-
-      if(data[1].toLowerCase().equalsIgnoreCase(placeholder.getId())) {
-        return placeholder.getValue(player);
-      }
-    }
-    return null;
+  public List<Placeholder> getRegisteredPAPIPlaceholders() {
+    return Collections.unmodifiableList(registeredPAPIPlaceholders);
   }
 }
