@@ -25,7 +25,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -40,9 +40,9 @@ import plugily.projects.minigamesbox.classic.utils.serialization.LocationSeriali
  */
 public class HologramArgument {
 
-  private final ArgumentsRegistry registry;
+  private final PluginArgumentsRegistry registry;
 
-  public HologramArgument(ArgumentsRegistry registry) {
+  public HologramArgument(PluginArgumentsRegistry registry) {
     this.registry = registry;
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("hologram", registry.getPlugin().getPluginNamePrefixLong() + ".admin.hologram.manage", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " hologram &6<action>", "/" + registry.getPlugin().getCommandAdminPrefix() + " hologram <action>", "&7Command handles 3 arguments:\n&7• /" + registry.getPlugin().getCommandAdminPrefix() + " hologram add <statistic type> <amount> - creates new hologram"

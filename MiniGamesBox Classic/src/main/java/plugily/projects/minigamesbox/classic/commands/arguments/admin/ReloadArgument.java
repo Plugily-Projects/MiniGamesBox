@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -42,7 +42,7 @@ public class ReloadArgument {
 
   private final Set<CommandSender> confirmations = new HashSet<>();
 
-  public ReloadArgument(ArgumentsRegistry registry) {
+  public ReloadArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("reload", registry.getPlugin().getPluginNamePrefixLong() + ".admin.reload", CommandArgument.ExecutorType.BOTH,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " reload", "/" + registry.getPlugin().getCommandAdminPrefix() + " reload", "&7Reload all game arenas and configuration files\n&7&lArenas will be stopped!\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.reload")) {
       @Override

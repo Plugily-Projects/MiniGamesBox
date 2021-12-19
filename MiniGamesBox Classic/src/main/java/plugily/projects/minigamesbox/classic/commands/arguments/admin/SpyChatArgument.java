@@ -20,7 +20,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -37,7 +37,7 @@ public class SpyChatArgument {
 
   private final Set<Player> spyChatters = new HashSet<>();
 
-  public SpyChatArgument(ArgumentsRegistry registry) {
+  public SpyChatArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("spychat", registry.getPlugin().getPluginNamePrefixLong() + ".admin.spychat", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " spychat", "/" + registry.getPlugin().getCommandAdminPrefix() + " spychat", "&7Toggles spy chat for all available arenas\n"
             + "&7You will see all messages from these games\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.spychat")) {

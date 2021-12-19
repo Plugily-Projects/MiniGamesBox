@@ -30,7 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -51,7 +51,7 @@ public class ArenaSelectorArgument implements Listener {
   private final Map<Integer, PluginArena> arenas = new HashMap<>();
   private final PluginMain plugin;
 
-  public ArenaSelectorArgument(ArgumentsRegistry registry) {
+  public ArenaSelectorArgument(PluginArgumentsRegistry registry) {
     this.chatManager = registry.getPlugin().getChatManager();
     this.plugin = registry.getPlugin();
 

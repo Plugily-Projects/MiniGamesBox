@@ -23,7 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -36,7 +36,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledComm
  */
 public class StopArgument {
 
-  public StopArgument(ArgumentsRegistry registry) {
+  public StopArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("stop", registry.getPlugin().getPluginNamePrefixLong() + ".admin.stop", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " stop", "/" + registry.getPlugin().getCommandAdminPrefix() + " stop",
             "&7Stops the arena you're in\n&7&lYou must be in target arena!\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.stop")) {

@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -35,7 +35,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledComm
  */
 public class ForceStartArgument {
 
-  public ForceStartArgument(ArgumentsRegistry registry) {
+  public ForceStartArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("forcestart", registry.getPlugin().getPluginNamePrefixLong() + ".admin.forcestart", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " forcestart", "/" + registry.getPlugin().getCommandAdminPrefix() + " forcestart",
             "&7Force starts arena you're in\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.forcestart")) {

@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -41,7 +41,7 @@ public class DeleteArgument {
 
   private final Set<CommandSender> confirmations = new HashSet<>();
 
-  public DeleteArgument(ArgumentsRegistry registry) {
+  public DeleteArgument(PluginArgumentsRegistry registry) {
 
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("delete", registry.getPlugin().getPluginNamePrefixLong() + ".admin.delete", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " delete &6<arena>", "/" + registry.getPlugin().getCommandAdminPrefix() + " delete <arena>",

@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 
 import java.util.Comparator;
@@ -41,7 +41,7 @@ public class JoinArguments {
 
   private final Random random = new Random();
 
-  public JoinArguments(ArgumentsRegistry registry) {
+  public JoinArguments(PluginArgumentsRegistry registry) {
     //join argument
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new CommandArgument("join", "", CommandArgument.ExecutorType.PLAYER) {
       @Override

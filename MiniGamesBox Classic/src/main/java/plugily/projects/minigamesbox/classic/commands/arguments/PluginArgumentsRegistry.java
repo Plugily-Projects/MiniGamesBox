@@ -68,14 +68,14 @@ import java.util.stream.Collectors;
  * <p>
  * Created at 01.11.2021
  */
-public class ArgumentsRegistry implements CommandExecutor {
+public class PluginArgumentsRegistry implements CommandExecutor {
 
   private final SpyChatArgument spyChat;
   private final PluginMain plugin;
   private final TabCompletion tabCompletion;
   private final Map<String, List<CommandArgument>> mappedArguments = new HashMap<>();
 
-  public ArgumentsRegistry(PluginMain plugin) {
+  public PluginArgumentsRegistry(PluginMain plugin) {
     this.plugin = plugin;
     tabCompletion = new TabCompletion(this);
     Optional.ofNullable(plugin.getCommand(plugin.getPluginNamePrefixLong())).ifPresent(plugily -> {
@@ -114,11 +114,6 @@ public class ArgumentsRegistry implements CommandExecutor {
     if(plugin.getConfigPreferences().getOption("HOLOGRAMS")) {
       new HologramArgument(this);
     }
-    registerPluginCommands();
-  }
-
-  public void registerPluginCommands() {
-    // can be used by the plugin
   }
 
   @Override

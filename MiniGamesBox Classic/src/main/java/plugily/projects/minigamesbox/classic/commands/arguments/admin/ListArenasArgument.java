@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
 import org.bukkit.command.CommandSender;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -33,7 +33,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledComm
  */
 public class ListArenasArgument {
 
-  public ListArenasArgument(ArgumentsRegistry registry) {
+  public ListArenasArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("list", registry.getPlugin().getPluginNamePrefixLong() + ".admin.list", CommandArgument.ExecutorType.BOTH,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " list", "/" + registry.getPlugin().getCommandAdminPrefix() + " list",
             "&7Shows list with all loaded arenas\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.list")) {

@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.user.User;
 
@@ -33,7 +33,7 @@ import plugily.projects.minigamesbox.classic.user.User;
  */
 public class StatsArgument {
 
-  public StatsArgument(ArgumentsRegistry registry) {
+  public StatsArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new CommandArgument("stats", "", CommandArgument.ExecutorType.PLAYER) {
       @Override
       public void execute(CommandSender sender, String[] args) {

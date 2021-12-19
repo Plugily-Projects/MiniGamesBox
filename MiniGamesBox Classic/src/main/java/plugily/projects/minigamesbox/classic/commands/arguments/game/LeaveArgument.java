@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 
 import java.util.logging.Level;
@@ -34,7 +34,7 @@ import java.util.logging.Level;
  */
 public class LeaveArgument {
 
-  public LeaveArgument(ArgumentsRegistry registry) {
+  public LeaveArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new CommandArgument("leave", "", CommandArgument.ExecutorType.PLAYER) {
       @Override
       public void execute(CommandSender sender, String[] args) {

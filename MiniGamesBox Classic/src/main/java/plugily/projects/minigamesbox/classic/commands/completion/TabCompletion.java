@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 
 import java.util.ArrayList;
@@ -39,9 +39,9 @@ import java.util.stream.Collectors;
 public class TabCompletion implements TabCompleter {
 
   private final List<CompletableArgument> registeredCompletions = new ArrayList<>();
-  private final ArgumentsRegistry registry;
+  private final PluginArgumentsRegistry registry;
 
-  public TabCompletion(ArgumentsRegistry registry) {
+  public TabCompletion(PluginArgumentsRegistry registry) {
     this.registry = registry;
   }
 

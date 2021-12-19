@@ -35,7 +35,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArenaManager;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaRegistry;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.events.ChatEvents;
 import plugily.projects.minigamesbox.classic.events.Events;
 import plugily.projects.minigamesbox.classic.events.JoinEvent;
@@ -121,7 +121,7 @@ public class PluginMain extends JavaPlugin {
   private KitRegistry kitRegistry;
   private MessageManager messageManager;
   private LanguageManager languageManager;
-  private ArgumentsRegistry argumentsRegistry;
+  private PluginArgumentsRegistry argumentsRegistry;
   private PluginArenaManager arenaManager;
   private Metrics metrics;
   private SpectatorItemsManager spectatorItemsManager;
@@ -189,9 +189,6 @@ public class PluginMain extends JavaPlugin {
     //initialize default classes
     initializeDefaultClasses();
 
-    //load plugin classes
-    initializePluginClasses();
-
     //send console message
     MiscUtils.sendStartUpMessage(this);
 
@@ -254,7 +251,7 @@ public class PluginMain extends JavaPlugin {
     //arena
     arenaRegistry = new PluginArenaRegistry(this);
     arenaRegistry.registerArenas();
-    argumentsRegistry = new ArgumentsRegistry(this);
+    argumentsRegistry = new PluginArgumentsRegistry(this);
     arenaManager = new PluginArenaManager(this);
 
     SetupInventory.init(this);
@@ -282,15 +279,6 @@ public class PluginMain extends JavaPlugin {
       return false;
     }
     return true;
-  }
-
-
-  public void initializePluginClasses() {
-    //space for additional classes
-  }
-
-  public void addAdditionalValues() {
-    //space for additional values e.g. configoptions
   }
 
   private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("arenas", "arena_selector", "bungee", "leaderboards", "rewards", "spectator", "stats", "permissions", "special_items", "mysql", "signs"));
@@ -517,7 +505,7 @@ public class PluginMain extends JavaPlugin {
     return languageManager;
   }
 
-  public ArgumentsRegistry getArgumentsRegistry() {
+  public PluginArgumentsRegistry getArgumentsRegistry() {
     return argumentsRegistry;
   }
 

@@ -25,7 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -42,9 +42,9 @@ import java.util.ArrayList;
  */
 public class CreateArgument {
 
-  private final ArgumentsRegistry registry;
+  private final PluginArgumentsRegistry registry;
 
-  public CreateArgument(ArgumentsRegistry registry) {
+  public CreateArgument(PluginArgumentsRegistry registry) {
     this.registry = registry;
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("create", registry.getPlugin().getPluginNamePrefixLong() + ".admin.create", CommandArgument.ExecutorType.PLAYER,
         new LabelData(registry.getPlugin().getPluginNamePrefix() + " create &6<arena>", registry.getPlugin().getPluginNamePrefix() + " create <arena>",

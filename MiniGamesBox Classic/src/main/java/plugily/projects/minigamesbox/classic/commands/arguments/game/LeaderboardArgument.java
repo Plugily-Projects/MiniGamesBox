@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.CompletableArgument;
 
@@ -37,9 +37,9 @@ import java.util.UUID;
  */
 public class LeaderboardArgument {
 
-  private final ArgumentsRegistry registry;
+  private final PluginArgumentsRegistry registry;
 
-  public LeaderboardArgument(ArgumentsRegistry registry) {
+  public LeaderboardArgument(PluginArgumentsRegistry registry) {
     this.registry = registry;
     List<String> stats = new ArrayList<>();
     for(StatisticType val : registry.getPlugin().getStatsStorage().getStatistics().values()) {

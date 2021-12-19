@@ -24,7 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.commonsbox.number.NumberUtils;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -38,7 +38,7 @@ import plugily.projects.minigamesbox.classic.user.User;
  */
 public class AddLevelArgument {
 
-  public AddLevelArgument(ArgumentsRegistry registry) {
+  public AddLevelArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("addlevel", registry.getPlugin().getPluginNamePrefixLong() + ".admin.addlevel",
         CommandArgument.ExecutorType.BOTH, new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " addlevel &6<amount> &c[player]", "/" + registry.getPlugin().getCommandAdminPrefix() + " addlevel <amount>",
         "&7Add level to yourself or target player\n&7Can be used from console too\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.addlevel (for yourself)\n"

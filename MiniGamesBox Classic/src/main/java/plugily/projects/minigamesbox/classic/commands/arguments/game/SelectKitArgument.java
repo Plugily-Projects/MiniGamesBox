@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.commands.arguments.ArgumentsRegistry;
+import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 
 /**
@@ -31,7 +31,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgu
  */
 public class SelectKitArgument {
 
-  public SelectKitArgument(ArgumentsRegistry registry) {
+  public SelectKitArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new CommandArgument("selectkit", registry.getPlugin().getPluginNamePrefixLong() + ".command.selectkit", CommandArgument.ExecutorType.PLAYER) {
       @Override
       public void execute(CommandSender sender, String[] args) {
