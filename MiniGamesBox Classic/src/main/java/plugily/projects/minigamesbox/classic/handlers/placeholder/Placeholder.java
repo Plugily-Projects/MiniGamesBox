@@ -79,7 +79,7 @@ public class Placeholder {
   }
 
   public enum PlaceholderExecutor {
-    INTERNAL, PLACEHOLDER_API
+    INTERNAL, PLACEHOLDER_API, ALL
   }
 
 }

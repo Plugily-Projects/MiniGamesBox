@@ -96,13 +96,17 @@ public class PlaceholderManager {
     });
   }
 
-  public void registerPlaceholder(Placeholder command) {
-    switch(command.getPlaceholderExecutor()) {
+  public void registerPlaceholder(Placeholder placeholder) {
+    switch(placeholder.getPlaceholderExecutor()) {
       case PLACEHOLDER_API:
-        registeredPAPIPlaceholders.add(command);
+        registeredPAPIPlaceholders.add(placeholder);
         break;
       case INTERNAL:
-        registeredInternalPlaceholders.add(command);
+        registeredInternalPlaceholders.add(placeholder);
+        break;
+      case ALL:
+        registeredPAPIPlaceholders.add(placeholder);
+        registeredInternalPlaceholders.add(placeholder);
         break;
       default:
         break;

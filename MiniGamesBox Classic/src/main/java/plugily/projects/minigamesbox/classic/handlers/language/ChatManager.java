@@ -219,8 +219,10 @@ public class ChatManager {
     returnString = StringUtils.replace(returnString, "%plugin_short_command%", plugin.getPluginNamePrefix());
     returnString = StringUtils.replace(returnString, "%arena_min_players%", Integer.toString(arena.getMinimumPlayers()));
     returnString = StringUtils.replace(returnString, "%arena_players%", String.valueOf(arena.getPlayers()));
-    returnString = StringUtils.replace(returnString, "%arena_max_players%", Integer.toString(arena.getMaximumPlayers()));
     returnString = StringUtils.replace(returnString, "%arena_players_size%", Integer.toString(arena.getPlayers().size()));
+    returnString = StringUtils.replace(returnString, "%arena_players_left%", String.valueOf(arena.getPlayersLeft()));
+    returnString = StringUtils.replace(returnString, "%arena_players_left_size%", Integer.toString(arena.getPlayersLeft().size()));
+    returnString = StringUtils.replace(returnString, "%arena_max_players%", Integer.toString(arena.getMaximumPlayers()));
     returnString = StringUtils.replace(returnString, "%arena_name%", arena.getMapName());
     returnString = StringUtils.replace(returnString, "%arena_id%", arena.getId());
     returnString = StringUtils.replace(returnString, "%arena_state%", String.valueOf(arena.getArenaState()));
