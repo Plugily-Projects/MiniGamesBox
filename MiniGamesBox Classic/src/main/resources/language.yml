@@ -290,31 +290,18 @@ Kit:
 
 
 #
-# Powerup messages
-#
-# Powerups need to be enabled on config.yml
-Powerup:
-  List:
-    'X-Powerup':
-      Name: "&e&lX Powerup"
-      # Used as sub title description
-      Description: "&7Awesome powerup!"
-  Ended-Title: "&4Powerup %powerup% has ended!"
-
-
-#
 # Leaderboard messages
 #
 # Leaderboard function need to be enabled on config.yml
 Leaderboard:
-  Header: '&6&lTop %amount% in %statistic%'
-  Format: '&e%place%. &f%nickname% (%value%)'
-  Empty-Format: '&e%place%. &fEmpty (0)'
-  Unknown-Player: '&fUnknown Player'
+  Header: "&6&lTop %amount% in %statistic%"
+  Format: "&e%place%. &f%nickname% (%value%)"
+  Empty-Format: "&e%place%. &fEmpty (0)"
+  Unknown-Player: "&fUnknown Player"
   Statistics:
-    Games-Played: '&eGames Played'
-    Level: '&eLevel'
-    Exp: '&eExperience'
+    Games-Played: "&eGames Played"
+    Level: "&eLevel"
+    Exp: "&eExperience"
 
 
 # Don't edit it. But who's stopping you? It's your server!

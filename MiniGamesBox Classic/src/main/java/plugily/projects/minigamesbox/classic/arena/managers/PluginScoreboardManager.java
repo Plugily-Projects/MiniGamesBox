@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Created at 01.11.2021
  */
-public class ScoreboardManager {
+public class PluginScoreboardManager {
 
   private final Map<UUID, Scoreboard> boardMap = new ConcurrentHashMap<>();
   private final Map<UUID, org.bukkit.scoreboard.Scoreboard> lastBoardMap = new ConcurrentHashMap<>();
@@ -51,7 +51,7 @@ public class ScoreboardManager {
   private final String boardTitle;
   private final PluginArena arena;
 
-  public ScoreboardManager(PluginArena arena) {
+  public PluginScoreboardManager(PluginArena arena) {
     this.arena = arena;
     this.plugin = arena.getPlugin();
     this.boardTitle = plugin.getChatManager().colorMessage("SCOREBOARD_TITLE");
@@ -102,7 +102,7 @@ public class ScoreboardManager {
     boardMap.clear();
   }
 
-  private List<Entry> formatScoreboard(User user) {
+  public List<Entry> formatScoreboard(User user) {
     EntryBuilder builder = new EntryBuilder();
     List<String> lines;
     if(arena.getArenaState() == ArenaState.FULL_GAME) {
@@ -116,7 +116,7 @@ public class ScoreboardManager {
     return builder.build();
   }
 
-  private String formatScoreboardLine(String line, User user) {
+  public String formatScoreboardLine(String line, User user) {
     String formattedLine = line;
     formattedLine = plugin.getChatManager().formatMessage(arena, formattedLine, user.getPlayer());
     return formattedLine;

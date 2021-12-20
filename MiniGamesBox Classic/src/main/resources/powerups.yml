@@ -1,16 +1,28 @@
 ## Plugily Projects powerups.yml
 #Example
-Healing:
-  name: "Healing"
-  description: "Let player heal"
-  material: REDSTONE
-  # Add as many potion effects as you want
-  # Format: PotionName, Duration, Amplifier
-  potion-effect:
-    - "REGENERATION, 30, 10"
-  # PLAYER for pickup player | ALL for all arena players
-  potion-type: PLAYER
-  # like rewards
-  execute:
-    - ""
+Powerups:
+  Pickup:
+    Chat: "&a%player% picked the &4Powerup %powerup% up"
+  Ended:
+    Title: "&4Powerup %powerup% from %player%"
+    Subtitle: "&chas ended"
+    Chat: "&4Powerup %powerup% from %player% has ended%"
+  Drop:
+    Chance: 1
+  Content:
+    Healing:
+      name: "Healing"
+      description: "Let player heal"
+      material: REDSTONE
+      # Add as many potion effects as you want
+      # Format: PotionName, Duration, Amplifier
+      potion-effect:
+        - "REGENERATION, 30, 10"
+      # PLAYER for pickup player | ALL for all arena players
+      potion-type: PLAYER
+      # like rewards
+      execute:
+        - ""
 
+
+Version: 1

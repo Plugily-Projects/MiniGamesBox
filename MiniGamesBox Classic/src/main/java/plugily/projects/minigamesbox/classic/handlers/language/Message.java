@@ -177,8 +177,6 @@ public class Message {
     messages.put("KIT_KIT_MENU_LORE_LOCKED", new Message("Kit.Menu.Lore.Locked", "", false));
     messages.put("KIT_KIT_MENU_LORE_UNLOCK_LEVEL", new Message("Kit.Menu.Lore.Unlock-At-Level", "", false));
     messages.put("KIT_KIT_MENU_LORE_UNLOCK_STORE", new Message("Kit.Menu.Lore.Unlock-In-Store", "", false));
-    // Powerup (not included list)
-    messages.put("POWERUP_ENDED_TITLE", new Message("Powerup.Ended-Title", "", false));
     // Leaderboard
     messages.put("LEADERBOARD_HEADER", new Message("Leaderboard.Header", "", false));
     messages.put("LEADERBOARD_FORMAT", new Message("Leaderboard.Format", "", false));

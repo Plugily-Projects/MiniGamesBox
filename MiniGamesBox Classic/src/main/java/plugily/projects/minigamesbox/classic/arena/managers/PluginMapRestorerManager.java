@@ -27,11 +27,11 @@ import plugily.projects.minigamesbox.classic.arena.ArenaState;
  * <p>
  * Created at 02.12.2021
  */
-public class MapRestorerManager {
+public class PluginMapRestorerManager {
 
   public final PluginArena arena;
 
-  public MapRestorerManager(PluginArena arena) {
+  public PluginMapRestorerManager(PluginArena arena) {
     this.arena = arena;
   }
 

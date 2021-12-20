@@ -28,8 +28,8 @@ import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.managers.BossbarManager;
-import plugily.projects.minigamesbox.classic.arena.managers.MapRestorerManager;
-import plugily.projects.minigamesbox.classic.arena.managers.ScoreboardManager;
+import plugily.projects.minigamesbox.classic.arena.managers.PluginMapRestorerManager;
+import plugily.projects.minigamesbox.classic.arena.managers.PluginScoreboardManager;
 import plugily.projects.minigamesbox.classic.arena.options.ArenaOption;
 import plugily.projects.minigamesbox.classic.arena.states.ArenaStateHandler;
 import plugily.projects.minigamesbox.classic.arena.states.PluginEndingState;
@@ -68,9 +68,9 @@ public class PluginArena extends BukkitRunnable {
   //all handlers for all game states, we don't include them all in one runnable because it would be too big
   private final Map<ArenaState, ArenaStateHandler> gameStateHandlers = new EnumMap<>(ArenaState.class);
 
-  private ScoreboardManager scoreboardManager;
+  private PluginScoreboardManager scoreboardManager;
   private BossbarManager bossbarManager;
-  private MapRestorerManager mapRestorerManager;
+  private PluginMapRestorerManager mapRestorerManager;
 
   private ArenaState arenaState = ArenaState.WAITING_FOR_PLAYERS;
   private String mapName = "";
@@ -162,8 +162,8 @@ public class PluginArena extends BukkitRunnable {
   public PluginArena(String id) {
     this.id = id == null ? "" : id;
     bossbarManager = new BossbarManager(this);
-    scoreboardManager = new ScoreboardManager(this);
-    mapRestorerManager = new MapRestorerManager(this);
+    scoreboardManager = new PluginScoreboardManager(this);
+    mapRestorerManager = new PluginMapRestorerManager(this);
     setDefaultValues();
     gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new PluginWaitingState());
     gameStateHandlers.put(ArenaState.STARTING, new PluginStartingState());
@@ -181,6 +181,10 @@ public class PluginArena extends BukkitRunnable {
 
   public void addGameStateHandler(ArenaState arenaState, ArenaStateHandler arenaStateHandler) {
     gameStateHandlers.put(arenaState, arenaStateHandler);
+  }
+
+  public void setScoreboardManager(PluginScoreboardManager scoreboardManager) {
+    this.scoreboardManager = scoreboardManager;
   }
 
   public static void init(PluginMain plugin) {
@@ -302,7 +306,7 @@ public class PluginArena extends BukkitRunnable {
     setArenaOption("MAXIMUM_PLAYERS", maximumPlayers);
   }
 
-  public MapRestorerManager getMapRestorerManager() {
+  public PluginMapRestorerManager getMapRestorerManager() {
     return mapRestorerManager;
   }
 
@@ -376,11 +380,11 @@ public class PluginArena extends BukkitRunnable {
     setArenaState(ArenaState.WAITING_FOR_PLAYERS);
   }
 
-  public ScoreboardManager getScoreboardManager() {
+  public PluginScoreboardManager getScoreboardManager() {
     return scoreboardManager;
   }
 
-  public void setMapRestorerManager(MapRestorerManager mapRestorerManager) {
+  public void setMapRestorerManager(PluginMapRestorerManager mapRestorerManager) {
     this.mapRestorerManager = mapRestorerManager;
   }
 
