@@ -62,35 +62,24 @@ public class Message {
     messages.put("COMMANDS_ONLY_BY_PLAYER", new Message("Commands.Only-By-Player", "", true));
     messages.put("COMMANDS_NOT_PLAYING", new Message("Commands.Not-Playing", "", true));
     messages.put("COMMANDS_NO_PERMISSION", new Message("Commands.No-Permission", "", true));
-    messages.put("COMMANDS_PLAYER_NOT_FOUND", new Message("Commands.Player-Not-Found", ".", true));
-    messages.put("COMMANDS_INVALID_LOCATION_TELEPORT", new Message("Commands.Location-Teleport-Invalid", ".", true));
-    messages.put("COMMANDS_WRONG_USAGE", new Message("Commands.Wrong-Usage", ".", true));
+    messages.put("COMMANDS_PLAYER_NOT_FOUND", new Message("Commands.Player-Not-Found", "", true));
+    messages.put("COMMANDS_INVALID_LOCATION_TELEPORT", new Message("Commands.Location-Teleport-Invalid", "", true));
+    messages.put("COMMANDS_WRONG_USAGE", new Message("Commands.Wrong-Usage", "", true));
     // commands.admin
-    messages.put("COMMANDS_ADMIN_ADDED_LEVEL", new Message("Commands.Admin.Added-Level", ".", true));
-    messages.put("COMMANDS_ADMIN_RELOAD_SUCCESS", new Message("Commands.Admin.Reload-Success", ".", true));
-    messages.put("COMMANDS_ADMIN_LIST_HEADER", new Message("Commands.Admin.List.Header", ".", true));
-    messages.put("COMMANDS_ADMIN_LIST_FORMAT", new Message("Commands.Admin.List.Format", ".", true));
-    messages.put("COMMANDS_ADMIN_LIST_NO_ARENAS", new Message("Commands.Admin.List.No-Arenas", ".", true));
-    messages.put("COMMANDS_ADMIN_SPYCHAT_TOGGLE", new Message("Commands.Admin.Spyhcat.Toggled", ".", true));
-    // commands.stats
-    messages.put("COMMANDS_STATS_HEADER", new Message("Commands.Stats.Header", ".", true));
-    messages.put("COMMANDS_STATS_HEADER_OTHER", new Message("Commands.Stats.Header-Other", ".", true));
-    messages.put("COMMANDS_STATS_FOOTER", new Message("Commands.Stats.Footer", ".", true));
-    messages.put("COMMANDS_STATS_GAMES_PLAYED", new Message("Commands.Stats.Games-Played", ".", true));
-    messages.put("COMMANDS_STATS_LEVEL", new Message("Commands.Stats.Level", ".", true));
-    messages.put("COMMANDS_STATS_EXP", new Message("Commands.Stats.Exp", ".", true));
-    messages.put("COMMANDS_STATS_NEXT_LEVEL_EXP", new Message("Commands.Stats.Next-Level-Exp", ".", true));
-    // commands.stats.top
-    messages.put("COMMANDS_STATS_TOP_TYPE_NAME", new Message("Commands.Stats.Top.Type-Name", ".", true));
-    messages.put("COMMANDS_STATS_TOP_INVALID_NAME", new Message("Commands.Stats.Top.Invalid-Name", ".", true));
-    messages.put("COMMANDS_STATS_TOP_HEADER", new Message("Commands.Stats.Top.Header", ".", true));
-    messages.put("COMMANDS_STATS_TOP_FORMAT", new Message("Commands.Stats.Top.Format", ".", true));
-    messages.put("COMMANDS_MAIN_HEADER", new Message("Commands.Stats.Main.Header", ".", true));
-    messages.put("COMMANDS_MAIN_DESCRIPTION", new Message("Commands.Stats.Main.Description", ".", true));
-    messages.put("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION", new Message("Commands.Stats.Main.Admin-Bonus-Description", ".", true));
-    messages.put("COMMANDS_MAIN_FOOTER", new Message("Commands.Stats.Main.Footer", ".", true));
+    messages.put("COMMANDS_ADMIN_ADDED_LEVEL", new Message("Commands.Admin.Added-Level", "", true));
+    messages.put("COMMANDS_ADMIN_RELOAD_SUCCESS", new Message("Commands.Admin.Reload-Success", "", true));
+    messages.put("COMMANDS_ADMIN_LIST_HEADER", new Message("Commands.Admin.List.Header", "", true));
+    messages.put("COMMANDS_ADMIN_LIST_FORMAT", new Message("Commands.Admin.List.Format", "", true));
+    messages.put("COMMANDS_ADMIN_LIST_NO_ARENAS", new Message("Commands.Admin.List.No-Arenas", "", true));
+    messages.put("COMMANDS_ADMIN_SPYCHAT_TOGGLE", new Message("Commands.Admin.Spyhcat.Toggled", "", true));
+    // commands.main
+    messages.put("COMMANDS_MAIN_HEADER", new Message("Commands.Stats.Main.Header", "", true));
+    messages.put("COMMANDS_MAIN_DESCRIPTION", new Message("Commands.Stats.Main.Description", "", true));
+    messages.put("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION", new Message("Commands.Stats.Main.Admin-Bonus-Description", "", true));
+    messages.put("COMMANDS_MAIN_FOOTER", new Message("Commands.Stats.Main.Footer", "", true));
+
     // scoreboard (scoreboard.content gets by arena state)
-    messages.put("SCOREBOARD_TITLE", new Message("Scoreboard.Title", ".", true));
+    messages.put("SCOREBOARD_TITLE", new Message("Scoreboard.Title", "", true));
     // bossbar (bossbar.content gets by arena state)
     messages.put("BOSSBAR_TITLE", new Message("Bossbar.", "", true));
     // In-Game messages
@@ -178,15 +167,33 @@ public class Message {
     messages.put("KIT_KIT_MENU_LORE_UNLOCK_LEVEL", new Message("Kit.Menu.Lore.Unlock-At-Level", "", false));
     messages.put("KIT_KIT_MENU_LORE_UNLOCK_STORE", new Message("Kit.Menu.Lore.Unlock-In-Store", "", false));
     // Leaderboard
-    messages.put("LEADERBOARD_HEADER", new Message("Leaderboard.Header", "", false));
-    messages.put("LEADERBOARD_FORMAT", new Message("Leaderboard.Format", "", false));
-    messages.put("LEADERBOARD_EMPTY_FORMAT", new Message("Leaderboard.Empty-Format", "", false));
-    messages.put("LEADERBOARD_UNKNOWN_PLAYER", new Message("Leaderboard.Unknown-Player", "", false));
+    // Leaderboard.type.hologram
+    messages.put("LEADERBOARD_TYPE_HOLOGRAM_HEADER", new Message("Leaderboard.Type.Hologram.Header", "", false));
+    messages.put("LEADERBOARD_TYPE_HOLOGRAM_FORMAT", new Message("Leaderboard.Type.Hologram.Format", "", false));
+    messages.put("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT", new Message("Leaderboard.Type.Hologram.Empty-Format", "", false));
+
+    // Leaderboard.type.chat
+    messages.put("LEADERBOARD_TYPE_CHAT_HEADER", new Message("Leaderboard.Type.Chat.Header", "", true));
+    messages.put("LEADERBOARD_TYPE_CHAT_HEADER_OTHER", new Message("Leaderboard.Type.Chat.Header-Other", "", true));
+    messages.put("LEADERBOARD_TYPE_CHAT_FOOTER", new Message("Leaderboard.Type.Chat.Footer", "", true));
+    messages.put("LEADERBOARD_TYPE_CHAT_FORMAT", new Message("Leaderboard.Type.Chat.Format", "", true));
+    messages.put("LEADERBOARD_TYPE_CHAT_TOP_TYPE_NAME", new Message("Leaderboard.Type.Chat.Top.Type-Name", "", true));
+    messages.put("LEADERBOARD_TYPE_CHAT_TOP_HEADER", new Message("Leaderboard.Type.Chat.Top.Header", "", true));
+    messages.put("LEADERBOARD_TYPE_CHAT_TOP_FORMAT", new Message("Leaderboard.Type.Chat.Top.Format", "", true));
+
+    // Leaderboard.statistics
     messages.put("LEADERBOARD_STATISTICS_GAMES_PLAYED", new Message("Leaderboard.Statistics.Games-Played", "", false));
     messages.put("LEADERBOARD_STATISTICS_LEVEL", new Message("Leaderboard.Statistics.Level", "", false));
     messages.put("LEADERBOARD_STATISTICS_EXP", new Message("Leaderboard.Statistics.Exp", "", false));
+    messages.put("LEADERBOARD_STATISTICS_NEXT_LEVEL_EXP", new Message("Leaderboard.Statistics.Next-Level-Exp", "", true));
+
+    messages.put("LEADERBOARD_INVALID_NAME", new Message("Leaderboard.Invalid-Name", "", true));
+    messages.put("LEADERBOARD_UNKNOWN_PLAYER", new Message("Leaderboard.Unknown-Player", "", false));
+
+
     // File version
-    messages.put("FILE_VERSION", new Message("File-Version-Do-Not-Edit", "", true));
+    messages.put("FILE_VERSION", new Message("Do-Not-Edit.File-Version", "", true));
+    messages.put("CORE_VERSION", new Message("Do-Not-Edit.Core-Version", "", true));
     //empty one
     messages.put("", new Message("", "", true));
   }

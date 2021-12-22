@@ -25,3 +25,10 @@ MOTD:
     Full-Game: "&4&lFULL"
     Ending: "&lEnding"
     Restarting: "&c&lRestarting"
+
+# Don't edit it. But who's stopping you? It's your server!
+# Really, don't edit ;p
+# You edited it, huh? Next time hurt yourself!
+Do-Not-Edit:
+  File-Version: 1
+  Core-Version: 1

@@ -86,15 +86,13 @@ public class PowerupRegistry {
     }
 
     for(String key : section.getKeys(false)) {
-      if("Version".equals(key)) {
-        continue;
-      }
-
       XMaterial mat = XMaterial.matchXMaterial(section.getString(key + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK);
       String name = chatManager.colorRawMessage(section.getString(key + ".name"));
       String description = chatManager.colorRawMessage(section.getString(key + ".description"));
 
       List<String> effects = new ArrayList<>(section.getStringList(key + ".potion-effect"));
+
+      description = chatManager.formatMessage(description, getLongestEffect(effects));
 
       BasePowerup.PotionType potionType = BasePowerup.PotionType.PLAYER;
       try {
@@ -139,13 +137,23 @@ public class PowerupRegistry {
 
   public int getLongestEffect(BasePowerup powerup) {
     List<String> effects = powerup.getEffects();
+    return getLongestDuration(effects);
+  }
 
+  public int getLongestEffect(List<String> effects) {
+    return getLongestDuration(effects);
+  }
+
+  private int getLongestDuration(List<String> effects) {
     int longDuration = 0;
 
     for(String effect : effects) {
       String[] split = StringUtils.split(StringUtils.deleteWhitespace(effect), ',');
       if(split.length == 0) {
         split = StringUtils.split(effect, ' ');
+      }
+      if(split.length <= 2) {
+        return longDuration;
       }
       int duration = NumberUtils.parseInt(split[1]).get() * 20;
       if(longDuration <= duration) {
