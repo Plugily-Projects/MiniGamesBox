@@ -24,7 +24,7 @@
 # Command messages
 #
 Commands:
-  Did-You-Mean: "&6Did you mean &e/%command%&6?"
+  Did-You-Mean: "&6Did you mean &e/%value%&6?"
   Command-Executed: "&aCommand successfully executed!"
   Teleported-To-Lobby: "&aTeleported to lobby!"
   Removed-Game-Instance: "&cSuccessfully removed game instance!"
@@ -202,9 +202,9 @@ In-Game:
         - ""
         - ""
         - "&a&m--------------------------------------------------"
-        Placeholders:
-          Win: "You won the game"
-          Lose: "You lose the game"
+      Placeholders:
+        Win: "You won the game"
+        Lose: "You lose the game"
     Admin:
       Set-Starting-In-To-0: "&bAn admin set waiting time to 0. The game starts now!"
 
@@ -290,7 +290,7 @@ Kit:
 #
 # Leaderboard messages
 #
-# Leaderboard function need to be enabled on config.yml
+# Hologram function need to be enabled on config.yml
 Leaderboard:
   Type:
     Hologram:

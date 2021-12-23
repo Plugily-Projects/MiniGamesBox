@@ -52,7 +52,7 @@ public class PlaceholderManager {
         return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
       }
     });
-    registerPlaceholder(new Placeholder("exp_to_next_level", Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("user_statistic_exp_to_next_level", Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player) {
         return Double.toString(Math.ceil(Math.pow(50 * plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5)));

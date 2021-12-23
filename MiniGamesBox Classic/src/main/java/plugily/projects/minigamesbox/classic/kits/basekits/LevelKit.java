@@ -48,7 +48,7 @@ public abstract class LevelKit extends Kit {
         .name(getName())
         .lore(getDescription())
         .lore(getPlugin().getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCK_LEVEL")
-            .replace("%NUMBER%", Integer.toString(level)))
+            .replace("%number%", Integer.toString(level)))
         .build();
   }
 }

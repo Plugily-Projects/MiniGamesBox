@@ -158,7 +158,7 @@ public class RewardsFactory {
     String command = reward.getExecutableCode();
 
     if(player != null) {
-      command = StringUtils.replace(command, "%PLAYER%", player.getName());
+      command = StringUtils.replace(command, "%player%", player.getName());
     }
 
     command = plugin.getChatManager().formatMessage(command, arena);

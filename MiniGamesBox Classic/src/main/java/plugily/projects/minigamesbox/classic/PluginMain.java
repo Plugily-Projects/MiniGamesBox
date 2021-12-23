@@ -35,6 +35,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArenaManager;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaRegistry;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
+import plugily.projects.minigamesbox.classic.arena.options.ArenaOptionManager;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.events.ChatEvents;
 import plugily.projects.minigamesbox.classic.events.Events;
@@ -96,6 +97,7 @@ public class PluginMain extends JavaPlugin {
   private String pluginNamePrefixLong;
   private MessageUtils messageUtils;
   private ConfigPreferences configPreferences;
+  private ArenaOptionManager arenaOptionManager;
   private PartyHandler partyHandler;
   private Debugger debugger;
   private UserManager userManager;
@@ -155,6 +157,7 @@ public class PluginMain extends JavaPlugin {
     setupFiles();
 
     configPreferences = new ConfigPreferences(this);
+    arenaOptionManager = new ArenaOptionManager(this);
 
     //check debug mode
     debugger = new Debugger(this, getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
@@ -391,6 +394,10 @@ public class PluginMain extends JavaPlugin {
 
   public ConfigPreferences getConfigPreferences() {
     return configPreferences;
+  }
+
+  public ArenaOptionManager getArenaOptionManager() {
+    return arenaOptionManager;
   }
 
   public PartyHandler getPartyHandler() {

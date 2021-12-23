@@ -13,7 +13,7 @@
 # Command messages
 #
 Commands:
-  Did-You-Mean: "&6Did you mean &e/%command%&6?"
+  Did-You-Mean: "&6Did you mean &e/%value%&6?"
   Command-Executed: "&aCommand successfully executed!"
   Teleported-To-Lobby: "&aTeleported to lobby!"
   Removed-Game-Instance: "&cSuccessfully removed game instance!"

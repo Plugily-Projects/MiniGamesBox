@@ -159,7 +159,7 @@ public class User {
     }
 
     String message = plugin.getChatManager().colorMessage("KIT_COOLDOWN");
-    message = message.replaceFirst("%cooldown%", Long.toString(time));
+    message = message.replaceFirst("%number%", Long.toString(time));
     getPlayer().sendMessage(message);
     return false;
   }

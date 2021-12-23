@@ -41,7 +41,6 @@ import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +93,7 @@ public class PluginArena extends BukkitRunnable {
 
 
   public void loadArenaOptions() {
-    ArenaOption.getOptions().forEach((s, option) -> arenaOptions.put(s, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected())));
+    arenaOptions.putAll(plugin.getArenaOptionManager().getArenaOptions());
   }
 
   /**
@@ -122,40 +121,6 @@ public class PluginArena extends BukkitRunnable {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
     arenaOptions.get(name).setValue(arenaOptions.get(name).getValue() + value);
-  }
-
-
-  /**
-   * Register a new config option
-   *
-   * @param name   The name of the Option
-   * @param option Contains the path and the default value
-   */
-  public void registerArenaOption(String name, ArenaOption option) {
-    if(arenaOptions.containsKey(name)) {
-      throw new IllegalStateException("Option with path " + name + " was already registered");
-    }
-    arenaOptions.put(name, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected()));
-  }
-
-  /**
-   * Remove config options that are not protected
-   *
-   * @param name The name of the Option
-   */
-  public void unregisterArenaOption(String name) {
-    ArenaOption option = arenaOptions.get(name);
-    if(option == null) {
-      return;
-    }
-    if(option.isProtected()) {
-      throw new IllegalStateException("Protected options cannot be removed!");
-    }
-    arenaOptions.remove(name);
-  }
-
-  public Map<String, ArenaOption> getArenaOptions() {
-    return Collections.unmodifiableMap(arenaOptions);
   }
 
 

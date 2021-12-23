@@ -47,7 +47,14 @@ public class Placeholder {
   }
 
   public String getId() {
-    return id;
+    switch(placeholderType) {
+      case ARENA:
+        return "arena_" + id;
+      case GLOBAL:
+        return id;
+      default:
+        return id;
+    }
   }
 
   public PlaceholderType getPlaceholderType() {
