@@ -91,6 +91,10 @@ public class PluginArena extends BukkitRunnable {
     loadArenaOptions();
   }
 
+  public void resetArenaOptions() {
+    arenaOptions.clear();
+    loadArenaOptions();
+  }
 
   public void loadArenaOptions() {
     arenaOptions.putAll(plugin.getArenaOptionManager().getArenaOptions());

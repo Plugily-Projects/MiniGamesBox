@@ -19,8 +19,8 @@
 
 package plugily.projects.minigamesbox.classic.arena.managers;
 
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -36,15 +36,10 @@ public class PluginMapRestorerManager {
   }
 
   public void fullyRestoreArena() {
-    resetArenaOptions();
+    arena.resetArenaOptions();
     arena.getScoreboardManager().stopAllScoreboards();
     arena.getPlayers().clear();
     arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
-  }
-
-  public void resetArenaOptions() {
-    arena.getArenaOptions().clear();
-    arena.loadArenaOptions();
   }
 
 }
