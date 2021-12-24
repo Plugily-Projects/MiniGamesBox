@@ -88,8 +88,10 @@ public class Cuboid {
   }
 
   public List<Chunk> chunkList() {
-    final List<Chunk> chunks = new ArrayList<>();
-    for(Block block : blockList()) {
+    List<Block> blockList = blockList();
+    List<Chunk> chunks = new ArrayList<>(blockList.size());
+
+    for(Block block : blockList) {
       Chunk chunk = block.getChunk();
       if(!chunks.contains(chunk)) {
         chunks.add(chunk);

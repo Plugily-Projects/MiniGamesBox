@@ -1,8 +1,12 @@
-# Custom in-game lobby items.
-# Probably you will only translate displayname and lore so don't mess with it.
+# Custom special items.
+# You can also add your own special items!
+#
+# Stage: SERVER_JOIN, WAITING_FOR_PLAYERS, ENOUGH_PLAYERS_TO_START, LOBBY, IN_GAME, SPECTATOR, ENDING
 #
 # Please don't modify 'Kit-Menu', 'Leave-Lobby', 'Leave-Spectator', 'Player-List' and 'Spectator-Options', 'Forcestart'
 # nodes as they are hardcoded in code!
+#
+# Also see the wiki for further reference!
 
 #Kit-Menu:
 #  permission: ""

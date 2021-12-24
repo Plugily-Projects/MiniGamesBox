@@ -200,6 +200,21 @@ public class LanguageManager {
     return getStrings(path);
   }
 
+  public List<String> getLanguageListFromKey(String key) {
+    key = plugin.getMessageManager().getPath(key);
+    if(isDefaultLanguageUsed()) {
+      return getStrings(key);
+    }
+    String prop = localeFile.getString(key);
+    if(prop == null) {
+      return getStrings(key);
+    }
+    if(getString(key).equalsIgnoreCase(defaultLanguageConfig.getString(key, "not found"))) {
+      return Arrays.asList(plugin.getChatManager().colorRawMessage(prop).split(";"));
+    }
+    return getStrings(key);
+  }
+
 
   private List<String> getStrings(String path) {
     if(!languageConfig.isSet(path)) {

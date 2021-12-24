@@ -134,4 +134,7 @@ public class PluginArenaRegisterComponent implements SetupComponent {
 
   }
 
+  public SetupInventory getSetupInventory() {
+    return setupInventory;
+  }
 }

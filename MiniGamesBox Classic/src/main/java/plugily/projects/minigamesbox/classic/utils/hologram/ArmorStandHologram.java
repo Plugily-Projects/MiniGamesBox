@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.utils.hologram;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -142,7 +143,7 @@ public class ArmorStandHologram {
   private void append() {
     delete();
 
-    org.bukkit.World world = location.getWorld();
+    World world = location.getWorld();
     if(world == null) {
       return;
     }
@@ -152,7 +153,7 @@ public class ArmorStandHologram {
 
     for(int i = 0; i <= lines.size() - 1; i++) {
       y += distanceAbove;
-      ArmorStand eas = getEntityArmorStand(location, y);
+      ArmorStand eas = getEntityArmorStand(y);
       eas.setCustomName(lines.get(i));
       armorStands.add(eas);
       plugin.getHologramManager().getArmorStands().add(eas);
@@ -180,19 +181,20 @@ public class ArmorStandHologram {
    * @param y the y axis of the hologram
    * @return {@link ArmorStand}
    */
-  private ArmorStand getEntityArmorStand(Location loc, double y) {
+  private ArmorStand getEntityArmorStand(double y) {
+    Location loc = location.clone();
     loc.setY(y);
-    if(location != null) {
-      if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R1)) {
-        location.getWorld().getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
-          if(entity instanceof ArmorStand && plugin.getHologramManager().getArmorStands().remove(entity)) {
-            entity.remove();
-            entity.setCustomNameVisible(false);
-          }
-        });
-      }
+
+    World world = loc.getWorld();
+    if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R1)) {
+      world.getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
+        if(entity instanceof ArmorStand && plugin.getHologramManager().getArmorStands().remove(entity)) {
+          entity.remove();
+          entity.setCustomNameVisible(false);
+        }
+      });
     }
-    ArmorStand stand = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+    ArmorStand stand = (ArmorStand) world.spawnEntity(loc, EntityType.ARMOR_STAND);
     stand.setVisible(false);
     stand.setGravity(false);
     stand.setCustomNameVisible(true);

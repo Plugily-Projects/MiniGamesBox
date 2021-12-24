@@ -26,6 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -89,6 +91,12 @@ public abstract class Kit {
   public void setDescription(String[] description) {
     if (description != null) {
       this.description = description.clone();
+    }
+  }
+
+  public void setDescription(List<String> description) {
+    if (description != null) {
+      this.description = description.toArray(new String[0]);
     }
   }
 

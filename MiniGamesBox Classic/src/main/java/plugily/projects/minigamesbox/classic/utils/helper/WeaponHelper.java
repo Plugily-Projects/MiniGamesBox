@@ -46,7 +46,7 @@ public class WeaponHelper {
   }
 
   public static ItemStack getEnchanted(ItemStack itemStack, Enchantment[] enchantments, int[] levels) {
-    Map<Enchantment, Integer> enchants = new HashMap<>();
+    Map<Enchantment, Integer> enchants = new HashMap<>(enchantments.length);
     for(int i = 0; i < enchantments.length; i++) {
       enchants.put(enchantments[i], levels[i]);
     }

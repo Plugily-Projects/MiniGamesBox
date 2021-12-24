@@ -23,6 +23,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -49,7 +50,12 @@ public class ItemUtils {
    * @return true if named, false otherwise
    */
   public static boolean isItemStackNamed(ItemStack stack) {
-    return stack != null && stack.hasItemMeta() && stack.getItemMeta().hasDisplayName();
+    if(stack == null) {
+      return false;
+    }
+
+    ItemMeta meta = stack.getItemMeta();
+    return meta != null && meta.hasDisplayName();
   }
 
   public static ItemStack getSkull(String url) {

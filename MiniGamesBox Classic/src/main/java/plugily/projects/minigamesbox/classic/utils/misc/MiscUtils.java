@@ -63,7 +63,7 @@ public class MiscUtils {
     Matcher matcher = PATTERN.matcher(s);
     while(matcher.find()) {
       try {
-        s = s.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)) + "");
+        s = s.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)).toString());
       } catch(Exception e) {
         System.err.println("Invalid hex color: " + e.getLocalizedMessage());
       }

@@ -65,6 +65,7 @@ public final class VersionUtils {
   private static Class<?> iChatBaseComponent, chatMessageTypeClass;
   private static Constructor<?> packetPlayOutChatConstructor, chatComponentTextConstructor, titleConstructor;
   private static Object chatMessageType, titleField, subTitleField;
+  public static final List<String> PARTICLE_VALUES;
 
   static {
     try {
@@ -72,6 +73,12 @@ public final class VersionUtils {
       isPaper = true;
     } catch(ClassNotFoundException e) {
       isPaper = false;
+    }
+
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
+      PARTICLE_VALUES = Stream.of(Particle.values()).map(Enum::toString).collect(Collectors.toList());
+    } else {
+      PARTICLE_VALUES = Stream.of(XParticleLegacy.values()).map(Enum::toString).collect(Collectors.toList());
     }
 
     iChatBaseComponent = PacketUtils.classByName("net.minecraft.network.chat", "IChatBaseComponent");
@@ -251,12 +258,9 @@ public final class VersionUtils {
     return null;
   }
 
+  @Deprecated
   public static List<String> getParticleValues() {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      return Stream.of(Particle.values()).map(Enum::toString).collect(Collectors.toList());
-    }
-
-    return Stream.of(XParticleLegacy.values()).map(Enum::toString).collect(Collectors.toList());
+    return PARTICLE_VALUES;
   }
 
   public static void updateNameTagsVisibility(Player player, Player other, String tag, boolean remove) {

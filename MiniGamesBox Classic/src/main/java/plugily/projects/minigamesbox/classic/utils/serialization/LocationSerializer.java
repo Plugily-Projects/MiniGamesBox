@@ -99,7 +99,12 @@ public class LocationSerializer {
    * @return location saved to string
    */
   public static String locationToString(Location location) {
-    return location == null ? "null" : (location.getWorld() == null ? "null" : location.getWorld().getName()) + "," + location.getX() + "," + location.getY() + "," + location.getZ();
+    if(location == null) {
+      return "null";
+    }
+
+    World world = location.getWorld();
+    return (world == null ? "null" : world.getName()) + "," + location.getX() + "," + location.getY() + "," + location.getZ();
   }
 
 }

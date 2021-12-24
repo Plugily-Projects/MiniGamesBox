@@ -40,6 +40,7 @@ import plugily.projects.minigamesbox.inventory.util.XMaterial;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -84,8 +85,10 @@ public class InventorySerializer {
 
       invConfig.set("Size", inventory.getSize());
       invConfig.set("Max stack size", inventory.getMaxStackSize());
-      List<String> activePotions = new ArrayList<>();
-      for(PotionEffect potion : player.getActivePotionEffects()) {
+      Collection<PotionEffect> activeEffects = player.getActivePotionEffects();
+      List<String> activePotions = new ArrayList<>(activeEffects.size());
+
+      for(PotionEffect potion : activeEffects) {
         activePotions.add(potion.getType().getName() + "#" + potion.getDuration() + "#" + potion.getAmplifier());
       }
       invConfig.set("Active potion effects", activePotions);
@@ -211,8 +214,7 @@ public class InventorySerializer {
         }
         playerInventory.setArmorContents(armor);
         if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-          ItemStack stack = invConfig.getItemStack("Offhand", new ItemStack(Material.AIR));
-          playerInventory.setItemInOffHand(stack);
+          playerInventory.setItemInOffHand(invConfig.getItemStack("Offhand", new ItemStack(Material.AIR)));
         }
         VersionUtils.setMaxHealth(player, invConfig.getDouble("Max health"));
         player.setExp(0);
@@ -220,19 +222,19 @@ public class InventorySerializer {
         player.setLevel(invConfig.getInt("ExperienceLevel"));
         try {
           player.setExp(Float.parseFloat(invConfig.getString("ExperienceProgress", "0")));
-        } catch(NumberFormatException ex) {
+        } catch(NumberFormatException ignored) {
         }
         player.setHealth(invConfig.getDouble("Current health"));
         player.setFoodLevel(invConfig.getInt("Food"));
         try {
           player.setSaturation(Float.parseFloat(invConfig.getString("Saturation", "0")));
-        } catch(NumberFormatException ex) {
+        } catch(NumberFormatException ignored) {
         }
         player.setFireTicks(invConfig.getInt("Fire ticks"));
         GameMode gameMode = GameMode.SURVIVAL;
         try {
-          gameMode = GameMode.valueOf(invConfig.getString("GameMode", ""));
-        } catch(IllegalArgumentException e) {
+          gameMode = GameMode.valueOf(invConfig.getString("GameMode", "").toUpperCase());
+        } catch(IllegalArgumentException ignored) {
         }
         player.setGameMode(gameMode);
 
@@ -249,7 +251,7 @@ public class InventorySerializer {
             try {
               player.addPotionEffect(new PotionEffect(effectType, splited.length < 2 ? 30 : Integer.parseInt(splited[1]),
                   splited.length < 3 ? 1 : Integer.parseInt(splited[2])));
-            } catch(NumberFormatException ex) {
+            } catch(NumberFormatException ignored) {
             }
           }
         }
