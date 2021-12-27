@@ -19,9 +19,9 @@
 
 package plugily.projects.minigamesbox.classic.handlers.items;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
+import plugily.projects.minigamesbox.inventory.util.XMaterial;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,7 +49,6 @@ public class SpecialItem {
 
   private final String path;
   private final String permission;
-  public static final SpecialItem INVALID_ITEM = new SpecialItem("INVALID", new ItemStack(Material.BEDROCK), -1, SpecialItem.DisplayStage.LOBBY, null);
   private final ItemStack itemStack;
   private int slot;
   private final SpecialItem.DisplayStage displayStage;
@@ -91,9 +90,9 @@ public class SpecialItem {
     this.rewards = rewards;
     this.protectedOption = false;
     this.permission = null;
-    this.itemStack = INVALID_ITEM.getItemStack();
-    this.slot = INVALID_ITEM.getSlot();
-    this.displayStage = INVALID_ITEM.getDisplayStage();
+    this.itemStack = XMaterial.BEDROCK.parseItem();
+    this.slot = 0;
+    this.displayStage = DisplayStage.LOBBY;
   }
 
   public SpecialItem(String path, boolean protectedOption, Set<Reward> rewards) {
@@ -101,9 +100,9 @@ public class SpecialItem {
     this.protectedOption = protectedOption;
     this.rewards = rewards;
     this.permission = null;
-    this.itemStack = INVALID_ITEM.getItemStack();
-    this.slot = INVALID_ITEM.getSlot();
-    this.displayStage = INVALID_ITEM.getDisplayStage();
+    this.itemStack = XMaterial.BEDROCK.parseItem();
+    this.slot = 0;
+    this.displayStage = DisplayStage.LOBBY;
   }
 
   public String getPath() {

@@ -142,32 +142,35 @@ public class PluginMain extends JavaPlugin {
   public void onEnable() {
     long start = System.currentTimeMillis();
 
+    //run file creation
+    saveDefaultConfig();
+
+    //check debug mode
+    debugger = new Debugger(this, getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
+    exceptionLogHandler = new ExceptionLogHandler(this);
+    messageUtils = new MessageUtils(this);
+
     //checking startup
     if(!validateIfPluginShouldStart()) {
       return;
     }
-    if(!ServiceRegistry.registerService(this)) {
-      debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we can't connect to Plugily Projects Services. Some functions may won't work. e.g. Translations, Automatic Error Report");
-    }
-    exceptionLogHandler = new ExceptionLogHandler(this);
-    messageUtils = new MessageUtils(this);
 
-    //run file creation
-    saveDefaultConfig();
-    setupFiles();
-
-    configPreferences = new ConfigPreferences(this);
-    arenaOptionManager = new ArenaOptionManager(this);
-
-    //check debug mode
-    debugger = new Debugger(this, getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
     debugger.debug("[System] Initialization start");
     if(getDescription().getVersion().contains("debug") || getConfig().getBoolean("Developer-Mode")) {
       debugger.deepDebug(true);
       debugger.debug(Level.FINE, "Deep debug enabled");
-
       getConfig().getStringList("Performance-Listenable").forEach(debugger::monitorPerformance);
     }
+
+    setupFiles();
+
+    if(!ServiceRegistry.registerService(this)) {
+      debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we can't connect to Plugily Projects Services. Some functions may won't work. e.g. Translations, Automatic Error Report");
+    }
+
+    configPreferences = new ConfigPreferences(this);
+
+
     if(!new File(getDataFolder(), "internal/data.yml").exists()) {
       new File(getDataFolder().getName() + "/internal").mkdir();
     }
@@ -207,8 +210,9 @@ public class PluginMain extends JavaPlugin {
     languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
-    statsStorage = new StatsStorage(this);
     userManager = new UserManager(this);
+    placeholderManager = new PlaceholderManager(this);
+    statsStorage = new StatsStorage(this);
     new EventsInitializer(this);
 
     specialItemManager = new SpecialItemManager(this);
@@ -217,22 +221,16 @@ public class PluginMain extends JavaPlugin {
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);
-    signManager = new SignManager(this);
-    signManager.loadSigns();
-    signManager.updateSigns();
 
-    if(configPreferences.getOption("HOLOGRAMS")) {
-      if(!new File(getDataFolder(), "internal/holograms_data.yml").exists()) {
+    if(configPreferences.getOption("LEADERBOARDS")) {
+      if(!new File(getDataFolder(), "internal/leaderboards_data.yml").exists()) {
         new File(getDataFolder().getName() + "/internal").mkdir();
       }
       leaderboardRegistry = new LeaderboardRegistry(this);
     }
 
     holidayManager = new HolidayManager(this);
-    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      debugger.debug(pluginMessagePrefix + "Hooking into PlaceholderAPI");
-      placeholderManager = new PlaceholderManager(this);
-    }
+
     permissionsManager = new PermissionsManager(this);
     User.init(this);
     User.cooldownHandlerTask();
@@ -252,10 +250,9 @@ public class PluginMain extends JavaPlugin {
     spectatorItemsManager = new SpectatorItemsManager(this);
 
     //arena
-    arenaRegistry = new PluginArenaRegistry(this);
-    arenaRegistry.registerArenas();
-    argumentsRegistry = new PluginArgumentsRegistry(this);
-    arenaManager = new PluginArenaManager(this);
+    arenaOptionManager = new ArenaOptionManager(this);
+
+    signManager = new SignManager(this);
 
     SetupInventory.init(this);
     PluginArenaUtils.init(this);
@@ -284,7 +281,7 @@ public class PluginMain extends JavaPlugin {
     return true;
   }
 
-  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("arenas", "arena_selector", "bungee", "leaderboards", "rewards", "spectator", "stats", "permissions", "special_items", "mysql", "signs"));
+  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("internal/data", "internal/leaderboards_data", "arenas", "arena_selector", "bungee", "leaderboards", "rewards", "spectator", "stats", "permissions", "special_items", "mysql", "signs"));
 
   public ArrayList<String> getFileNames() {
     return fileNames;
@@ -356,30 +353,36 @@ public class PluginMain extends JavaPlugin {
     long start = System.currentTimeMillis();
 
     Bukkit.getLogger().removeHandler(exceptionLogHandler);
-    for(PluginArena arena : arenaRegistry.getArenas()) {
-      arena.getScoreboardManager().stopAllScoreboards();
-      for(Player player : arena.getPlayers()) {
-        arena.teleportToEndLocation(player);
-        player.setFlySpeed(0.1f);
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
-        player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
-        arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-        if(configPreferences.getOption("INVENTORY_MANAGER")) {
-          InventorySerializer.loadInventory(this, player);
+    if(arenaRegistry != null) {
+      for(PluginArena arena : arenaRegistry.getArenas()) {
+        arena.getScoreboardManager().stopAllScoreboards();
+        for(Player player : arena.getPlayers()) {
+          arena.teleportToEndLocation(player);
+          player.setFlySpeed(0.1f);
+          player.getInventory().clear();
+          player.getInventory().setArmorContents(null);
+          player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
+          arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
+          if(configPreferences != null && configPreferences.getOption("INVENTORY_MANAGER")) {
+            InventorySerializer.loadInventory(this, player);
+          }
         }
+        arena.getMapRestorerManager().fullyRestoreArena();
       }
-      arena.getMapRestorerManager().fullyRestoreArena();
     }
-    userManager.getDatabase().disable();
-    if(configPreferences.getOption("HOLOGRAMS")) {
+    if(userManager != null) {
+      userManager.getDatabase().disable();
+    }
+    if(configPreferences != null && leaderboardRegistry != null && configPreferences.getOption("LEADERBOARDS")) {
       leaderboardRegistry.disableHolograms();
     }
-    for(ArmorStand armorStand : hologramManager.getArmorStands()) {
-      armorStand.remove();
-      armorStand.setCustomNameVisible(false);
+    if(hologramManager != null) {
+      for(ArmorStand armorStand : hologramManager.getArmorStands()) {
+        armorStand.remove();
+        armorStand.setCustomNameVisible(false);
+      }
+      hologramManager.getArmorStands().clear();
     }
-    hologramManager.getArmorStands().clear();
     debugger.debug(pluginMessagePrefix + "System disable finished took {0}ms", System.currentTimeMillis() - start);
   }
 
@@ -527,4 +530,5 @@ public class PluginMain extends JavaPlugin {
   public SpectatorItemsManager getSpectatorItemsManager() {
     return spectatorItemsManager;
   }
+
 }

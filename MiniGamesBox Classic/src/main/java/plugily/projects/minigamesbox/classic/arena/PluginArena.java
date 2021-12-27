@@ -130,7 +130,6 @@ public class PluginArena extends BukkitRunnable {
 
   public PluginArena(String id) {
     this.id = id == null ? "" : id;
-    bossbarManager = new BossbarManager(this);
     scoreboardManager = new PluginScoreboardManager(this);
     mapRestorerManager = new PluginMapRestorerManager(this);
     setDefaultValues();
@@ -142,6 +141,7 @@ public class PluginArena extends BukkitRunnable {
     for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
+    bossbarManager = new BossbarManager(this);
   }
 
   public void removeGameStateHandler(ArenaState arenaState) {

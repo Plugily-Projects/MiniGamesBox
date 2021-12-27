@@ -43,7 +43,7 @@ public class Debugger {
 
   public Debugger(PluginMain plugin, boolean enable) {
     logger = Logger.getLogger(plugin.getName());
-    debuggerPrefix = "[" + plugin.getDescription().getName() + " Debug] ";
+    debuggerPrefix = "[Debug] ";
     enabled = enable;
   }
 
@@ -83,7 +83,7 @@ public class Debugger {
     if(!enabled && (level != Level.WARNING || level != Level.SEVERE)) {
       return;
     }
-    logger.log(level, debuggerPrefix + msg);
+    logger.log(level, debuggerPrefix + ChatColor.translateAlternateColorCodes('&', msg));
   }
 
   public void debug(String msg, Object... params) {

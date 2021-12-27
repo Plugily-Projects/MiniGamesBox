@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.utils.services.locale;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 
@@ -43,10 +43,10 @@ import java.util.regex.Pattern;
  */
 public class LocaleService {
 
-  private JavaPlugin plugin;
+  private PluginMain plugin;
   private FileConfiguration localeData;
 
-  public LocaleService(JavaPlugin plugin) {
+  public LocaleService(PluginMain plugin) {
     if(ServiceRegistry.getRegisteredService() == null || !ServiceRegistry.getRegisteredService().equals(plugin)) {
       throw new IllegalArgumentException("LocaleService cannot be used without registering service via ServiceRegistry first!");
     }
@@ -60,16 +60,16 @@ public class LocaleService {
       if(!file.exists()) {
         new File(plugin.getDataFolder().getPath() + "/locales").mkdir();
         if(!file.createNewFile()) {
-          plugin.getLogger().log(Level.WARNING, "Couldn't create locales folder! We must disable locales support.");
+          plugin.getDebugger().debug(Level.WARNING, "Couldn't create locales folder! We must disable locales support.");
           return;
         }
       }
       Files.write(file.toPath(), data.getBytes());
       localeData = ConfigUtils.getConfig(plugin, "/locales/locale_data");
-      plugin.getLogger().log(Level.INFO, "Fetched latest localization file from repository.");
+      plugin.getDebugger().debug(Level.WARNING, "Fetched latest localization file from repository.");
     } catch(IOException ignored) {
       //ignore exceptions
-      plugin.getLogger().log(Level.WARNING, "Couldn't access locale fetcher service or there is other problem! You should notify author!");
+      plugin.getDebugger().debug(Level.WARNING, "Couldn't access locale fetcher service or there is other problem! You should notify author!");
     }
   }
 
@@ -85,10 +85,10 @@ public class LocaleService {
 
   private InputStream requestLocaleFetch(Locale locale) {
     try {
-      URL url = new URL("https://api.plugily.xyz/locale/v2/fetch.php");
+      URL url = new URL("https://api.plugily.xyz/locale/v3/fetch.php");
       HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
       conn.setRequestMethod("POST");
-      conn.setRequestProperty("User-Agent", "PLLocale/1.0");
+      conn.setRequestProperty("User-Agent", "PlugilyProjectsLocale/1.0");
       conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
       conn.setRequestProperty("Accept-Charset", "UTF-8");
       conn.setDoOutput(true);
@@ -103,7 +103,7 @@ public class LocaleService {
       os.close();
       return conn.getInputStream();
     } catch(IOException e) {
-      plugin.getLogger().log(Level.SEVERE, "Could not fetch locale from plugily.xyz api! Cause: {0} ({1})", new Object[]{e.getCause(), e.getMessage()});
+      plugin.getDebugger().debug(Level.SEVERE, "Could not fetch locale from plugily.xyz api! Cause: {0} ({1})", new Object[]{e.getCause(), e.getMessage()});
       return new InputStream() {
         @Override
         public int read() {
@@ -135,12 +135,12 @@ public class LocaleService {
   private DownloadStatus writeFile(Locale locale) {
     try(Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
-      try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(new File(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml")), StandardCharsets.UTF_8)) {
+      try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml"), StandardCharsets.UTF_8)) {
         writer.write(data);
       }
       return DownloadStatus.SUCCESS;
     } catch(IOException ignored) {
-      plugin.getLogger().log(Level.WARNING, "Demanded locale " + locale.getPrefix() + " cannot be downloaded! You should notify author!");
+      plugin.getDebugger().debug(Level.WARNING, "Demanded locale " + locale.getPrefix() + " cannot be downloaded! You should notify author!");
       return DownloadStatus.FAIL;
     }
   }
@@ -155,6 +155,7 @@ public class LocaleService {
     if(localeData == null) {
       return false;
     }
+    plugin.getDebugger().debug("Version check on language api: Plugin: {0} Locale: {1}", plugin.getDescription().getVersion(), localeData.getString("locales.valid-version", plugin.getDescription().getVersion()));
     return !checkHigher(plugin.getDescription().getVersion(), localeData.getString("locales.valid-version", plugin.getDescription().getVersion()));
   }
 

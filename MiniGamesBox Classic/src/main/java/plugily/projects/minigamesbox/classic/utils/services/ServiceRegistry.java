@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.utils.services;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.services.locale.LocaleService;
 import plugily.projects.minigamesbox.classic.utils.services.metrics.MetricsService;
 
@@ -37,12 +38,12 @@ import java.util.logging.Level;
  */
 public class ServiceRegistry {
 
-  private static JavaPlugin registeredService;
+  private static PluginMain registeredService;
   private static boolean serviceEnabled;
   private static long serviceCooldown = 0;
   private static LocaleService localeService;
 
-  public static boolean registerService(JavaPlugin plugin) {
+  public static boolean registerService(PluginMain plugin) {
     if(registeredService != null && registeredService.equals(plugin)) {
       return false;
     }

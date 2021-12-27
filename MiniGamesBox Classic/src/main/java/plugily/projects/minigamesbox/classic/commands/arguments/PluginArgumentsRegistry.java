@@ -111,7 +111,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new ListArenasArgument(this);
     spyChat = new SpyChatArgument(this);
     new TeleportArgument(this);
-    if(plugin.getConfigPreferences().getOption("HOLOGRAMS")) {
+    if(plugin.getConfigPreferences().getOption("LEADERBOARDS")) {
       new HologramArgument(this);
     }
   }

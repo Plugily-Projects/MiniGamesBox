@@ -101,11 +101,9 @@ Powerups: false
 Kits: false
 
 
-# The plugin will be able to spawn holograms with armorstands! (no additional plugin required!)
-Hologram: true
-
 # Should we create leaderboards out of the stats?
 Leaderboard: true
+
 
 Parties:
   # Should we try to hook into your current party plugin? (Supports well know party plugins, see wiki!)
@@ -115,6 +113,7 @@ Parties:
   # Check the wiki for commands
   Own: false
 
+
 Damage:
   # Should players get fall damage?
   Fall: false
@@ -122,6 +121,7 @@ Damage:
   Drowning: false
   # Should players get fire damage?
   Fire: false
+
 
 Cycle:
   # Should we make permanent clear weather on all worlds where our arenas are?
@@ -140,6 +140,7 @@ Time-Manager:
   Ending: 10
   Restarting: 5
 
+
 Update-Notifier:
   # Should we check for updates on plugin start/after admin join?
   # You REALLY should have this true!
@@ -147,6 +148,7 @@ Update-Notifier:
   # Should we inform you when beta version is out?
   # BETA IS NOT ALWAYS AS STABLE AS NORMAL RELEASE!
   Notify-Beta-Versions: true
+
 
 # Don't edit it. But who's stopping you? It's your server!
 # Really, don't edit ;p

@@ -29,6 +29,7 @@ import plugily.projects.minigamesbox.classic.utils.migrator.MigratorUtils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 /*
   NOTE FOR CONTRIBUTORS - Please do not touch this class if you don't now how it works! You can break migrator modyfing these values!
@@ -69,7 +70,7 @@ public class LanguageMigrator {
       return;
     }
 
-    plugin.getDebugger().sendConsoleMsg("&eSystem notify >> Your config file is outdated! Updating...");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] >> Your config file is outdated! Updating...");
     File file = new File(plugin.getDataFolder() + "/config.yml");
     File bungeefile = new File(plugin.getDataFolder() + "/bungee.yml");
     File kitsfile = new File(plugin.getDataFolder() + "/kits.yml");
@@ -86,8 +87,8 @@ public class LanguageMigrator {
     }
     updateConfigVersionControl(version);
     plugin.reloadConfig();
-    plugin.getDebugger().sendConsoleMsg("&a[System notify] Config updated, no comments were removed :)");
-    plugin.getDebugger().sendConsoleMsg("&a[System notify] You're using latest config file version! Nice!");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] Config updated, no comments were removed :)");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] You're using latest config file version! Nice!");
   }
 
   private void languageFileUpdate() {
@@ -95,13 +96,13 @@ public class LanguageMigrator {
     if(config.getString("File-Version-Do-Not-Edit", "").equals(Integer.toString(LANGUAGE_FILE_VERSION))) {
       return;
     }
-    plugin.getDebugger().sendConsoleMsg("&e[System notify] Your language file is outdated! Updating...");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] Your language file is outdated! Updating...");
 
     int version = LANGUAGE_FILE_VERSION - 1;
     if(NumberUtils.isNumber(config.getString("File-Version-Do-Not-Edit"))) {
       version = Integer.parseInt(config.getString("File-Version-Do-Not-Edit", ""));
     } else {
-      plugin.getDebugger().sendConsoleMsg("&c[System notify] Failed to parse language file version!");
+      plugin.getDebugger().debug(Level.WARNING, "[System notify] Failed to parse language file version!");
     }
     updateLanguageVersionControl(version);
 
@@ -116,26 +117,26 @@ public class LanguageMigrator {
       }
       version++;
     }
-    plugin.getDebugger().sendConsoleMsg("&a[System notify] Language file updated! Nice!");
-    plugin.getDebugger().sendConsoleMsg("&a[System notify] You're using latest language file version! Nice!");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] Language file updated! Nice!");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] You're using latest language file version! Nice!");
   }
 
   private void migrateToNewFormat() {
     plugin.getMessageUtils().gonnaMigrate();
-    plugin.getDebugger().sendConsoleMsg("&aMigrating all files to the new file format...");
-    plugin.getDebugger().sendConsoleMsg("&aDon't worry! Old files will be renamed not overridden!");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] &aMigrating all files to the new file format...");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] &aDon't worry! Old files will be renamed not overridden!");
     for(String fileName : migratable) {
       File file = new File(plugin.getDataFolder() + "/" + fileName + ".yml");
       if(!file.exists()) {
         continue;
       }
       if(file.renameTo(new File(plugin.getDataFolder(), plugin.getDataFolder() + plugin.getPluginNamePrefix() + "2_" + file + ".yml"))) {
-        plugin.getDebugger().sendConsoleMsg("&aRenamed file " + file + ".yml");
+        plugin.getDebugger().debug(Level.WARNING, "[System notify] &aRenamed file " + file + ".yml");
         continue;
       }
-      plugin.getDebugger().sendConsoleMsg("&cCouldn't rename file " + file + ".yml. Problems might occur!");
+      plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't rename file " + file + ".yml. Problems might occur!");
     }
-    plugin.getDebugger().sendConsoleMsg("&aDone! Enabling Plugin...");
+    plugin.getDebugger().debug(Level.WARNING, "[System notify] &aDone! Enabling Plugin...");
   }
 
   private void updateLanguageVersionControl(int oldVersion) {

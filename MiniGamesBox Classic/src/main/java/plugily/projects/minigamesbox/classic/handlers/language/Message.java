@@ -63,7 +63,7 @@ public class Message {
     messages.put("COMMANDS_NOT_PLAYING", new Message("Commands.Not-Playing", "", true));
     messages.put("COMMANDS_NO_PERMISSION", new Message("Commands.No-Permission", "", true));
     messages.put("COMMANDS_PLAYER_NOT_FOUND", new Message("Commands.Player-Not-Found", "", true));
-    messages.put("COMMANDS_INVALID_LOCATION_TELEPORT", new Message("Commands.Location-Teleport-Invalid", "", true));
+    messages.put("COMMANDS_INVALID_LOCATION_TELEPORT", new Message("Commands.Invalid-Location-Teleport", "", true));
     messages.put("COMMANDS_WRONG_USAGE", new Message("Commands.Wrong-Usage", "", true));
     // commands.admin
     messages.put("COMMANDS_ADMIN_ADDED_LEVEL", new Message("Commands.Admin.Added-Level", "", true));
@@ -71,12 +71,12 @@ public class Message {
     messages.put("COMMANDS_ADMIN_LIST_HEADER", new Message("Commands.Admin.List.Header", "", true));
     messages.put("COMMANDS_ADMIN_LIST_FORMAT", new Message("Commands.Admin.List.Format", "", true));
     messages.put("COMMANDS_ADMIN_LIST_NO_ARENAS", new Message("Commands.Admin.List.No-Arenas", "", true));
-    messages.put("COMMANDS_ADMIN_SPYCHAT_TOGGLE", new Message("Commands.Admin.Spyhcat.Toggled", "", true));
+    messages.put("COMMANDS_ADMIN_SPYCHAT_TOGGLE", new Message("Commands.Admin.Spychat.Toggled", "", true));
     // commands.main
-    messages.put("COMMANDS_MAIN_HEADER", new Message("Commands.Stats.Main.Header", "", true));
-    messages.put("COMMANDS_MAIN_DESCRIPTION", new Message("Commands.Stats.Main.Description", "", true));
-    messages.put("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION", new Message("Commands.Stats.Main.Admin-Bonus-Description", "", true));
-    messages.put("COMMANDS_MAIN_FOOTER", new Message("Commands.Stats.Main.Footer", "", true));
+    messages.put("COMMANDS_MAIN_HEADER", new Message("Commands.Main.Header", "", true));
+    messages.put("COMMANDS_MAIN_DESCRIPTION", new Message("Commands.Main.Description", "", true));
+    messages.put("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION", new Message("Commands.Main.Admin-Bonus-Description", "", true));
+    messages.put("COMMANDS_MAIN_FOOTER", new Message("Commands.Main.Footer", "", true));
 
     // scoreboard (scoreboard.content gets by arena state)
     messages.put("SCOREBOARD_TITLE", new Message("Scoreboard.Title", "", true));
@@ -127,9 +127,9 @@ public class Message {
     messages.put("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM", new Message("In-Game.Messages.Lobby.You-Were-Kicked-For-Premium-Slot", "", true));
     messages.put("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY", new Message("In-Game.Messages.Lobby.Not-Enough-Space-For-Party", "", true));
     // in-game.messages.game-end
-    messages.put("IN_GAME_MESSAGES_GAME_END_SUMMARY", new Message("In-Game.Messages.Lobby.Game-End.Summary", "", true));
-    messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_WIN", new Message("In-Game.Messages.Lobby.Game-End.Placeholders.Win", "", true));
-    messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_LOSE", new Message("In-Game.Messages.Lobby.Game-End.Placeholders.Lose", "", true));
+    messages.put("IN_GAME_MESSAGES_GAME_END_SUMMARY", new Message("In-Game.Messages.Game-End.Summary", "", true));
+    messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_WIN", new Message("In-Game.Messages.Game-End.Placeholders.Win", "", true));
+    messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_LOSE", new Message("In-Game.Messages.Game-End.Placeholders.Lose", "", true));
     // in-game.messages.admin
     messages.put("IN_GAME_MESSAGES_ADMIN_FORCESTART", new Message("In-Game.Messages.Admin.Set-Starting-In-To-0", "", true));
     // Signs messages
@@ -195,7 +195,7 @@ public class Message {
     messages.put("FILE_VERSION", new Message("Do-Not-Edit.File-Version", "", true));
     messages.put("CORE_VERSION", new Message("Do-Not-Edit.Core-Version", "", true));
     //empty one
-    messages.put("", new Message("", "", true));
+    // messages.put("", new Message("", "", true));
   }
 
   private final String path;

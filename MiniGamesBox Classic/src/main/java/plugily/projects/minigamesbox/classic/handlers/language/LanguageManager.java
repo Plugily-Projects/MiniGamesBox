@@ -81,12 +81,14 @@ public class LanguageManager {
       if(languageConfig.isSet(message.getPath())) {
         continue;
       }
-      plugin.getDebugger().sendConsoleMsg("&cLanguage file integrity check failed! Message "
+      plugin.getDebugger().debug(Level.WARNING, "&cLanguage file integrity check failed! Message "
           + message.getPath() + " not found! It will be set to default value of ERR_MSG_" + message.getPath() + "_NOT_FOUND");
       languageConfig.set(message.getPath(), "ERR_MSG_" + message.getPath() + "_NOT_FOUND");
       messagesIntegrityPassed = false;
     }
+    plugin.getDebugger().debug("Message integrity passed for language.yml!");
     if(!messagesIntegrityPassed) {
+      plugin.getDebugger().debug("Saving language.yml with integrity messages!");
       ConfigUtils.saveConfig(plugin, languageConfig, "language");
     }
   }
@@ -97,32 +99,32 @@ public class LanguageManager {
     }
     LocaleService service = ServiceRegistry.getLocaleService(plugin);
     if(service == null) {
-      plugin.getDebugger().sendConsoleMsg("&cLocales cannot be downloaded because API website is unreachable, locales will be disabled.");
+      plugin.getDebugger().debug(Level.WARNING, "&cLocales cannot be downloaded because API website is unreachable, locales will be disabled.");
       pluginLocale = LocaleRegistry.getByName("English");
       return;
     }
     if(service.isValidVersion()) {
+      plugin.getDebugger().debug("LocaleService got valid version!");
       LocaleService.DownloadStatus status = service.demandLocaleDownload(pluginLocale);
       if(status == LocaleService.DownloadStatus.FAIL) {
         pluginLocale = LocaleRegistry.getByName("English");
-        plugin.getDebugger().sendConsoleMsg("&cLocale service couldn't download latest locale for plugin! English locale will be used instead!");
+        plugin.getDebugger().debug(Level.WARNING, "&cLocale service couldn't download latest locale for plugin! English locale will be used instead!");
         return;
       } else if(status == LocaleService.DownloadStatus.SUCCESS) {
-        plugin.getDebugger().sendConsoleMsg("&aDownloaded locale " + pluginLocale.getPrefix() + " properly!");
+        plugin.getDebugger().debug(Level.WARNING, "&aDownloaded locale " + pluginLocale.getPrefix() + " properly!");
       } else if(status == LocaleService.DownloadStatus.LATEST) {
-        plugin.getDebugger().sendConsoleMsg("&aLocale " + pluginLocale.getPrefix() + " is latest! Awesome!");
+        plugin.getDebugger().debug(Level.WARNING, "&aLocale " + pluginLocale.getPrefix() + " is latest! Awesome!");
       }
     } else {
       pluginLocale = LocaleRegistry.getByName("English");
-      plugin.getDebugger().sendConsoleMsg("&cYour plugin version is too old to use latest locale! Please update plugin to access latest updates of locale!");
+      plugin.getDebugger().debug(Level.WARNING, "&cYour plugin version is too old to use latest locale! Please update plugin to access latest updates of locale!");
       return;
     }
-
     File file = new File(plugin.getDataFolder() + "/locales/"
         + pluginLocale.getPrefix() + ".yml");
     if(!file.exists()) {
-      plugin.getLogger().log(Level.WARNING, "Failed to load localization file for locale " + pluginLocale.getPrefix() + "! Using English instead");
-      plugin.getLogger().log(Level.WARNING, "Cause: " + "File does not exists");
+      plugin.getDebugger().debug(Level.WARNING, "Failed to load localization file for locale " + pluginLocale.getPrefix() + "! Using English instead");
+      plugin.getDebugger().debug(Level.WARNING, "Cause: " + "File does not exists");
       pluginLocale = LocaleRegistry.getByName("English");
       return;
     }
@@ -131,8 +133,8 @@ public class LanguageManager {
     try {
       config.load(file);
     } catch(InvalidConfigurationException | IOException ex) {
-      plugin.getLogger().log(Level.WARNING, "Failed to load localization file for locale " + pluginLocale.getPrefix() + "! Using English instead");
-      plugin.getLogger().log(Level.WARNING, "Cause: " + ex.getMessage());
+      plugin.getDebugger().debug(Level.WARNING, "Failed to load localization file for locale " + pluginLocale.getPrefix() + "! Using English instead");
+      plugin.getDebugger().debug(Level.WARNING, "Cause: " + ex.getMessage());
       pluginLocale = LocaleRegistry.getByName("English");
       return;
     }
@@ -154,16 +156,16 @@ public class LanguageManager {
       }
     }
     if(pluginLocale == null) {
-      plugin.getDebugger().sendConsoleMsg("&cPlugin locale is invalid! Using default one...");
+      plugin.getDebugger().debug(Level.WARNING, "&cPlugin locale is invalid! Using default one...");
       pluginLocale = LocaleRegistry.getByName("English");
     }
     /* is beta release */
     if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("pre")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
-      plugin.getDebugger().sendConsoleMsg("&cLocales aren't supported in beta versions because they're lacking latest translations! Enabling English one...");
+      plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in beta versions because they're lacking latest translations! Enabling English one...");
       pluginLocale = LocaleRegistry.getByName("English");
       return;
     }
-    plugin.getDebugger().sendConsoleMsg("&aLoaded locale " + pluginLocale.getName() + " (" + pluginLocale.getOriginalName() + " ID: "
+    plugin.getDebugger().debug(Level.WARNING, "&aLoaded locale " + pluginLocale.getName() + " (" + pluginLocale.getOriginalName() + " ID: "
         + pluginLocale.getPrefix() + ") by " + pluginLocale.getAuthor());
     loadLocaleFile();
   }
@@ -218,9 +220,9 @@ public class LanguageManager {
 
   private List<String> getStrings(String path) {
     if(!languageConfig.isSet(path)) {
-      plugin.getDebugger().sendConsoleMsg("&cGame message not found in your locale!");
-      plugin.getDebugger().sendConsoleMsg("&cPlease regenerate your language.yml file! If error still occurs report it to the developer on discord!");
-      plugin.getDebugger().sendConsoleMsg("&cPath: " + path);
+      plugin.getDebugger().debug(Level.WARNING, "&cGame message not found in your locale!");
+      plugin.getDebugger().debug(Level.WARNING, "&cPlease regenerate your language.yml file! If error still occurs report it to the developer on discord!");
+      plugin.getDebugger().debug(Level.WARNING, "&cPath: " + path);
       return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
     }
     return languageConfig.getStringList(path).stream().map(string -> plugin.getChatManager().colorRawMessage(string)).collect(Collectors.toList());
@@ -229,9 +231,9 @@ public class LanguageManager {
 
   private String getString(String path) {
     if(!languageConfig.isSet(path)) {
-      plugin.getDebugger().sendConsoleMsg("&cGame message not found in your locale!");
-      plugin.getDebugger().sendConsoleMsg("&cPlease regenerate your language.yml file! If error still occurs report it to the developer on discord!");
-      plugin.getDebugger().sendConsoleMsg("&cPath: " + path);
+      plugin.getDebugger().debug(Level.WARNING, "&cGame message not found in your locale!");
+      plugin.getDebugger().debug(Level.WARNING, "&cPlease regenerate your language.yml file! If error still occurs report it to the developer on discord!");
+      plugin.getDebugger().debug(Level.WARNING, "&cPath: " + path);
       return "ERR_MESSAGE_" + path + "_NOT_FOUND";
     }
     return languageConfig.getString(path, "not found");

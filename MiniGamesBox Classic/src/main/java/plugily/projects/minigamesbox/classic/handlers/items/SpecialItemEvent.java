@@ -32,8 +32,6 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerSwapHandItemsEvent;
 
-import static plugily.projects.minigamesbox.classic.handlers.items.SpecialItem.INVALID_ITEM;
-
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -57,7 +55,7 @@ public class SpecialItemEvent implements Listener {
       return false;
     }
     SpecialItem key = plugin.getSpecialItemManager().getRelatedSpecialItem(itemStack);
-    return key != INVALID_ITEM;
+    return key != plugin.getSpecialItemManager().getInvalidItem();
   }
 
   @EventHandler
@@ -84,7 +82,7 @@ public class SpecialItemEvent implements Listener {
     }
 
     SpecialItem relatedSpecialItem = plugin.getSpecialItemManager().getRelatedSpecialItem(itemStack);
-    if(relatedSpecialItem == INVALID_ITEM) {
+    if(relatedSpecialItem == plugin.getSpecialItemManager().getInvalidItem()) {
       return;
     }
     if(relatedSpecialItem.getPermission() != null && !relatedSpecialItem.getPermission().equalsIgnoreCase("")) {

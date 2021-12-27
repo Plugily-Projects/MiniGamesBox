@@ -42,6 +42,7 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -59,7 +60,7 @@ public class SpectatorSettingsMenu implements Listener {
   private final PluginMain plugin;
   private final FastInv inventory;
   private final FileConfiguration config;
-  public List<SpectatorSettingsItem> settingsItems;
+  public List<SpectatorSettingsItem> settingsItems = new ArrayList<>();
   public List<Player> autoTeleport;
   public Map<Player, Player> targetPlayer = new HashMap<>();
   public List<Player> invisibleSpectators;

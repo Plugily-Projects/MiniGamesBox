@@ -51,6 +51,9 @@ public class SpecialItemManager {
   private final FileConfiguration config;
   private final PluginMain plugin;
 
+  public final SpecialItem INVALID_ITEM = new SpecialItem("INVALID", new ItemStack(Material.BEDROCK), -1, SpecialItem.DisplayStage.LOBBY, null);
+
+
   public SpecialItemManager(PluginMain plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "special_items");
@@ -60,12 +63,12 @@ public class SpecialItemManager {
 
   private void loadSpecialItems() {
     SpecialItem.getSpecialItems().forEach((key, specialItem) -> {
-      if(!"Version".equals(specialItem.getPath())) {
+      if(!"Do-Not-Edit".startsWith(specialItem.getPath())) {
         addItem(key, specialItem.getPath());
       }
     });
     for(String key : config.getKeys(false)) {
-      if("Version".equals(key)) {
+      if("Do-Not-Edit".startsWith(key)) {
         continue;
       }
       if(specialItems.containsKey(key)) {
@@ -106,7 +109,7 @@ public class SpecialItemManager {
    */
   public ItemStack getSpecialItemStack(String key) {
     if(!specialItems.containsKey(key)) {
-      return SpecialItem.INVALID_ITEM.getItemStack();
+      return getInvalidItem().getItemStack();
     }
     return specialItems.get(key).getItemStack();
   }
@@ -120,7 +123,7 @@ public class SpecialItemManager {
   @NotNull
   public SpecialItem getSpecialItem(String key) {
     if(!specialItems.containsKey(key)) {
-      return SpecialItem.INVALID_ITEM;
+      return getInvalidItem();
     }
     return specialItems.get(key);
   }
@@ -198,8 +201,10 @@ public class SpecialItemManager {
         return item;
       }
     }
-    return SpecialItem.INVALID_ITEM;
+    return getInvalidItem();
   }
 
-
+  public SpecialItem getInvalidItem() {
+    return INVALID_ITEM;
+  }
 }

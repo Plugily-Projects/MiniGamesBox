@@ -38,7 +38,6 @@ public class SpectatorSettingsItem {
   private final String permission;
   private final Set<Reward> rewards;
   private final Type type;
-  public static final SpectatorSettingsItem INVALID_ITEM = new SpectatorSettingsItem(new ItemBuilder(new ItemStack(Material.BEDROCK)).name("INVALID").build(), -1);
 
   public SpectatorSettingsItem(ItemStack itemStack, int slot, String permission, Set<Reward> rewards, Type type) {
     this.itemStack = itemStack;

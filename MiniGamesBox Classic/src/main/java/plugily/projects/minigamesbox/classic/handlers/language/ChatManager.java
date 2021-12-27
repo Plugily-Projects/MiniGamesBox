@@ -76,6 +76,7 @@ public class ChatManager {
   }
 
   public String colorRawMessage(String message) {
+    plugin.getDebugger().debug("Coloring - {0}", message);
     if(message == null || message.isEmpty()) {
       return "";
     }
@@ -122,7 +123,7 @@ public class ChatManager {
 
   public String formatMessage(String message) {
     String returnString = message;
-    returnString = colorRawMessage(formatPlaceholders(returnString));
+    returnString = formatPlaceholders(returnString);
     if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       returnString = PlaceholderAPI.setPlaceholders(null, returnString);
     }

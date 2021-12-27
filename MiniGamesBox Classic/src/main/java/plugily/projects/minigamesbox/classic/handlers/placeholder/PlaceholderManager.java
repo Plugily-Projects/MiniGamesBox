@@ -20,6 +20,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.placeholder;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
@@ -41,7 +42,10 @@ public class PlaceholderManager {
 
   public PlaceholderManager(PluginMain plugin) {
     this.plugin = plugin;
-    new PAPIPlaceholders(plugin);
+    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+      plugin.getDebugger().debug(plugin.getPluginMessagePrefix() + "Hooking into PlaceholderAPI");
+      new PAPIPlaceholders(plugin);
+    }
     insertDefaultPlaceholders();
   }
 

@@ -44,7 +44,7 @@ public class LeaderboardRegistry {
   }
 
   private void registerHolograms() {
-    FileConfiguration config = ConfigUtils.getConfig(plugin, "internal/holograms_data");
+    FileConfiguration config = ConfigUtils.getConfig(plugin, "internal/leaderboards_data");
     org.bukkit.configuration.ConfigurationSection section = config.getConfigurationSection("holograms");
     if(section == null) {
       return;
