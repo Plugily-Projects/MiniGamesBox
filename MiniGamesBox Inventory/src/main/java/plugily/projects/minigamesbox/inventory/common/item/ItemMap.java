@@ -9,7 +9,7 @@ import java.util.Map;
  * @author HSGamer
  */
 public class ItemMap {
-    private final Map<Integer, IClickableItem> items = new HashMap<>();
+    private final Map<Integer, ClickableItem> items = new HashMap<>();
 
     /**
      * Set the item for the given slot
@@ -17,7 +17,7 @@ public class ItemMap {
      * @param slot the slot
      * @param item the item
      */
-    public void setItem(int slot, IClickableItem item) {
+    public void setItem(int slot, ClickableItem item) {
         items.put(slot, item);
     }
 
@@ -27,7 +27,7 @@ public class ItemMap {
      * @param slot the slot
      * @return the item
      */
-    public IClickableItem getItem(int slot) {
+    public ClickableItem getItem(int slot) {
         return items.get(slot);
     }
 
@@ -36,7 +36,7 @@ public class ItemMap {
      *
      * @return the slot map
      */
-    public Map<Integer, IClickableItem> getItems() {
+    public Map<Integer, ClickableItem> getItems() {
         return items;
     }
 }

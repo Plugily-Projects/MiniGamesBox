@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  *
  * @author HSGamer
  */
-public interface IClickableItem {
+public interface ClickableItem {
     /**
      * Get the display item
      *

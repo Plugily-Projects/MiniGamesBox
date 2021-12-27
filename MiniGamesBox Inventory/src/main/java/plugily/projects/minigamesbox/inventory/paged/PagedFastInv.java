@@ -2,7 +2,7 @@ package plugily.projects.minigamesbox.inventory.paged;
 
 import org.bukkit.event.inventory.InventoryType;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
-import plugily.projects.minigamesbox.inventory.common.item.IClickableItem;
+import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 public class PagedFastInv extends RefreshableFastInv {
     private final List<ItemMap> pages = new ArrayList<>();
     private final AtomicInteger currentPage = new AtomicInteger(0);
-    private BiFunction<Integer, IClickableItem, IClickableItem> lastLineSequence = null;
+    private BiFunction<Integer, ClickableItem, ClickableItem> lastLineSequence = null;
 
     public PagedFastInv(int size) {
         super(size);
@@ -37,12 +37,12 @@ public class PagedFastInv extends RefreshableFastInv {
     }
 
     @Override
-    protected Map<Integer, IClickableItem> getClickableItemSlotMap() {
+    protected Map<Integer, ClickableItem> getClickableItemSlotMap() {
         int page = getCurrentPage();
         if (page < 0) {
             return Collections.emptyMap();
         }
-        Map<Integer, IClickableItem> map = new HashMap<>(getPage(page).getItems());
+        Map<Integer, ClickableItem> map = new HashMap<>(getPage(page).getItems());
         if (lastLineSequence != null) {
             int inventorySize = getInventory().getSize();
             int startSlot = inventorySize - 9;
@@ -152,7 +152,7 @@ public class PagedFastInv extends RefreshableFastInv {
      *
      * @param lastLineSequence the last line sequence, gives the hotbar slot (0-8) and the item of the slot and returns the item to add
      */
-    public void setLastLineSequence(BiFunction<Integer, IClickableItem, IClickableItem> lastLineSequence) {
+    public void setLastLineSequence(BiFunction<Integer, ClickableItem, ClickableItem> lastLineSequence) {
         this.lastLineSequence = lastLineSequence;
     }
 }

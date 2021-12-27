@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * A simple clickable item contains a {@link ItemStack} and a {@link Consumer}
  */
-public class SimpleClickableItem implements IClickableItem {
+public class SimpleClickableItem implements ClickableItem {
     private final ItemStack item;
     private final Consumer<InventoryClickEvent> clickConsumer;
 

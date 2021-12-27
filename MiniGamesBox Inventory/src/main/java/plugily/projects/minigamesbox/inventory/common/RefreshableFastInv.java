@@ -3,7 +3,7 @@ package plugily.projects.minigamesbox.inventory.common;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import plugily.projects.minigamesbox.inventory.common.item.IClickableItem;
+import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,9 @@ public abstract class RefreshableFastInv extends FastInv {
     protected final List<Integer> borderSlots = new ArrayList<>();
     protected final List<Integer> cornerSlots = new ArrayList<>();
     protected boolean isForceRefresh = false;
-    protected IClickableItem borderItem = null;
-    protected IClickableItem cornerItem = null;
-    protected IClickableItem defaultItem = null;
+    protected ClickableItem borderItem = null;
+    protected ClickableItem cornerItem = null;
+    protected ClickableItem defaultItem = null;
 
     public RefreshableFastInv(int size) {
         super(size);
@@ -56,19 +56,19 @@ public abstract class RefreshableFastInv extends FastInv {
      *
      * @return the item slot map
      */
-    protected abstract Map<Integer, IClickableItem> getClickableItemSlotMap();
+    protected abstract Map<Integer, ClickableItem> getClickableItemSlotMap();
 
     /**
      * Refresh the inventory.
      * Should be called when initializing and after changing the item slot map.
      */
     public void refresh() {
-        Map<Integer, IClickableItem> clickableItemSlotMap = getClickableItemSlotMap();
+        Map<Integer, ClickableItem> clickableItemSlotMap = getClickableItemSlotMap();
 
         int inventorySize = getInventory().getSize();
         for (int i = 0; i < inventorySize; i++) {
-            if (clickableItemSlotMap.containsKey(i)) {
-                IClickableItem clickableItem = clickableItemSlotMap.get(i);
+            ClickableItem clickableItem = clickableItemSlotMap.get(i);
+            if (clickableItem != null) {
                 setItem(i, clickableItem.getItem(), clickableItem.getClickConsumer());
             } else if (cornerItem != null && cornerSlots.contains(i)) {
                 setItem(i, cornerItem.getItem(), cornerItem.getClickConsumer());
@@ -106,7 +106,7 @@ public abstract class RefreshableFastInv extends FastInv {
      *
      * @param borderItem the border item
      */
-    public void setBorderItem(IClickableItem borderItem) {
+    public void setBorderItem(ClickableItem borderItem) {
         this.borderItem = borderItem;
     }
 
@@ -115,7 +115,7 @@ public abstract class RefreshableFastInv extends FastInv {
      *
      * @param cornerItem the corner item
      */
-    public void setCornerItem(IClickableItem cornerItem) {
+    public void setCornerItem(ClickableItem cornerItem) {
         this.cornerItem = cornerItem;
     }
 
@@ -124,7 +124,7 @@ public abstract class RefreshableFastInv extends FastInv {
      *
      * @param defaultItem the default item
      */
-    public void setDefaultItem(IClickableItem defaultItem) {
+    public void setDefaultItem(ClickableItem defaultItem) {
         this.defaultItem = defaultItem;
     }
 }
