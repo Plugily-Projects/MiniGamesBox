@@ -12,6 +12,28 @@ import java.util.function.Consumer;
  */
 public interface ClickableItem {
     /**
+     * Create a dummy clickable item, with no click consumer
+     *
+     * @param item the item
+     * @return the dummy clickable item
+     */
+    static ClickableItem of(ItemStack item) {
+        return new SimpleClickableItem(item, event -> {
+        });
+    }
+
+    /**
+     * Create a clickable item
+     *
+     * @param item          the item
+     * @param clickConsumer the click consumer
+     * @return the clickable item
+     */
+    static ClickableItem of(ItemStack item, Consumer<InventoryClickEvent> clickConsumer) {
+        return new SimpleClickableItem(item, clickConsumer);
+    }
+
+    /**
      * Get the display item
      *
      * @return the display item
