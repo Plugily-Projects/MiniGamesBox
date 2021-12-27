@@ -47,7 +47,10 @@ public class PagedFastInv extends RefreshableFastInv {
             int inventorySize = getInventory().getSize();
             int startSlot = inventorySize - 9;
             for (int slot = startSlot; slot < inventorySize; slot++) {
-                map.put(slot, lastLineSequence.apply(slot - startSlot, map.get(slot)));
+                ClickableItem item = lastLineSequence.apply(slot - startSlot, map.get(slot));
+                if (item != null) {
+                    map.put(slot, item);
+                }
             }
         }
         return map;
