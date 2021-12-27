@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A refreshable inventory
+ *
+ * @author HSGamer
+ */
 public abstract class RefreshableFastInv extends FastInv {
     protected final List<Integer> borderSlots = new ArrayList<>();
     protected final List<Integer> cornerSlots = new ArrayList<>();
@@ -46,8 +51,17 @@ public abstract class RefreshableFastInv extends FastInv {
         }
     }
 
+    /**
+     * Get the item slot map
+     *
+     * @return the item slot map
+     */
     protected abstract Map<Integer, IClickableItem> getClickableItemSlotMap();
 
+    /**
+     * Refresh the inventory.
+     * Should be called when initializing and after changing the item slot map.
+     */
     public void refresh() {
         Map<Integer, IClickableItem> clickableItemSlotMap = getClickableItemSlotMap();
 
@@ -75,5 +89,42 @@ public abstract class RefreshableFastInv extends FastInv {
                 }
             });
         }
+    }
+
+    /**
+     * Should the plugin force viewers to refresh their inventory?
+     * If set to false, the inventory will still be refreshed, but viewers will not be forced to refresh their inventory.
+     *
+     * @param forceRefresh true to force refresh
+     */
+    public void setForceRefresh(boolean forceRefresh) {
+        isForceRefresh = forceRefresh;
+    }
+
+    /**
+     * Set the border item. Set to null to disable.
+     *
+     * @param borderItem the border item
+     */
+    public void setBorderItem(IClickableItem borderItem) {
+        this.borderItem = borderItem;
+    }
+
+    /**
+     * Set the corner item. Set to null to disable.
+     *
+     * @param cornerItem the corner item
+     */
+    public void setCornerItem(IClickableItem cornerItem) {
+        this.cornerItem = cornerItem;
+    }
+
+    /**
+     * Set the default item. Set to null to disable.
+     *
+     * @param defaultItem the default item
+     */
+    public void setDefaultItem(IClickableItem defaultItem) {
+        this.defaultItem = defaultItem;
     }
 }
