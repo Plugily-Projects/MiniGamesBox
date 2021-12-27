@@ -10,7 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
 /**
- * A multi-paged inventory
+ * A multi-paged inventory.
+ * Register the plugin via {@link fr.mrmicky.fastinv.FastInvManager#register(org.bukkit.plugin.Plugin)} before creating any inventory.
  *
  * @author HSGamer
  */

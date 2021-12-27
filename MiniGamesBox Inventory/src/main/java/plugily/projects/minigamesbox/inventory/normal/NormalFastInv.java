@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * A normal, single-paged inventory.
+ * Register the plugin via {@link fr.mrmicky.fastinv.FastInvManager#register(org.bukkit.plugin.Plugin)} before creating any inventory.
  *
  * @author HSGamer
  */
