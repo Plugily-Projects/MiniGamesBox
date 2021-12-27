@@ -57,7 +57,8 @@ public class PagedFastInv extends RefreshableFastInv {
         if (pages.isEmpty()) {
             return -1;
         }
-        return page % getMaxPage();
+        int maxPage = getMaxPage();
+        return (page + maxPage) % maxPage;
     }
 
     /**
