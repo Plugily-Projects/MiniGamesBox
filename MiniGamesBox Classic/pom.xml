@@ -126,7 +126,7 @@
         <dependency>
             <groupId>plugily.projects</groupId>
             <artifactId>MiniGamesBox-Inventory</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -166,6 +166,10 @@
                         <relocation>
                             <pattern>me.tigerhix.lib.scoreboard</pattern>
                             <shadedPattern>plugily.projects.minigamesbox.classic.utils.scoreboard</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>fr.mrmicky.fastinv</pattern>
+                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.fastinv</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

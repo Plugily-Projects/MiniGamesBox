@@ -19,8 +19,8 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.components;
 
+import fr.mrmicky.fastinv.FastInv;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 /**
  * @author Tigerpanzer_02

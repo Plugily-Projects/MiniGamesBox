@@ -20,6 +20,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup;
 
+import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
@@ -30,7 +31,6 @@ import plugily.projects.minigamesbox.classic.handlers.setup.components.MiscCompo
 import plugily.projects.minigamesbox.classic.handlers.setup.components.PlayerAmountComponents;
 import plugily.projects.minigamesbox.classic.handlers.setup.components.SpawnComponents;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
-import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 import java.util.Random;
 
