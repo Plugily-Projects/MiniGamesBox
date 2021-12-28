@@ -46,6 +46,15 @@ public class NormalFastInv extends RefreshableFastInv {
     }
 
     /**
+     * Sets the default item.
+     *
+     * @param item the item to set
+     */
+    public void setDefaultItem(ClickableItem item) {
+        itemMap.setDefaultItem(item);
+    }
+
+    /**
      * Gets the item in the specified slot.
      *
      * @param slot the slot to get the item from
