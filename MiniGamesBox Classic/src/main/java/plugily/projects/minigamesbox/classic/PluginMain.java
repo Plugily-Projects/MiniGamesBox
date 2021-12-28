@@ -155,7 +155,7 @@ public class PluginMain extends JavaPlugin {
       return;
     }
 
-    debugger.debug("[System] Initialization start");
+    debugger.debug("[System] [Core] Initialization start");
     if(getDescription().getVersion().contains("debug") || getConfig().getBoolean("Developer-Mode")) {
       debugger.deepDebug(true);
       debugger.debug(Level.FINE, "Deep debug enabled");
@@ -199,7 +199,7 @@ public class PluginMain extends JavaPlugin {
     MiscUtils.sendStartUpMessage(this);
 
     //finished initial start
-    debugger.debug("[System] Initialization finished took {0}ms", System.currentTimeMillis() - start);
+    debugger.debug("[System] [Core] Initialization finished took {0}ms", System.currentTimeMillis() - start);
 
   }
 

@@ -26,7 +26,6 @@ import plugily.projects.minigamesbox.classic.kits.free.ExampleKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * @author Tigerpanzer_02
@@ -38,7 +37,6 @@ public class KitRegistry {
   private final List<Kit> kits = new java.util.ArrayList<>();
   private Kit defaultKit;
   private final PluginMain plugin;
-  private FileConfiguration config;
 
   //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
   public KitRegistry(PluginMain plugin) {
@@ -46,7 +44,6 @@ public class KitRegistry {
     if(!plugin.getConfig().getBoolean("Kits", false)) {
       return;
     }
-    config = ConfigUtils.getConfig(plugin, "kits");
     setDefaultKit(new ExampleKit());
   }
 
@@ -60,10 +57,12 @@ public class KitRegistry {
       plugin.getDebugger().debug("Kit " + kit.getName() + " can't be added as its already registered");
       return;
     }
-    if(config.getBoolean("Enabled-Game-Kits." + kit.getName())) {
+    FileConfiguration config = ConfigUtils.getConfig(plugin, "kits");
+    if(config.getBoolean("Enabled-Game-Kits." + kit.getName(), false)) {
       plugin.getDebugger().debug("Kit " + kit.getName() + " is disabled by kits.yml");
       return;
     }
+    plugin.getDebugger().debug("Registered {0} kit", kit.getName());
     kits.add(kit);
   }
 

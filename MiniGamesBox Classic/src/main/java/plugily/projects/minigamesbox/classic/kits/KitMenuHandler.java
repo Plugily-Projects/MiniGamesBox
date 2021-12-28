@@ -50,7 +50,7 @@ public class KitMenuHandler implements Listener {
 
   public KitMenuHandler(PluginMain plugin) {
     this.plugin = plugin;
-    this.kitItem = plugin.getSpecialItemManager().getSpecialItem("KIT_OPEN_MENU");
+    this.kitItem = plugin.getSpecialItemManager().getSpecialItem("KIT_SELECTOR_MENU");
     unlockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCKED");
     lockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_LOCKED");
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

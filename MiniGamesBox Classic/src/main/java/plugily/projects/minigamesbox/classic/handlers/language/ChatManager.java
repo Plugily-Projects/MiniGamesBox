@@ -76,7 +76,6 @@ public class ChatManager {
   }
 
   public String colorRawMessage(String message) {
-    plugin.getDebugger().debug("Coloring - {0}", message);
     if(message == null || message.isEmpty()) {
       return "";
     }

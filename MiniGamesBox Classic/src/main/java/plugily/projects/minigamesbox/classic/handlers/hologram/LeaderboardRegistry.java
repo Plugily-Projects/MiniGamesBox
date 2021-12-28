@@ -70,6 +70,9 @@ public class LeaderboardRegistry {
   }
 
   public void disableHologram(int id) {
+    if(leaderboardHolograms.isEmpty()) {
+      return;
+    }
     for(LeaderboardHologram hologram : leaderboardHolograms) {
       if(hologram.getId() == id) {
         hologram.cancel();
