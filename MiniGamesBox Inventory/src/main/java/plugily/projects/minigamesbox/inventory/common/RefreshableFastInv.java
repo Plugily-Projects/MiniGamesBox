@@ -4,6 +4,7 @@ import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
+import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,6 @@ public abstract class RefreshableFastInv extends FastInv {
     protected boolean isForceRefresh = false;
     protected ClickableItem borderItem = null;
     protected ClickableItem cornerItem = null;
-    protected ClickableItem defaultItem = null;
 
     public RefreshableFastInv(int size) {
         super(normalizeToChestSize(size));
@@ -59,18 +59,20 @@ public abstract class RefreshableFastInv extends FastInv {
     }
 
     /**
-     * Get the item slot map
+     * Get the item map
      *
-     * @return the item slot map
+     * @return the item map
      */
-    protected abstract Map<Integer, ClickableItem> getClickableItemSlotMap();
+    protected abstract ItemMap getItemMap();
 
     /**
      * Refresh the inventory.
      * Should be called when initializing and after changing the item slot map.
      */
     public void refresh() {
-        Map<Integer, ClickableItem> clickableItemSlotMap = getClickableItemSlotMap();
+        ItemMap itemMap = getItemMap();
+        Map<Integer, ClickableItem> clickableItemSlotMap = itemMap.getItems();
+        ClickableItem defaultItem = itemMap.getDefaultItem();
 
         int inventorySize = getInventory().getSize();
         for (int i = 0; i < inventorySize; i++) {
@@ -127,11 +129,11 @@ public abstract class RefreshableFastInv extends FastInv {
     }
 
     /**
-     * Set the default item. Set to null to disable.
+     * Get the number of slots in a line
      *
-     * @param defaultItem the default item
+     * @return the number of slots in a line
      */
-    public void setDefaultItem(ClickableItem defaultItem) {
-        this.defaultItem = defaultItem;
+    protected int getSlotsPerLine() {
+        return 9;
     }
 }

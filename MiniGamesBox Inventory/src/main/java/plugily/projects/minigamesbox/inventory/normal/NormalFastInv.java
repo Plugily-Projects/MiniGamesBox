@@ -5,8 +5,6 @@ import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
 
-import java.util.Map;
-
 /**
  * A normal, single-paged inventory.
  * Register the plugin via {@link fr.mrmicky.fastinv.FastInvManager#register(org.bukkit.plugin.Plugin)} before creating any inventory.
@@ -33,8 +31,8 @@ public class NormalFastInv extends RefreshableFastInv {
     }
 
     @Override
-    protected Map<Integer, ClickableItem> getClickableItemSlotMap() {
-        return itemMap.getItems();
+    public ItemMap getItemMap() {
+        return itemMap;
     }
 
     /**
@@ -55,14 +53,5 @@ public class NormalFastInv extends RefreshableFastInv {
      */
     public ClickableItem getItem(int slot) {
         return itemMap.getItem(slot);
-    }
-
-    /**
-     * Get the item map.
-     *
-     * @return the item map
-     */
-    public ItemMap getItemMap() {
-        return itemMap;
     }
 }

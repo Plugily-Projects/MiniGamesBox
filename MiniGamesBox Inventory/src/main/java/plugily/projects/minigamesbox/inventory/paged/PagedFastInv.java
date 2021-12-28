@@ -5,7 +5,8 @@ import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
@@ -37,23 +38,27 @@ public class PagedFastInv extends RefreshableFastInv {
     }
 
     @Override
-    protected Map<Integer, ClickableItem> getClickableItemSlotMap() {
+    protected ItemMap getItemMap() {
         int page = getCurrentPage();
         if (page < 0) {
-            return Collections.emptyMap();
+            return ItemMap.EMPTY;
         }
-        Map<Integer, ClickableItem> map = new HashMap<>(getPage(page).getItems());
-        if (lastLineSequence != null) {
-            int inventorySize = getInventory().getSize();
-            int startSlot = inventorySize - 9;
-            for (int slot = startSlot; slot < inventorySize; slot++) {
-                ClickableItem item = lastLineSequence.apply(slot - startSlot, map.get(slot));
-                if (item != null) {
-                    map.put(slot, item);
-                }
+        ItemMap map = getPage(page);
+        if (lastLineSequence == null) {
+            return map;
+        }
+
+        // Clone the map and apply the last line sequence
+        ItemMap cloneMap = new ItemMap(map);
+        int inventorySize = getInventory().getSize();
+        int startSlot = inventorySize - getSlotsPerLine();
+        for (int slot = startSlot; slot < inventorySize; slot++) {
+            ClickableItem item = lastLineSequence.apply(slot - startSlot, cloneMap.getItem(slot));
+            if (item != null) {
+                cloneMap.setItem(slot, item);
             }
         }
-        return map;
+        return cloneMap;
     }
 
     private int getActualPage(int page) {
