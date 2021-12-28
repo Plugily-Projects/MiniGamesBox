@@ -29,8 +29,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>MiniGamesBox Classic</module>
         <module>MiniGamesBox Inventory</module>
+        <module>MiniGamesBox Classic</module>
     </modules>
 
     <name>MiniGamesBox</name>

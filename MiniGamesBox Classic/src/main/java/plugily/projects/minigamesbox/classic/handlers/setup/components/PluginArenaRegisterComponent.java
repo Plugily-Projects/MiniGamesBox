@@ -21,6 +21,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.components;
 
 import com.cryptomorin.xseries.XMaterial;
+import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -35,7 +36,6 @@ import plugily.projects.minigamesbox.classic.handlers.sign.ArenaSign;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
-import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 import java.util.ArrayList;
 import java.util.List;

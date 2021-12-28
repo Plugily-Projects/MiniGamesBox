@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.events.spectator;
 
 import com.cryptomorin.xseries.XMaterial;
+import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,6 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.events.spectator.settings.SpectatorSettingsMenu;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 import java.util.Collections;
 

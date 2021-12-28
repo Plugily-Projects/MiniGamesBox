@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.events.spectator.settings;
 
 import com.cryptomorin.xseries.XMaterial;
+import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,7 +41,6 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
-import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 import java.util.ArrayList;
 import java.util.HashMap;

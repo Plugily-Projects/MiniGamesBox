@@ -20,6 +20,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.components;
 
+import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,7 +30,6 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
-import plugily.projects.minigamesbox.inventory.normal.FastInv;
 
 /**
  * @author Tigerpanzer_02

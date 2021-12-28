@@ -39,53 +39,16 @@
     </repositories>
 
     <dependencies>
-        <!-- imported
         <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastInv</artifactId>
             <version>3.0.3</version>
-            <optional>true</optional>
         </dependency>
-        -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
-            <version>2.0.1</version>
+            <version>3.0.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!--<relocations>
-                        <relocation>
-                             imported
-                            <pattern>fr.mrmicky.fastinv</pattern>
-                             Replace 'com.yourpackae' with the package of your plugin
-                            <shadedPattern>plugily.projects.minigamesbox.inventory.normal</shadedPattern>
-
-                        </relocation>
-                    </relocations>
-                    -->
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-
 </project>
