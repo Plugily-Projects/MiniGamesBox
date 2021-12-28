@@ -23,12 +23,12 @@ public abstract class RefreshableFastInv extends FastInv {
     protected ClickableItem defaultItem = null;
 
     public RefreshableFastInv(int size) {
-        super(size);
+        super(normalizeToChestSize(size));
         initSlots();
     }
 
     public RefreshableFastInv(int size, String title) {
-        super(size, title);
+        super(normalizeToChestSize(size), title);
         initSlots();
     }
 
@@ -40,6 +40,13 @@ public abstract class RefreshableFastInv extends FastInv {
     public RefreshableFastInv(InventoryType type, String title) {
         super(type, title);
         initSlots();
+    }
+
+    private static int normalizeToChestSize(int size) {
+        int remain = size % 9;
+        size -= remain;
+        size += remain > 0 ? 9 : 0;
+        return size;
     }
 
     private void initSlots() {
