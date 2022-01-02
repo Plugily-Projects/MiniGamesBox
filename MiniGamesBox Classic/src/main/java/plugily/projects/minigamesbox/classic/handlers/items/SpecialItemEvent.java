@@ -72,9 +72,6 @@ public class SpecialItemEvent implements Listener {
     }
     Player player = event.getPlayer();
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null) {
-      return;
-    }
 
     ItemStack itemStack = VersionUtils.getItemInHand(player);
     if(!ItemUtils.isItemStackNamed(itemStack)) {
@@ -85,19 +82,25 @@ public class SpecialItemEvent implements Listener {
     if(relatedSpecialItem == plugin.getSpecialItemManager().getInvalidItem()) {
       return;
     }
+    plugin.getDebugger().debug("Found the item " + relatedSpecialItem.getPath());
+    event.setCancelled(true);
     if(relatedSpecialItem.getPermission() != null && !relatedSpecialItem.getPermission().equalsIgnoreCase("")) {
       if(!plugin.getBukkitHelper().hasPermission(player, relatedSpecialItem.getPermission())) {
         return;
       }
     }
+    plugin.getDebugger().debug("SpecialItem {0} - Permission check for {1} true", relatedSpecialItem.getPath(), player.getName());
+
+    if(arena == null) {
+      plugin.getRewardsHandler().performReward(player, relatedSpecialItem.getRewards());
+      return;
+    }
     plugin.getRewardsHandler().performReward(player, arena, relatedSpecialItem.getRewards());
     if(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").equals(relatedSpecialItem)) {
-      event.setCancelled(true);
       PluginArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
       return;
     }
     if(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").equals(relatedSpecialItem) || plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").equals(relatedSpecialItem)) {
-      event.setCancelled(true);
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         plugin.getBungeeManager().connectToHub(player);
       } else {
@@ -106,12 +109,10 @@ public class SpecialItemEvent implements Listener {
       return;
     }
     if(plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").equals(relatedSpecialItem)) {
-      event.setCancelled(true);
       plugin.getSpectatorItemsManager().openSpectatorMenu(player, arena);
       return;
     }
     if(plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_SETTINGS").equals(relatedSpecialItem)) {
-      event.setCancelled(true);
       plugin.getSpectatorItemsManager().getSpectatorSettingsMenu().getInventory().open(player);
     }
   }

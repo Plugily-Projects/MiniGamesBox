@@ -44,16 +44,16 @@ public class StatsArgument {
         }
         User user = registry.getPlugin().getUserManager().getUser(player);
         if(player == sender) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_HEADER"));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER"));
         } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_HEADER_OTHER").replace("%player%", player.getName()));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER_OTHER").replace("%player%", player.getName()));
         }
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_GAMES_PLAYED") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("GAMES_PLAYED")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_LEVEL") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_EXP") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("XP")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_NEXT_LEVEL_EXP")
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_GAMES_PLAYED") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("GAMES_PLAYED")));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_LEVEL") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_EXP") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("XP")));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_NEXT_LEVEL_EXP")
             + Math.ceil(Math.pow(50.0 * user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")), 1.5)));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_STATS_FOOTER"));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_FOOTER"));
       }
     });
   }

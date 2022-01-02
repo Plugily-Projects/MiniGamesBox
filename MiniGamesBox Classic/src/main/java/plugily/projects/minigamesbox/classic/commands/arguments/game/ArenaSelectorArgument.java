@@ -57,7 +57,7 @@ public class ArenaSelectorArgument implements Listener {
 
     registry.getPlugin().getServer().getPluginManager().registerEvents(this, registry.getPlugin());
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("arenas", registry.getPlugin().getPluginNamePrefixLong() + ".arenas", CommandArgument.ExecutorType.PLAYER,
-        new LabelData(registry.getPlugin().getPluginNamePrefix() + " arenas", registry.getPlugin().getPluginNamePrefix() + " arenas", "&7Select an arena\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".arenas")) {
+        new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " arenas", registry.getPlugin().getPluginNamePrefix() + " arenas", "&7Select an arena\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".arenas")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
@@ -79,11 +79,11 @@ public class ArenaSelectorArgument implements Listener {
 
           ItemMeta itemMeta = itemStack.getItemMeta();
           if(itemMeta != null) {
-            ComplementAccessor.getComplement().setDisplayName(itemMeta, formatItem(registry.getPlugin().getChatManager().colorMessage("ARENA_SELECTOR_ITEM_NAME"), arena));
+            ComplementAccessor.getComplement().setDisplayName(itemMeta, registry.getPlugin().getChatManager().formatMessage(registry.getPlugin().getChatManager().colorMessage("ARENA_SELECTOR_ITEM_NAME"), arena));
 
             java.util.List<String> lore = registry.getPlugin().getLanguageManager().getLanguageList("Arena-Selector.Item.Lore");
             for(int e = 0; e < lore.size(); e++) {
-              lore.set(e, formatItem(lore.get(e), arena));
+              lore.set(e, registry.getPlugin().getChatManager().formatMessage(lore.get(e), arena));
             }
 
             ComplementAccessor.getComplement().setLore(itemMeta, lore);
@@ -95,18 +95,6 @@ public class ArenaSelectorArgument implements Listener {
         player.openInventory(inventory);
       }
     });
-
-  }
-
-  private String formatItem(String string, PluginArena arena) {
-    String formatted = string;
-    formatted = StringUtils.replace(formatted, "%mapname%", arena.getMapName());
-    int maxPlayers = arena.getMaximumPlayers();
-    formatted = StringUtils.replace(formatted, "%state%", arena.getArenaState().getPlaceholder());
-    formatted = StringUtils.replace(formatted, "%playersize%", Integer.toString(arena.getPlayers().size()));
-    formatted = StringUtils.replace(formatted, "%maxplayers%", Integer.toString(maxPlayers));
-    formatted = chatManager.colorRawMessage(formatted);
-    return formatted;
   }
 
   @EventHandler

@@ -22,7 +22,6 @@ permissions:
       PlugilyProjects.updatenotify: true
       PlugilyProjects.admin: true
       PlugilyProjects.admin.setup: true
-      PlugilyProjects.admin.create: true
       PlugilyProjects.admin.delete: true
       PlugilyProjects.admin.list: true
       PlugilyProjects.admin.spychat: true

@@ -141,10 +141,6 @@ public class RewardsFactory {
   public void performReward(Player player, PluginArena arena, Set<Reward> rewards) {
     if(arena == null && player != null)
       arena = plugin.getArenaRegistry().getArena(player);
-
-    if(arena == null)
-      return;
-
     for(Reward reward : rewards) {
       executeReward(player, arena, reward);
     }
@@ -160,8 +156,11 @@ public class RewardsFactory {
     if(player != null) {
       command = StringUtils.replace(command, "%player%", player.getName());
     }
-
-    command = plugin.getChatManager().formatMessage(command, arena);
+    if(arena == null) {
+      command = plugin.getChatManager().formatMessage(command);
+    } else {
+      command = plugin.getChatManager().formatMessage(command, arena);
+    }
     switch(reward.getExecutor()) {
       case CONSOLE:
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
@@ -177,12 +176,16 @@ public class RewardsFactory {
           engine.setValue("player", player);
         }
         engine.setValue("server", Bukkit.getServer());
-        engine.setValue("arena", arena);
+        if(arena != null) {
+          engine.setValue("arena", arena);
+        }
+        engine.setValue("plugin", plugin);
         engine.execute(command);
         break;
       default:
         break;
     }
+    plugin.getDebugger().debug("Executed command {0} as {1} executor", command, reward.getExecutor());
   }
 
   public void performReward(Player player, PluginArena arena, RewardType type, int executeNumber) {
@@ -197,9 +200,6 @@ public class RewardsFactory {
     if(arena == null && player != null)
       arena = plugin.getArenaRegistry().getArena(player);
 
-    if(arena == null) {
-      return;
-    }
 
     for(Reward reward : rewards) {
       if(reward.getType() == type) {

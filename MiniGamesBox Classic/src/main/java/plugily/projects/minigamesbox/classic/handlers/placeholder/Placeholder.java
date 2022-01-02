@@ -67,17 +67,17 @@ public class Placeholder {
 
   public String getValue(Player player) {
     // EMPTY
-    throw new UnsupportedOperationException("Method must be overridden");
+    return null;
   }
 
   public String getValue(Player player, PluginArena arena) {
     // EMPTY
-    throw new UnsupportedOperationException("Method must be overridden");
+    return null;
   }
 
   public String getValue(PluginArena arena) {
     // EMPTY
-    throw new UnsupportedOperationException("Method must be overridden");
+    return null;
   }
 
 

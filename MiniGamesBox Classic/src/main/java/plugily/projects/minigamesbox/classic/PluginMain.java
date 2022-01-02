@@ -48,6 +48,7 @@ import plugily.projects.minigamesbox.classic.events.spectator.SpectatorEvents;
 import plugily.projects.minigamesbox.classic.events.spectator.SpectatorItemsManager;
 import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemEvent;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.handlers.language.LanguageManager;
@@ -58,7 +59,8 @@ import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsMan
 import plugily.projects.minigamesbox.classic.handlers.placeholder.PlaceholderManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
@@ -68,6 +70,7 @@ import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
 import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
+import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
@@ -126,6 +129,7 @@ public class PluginMain extends JavaPlugin {
   private PluginArenaManager arenaManager;
   private Metrics metrics;
   private SpectatorItemsManager spectatorItemsManager;
+  private SetupUtilities setupUtilities;
 
   @TestOnly
   public PluginMain() {
@@ -187,6 +191,9 @@ public class PluginMain extends JavaPlugin {
     //setup InvManager
     FastInvManager.register(this);
 
+    //setup ItemManager
+    ItemManager.register(this);
+
     //setup Scoreboard
     ScoreboardLib.setPluginInstance(this);
 
@@ -214,6 +221,7 @@ public class PluginMain extends JavaPlugin {
     new EventsInitializer(this);
 
     specialItemManager = new SpecialItemManager(this);
+    new SpecialItemEvent(this);
     kitMenuHandler = new KitMenuHandler(this);
     kitRegistry = new KitRegistry(this);
     rewardsHandler = new RewardsFactory(this);
@@ -252,7 +260,7 @@ public class PluginMain extends JavaPlugin {
 
     signManager = new SignManager(this);
 
-    SetupInventory.init(this);
+    setupUtilities = new SetupUtilities(this);
     PluginArenaUtils.init(this);
     PluginArena.init(this);
   }
@@ -529,4 +537,11 @@ public class PluginMain extends JavaPlugin {
     return spectatorItemsManager;
   }
 
+  public SetupUtilities getSetupUtilities() {
+    return setupUtilities;
+  }
+
+  public PluginSetupInventory getSetupInventory(PluginArena arena, Player player) {
+    return new PluginSetupInventory(this, arena, player);
+  }
 }

@@ -33,8 +33,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -205,31 +205,31 @@ public class SignManager implements Listener {
             case WAITING_FOR_PLAYERS:
               behind.setType(XMaterial.WHITE_STAINED_GLASS.parseMaterial());
               if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
-                Block.class.getMethod("setData", byte.class).invoke(behind, (byte) 0);
+                Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.WHITE_STAINED_GLASS.getData());
               }
               break;
             case STARTING:
               behind.setType(XMaterial.YELLOW_STAINED_GLASS.parseMaterial());
               if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
-                Block.class.getMethod("setData", byte.class).invoke(behind, (byte) 4);
+                Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.YELLOW_STAINED_GLASS.getData());
               }
               break;
             case IN_GAME:
               behind.setType(XMaterial.ORANGE_STAINED_GLASS.parseMaterial());
               if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
-                Block.class.getMethod("setData", byte.class).invoke(behind, (byte) 1);
+                Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.ORANGE_STAINED_GLASS.getData());
               }
               break;
             case ENDING:
               behind.setType(XMaterial.GRAY_STAINED_GLASS.parseMaterial());
               if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
-                Block.class.getMethod("setData", byte.class).invoke(behind, (byte) 7);
+                Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.GRAY_STAINED_GLASS.getData());
               }
               break;
             case RESTARTING:
               behind.setType(XMaterial.BLACK_STAINED_GLASS.parseMaterial());
               if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
-                Block.class.getMethod("setData", byte.class).invoke(behind, (byte) 15);
+                Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.BLACK_STAINED_GLASS.getData());
               }
               break;
             default:

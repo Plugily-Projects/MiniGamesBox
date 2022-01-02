@@ -51,9 +51,9 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.JoinArgumen
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaderboardArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaveArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.game.SetupArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.ArrayList;
@@ -88,6 +88,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     });
 
     //register basic arguments
+    new SetupArgument(this);
     new CreateArgument(this);
     new JoinArguments(this);
     new ArenaSelectorArgument(this);
@@ -127,18 +128,18 @@ public class PluginArgumentsRegistry implements CommandExecutor {
           sendHelpCommand(sender);
           return true;
         }
-        if(args.length > 1 && args[1].equalsIgnoreCase("edit")) {
+        if(args.length > 1 && args[0].equalsIgnoreCase("edit")) {
           if(!checkSenderIsExecutorType(sender, CommandArgument.ExecutorType.PLAYER)
-              || !plugin.getBukkitHelper().hasPermission(sender, plugin.getPluginNamePrefixLong() + ".admin.create")) {
+              || !plugin.getBukkitHelper().hasPermission(sender, plugin.getPluginNamePrefixLong() + ".admin.setup")) {
             return true;
           }
-          PluginArena arena = plugin.getArenaRegistry().getArena(args[0]);
+          PluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
           if(arena == null) {
             sender.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
             return true;
           }
 
-          new SetupInventory(arena, (Player) sender).openInventory();
+          plugin.getSetupInventory(arena, (Player) sender).openPagedGui();
           return true;
         }
       }
@@ -170,7 +171,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       //sending did you mean help
       List<StringMatcher.Match> matches = StringMatcher.match(args[0], entry.getValue().stream().map(CommandArgument::getArgumentName).collect(Collectors.toList()));
       if(!matches.isEmpty()) {
-        sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_DID_YOU_MEAN").replace("%command%", label + " " + matches.get(0).getMatch()));
+        sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_DID_YOU_MEAN").replace("%value%", label + " " + matches.get(0).getMatch()));
         return true;
       }
     }
@@ -179,10 +180,13 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
   private void sendHelpCommand(CommandSender sender) {
     sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_HEADER"));
-    sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_DESCRIPTION"));
+    List<String> description = plugin.getLanguageManager().getLanguageListFromKey("COMMANDS_MAIN_DESCRIPTION");
+    description.forEach(string -> sender.sendMessage(plugin.getChatManager().formatMessage(string)));
+
 
     if(sender.hasPermission(plugin.getPluginNamePrefixLong() + ".admin")) {
       sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION"));
+      sendAdminHelpCommand(sender);
     }
 
     sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_FOOTER"));
@@ -200,12 +204,12 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
     List<LabelData> data = mappedArguments.get(plugin.getCommandAdminPrefixLong()).stream().filter(arg -> arg instanceof LabeledCommandArgument)
         .map(arg -> ((LabeledCommandArgument) arg).getLabelData()).collect(Collectors.toList());
-    data.add(new LabelData(plugin.getPluginNamePrefix() + " &6<arena>&f edit", plugin.getPluginNamePrefix() + " <arena> edit",
+    data.add(new LabelData("/" + plugin.getPluginNamePrefix() + " &6<arena>&f edit", plugin.getPluginNamePrefix() + " <arena> edit",
         "&7Edit existing arena\n&6Permission: &7" + plugin.getPluginNamePrefixLong() + ".admin.edit"));
     data.addAll(mappedArguments.get(plugin.getPluginNamePrefixLong()).stream().filter(arg -> arg instanceof LabeledCommandArgument)
         .map(arg -> ((LabeledCommandArgument) arg).getLabelData()).collect(Collectors.toList()));
 
-    if(ServerVersion.Version.isCurrentEqual(ServerVersion.Version.v1_11_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11_R1)) {
       for(LabelData labelData : data) {
         sender.sendMessage(labelData.getText() + " - " + labelData.getDescription().split("\n", 2)[0]);
       }

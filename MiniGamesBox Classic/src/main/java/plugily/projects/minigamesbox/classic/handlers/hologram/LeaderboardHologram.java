@@ -56,7 +56,7 @@ public class LeaderboardHologram extends BukkitRunnable {
     this.location = location;
     this.hologram = new ArmorStandHologram(location);
 
-    String header = color(plugin.getLanguageConfig().getString("LEADERBOARD_HEADER"));
+    String header = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_HEADER"));
     header = StringUtils.replace(header, "%amount%", Integer.toString(topAmount));
 
     Message lm = statisticToMessage();
@@ -88,11 +88,11 @@ public class LeaderboardHologram extends BukkitRunnable {
       String text;
       if(i < reverseKeys.size()) {
         UUID uuid = reverseKeys.get(i);
-        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_FORMAT"));
+        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_FORMAT"));
         text = StringUtils.replace(text, "%nickname%", getPlayerNameSafely(uuid));
         text = StringUtils.replace(text, "%value%", String.valueOf(values.get(uuid)));
       } else {
-        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_EMPTY_FORMAT"));
+        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT"));
       }
       text = StringUtils.replace(text, "%place%", Integer.toString(i + 1));
       update.add(text);

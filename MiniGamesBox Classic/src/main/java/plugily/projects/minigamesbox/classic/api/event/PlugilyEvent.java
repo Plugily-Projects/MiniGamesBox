@@ -20,6 +20,8 @@
 package plugily.projects.minigamesbox.classic.api.event;
 
 import org.bukkit.event.Event;
+import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
@@ -32,7 +34,11 @@ public abstract class PlugilyEvent extends Event {
 
   public PlugilyEvent(PluginArena eventArena) {
     arena = eventArena;
-    pluginName = eventArena.getPlugin().getName();
+    if(arena != null) {
+      pluginName = eventArena.getPlugin().getName();
+    } else {
+      pluginName = JavaPlugin.getPlugin(PluginMain.class).getName();
+    }
   }
 
   /**

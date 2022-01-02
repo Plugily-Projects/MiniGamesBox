@@ -82,6 +82,9 @@ public class LeaderboardRegistry {
   }
 
   public void disableHolograms() {
+    if(leaderboardHolograms.isEmpty()) {
+      return;
+    }
     leaderboardHolograms.forEach(LeaderboardHologram::cancel);
   }
 

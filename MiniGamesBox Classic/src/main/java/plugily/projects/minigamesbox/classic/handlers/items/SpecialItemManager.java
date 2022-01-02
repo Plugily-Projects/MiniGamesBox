@@ -89,16 +89,18 @@ public class SpecialItemManager {
     try {
       stage = SpecialItem.DisplayStage.valueOf(config.getString(path + ".stage").toUpperCase());
     } catch(Exception ex) {
-      plugin.getDebugger().debug(Level.WARNING, "Invalid display stage of special item " + path + " in special_items.yml! Please use lobby or spectator!");
+      plugin.getDebugger().debug(Level.WARNING, "Invalid display stage of special item " + path + " in special_items.yml! Please use SERVER_JOIN, WAITING_FOR_PLAYERS, ENOUGH_PLAYERS_TO_START, LOBBY, IN_GAME, SPECTATOR or ENDING!");
     }
 
     Set<Reward> rewards = new HashSet<>();
     for(String reward : config.getStringList(path + ".execute")) {
       rewards.add(new Reward(new RewardType(path), reward));
     }
-
-    specialItems.put(key, new SpecialItem(path, config.getString(path + ".permission", null), new ItemBuilder(mat).name(name).lore(lore).build(), config.getInt(path + ".slot", -1), stage, rewards));
-
+    String permission = config.getString(path + ".permission", null);
+    ItemStack itemStack = new ItemBuilder(mat).name(name).lore(lore).build();
+    int slot = config.getInt(path + ".slot", -1);
+    specialItems.put(key, new SpecialItem(path, permission, itemStack, slot, stage, rewards));
+    plugin.getDebugger().debug("Loaded SpecialItem with key {0}, permissions {1}, itemstack {2}, slot {3}, stage {4} and reward {5}", key, permission, itemStack, slot, stage, rewards.stream().map(Reward::getExecutableCode).collect(Collectors.toList()));
   }
 
   /**
@@ -150,6 +152,7 @@ public class SpecialItemManager {
     if(specialItems.containsKey(key)) {
       throw new IllegalStateException("SpecialItem with path " + key + " was already registered");
     }
+    addItem(key, specialItem.getPath());
     specialItems.put(key, specialItem);
   }
 

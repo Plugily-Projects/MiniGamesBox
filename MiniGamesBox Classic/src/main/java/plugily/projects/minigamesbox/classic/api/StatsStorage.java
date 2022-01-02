@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.api;
 
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 
 import java.util.Collections;
@@ -58,6 +59,11 @@ public class StatsStorage {
     plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("user_statistic_" + statisticType.getName(), Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player) {
+        return Integer.toString(plugin.getStatsStorage().getUserStats(player, statisticType));
+      }
+
+      @Override
+      public String getValue(Player player, PluginArena arena) {
         return Integer.toString(plugin.getStatsStorage().getUserStats(player, statisticType));
       }
     });
