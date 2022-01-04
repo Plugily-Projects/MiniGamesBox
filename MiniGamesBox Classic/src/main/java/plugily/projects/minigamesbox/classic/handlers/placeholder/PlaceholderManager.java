@@ -116,7 +116,7 @@ public class PlaceholderManager {
         return arena.getArenaState().getPlaceholder();
       }
     });
-    registerPlaceholder(new Placeholder("mapname", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("name", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getMapName();

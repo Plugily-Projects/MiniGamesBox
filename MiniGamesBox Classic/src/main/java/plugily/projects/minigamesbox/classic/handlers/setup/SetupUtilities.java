@@ -24,24 +24,20 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.StringPrompt;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.setup.items.EmptyItem;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
-import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
-import plugily.projects.minigamesbox.inventory.paged.PagedFastInv;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,170 +54,25 @@ public class SetupUtilities {
   private final PluginMain plugin;
   private final FileConfiguration config;
   private static final Random random = new Random();
-  private final PagedFastInv pagedGUI;
-  private final NormalFastInv setupGUI;
-  private Map<ItemMap, Integer> pagedGUIPages = new HashMap<>();
-  private Map<InventoryStage, ItemMap> pagedGUIStages = new HashMap<>();
   private Map<HumanEntity, PluginArena> setupInventories = new HashMap<>();
-  public final String VIDEO_LINK = "https://tutorial.plugily.xyz";
+  public final String VIDEO_LINK = "https://tutorial.plugily.xyz/";
 
-
-  public void addSetupInventory(HumanEntity humanEntity, PluginArena setupInventory) {
-    setupInventories.put(humanEntity, setupInventory);
+  public SetupUtilities(PluginMain plugin) {
+    this.plugin = plugin;
+    this.config = ConfigUtils.getConfig(plugin, "arenas");
   }
 
-  public boolean getPagedInventory(HumanEntity humanEntity) {
-    if(setupInventories.get(humanEntity) == null) {
-      return false;
-    }
-    plugin.getSetupInventory(setupInventories.get(humanEntity), (Player) humanEntity).openPagedGui();
-    return true;
+  public void addSetupInventory(HumanEntity humanEntity, PluginArena arena) {
+    setupInventories.put(humanEntity, arena);
+  }
+
+  public PluginArena getArena(HumanEntity humanEntity) {
+    return setupInventories.get(humanEntity);
   }
 
   public void removeSetupInventory(HumanEntity humanEntity) {
     setupInventories.remove(humanEntity);
   }
-
-  public SetupUtilities(PluginMain plugin) {
-    this.plugin = plugin;
-    this.config = ConfigUtils.getConfig(plugin, "arenas");
-    this.setupGUI = new NormalFastInv(54, plugin.getPluginMessagePrefix() + "Setup Gui");
-    this.pagedGUI = new PagedFastInv(54, plugin.getPluginMessagePrefix() + "Arena Editor");
-    prepareSetupGui();
-    preparePagedGui();
-  }
-
-  private void prepareSetupGui() {
-    setupGUI.setItem(19, ClickableItem.of(new ItemBuilder(XMaterial.REDSTONE_BLOCK.parseItem())
-            .name(plugin.getChatManager().colorRawMessage("&cArenas List"))
-            .lore(ChatColor.GRAY + "Edit, delete or copy arenas")
-            .build(), event -> {
-          //todo
-        }
-    ));
-
-    setupGUI.setItem(22, ClickableItem.of(new ItemBuilder(XMaterial.OAK_SIGN.parseItem())
-            .name(plugin.getChatManager().colorRawMessage("&cCreate Arena"))
-            .lore(ChatColor.GRAY + "Create a fully new arena")
-            .build(), event -> {
-          new SimpleConversationBuilder(plugin).withPrompt(new StringPrompt() {
-            @Override
-            public @NotNull String getPromptText(ConversationContext context) {
-              return plugin.getChatManager().colorRawMessage(plugin.getChatManager().getPrefix() + "&ePlease type in chat arena name to create new arena! You can use color codes. &cType in 'CANCEL' to cancel!");
-            }
-
-            @Override
-            public Prompt acceptInput(ConversationContext context, String input) {
-              String name = plugin.getChatManager().colorRawMessage(input);
-              PluginArena arena = createInstanceInConfig(name, event.getWhoClicked().getWorld().getName(), (Player) event.getWhoClicked());
-              if(arena == null) {
-                return Prompt.END_OF_CONVERSATION;
-              }
-              plugin.getSetupInventory(arena, (Player) event.getWhoClicked()).openPagedGuiStage(InventoryStage.PAGED_VALUES);
-              return Prompt.END_OF_CONVERSATION;
-            }
-          }).buildFor((Player) event.getWhoClicked());
-        }
-    ));
-
-
-    setupGUI.setItem(25, ClickableItem.of(new ItemBuilder(XMaterial.SLIME_BLOCK.parseItem())
-            .name(plugin.getChatManager().colorRawMessage("&cContinue Arena Setup"))
-            .lore(ChatColor.GRAY + "Create a fully new arena")
-            .build(), event -> {
-          if(!getPagedInventory(event.getWhoClicked())) {
-            event.getWhoClicked().sendMessage(plugin.getChatManager().colorRawMessage(plugin.getChatManager().getPrefix() + "You need to create or edit a arena first"));
-          }
-        }
-    ));
-
-
-    setupGUI.setItem(39, ClickableItem.of(new ItemBuilder(XMaterial.GOLD_INGOT.parseItem())
-        .name(plugin.getChatManager().colorRawMessage("&6&l► Patreon Addon ◄ &8(AD)"))
-        .lore(ChatColor.GRAY + "Enhance gameplay with paid addon!")
-        .lore(ChatColor.GOLD + "Selection of features of the addon:")
-        .lore(ChatColor.GOLD + "Custom Kits, Achievements, Replay Ability")
-        .lore(ChatColor.GRAY + "Click to get link for patron program!")
-        .build(), event -> {
-      event.getWhoClicked().closeInventory();
-      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview"));
-    }));
-
-    setupGUI.setItem(41, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
-        .name(plugin.getChatManager().colorRawMessage("&e&lView Setup Video"))
-        .lore(ChatColor.GRAY + "Having problems with setup or wanna")
-        .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
-        .build(), event -> {
-      event.getWhoClicked().closeInventory();
-      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check out this video: " + VIDEO_LINK + InventoryStage.SETUP_GUI.getTutorial()));
-    }));
-
-    setupGUI.setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
-    setupGUI.refresh();
-  }
-
-
-  private void preparePagedGui() {
-    ItemMap locationItems = pagedGUI.createNewPage();
-    Consumer<InventoryClickEvent> locationItemsLeft = event -> {
-      event.getWhoClicked().closeInventory();
-      setupGUI.open(event.getWhoClicked());
-    };
-    Consumer<InventoryClickEvent> locationItemsRight = event -> {
-      pagedGUI.setCurrentPage(getPagedGUI().getCurrentPage() + 1);
-      pagedGUI.refresh();
-    };
-    setDefaultItems(locationItems, XMaterial.ORANGE_STAINED_GLASS_PANE, XMaterial.GRAY_STAINED_GLASS_PANE, locationItemsLeft, XMaterial.BLUE_STAINED_GLASS_PANE, locationItemsRight);
-
-    pagedGUIPages.put(locationItems, 0);
-    pagedGUIStages.put(InventoryStage.PAGED_LOCATIONS, locationItems);
-
-    ItemMap valueItems = pagedGUI.createNewPage();
-    Consumer<InventoryClickEvent> valueItemsLeft = event -> {
-      pagedGUI.setCurrentPage(getPagedGUI().getCurrentPage() - 1);
-      pagedGUI.refresh();
-    };
-    Consumer<InventoryClickEvent> valueItemsRight = event -> {
-      pagedGUI.setCurrentPage(getPagedGUI().getCurrentPage() + 1);
-      pagedGUI.refresh();
-    };
-    setDefaultItems(valueItems, XMaterial.BLUE_STAINED_GLASS_PANE, XMaterial.GRAY_STAINED_GLASS_PANE, valueItemsLeft, XMaterial.WHITE_STAINED_GLASS_PANE, valueItemsRight);
-
-    pagedGUIPages.put(valueItems, 1);
-    pagedGUIStages.put(InventoryStage.PAGED_VALUES, valueItems);
-
-
-    ItemMap countableItems = pagedGUI.createNewPage();
-    Consumer<InventoryClickEvent> countableItemsLeft = event -> {
-      pagedGUI.setCurrentPage(getPagedGUI().getCurrentPage() - 1);
-      pagedGUI.refresh();
-    };
-    Consumer<InventoryClickEvent> countableItemsRight = event -> {
-      pagedGUI.setCurrentPage(getPagedGUI().getCurrentPage() + 1);
-      pagedGUI.refresh();
-    };
-    setDefaultItems(countableItems, XMaterial.BLUE_STAINED_GLASS_PANE, XMaterial.GRAY_STAINED_GLASS_PANE, countableItemsLeft, XMaterial.WHITE_STAINED_GLASS_PANE, countableItemsRight);
-
-    pagedGUIPages.put(countableItems, 2);
-    pagedGUIStages.put(InventoryStage.PAGED_COUNTABLE, countableItems);
-
-
-    ItemMap booleanItems = pagedGUI.createNewPage();
-    Consumer<InventoryClickEvent> booleanItemsLeft = event -> {
-      pagedGUI.setCurrentPage(getPagedGUI().getCurrentPage() - 1);
-      pagedGUI.refresh();
-    };
-    Consumer<InventoryClickEvent> booleanItemsRight = event -> {
-      event.getWhoClicked().closeInventory();
-      setupGUI.open(event.getWhoClicked());
-    };
-    setDefaultItems(booleanItems, XMaterial.BLUE_STAINED_GLASS_PANE, XMaterial.GRAY_STAINED_GLASS_PANE, booleanItemsLeft, XMaterial.WHITE_STAINED_GLASS_PANE, booleanItemsRight);
-
-    pagedGUIPages.put(booleanItems, 3);
-    pagedGUIStages.put(InventoryStage.PAGED_BOOLEAN, booleanItems);
-    pagedGUI.refresh();
-  }
-
 
   public String isOptionDone(String path, PluginSetupInventory setupInventory) {
     String option = config.getString("instances." + setupInventory.getArena().getId() + "." + path);
@@ -273,31 +124,6 @@ public class SetupUtilities {
   }
 
 
-  public PagedFastInv getPagedGUI() {
-    return pagedGUI;
-  }
-
-  public NormalFastInv getSetupGUI() {
-    return setupGUI;
-  }
-
-  public InventoryStage getStageOf(ItemMap itemMap) {
-    for(Map.Entry<InventoryStage, ItemMap> pair : pagedGUIStages.entrySet()) {
-      if(pair.getValue() == itemMap) {
-        return pair.getKey();
-      }
-    }
-    return InventoryStage.PAGED_GUI;
-  }
-
-  public ItemMap getPagedItemMapOf(InventoryStage inventoryStage) {
-    return pagedGUIStages.get(inventoryStage);
-  }
-
-  public int getPageGUIPageOf(ItemMap itemMap) {
-    return pagedGUIPages.get(itemMap);
-  }
-
   public enum InventoryStage {
     SETUP_GUI("setup"), ARENA_LIST("arena_list"), PAGED_GUI("arena_editor"), PAGED_LOCATIONS("locations"), PAGED_VALUES("values"), PAGED_COUNTABLE("countable"), PAGED_BOOLEAN("boolean");
 
@@ -314,7 +140,7 @@ public class SetupUtilities {
 
 
   public void sendProTip(HumanEntity entity) {
-    switch(random.nextInt(30)) {
+    switch(random.nextInt(25)) {
       case 0:
         entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7We also got premade setups, check them out on &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/setup/maps"));
         break;
@@ -344,25 +170,25 @@ public class SetupUtilities {
     }
   }
 
-  public void setDefaultItems(ItemMap itemMap, XMaterial border, XMaterial left_corner, Consumer<InventoryClickEvent> left_corner_event, XMaterial right_corner, Consumer<InventoryClickEvent> right_corner_event) {
-    itemMap.setItem(0, ClickableItem.of(border.parseItem()));
-    itemMap.setItem(8, ClickableItem.of(border.parseItem()));
+  public void setDefaultItems(PluginSetupInventory pluginSetupInventory, NormalFastInv normalFastInv, ItemStack border, ItemStack left_corner, Consumer<InventoryClickEvent> left_corner_event, ItemStack right_corner, Consumer<InventoryClickEvent> right_corner_event) {
+    normalFastInv.setItem(0, new EmptyItem(border));
+    normalFastInv.setItem(8, new EmptyItem(border));
 
-    itemMap.setItem(9, ClickableItem.of(border.parseItem()));
-    itemMap.setItem(17, ClickableItem.of(border.parseItem()));
+    normalFastInv.setItem(9, new EmptyItem(border));
+    normalFastInv.setItem(17, new EmptyItem(border));
 
-    itemMap.setItem(18, ClickableItem.of(border.parseItem()));
-    itemMap.setItem(26, ClickableItem.of(border.parseItem()));
+    normalFastInv.setItem(18, new EmptyItem(border));
+    normalFastInv.setItem(26, new EmptyItem(border));
 
-    itemMap.setItem(27, ClickableItem.of(border.parseItem()));
-    itemMap.setItem(35, ClickableItem.of(border.parseItem()));
+    normalFastInv.setItem(27, new EmptyItem(border));
+    normalFastInv.setItem(35, new EmptyItem(border));
 
-    itemMap.setItem(36, ClickableItem.of(border.parseItem()));
-    itemMap.setItem(44, ClickableItem.of(border.parseItem()));
+    normalFastInv.setItem(36, new EmptyItem(border));
+    normalFastInv.setItem(44, new EmptyItem(border));
 
-    itemMap.setItem(45, ClickableItem.of(left_corner.parseItem(), left_corner_event));
+    normalFastInv.setItem(45, ClickableItem.of(left_corner, left_corner_event));
 
-    setupGUI.setItem(48, ClickableItem.of(new ItemBuilder(XMaterial.GOLD_INGOT.parseItem())
+    normalFastInv.setItem(48, ClickableItem.of(new ItemBuilder(XMaterial.GOLD_INGOT.parseItem())
         .name(plugin.getChatManager().colorRawMessage("&6&l► Patreon Addon ◄ &8(AD)"))
         .lore(ChatColor.GRAY + "Enhance gameplay with paid addon!")
         .lore(ChatColor.GOLD + "Selection of features of the addon:")
@@ -374,18 +200,63 @@ public class SetupUtilities {
       e.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview"));
     }));
 
-    setupGUI.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
+    normalFastInv.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
         .name(plugin.getChatManager().colorRawMessage("&e&lView Setup Video"))
         .lore(ChatColor.GRAY + "Having problems with setup or wanna")
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check out this video: " + VIDEO_LINK + getStageOf(itemMap).getTutorial()));
+      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()));
+    }));
+
+    normalFastInv.setItem(53, ClickableItem.of(right_corner, right_corner_event));
+
+    normalFastInv.setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
+    normalFastInv.refresh();
+  }
+
+  public void setDefaultItems(PluginSetupInventory pluginSetupInventory, ItemMap itemMap, XMaterial border, XMaterial left_corner, Consumer<InventoryClickEvent> left_corner_event, XMaterial right_corner, Consumer<InventoryClickEvent> right_corner_event) {
+    itemMap.setItem(0, new EmptyItem(border.parseItem()));
+    itemMap.setItem(8, new EmptyItem(border.parseItem()));
+
+    itemMap.setItem(9, new EmptyItem(border.parseItem()));
+    itemMap.setItem(17, new EmptyItem(border.parseItem()));
+
+    itemMap.setItem(18, new EmptyItem(border.parseItem()));
+    itemMap.setItem(26, new EmptyItem(border.parseItem()));
+
+    itemMap.setItem(27, new EmptyItem(border.parseItem()));
+    itemMap.setItem(35, new EmptyItem(border.parseItem()));
+
+    itemMap.setItem(36, new EmptyItem(border.parseItem()));
+    itemMap.setItem(44, new EmptyItem(border.parseItem()));
+
+    itemMap.setItem(45, ClickableItem.of(left_corner.parseItem(), left_corner_event));
+
+    itemMap.setItem(48, ClickableItem.of(new ItemBuilder(XMaterial.GOLD_INGOT.parseItem())
+        .name(plugin.getChatManager().colorRawMessage("&6&l► Patreon Addon ◄ &8(AD)"))
+        .lore(ChatColor.GRAY + "Enhance gameplay with paid addon!")
+        .lore(ChatColor.GOLD + "Selection of features of the addon:")
+        .lore(ChatColor.GOLD + "Custom Kits, Achievements, Replay Ability")
+        .lore(ChatColor.GRAY + "Click to get link for patron program!")
+        .enchantment(Enchantment.DURABILITY)
+        .build(), e -> {
+      e.getWhoClicked().closeInventory();
+      e.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview"));
+    }));
+
+    itemMap.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
+        .name(plugin.getChatManager().colorRawMessage("&e&lView Setup Video"))
+        .lore(ChatColor.GRAY + "Having problems with setup or wanna")
+        .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
+        .build(), event -> {
+      event.getWhoClicked().closeInventory();
+      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()));
     }));
 
     itemMap.setItem(53, ClickableItem.of(right_corner.parseItem(), right_corner_event));
 
-    itemMap.setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
+    itemMap.setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
   }
 
   public PluginArena createInstanceInConfig(String id, String worldName, Player player) {
@@ -402,7 +273,7 @@ public class SetupUtilities {
 
     PluginArena arena = new PluginArena(id);
 
-    arena.setMapName(config.getString(path + "mapname"));
+    arena.setMapName(id);
     arena.setReady(false);
 
     plugin.getArenaRegistry().registerArena(arena);

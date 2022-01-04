@@ -220,7 +220,7 @@ Signs:
   Lines:
     - "&a&l%plugin_name%"
     - "%arena_state%"
-    - "%mapname%"
+    - "%arena_name%"
     - "&5[%arena_players_size%/%max_players%]"
 
 
@@ -230,13 +230,13 @@ Signs:
 Arena-Selector:
   Inventory-Title: "%plugin_short_command% > Arena selector"
   Item:
-    Name: "&f%mapname%"
+    Name: "&f%arena_name%"
     Lore:
-      - "&a%plugin_name% &f- &e%mapname%"
+      - "&a%plugin_name% &f- &e%arena_name%"
       - " "
       - " "
       - "  &fOnline: %arena_players_size%/%arena_max_players%"
-      - "  &fState: %arena_pretty_state%"
+      - "  &fState: %arena_state_pretty%"
       - " "
       - " "
       - "&eClick to join this arena"

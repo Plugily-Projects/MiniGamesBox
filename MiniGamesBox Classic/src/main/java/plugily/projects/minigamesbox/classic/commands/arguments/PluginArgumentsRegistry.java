@@ -54,6 +54,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitAr
 import plugily.projects.minigamesbox.classic.commands.arguments.game.SetupArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
             return true;
           }
 
-          plugin.getSetupInventory(arena, (Player) sender).openPagedGui();
+          plugin.openSetupInventory(arena, (Player) sender, SetupUtilities.InventoryStage.PAGED_GUI);
           return true;
         }
       }

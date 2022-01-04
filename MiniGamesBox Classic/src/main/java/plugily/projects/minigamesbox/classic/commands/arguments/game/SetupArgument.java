@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 /**
@@ -47,7 +48,7 @@ public class SetupArgument {
       public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if(args.length == 1) {
-          registry.getPlugin().getSetupUtilities().getSetupGUI().open(player);
+          registry.getPlugin().openSetupInventory(null, player);
           return;
         }
 
@@ -76,7 +77,7 @@ public class SetupArgument {
               sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
               return;
             }
-            registry.getPlugin().getSetupInventory(arena, (Player) sender).openPagedGui();
+            registry.getPlugin().openSetupInventory(arena, (Player) sender, SetupUtilities.InventoryStage.PAGED_GUI);
             break;
           default:
             sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE")
