@@ -23,6 +23,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.ArenaListPage;
@@ -32,6 +33,7 @@ import plugily.projects.minigamesbox.classic.handlers.setup.pages.HomePage;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.LocationPage;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.PagesPage;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.ValuePage;
+import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
 import javax.annotation.Nullable;
 
@@ -51,18 +53,14 @@ public class PluginSetupInventory {
 
   public PluginSetupInventory(PluginMain plugin, @Nullable PluginArena arena, Player player) {
     this.plugin = plugin;
-    setArena(player, arena);
     this.player = player;
     this.inventoryStage = SetupUtilities.InventoryStage.SETUP_GUI;
-    open();
   }
 
   public PluginSetupInventory(PluginMain plugin, @Nullable PluginArena arena, Player player, SetupUtilities.InventoryStage inventoryStage) {
     this.plugin = plugin;
-    setArena(player, arena);
     this.player = player;
     this.inventoryStage = inventoryStage;
-    open();
   }
 
   public void setArena(Player player, PluginArena arena) {
@@ -74,32 +72,69 @@ public class PluginSetupInventory {
   }
 
   public void open() {
+    player.closeInventory();
     switch(inventoryStage) {
       case SETUP_GUI:
-        new HomePage(54, plugin.getPluginMessagePrefix() + "Setup Menu", this).open(player);
+        NormalFastInv setup_gui = new HomePage(54, plugin.getPluginMessagePrefix() + "Setup Menu", this);
+        addExternalItems(setup_gui);
+        setup_gui.open(player);
         break;
       case ARENA_LIST:
-        new ArenaListPage(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this).open(player);
+        NormalFastInv arena_list = new ArenaListPage(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this);
+        addExternalItems(arena_list);
+        arena_list.open(player);
         break;
       case PAGED_GUI:
-        new PagesPage(54, plugin.getPluginMessagePrefix() + "Arena Editor Menu", this).open(player);
+        NormalFastInv paged_gui = new PagesPage(54, plugin.getPluginMessagePrefix() + "Arena Editor Menu", this);
+        addExternalItems(paged_gui);
+        paged_gui.open(player);
         break;
       case PAGED_VALUES:
-        new ValuePage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this).open(player);
+        NormalFastInv paged_values = new ValuePage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this);
+        addExternalItems(paged_values);
+        paged_values.open(player);
         break;
       case PAGED_BOOLEAN:
-        new BooleanPage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this).open(player);
+        NormalFastInv paged_boolean = new BooleanPage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this);
+        addExternalItems(paged_boolean);
+        paged_boolean.open(player);
         break;
       case PAGED_COUNTABLE:
-        new CountablePage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this).open(player);
+        NormalFastInv paged_countable = new CountablePage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this);
+        addExternalItems(paged_countable);
+        paged_countable.open(player);
         break;
       case PAGED_LOCATIONS:
-        new LocationPage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this).open(player);
+        NormalFastInv paged_locations = new LocationPage(54, plugin.getPluginMessagePrefix() + "Arena Editor", this);
+        addExternalItems(paged_locations);
+        paged_locations.open(player);
         break;
       default:
         break;
     }
     plugin.getSetupUtilities().sendProTip(player);
+  }
+
+  public void addExternalItems(NormalFastInv inv) {
+    switch(inventoryStage) {
+      case SETUP_GUI:
+        break;
+      case ARENA_LIST:
+        break;
+      case PAGED_GUI:
+        break;
+      case PAGED_VALUES:
+        break;
+      case PAGED_BOOLEAN:
+        break;
+      case PAGED_COUNTABLE:
+        break;
+      case PAGED_LOCATIONS:
+        break;
+      default:
+        break;
+    }
+    inv.refresh();
   }
 
   public void open(SetupUtilities.InventoryStage inventoryStage) {
@@ -125,6 +160,7 @@ public class PluginSetupInventory {
     return player;
   }
 
+  @Nullable
   public PluginArena getArena() {
     return arena;
   }

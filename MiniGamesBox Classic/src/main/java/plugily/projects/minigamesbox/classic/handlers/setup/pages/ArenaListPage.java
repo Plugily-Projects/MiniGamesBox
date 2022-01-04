@@ -60,10 +60,10 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
 
   @Override
   public void injectItems() {
-
     if(setupInventory.getPlugin().getArenaRegistry().getArenas().size() == 0) {
       setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI);
       setupInventory.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&cThere are no arenas!"));
+      return;
     }
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
