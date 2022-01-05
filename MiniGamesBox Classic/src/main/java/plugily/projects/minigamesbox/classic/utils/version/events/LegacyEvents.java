@@ -23,7 +23,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -31,7 +30,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBInventoryClickEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerPickupArrow;
@@ -80,15 +78,6 @@ public class LegacyEvents implements Listener {
   @EventHandler
   public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
     CBPlayerInteractEntityEvent cbEvent = new CBPlayerInteractEntityEvent(event.getPlayer(), EquipmentSlot.HAND, event.getRightClicked());
-    Bukkit.getPluginManager().callEvent(cbEvent);
-    if(cbEvent.isCancelled()) {
-      event.setCancelled(true);
-    }
-  }
-
-  @EventHandler
-  public void onInventoryClickEvent(InventoryClickEvent event) {
-    CBInventoryClickEvent cbEvent = new CBInventoryClickEvent(event.getClick(), event.getCurrentItem(), event.getClickedInventory(), event.getCursor(), event.getHotbarButton(), event.getAction(), event.getRawSlot(), event.getSlot(), event.getSlotType(), event.isLeftClick(), event.isRightClick(), event.isShiftClick(), event.getView());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
