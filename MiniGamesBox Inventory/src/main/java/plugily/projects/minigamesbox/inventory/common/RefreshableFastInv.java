@@ -1,6 +1,6 @@
 package plugily.projects.minigamesbox.inventory.common;
 
-import fr.mrmicky.fastinv.FastInv;
+import plugily.projects.minigamesbox.inventory.common.core.FastInv;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;

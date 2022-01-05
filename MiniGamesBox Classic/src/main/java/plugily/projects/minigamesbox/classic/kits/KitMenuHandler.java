@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.kits;
 
-import fr.mrmicky.fastinv.FastInv;
+import plugily.projects.minigamesbox.inventory.common.core.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

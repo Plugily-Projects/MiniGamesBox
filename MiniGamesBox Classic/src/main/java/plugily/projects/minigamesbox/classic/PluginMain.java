@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic;
 
-import fr.mrmicky.fastinv.FastInvManager;
+import plugily.projects.minigamesbox.inventory.common.core.FastInvManager;
 import me.tigerhix.lib.scoreboard.ScoreboardLib;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

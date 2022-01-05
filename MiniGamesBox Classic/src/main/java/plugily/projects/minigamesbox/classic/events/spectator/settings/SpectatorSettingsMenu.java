@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.events.spectator.settings;
 
 import com.cryptomorin.xseries.XMaterial;
-import fr.mrmicky.fastinv.FastInv;
+import plugily.projects.minigamesbox.inventory.common.core.FastInv;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

@@ -2,6 +2,7 @@ package plugily.projects.minigamesbox.inventory.paged;
 
 import org.bukkit.event.inventory.InventoryType;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
+import plugily.projects.minigamesbox.inventory.common.core.FastInvManager;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
 
@@ -12,7 +13,7 @@ import java.util.function.BiFunction;
 
 /**
  * A multi-paged inventory.
- * Register the plugin via {@link fr.mrmicky.fastinv.FastInvManager#register(org.bukkit.plugin.Plugin)} before creating any inventory.
+ * Register the plugin via {@link FastInvManager#register(org.bukkit.plugin.Plugin)} before creating any inventory.
  *
  * @author HSGamer
  */
