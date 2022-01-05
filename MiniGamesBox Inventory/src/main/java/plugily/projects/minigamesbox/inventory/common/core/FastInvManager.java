@@ -64,7 +64,6 @@ public final class FastInvManager {
         }
 
         Bukkit.getPluginManager().registerEvents(new InventoryListener(plugin), plugin);
-        System.out.println("FastInv is now registered");
     }
 
     /**
@@ -90,7 +89,6 @@ public final class FastInvManager {
                 FastInv inv = (FastInv) e.getInventory().getHolder();
 
                 boolean wasCancelled = e.isCancelled();
-                System.out.println("Click was cancelled: " + wasCancelled);
                 e.setCancelled(true);
 
                 inv.handleClick(e);
@@ -98,7 +96,6 @@ public final class FastInvManager {
                 // This prevents un-canceling the event if another plugin canceled it before
                 if (!wasCancelled && !e.isCancelled()) {
                     e.setCancelled(false);
-                    System.out.println("Click was un-canceled");
                 }
             }
         }
