@@ -167,10 +167,6 @@
                             <pattern>me.tigerhix.lib.scoreboard</pattern>
                             <shadedPattern>plugily.projects.minigamesbox.classic.utils.scoreboard</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>fr.mrmicky.fastinv</pattern>
-                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.fastinv</shadedPattern>
-                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
