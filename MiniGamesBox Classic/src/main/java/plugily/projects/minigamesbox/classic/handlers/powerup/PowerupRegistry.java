@@ -110,11 +110,11 @@ public class PowerupRegistry {
         if(pickup.getPowerup().getPotionType() == BasePowerup.PotionType.ALL) {
           for(Player p : pickup.getArena().getPlayers()) {
             VersionUtils.sendTitles(p, pickup.getPowerup().getName(), pickup.getPowerup().getDescription(), 5, 30, 5);
-            XPotion.addPotionEffectsFromString(p, pickup.getPowerup().getEffects());
+            XPotion.addEffects(p, pickup.getPowerup().getEffects());
           }
         } else {
           VersionUtils.sendTitles(pickup.getPlayer(), pickup.getPowerup().getName(), pickup.getPowerup().getDescription(), 5, 30, 5);
-          XPotion.addPotionEffectsFromString(pickup.getPlayer(), pickup.getPowerup().getEffects());
+          XPotion.addEffects(pickup.getPlayer(), pickup.getPowerup().getEffects());
         }
         int duration = getLongestEffect(pickup.getPowerup());
 
