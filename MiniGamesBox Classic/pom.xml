@@ -79,6 +79,7 @@
             <artifactId>scoreboard</artifactId>
             <version>1.0.9</version>
             <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
@@ -128,6 +129,7 @@
             <artifactId>MiniGamesBox-Inventory</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
