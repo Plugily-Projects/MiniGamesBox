@@ -27,12 +27,13 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -40,91 +41,91 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ItemManager {
 
-    private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
-    private static List<HandlerItem> items = new ArrayList<>();
+  private static final AtomicBoolean REGISTERED = new AtomicBoolean(false);
+  private static List<HandlerItem> items = new ArrayList<>();
 
-    private ItemManager() {
-        throw new UnsupportedOperationException();
+  private ItemManager() {
+    throw new UnsupportedOperationException();
+  }
+
+  public static void register(Plugin plugin) {
+    Objects.requireNonNull(plugin, "plugin");
+    if(REGISTERED.getAndSet(true)) {
+      throw new IllegalStateException("ItemManager is already registered");
+    } else {
+      Bukkit.getPluginManager().registerEvents(new ItemListener(plugin), plugin);
+    }
+  }
+
+  public static List<HandlerItem> getItems() {
+    return items;
+  }
+
+  public static final class ItemListener implements Listener {
+    private final Plugin plugin;
+
+    public ItemListener(Plugin plugin) {
+      this.plugin = plugin;
     }
 
-    public static void register(Plugin plugin) {
-        Objects.requireNonNull(plugin, "plugin");
-        if (REGISTERED.getAndSet(true)) {
-            throw new IllegalStateException("ItemManager is already registered");
-        } else {
-            Bukkit.getPluginManager().registerEvents(new ItemListener(plugin), plugin);
-        }
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+      HandlerItem handlerItem = getInteractItem(event.getItemDrop().getItemStack());
+      if(handlerItem == null) {
+        return;
+      }
+      boolean wasCancelled = event.isCancelled();
+      event.setCancelled(true);
+      handlerItem.handleDrop(event);
+      if(!wasCancelled && !event.isCancelled()) {
+        event.setCancelled(false);
+      }
     }
 
-    public static List<HandlerItem> getItems() {
-        return items;
+    @EventHandler
+    public void onConsumeEvent(PlayerItemConsumeEvent event) {
+      HandlerItem handlerItem = getInteractItem(event.getItem());
+      if(handlerItem == null) {
+        return;
+      }
+      boolean wasCancelled = event.isCancelled();
+      event.setCancelled(true);
+      handlerItem.handleConsume(event);
+      if(!wasCancelled && !event.isCancelled()) {
+        event.setCancelled(false);
+      }
     }
 
-    public static final class ItemListener implements Listener {
-        private final Plugin plugin;
-
-        public ItemListener(Plugin plugin) {
-            this.plugin = plugin;
-        }
-
-        @EventHandler
-        public void onItemDrop(PlayerDropItemEvent event) {
-            HandlerItem handlerItem = getInteractItem(event.getItemDrop().getItemStack());
-            if (handlerItem == null) {
-                return;
-            }
-            boolean wasCancelled = event.isCancelled();
-            event.setCancelled(true);
-            handlerItem.handleDrop(event);
-            if (!wasCancelled && !event.isCancelled()) {
-                event.setCancelled(false);
-            }
-        }
-
-        @EventHandler
-        public void onConsumeEvent(PlayerItemConsumeEvent event) {
-            HandlerItem handlerItem = getInteractItem(event.getItem());
-            if (handlerItem == null) {
-                return;
-            }
-            boolean wasCancelled = event.isCancelled();
-            event.setCancelled(true);
-            handlerItem.handleConsume(event);
-            if (!wasCancelled && !event.isCancelled()) {
-                event.setCancelled(false);
-            }
-        }
-
-        @EventHandler
-        public void onInteractEvent(CBPlayerInteractEvent event) {
-            HandlerItem handlerItem = getInteractItem(event.getItem());
-            if (handlerItem == null) {
-                return;
-            }
-            boolean wasCancelled = event.isCancelled();
-            event.setCancelled(true);
-            handlerItem.handleInteract(event);
-            if (!wasCancelled && !event.isCancelled()) {
-                event.setCancelled(false);
-            }
-        }
-
-        @EventHandler
-        public void onPluginDisable(PluginDisableEvent e) {
-            if (e.getPlugin() == this.plugin) {
-                ItemManager.getItems().clear();
-                REGISTERED.set(false);
-            }
-        }
-
-        private HandlerItem getInteractItem(ItemStack itemStack) {
-            for (HandlerItem item : ItemManager.getItems()) {
-                if (item.getItemStack() == itemStack) {
-                    return item;
-                }
-            }
-            return null;
-        }
+    @EventHandler
+    public void onInteractEvent(PlugilyPlayerInteractEvent event) {
+      HandlerItem handlerItem = getInteractItem(event.getItem());
+      if(handlerItem == null) {
+        return;
+      }
+      boolean wasCancelled = event.isCancelled();
+      event.setCancelled(true);
+      handlerItem.handleInteract(event);
+      if(!wasCancelled && !event.isCancelled()) {
+        event.setCancelled(false);
+      }
     }
+
+    @EventHandler
+    public void onPluginDisable(PluginDisableEvent e) {
+      if(e.getPlugin() == this.plugin) {
+        ItemManager.getItems().clear();
+        REGISTERED.set(false);
+      }
+    }
+
+    private HandlerItem getInteractItem(ItemStack itemStack) {
+      for(HandlerItem item : ItemManager.getItems()) {
+        if(item.getItemStack().equals(itemStack)) {
+          return item;
+        }
+      }
+      return null;
+    }
+  }
 
 }

@@ -28,7 +28,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public class CBPlayerInteractEvent extends VersionEvent {
+public class PlugilyPlayerInteractEvent extends VersionEvent {
 
   private static final HandlerList handlers = new HandlerList();
   private final Player player;
@@ -41,7 +41,7 @@ public class CBPlayerInteractEvent extends VersionEvent {
   private final boolean hasItem;
   private final boolean hasBlock;
 
-  public CBPlayerInteractEvent(Player player, ItemStack itemStack, EquipmentSlot equipmentSlot, Action action, BlockFace blockFace, Block clickedBlock, Material material, boolean hasItem, boolean hasBlock) {
+  public PlugilyPlayerInteractEvent(Player player, ItemStack itemStack, EquipmentSlot equipmentSlot, Action action, BlockFace blockFace, Block clickedBlock, Material material, boolean hasItem, boolean hasBlock) {
     super(false);
     this.player = player;
     this.itemStack = itemStack;

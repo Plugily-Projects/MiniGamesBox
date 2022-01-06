@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class HologramManager implements Listener {
   }
 
   @EventHandler
-  public void onItemPickup(CBEntityPickupItemEvent event) {
+  public void onItemPickup(PlugilyEntityPickupItemEvent event) {
     if(!(event.getEntity() instanceof Player)) {
       return;
     }

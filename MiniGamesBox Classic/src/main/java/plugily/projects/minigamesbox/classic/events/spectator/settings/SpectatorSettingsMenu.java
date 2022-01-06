@@ -40,7 +40,7 @@ import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -222,7 +222,7 @@ public class SpectatorSettingsMenu implements Listener {
   }
 
   @EventHandler
-  public void onPlayerClick(CBPlayerInteractEntityEvent event) {
+  public void onPlayerClick(PlugilyPlayerInteractEntityEvent event) {
     Player player = event.getPlayer();
     if(!plugin.getUserManager().getUser(player).isSpectator()) {
       return;

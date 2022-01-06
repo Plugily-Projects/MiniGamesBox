@@ -31,11 +31,11 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerPickupArrow;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerSwapHandItemsEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerPickupArrow;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerSwapHandItemsEvent;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -52,7 +52,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-    CBPlayerSwapHandItemsEvent cbEvent = new CBPlayerSwapHandItemsEvent(event.getPlayer(), event.getMainHandItem(), event.getOffHandItem());
+    PlugilyPlayerSwapHandItemsEvent cbEvent = new PlugilyPlayerSwapHandItemsEvent(event.getPlayer(), event.getMainHandItem(), event.getOffHandItem());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
@@ -61,7 +61,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onEntityPickupItem(EntityPickupItemEvent event) {
-    CBEntityPickupItemEvent cbEvent = new CBEntityPickupItemEvent(event.getEntity(), event.getItem(), event.getRemaining());
+    PlugilyEntityPickupItemEvent cbEvent = new PlugilyEntityPickupItemEvent(event.getEntity(), event.getItem(), event.getRemaining());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
@@ -70,12 +70,12 @@ public class Events implements Listener {
 
   @EventHandler
   public void onPlayerPickupArrow(PlayerPickupArrowEvent event) {
-    CBPlayerPickupArrow cbEvent;
+    PlugilyPlayerPickupArrow cbEvent;
     try {
       Projectile projectile = (Projectile) event.getClass().getDeclaredMethod("getArrow").invoke(event);
-      cbEvent = new CBPlayerPickupArrow(event.getPlayer(), event.getItem(), projectile, event.getRemaining(), VersionUtils.isPaper() && event.getFlyAtPlayer());
+      cbEvent = new PlugilyPlayerPickupArrow(event.getPlayer(), event.getItem(), projectile, event.getRemaining(), VersionUtils.isPaper() && event.getFlyAtPlayer());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-      cbEvent = new CBPlayerPickupArrow(event.getPlayer(), event.getItem(), null, event.getRemaining(), false);
+      cbEvent = new PlugilyPlayerPickupArrow(event.getPlayer(), event.getItem(), null, event.getRemaining(), false);
     }
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
@@ -85,7 +85,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onPlayerInteractEvent(PlayerInteractEvent event) {
-    CBPlayerInteractEvent cbEvent = new CBPlayerInteractEvent(event.getPlayer(), event.getItem(), event.getHand(), event.getAction(), event.getBlockFace(), event.getClickedBlock(), event.getMaterial(), event.hasItem(), event.hasBlock());
+    PlugilyPlayerInteractEvent cbEvent = new PlugilyPlayerInteractEvent(event.getPlayer(), event.getItem(), event.getHand(), event.getAction(), event.getBlockFace(), event.getClickedBlock(), event.getMaterial(), event.hasItem(), event.hasBlock());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
@@ -94,7 +94,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
-    CBPlayerInteractEntityEvent cbEvent = new CBPlayerInteractEntityEvent(event.getPlayer(), event.getHand(), event.getRightClicked());
+    PlugilyPlayerInteractEntityEvent cbEvent = new PlugilyPlayerInteractEntityEvent(event.getPlayer(), event.getHand(), event.getRightClicked());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);

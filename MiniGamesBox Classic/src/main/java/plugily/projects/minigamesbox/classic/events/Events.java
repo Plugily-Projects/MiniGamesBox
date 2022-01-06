@@ -47,7 +47,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 /**
  * @author Tigerpanzer_02
@@ -177,7 +177,7 @@ public class Events implements Listener {
   }
 
   @EventHandler
-  public void onCraft(CBPlayerInteractEvent event) {
+  public void onCraft(PlugilyPlayerInteractEvent event) {
     if(plugin.getArenaRegistry().isInArena(event.getPlayer()) && event.getPlayer().getTargetBlock(null, 7).getType() == XMaterial.CRAFTING_TABLE.parseMaterial()) {
       event.setCancelled(true);
     }

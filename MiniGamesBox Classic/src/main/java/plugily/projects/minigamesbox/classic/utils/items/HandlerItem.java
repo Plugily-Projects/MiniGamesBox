@@ -24,7 +24,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class HandlerItem {
 
     private final List<Consumer<PlayerDropItemEvent>> dropHandlers;
     private final List<Consumer<PlayerItemConsumeEvent>> consumeHandlers;
-    private final List<Consumer<CBPlayerInteractEvent>> interactHandlers;
+    private final List<Consumer<PlugilyPlayerInteractEvent>> interactHandlers;
     private final ItemStack itemStack;
     private boolean rightClick = false;
     private boolean leftClick = false;
@@ -65,7 +65,7 @@ public class HandlerItem {
         consumeHandlers.add(consumeHandler);
     }
 
-    public void addInteractHandler(Consumer<CBPlayerInteractEvent> interactHandler) {
+    public void addInteractHandler(Consumer<PlugilyPlayerInteractEvent> interactHandler) {
         interactHandlers.add(interactHandler);
     }
 
@@ -77,7 +77,7 @@ public class HandlerItem {
         this.consumeHandlers.forEach((c) -> c.accept(event));
     }
 
-    void handleInteract(CBPlayerInteractEvent event) {
+    void handleInteract(PlugilyPlayerInteractEvent event) {
         boolean interactPermit = false;
         if (physical) {
             if (isPhysical(event)) {
@@ -113,21 +113,21 @@ public class HandlerItem {
         this.physical = physical;
     }
 
-    private boolean isRightClick(CBPlayerInteractEvent event) {
+    private boolean isRightClick(PlugilyPlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
             return true;
         }
         return event.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
 
-    private boolean isLeftClick(CBPlayerInteractEvent event) {
+    private boolean isLeftClick(PlugilyPlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR) {
             return true;
         }
         return event.getAction() == Action.LEFT_CLICK_BLOCK;
     }
 
-    private boolean isPhysical(CBPlayerInteractEvent event) {
+    private boolean isPhysical(PlugilyPlayerInteractEvent event) {
         return event.getAction() == Action.PHYSICAL;
     }
 

@@ -45,10 +45,10 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerPickupArrow;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerPickupArrow;
 
 /**
  * @author Tigerpanzer_02
@@ -109,7 +109,7 @@ public class SpectatorEvents implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  public void onInteract(CBPlayerInteractEntityEvent event) {
+  public void onInteract(PlugilyPlayerInteractEntityEvent event) {
     if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
       event.setCancelled(true);
     }
@@ -171,14 +171,14 @@ public class SpectatorEvents implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPickup(CBEntityPickupItemEvent event) {
+  public void onPickup(PlugilyEntityPickupItemEvent event) {
     if(event.getEntity() instanceof Player && plugin.getUserManager().getUser((Player) event.getEntity()).isSpectator()) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onArrowPickup(CBPlayerPickupArrow event) {
+  public void onArrowPickup(PlugilyPlayerPickupArrow event) {
     if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
       event.setCancelled(true);
     }
@@ -212,14 +212,14 @@ public class SpectatorEvents implements Listener {
   }
 
   @EventHandler
-  public void onInteractEntityInteract(CBPlayerInteractEntityEvent event) {
+  public void onInteractEntityInteract(PlugilyPlayerInteractEntityEvent event) {
     if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler
-  public void onRightClick(CBPlayerInteractEvent event) {
+  public void onRightClick(PlugilyPlayerInteractEvent event) {
     if(plugin.getArenaRegistry().getArena(event.getPlayer()) != null && plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
       event.setCancelled(true);
     }

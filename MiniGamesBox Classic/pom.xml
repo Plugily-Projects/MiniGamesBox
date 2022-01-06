@@ -169,7 +169,7 @@
                         </relocation>
                         <relocation>
                             <pattern>fr.mrmicky.fastinv</pattern>
-                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.fastinv</shadedPattern>
+                            <shadedPattern>plugily.projects.minigamesbox.inventory.utils.fastinv</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

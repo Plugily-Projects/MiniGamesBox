@@ -34,7 +34,7 @@ import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 /**
  * @author Tigerpanzer_02
@@ -90,7 +90,7 @@ public class KitMenuHandler implements Listener {
   }
 
   @EventHandler
-  public void onKitMenuItemClick(CBPlayerInteractEvent e) {
+  public void onKitMenuItemClick(PlugilyPlayerInteractEvent e) {
     if(!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
       return;
     }

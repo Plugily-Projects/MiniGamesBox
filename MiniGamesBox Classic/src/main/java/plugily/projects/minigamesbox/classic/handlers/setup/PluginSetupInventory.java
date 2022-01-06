@@ -23,7 +23,6 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.ArenaListPage;
@@ -64,15 +63,14 @@ public class PluginSetupInventory {
   }
 
   public void setArena(Player player, PluginArena arena) {
-    if(arena == null) {
-      plugin.getSetupUtilities().getArena(player);
+    if(arena == null && plugin.getSetupUtilities().getArena(player) != null) {
+      this.arena = plugin.getSetupUtilities().getArena(player);
     } else {
       this.arena = arena;
     }
   }
 
   public void open() {
-    player.closeInventory();
     switch(inventoryStage) {
       case SETUP_GUI:
         NormalFastInv setup_gui = new HomePage(54, plugin.getPluginMessagePrefix() + "Setup Menu", this);
@@ -80,6 +78,10 @@ public class PluginSetupInventory {
         setup_gui.open(player);
         break;
       case ARENA_LIST:
+        if(plugin.getArenaRegistry().getArenas().size() == 0) {
+          player.sendMessage(plugin.getChatManager().colorRawMessage("&cThere are no arenas!"));
+          return;
+        }
         NormalFastInv arena_list = new ArenaListPage(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this);
         addExternalItems(arena_list);
         arena_list.open(player);
@@ -167,6 +169,7 @@ public class PluginSetupInventory {
 
   public void setArena(PluginArena arena) {
     this.arena = arena;
+    plugin.getSetupUtilities().addSetupInventory(player, arena);
   }
 
   public PluginMain getPlugin() {

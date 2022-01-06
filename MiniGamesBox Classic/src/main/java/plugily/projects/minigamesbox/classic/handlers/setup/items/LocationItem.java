@@ -25,7 +25,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 
@@ -40,19 +40,19 @@ public class LocationItem implements ClickableItem {
 
   private final ItemStack item;
   private final Consumer<InventoryClickEvent> clickConsumer;
-  private final Consumer<CBPlayerInteractEvent> interactConsumer;
+  private final Consumer<PlugilyPlayerInteractEvent> interactConsumer;
   private boolean rightClick = false;
   private boolean leftClick = true;
   private boolean physical = false;
 
 
-  public LocationItem(ItemStack item, Consumer<InventoryClickEvent> clickConsumer, Consumer<CBPlayerInteractEvent> interactConsumer) {
+  public LocationItem(ItemStack item, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
     this.item = item;
     this.clickConsumer = clickConsumer;
     this.interactConsumer = interactConsumer;
   }
 
-  public LocationItem(ItemStack item, Consumer<InventoryClickEvent> clickConsumer, Consumer<CBPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
+  public LocationItem(ItemStack item, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
     this.item = item;
     this.clickConsumer = clickConsumer;
     this.interactConsumer = interactConsumer;
@@ -73,7 +73,9 @@ public class LocationItem implements ClickableItem {
       HandlerItem handlerItem = new HandlerItem(new ItemBuilder(item).amount(1).build());
       handlerItem.addDropHandler(dropEvent -> {
         handlerItem.remove();
+        dropEvent.getPlayer().getInventory().remove(dropEvent.getItemDrop().getItemStack());
         dropEvent.getItemDrop().remove();
+        dropEvent.getPlayer().updateInventory();
       });
       handlerItem.addConsumeHandler(consumeEvent -> consumeEvent.setCancelled(true));
       handlerItem.addInteractHandler(interactEvent -> {

@@ -39,7 +39,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -131,7 +131,7 @@ public class SignManager implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  public void onJoinAttempt(CBPlayerInteractEvent event) {
+  public void onJoinAttempt(PlugilyPlayerInteractEvent event) {
     if(event.getAction() != Action.RIGHT_CLICK_BLOCK || !(event.getClickedBlock().getState() instanceof Sign)) {
       return;
     }

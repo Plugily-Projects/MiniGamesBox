@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class CBPlayerInteractEntityEvent extends VersionEvent {
+public class PlugilyPlayerInteractEntityEvent extends VersionEvent {
 
   private static final HandlerList handlers = new HandlerList();
   private final Player player;
@@ -32,7 +32,7 @@ public class CBPlayerInteractEntityEvent extends VersionEvent {
   private final Entity rightClicked;
 
 
-  public CBPlayerInteractEntityEvent(Player player, EquipmentSlot equipmentSlot, Entity rightClicked) {
+  public PlugilyPlayerInteractEntityEvent(Player player, EquipmentSlot equipmentSlot, Entity rightClicked) {
     super(false);
     this.player = player;
     this.equipmentSlot = equipmentSlot;

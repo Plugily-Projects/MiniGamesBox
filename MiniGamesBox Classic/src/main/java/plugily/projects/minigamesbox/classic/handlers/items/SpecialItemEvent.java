@@ -29,8 +29,8 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerSwapHandItemsEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerSwapHandItemsEvent;
 
 /**
  * @author Tigerpanzer_02
@@ -59,14 +59,14 @@ public class SpecialItemEvent implements Listener {
   }
 
   @EventHandler
-  public void onSwap(CBPlayerSwapHandItemsEvent event) {
+  public void onSwap(PlugilyPlayerSwapHandItemsEvent event) {
     if(checkSpecialItem(event.getOffHandItem(), event.getPlayer())) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler
-  public void onSpecialItem(CBPlayerInteractEvent event) {
+  public void onSpecialItem(PlugilyPlayerInteractEvent event) {
     if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.PHYSICAL) {
       return;
     }

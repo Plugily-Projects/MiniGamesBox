@@ -19,34 +19,47 @@
 
 package plugily.projects.minigamesbox.classic.utils.version.events.api;
 
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
-public class CBPlayerSwapHandItemsEvent extends VersionEvent {
+public class PlugilyPlayerPickupArrow extends VersionEvent {
 
   private static final HandlerList handlers = new HandlerList();
-  private final ItemStack mainHandItem;
-  private final ItemStack offHandItem;
+  private final Item item;
+  private final Projectile arrow;
   private final Player player;
+  private final int remaining;
+  private final boolean flyAtPlayer;
 
-  public CBPlayerSwapHandItemsEvent(Player player, ItemStack mainHandItem, ItemStack offHandItem) {
+  public PlugilyPlayerPickupArrow(Player player, Item item, Projectile arrow, int remaining, boolean flyAtPlayer) {
     super(false);
     this.player = player;
-    this.mainHandItem = mainHandItem;
-    this.offHandItem = offHandItem;
+    this.item = item;
+    this.arrow = arrow;
+    this.remaining = remaining;
+    this.flyAtPlayer = flyAtPlayer;
   }
 
   public static HandlerList getHandlerList() {
     return handlers;
   }
 
-  public ItemStack getMainHandItem() {
-    return mainHandItem;
+  public int getRemaining() {
+    return remaining;
   }
 
-  public ItemStack getOffHandItem() {
-    return offHandItem;
+  public Projectile getArrow() {
+    return arrow;
+  }
+
+  public Item getItem() {
+    return item;
+  }
+
+  public boolean isFlyAtPlayer() {
+    return flyAtPlayer;
   }
 
   public Player getPlayer() {
@@ -57,7 +70,6 @@ public class CBPlayerSwapHandItemsEvent extends VersionEvent {
   public HandlerList getHandlers() {
     return handlers;
   }
-
 
 
 }
