@@ -41,8 +41,8 @@ public class SetupArgument {
 
   public SetupArgument(PluginArgumentsRegistry registry) {
     this.registry = registry;
-    registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("setup", registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " setup &c[create/edit] &c[arena]", registry.getPlugin().getPluginNamePrefix() + " setup [create/edit] [arena]",
+    registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("setup", registry.getPlugin().getCommandAdminPrefixLong() + ".admin.setup", CommandArgument.ExecutorType.PLAYER,
+        new LabelData("/" + registry.getPlugin().getCommandAdminPrefixLong() + " setup &c[create/edit] &c[arena]", registry.getPlugin().getCommandAdminPrefixLong() + " setup [create/edit] [arena]",
             "&7Used for all setup configuration \n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
@@ -61,14 +61,14 @@ public class SetupArgument {
             for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
               if(arena.getId().equalsIgnoreCase(args[2])) {
                 player.sendMessage(ChatColor.DARK_RED + "Arena with that ID already exists!");
-                player.sendMessage(ChatColor.DARK_RED + "Usage: /vd setup edit <ID>");
+                player.sendMessage(ChatColor.DARK_RED + "Usage: /" + registry.getPlugin().getCommandAdminPrefix() + " setup edit <ID>");
                 return;
               }
             }
-            if(ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[1])) {
+            if(ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[2])) {
               player.sendMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
             } else {
-              registry.getPlugin().getSetupUtilities().createInstanceInConfig(args[1], player.getWorld().getName(), player);
+              registry.getPlugin().getSetupUtilities().createInstanceInConfig(args[2], player.getWorld().getName(), player);
             }
             break;
           case "edit":
