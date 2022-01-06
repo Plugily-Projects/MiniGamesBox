@@ -43,14 +43,12 @@ public class ListArenasArgument {
 
         if(registry.getPlugin().getArenaRegistry().getArenas().isEmpty()) {
           sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_NO_ARENAS"));
-          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&e&lTIP: &7You can get free maps with configs at our wiki! Just head to https://wiki.plugily.xyz/"+ registry.getPlugin().getPluginNamePrefixLong().toLowerCase() +"/setup/maps"));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&e&lTIP: &7You can get free maps with configs at our wiki! Just head to https://wiki.plugily.xyz/" + registry.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/setup/maps"));
           return;
         }
 
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_FORMAT").replace("%arena%", arena.getId())
-              .replace("%status%", arena.getArenaState().getFormattedName()).replace("%players%", Integer.toString(arena.getPlayers().size()))
-              .replace("%maxplayers%", Integer.toString(arena.getMaximumPlayers())));
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_FORMAT", arena));
         }
       }
     });
