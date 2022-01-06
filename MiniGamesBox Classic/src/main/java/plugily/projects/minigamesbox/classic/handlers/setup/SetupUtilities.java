@@ -140,7 +140,7 @@ public class SetupUtilities {
 
 
   public void sendProTip(HumanEntity entity) {
-    switch(random.nextInt(25)) {
+    switch(random.nextInt(35)) {
       case 0:
         entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7We also got premade setups, check them out on &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/setup/maps"));
         break;
