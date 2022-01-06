@@ -27,6 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
@@ -56,6 +57,7 @@ public class LocationPage extends NormalFastInv implements SetupPage {
   @Override
   public void prepare() {
     injectItems();
+    setForceRefresh(true);
     setupInventory.getPlugin().getSetupUtilities().setDefaultItems(setupInventory, this, XMaterial.ORANGE_STAINED_GLASS_PANE.parseItem(), XMaterial.GRAY_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_GUI), XMaterial.BLUE_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_VALUES));
     refresh();
   }
@@ -108,7 +110,6 @@ public class LocationPage extends NormalFastInv implements SetupPage {
           setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".endlocation", serializedBlockLocation);
           setupInventory.getArena().setEndLocation(event.getClickedBlock().getRelative(0, 1, 0).getLocation());
           event.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&e✔ Completed | &aEnding location for arena " + setupInventory.getArena().getId() + " set at your location!"));
-          event.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "&cPlease keep in mind to use blocks instead of player location for precise coordinates!"));
           ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
           refresh();
           break;
@@ -258,7 +259,6 @@ public class LocationPage extends NormalFastInv implements SetupPage {
           setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".lobbylocation", serializedBlockLocation);
           setupInventory.getArena().setLobbyLocation(new Location(event.getClickedBlock().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()));
           event.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&e✔ Completed | &aLobby location for arena " + setupInventory.getArena().getId() + " set at your location!"));
-          event.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "&cPlease keep in mind to use blocks instead of player location for precise coordinates!"));
           ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
           refresh();
           break;
@@ -312,7 +312,6 @@ public class LocationPage extends NormalFastInv implements SetupPage {
           setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".startlocation", serializedBlockLocation);
           setupInventory.getArena().setStartLocation(new Location(event.getClickedBlock().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()));
           event.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&e✔ Completed | &aStarting location for arena " + setupInventory.getArena().getId() + " set at your location!"));
-          event.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "&cPlease keep in mind to use blocks instead of player location for precise coordinates!"));
           ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
           refresh();
           break;
@@ -320,5 +319,8 @@ public class LocationPage extends NormalFastInv implements SetupPage {
     }, true, true, false));
   }
 
-
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 }

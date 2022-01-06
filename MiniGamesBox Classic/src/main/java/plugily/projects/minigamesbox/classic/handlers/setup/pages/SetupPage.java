@@ -30,5 +30,4 @@ public interface SetupPage {
   void prepare();
 
   void injectItems();
-
 }

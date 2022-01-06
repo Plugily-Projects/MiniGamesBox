@@ -194,12 +194,14 @@ public class SetupUtilities {
         .lore(ChatColor.GOLD + "Selection of features of the addon:")
         .lore(ChatColor.GOLD + "Custom Kits, Achievements, Replay Ability")
         .lore(ChatColor.GRAY + "Click to get link for patron program!")
-        .enchantment(Enchantment.DURABILITY)
+        .enchantment(Enchantment.KNOCKBACK, 5)
         .build(), e -> {
       e.getWhoClicked().closeInventory();
       e.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview"));
     }));
-
+    if(pluginSetupInventory.getArena() != null) {
+      normalFastInv.setItem(49, new EmptyItem(new ItemBuilder(XMaterial.ANVIL.parseMaterial()).name("&aCurrently editing: " + pluginSetupInventory.getArena().getId()).colorizeItem().build()));
+    }
     normalFastInv.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
         .name(plugin.getChatManager().colorRawMessage("&e&lView Setup Video"))
         .lore(ChatColor.GRAY + "Having problems with setup or wanna")
@@ -261,7 +263,7 @@ public class SetupUtilities {
 
   public PluginArena createInstanceInConfig(String id, String worldName, Player player) {
     if(ConfigUtils.getConfig(plugin, "arenas").contains("instances." + id)) {
-      player.sendMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
+      player.sendRawMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
       return null;
     }
     String path = "instances." + id + ".";
@@ -271,20 +273,20 @@ public class SetupUtilities {
     config.set(path + "world", worldName);
     ConfigUtils.saveConfig(plugin, config, "arenas");
 
-    PluginArena arena = new PluginArena(id);
+    PluginArena arena = plugin.getArenaRegistry().getNewArena(id);
 
     arena.setMapName(id);
     arena.setReady(false);
 
     plugin.getArenaRegistry().registerArena(arena);
-    player.sendMessage(ChatColor.BOLD + "------------------------------------------");
-    player.sendMessage(ChatColor.YELLOW + "      Instance " + id + " created!");
-    player.sendMessage("");
-    player.sendMessage(ChatColor.GREEN + "Edit this arena via " + ChatColor.GOLD + plugin.getPluginNamePrefix() + " edit" + id + ChatColor.GREEN + "!");
-    player.sendMessage(ChatColor.GREEN + "Get full setup inventory via " + ChatColor.GOLD + plugin.getPluginNamePrefix() + " setup" + ChatColor.GREEN + "!");
-    player.sendMessage(ChatColor.GOLD + "Don't know where to start? Check out tutorial video:");
-    player.sendMessage(ChatColor.GOLD + VIDEO_LINK);
-    player.sendMessage(ChatColor.BOLD + "-------------------------------------------");
+    player.sendRawMessage(ChatColor.BOLD + "------------------------------------------");
+    player.sendRawMessage(ChatColor.YELLOW + "      Instance " + id + " created!");
+    player.sendRawMessage("");
+    player.sendRawMessage(ChatColor.GREEN + "Edit this arena via /" + ChatColor.GOLD + plugin.getCommandAdminPrefix() + " setup edit " + id + ChatColor.GREEN + "!");
+    player.sendRawMessage(ChatColor.GREEN + "Get full setup inventory via /" + ChatColor.GOLD + plugin.getCommandAdminPrefix() + " setup" + ChatColor.GREEN + "!");
+    player.sendRawMessage(ChatColor.GOLD + "Don't know where to start? Check out tutorial video:");
+    player.sendRawMessage(ChatColor.GOLD + VIDEO_LINK);
+    player.sendRawMessage(ChatColor.BOLD + "-------------------------------------------");
     return arena;
   }
 

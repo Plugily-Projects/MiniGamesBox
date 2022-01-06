@@ -22,6 +22,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup.pages;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
@@ -48,6 +49,7 @@ public class CountablePage extends NormalFastInv implements SetupPage {
   @Override
   public void prepare() {
     injectItems();
+    setForceRefresh(true);
     setupInventory.getPlugin().getSetupUtilities().setDefaultItems(setupInventory, this, XMaterial.WHITE_STAINED_GLASS_PANE.parseItem(), XMaterial.BLUE_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_VALUES), XMaterial.GREEN_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_BOOLEAN));
     refresh();
   }
@@ -92,5 +94,8 @@ public class CountablePage extends NormalFastInv implements SetupPage {
     }));
   }
 
-
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 }

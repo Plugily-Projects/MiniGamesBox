@@ -25,6 +25,7 @@ import org.bukkit.Material;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
@@ -52,6 +53,7 @@ public class ValuePage extends NormalFastInv implements SetupPage {
   @Override
   public void prepare() {
     injectItems();
+    setForceRefresh(true);
     setupInventory.getPlugin().getSetupUtilities().setDefaultItems(setupInventory, this, XMaterial.BLUE_STAINED_GLASS_PANE.parseItem(), XMaterial.ORANGE_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_LOCATIONS), XMaterial.WHITE_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_COUNTABLE));
     refresh();
   }
@@ -85,5 +87,9 @@ public class ValuePage extends NormalFastInv implements SetupPage {
     }));
   }
 
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 
 }

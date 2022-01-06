@@ -26,6 +26,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
@@ -55,16 +56,13 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
   public void prepare() {
     injectItems();
     setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
+    setForceRefresh(true);
     refresh();
   }
 
   @Override
   public void injectItems() {
-    if(setupInventory.getPlugin().getArenaRegistry().getArenas().size() == 0) {
-      setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI);
-      setupInventory.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&cThere are no arenas!"));
-      return;
-    }
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("Go to Setup Menu").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI)));
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
 
@@ -73,11 +71,12 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
         material = XMaterial.RED_WOOL.parseMaterial();
       }
 
-      addItem(new ItemBuilder(material)
+      addItem(ClickableItem.of(new ItemBuilder(material)
           .name(arena.getId() + " | " + arena.getMapName())
-          .lore("Left-Click to edit")
-          .lore("Right-Click to delete")
-          .lore("Shift-Left to clone")
+          .lore("&aLeft-Click to edit")
+          .lore("&cRight-Click to delete")
+          .lore("&eShift-Left to clone")
+          .colorizeItem()
           .build(), event -> {
         switch(event.getClick()) {
           case LEFT:
@@ -88,13 +87,14 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
             new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
               @Override
               public @NotNull String getPromptText(ConversationContext context) {
+                setupInventory.getPlayer().closeInventory();
                 return setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "&ePlease type in chat 'delete' ! &cType in 'CANCEL' to cancel!");
               }
 
               @Override
               public Prompt acceptInput(ConversationContext context, String input) {
                 if(!input.equalsIgnoreCase("delete")) {
-                  setupInventory.getPlayer().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&cDelete operation canceled"));
+                  setupInventory.getPlayer().sendRawMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&cDelete operation canceled"));
                   return Prompt.END_OF_CONVERSATION;
                 }
                 setupInventory.getPlugin().getArenaManager().stopGame(false, arena);
@@ -102,7 +102,7 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
                 config.set("instances." + arena.getId(), null);
                 ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
-                event.getWhoClicked().sendMessage(setupInventory.getPlugin().getChatManager().getPrefix() + setupInventory.getPlugin().getChatManager().colorMessage("COMMANDS_REMOVED_GAME_INSTANCE"));
+                setupInventory.getPlayer().sendRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + setupInventory.getPlugin().getChatManager().colorMessage("COMMANDS_REMOVED_GAME_INSTANCE"));
                 setupInventory.open(SetupUtilities.InventoryStage.ARENA_LIST);
                 return Prompt.END_OF_CONVERSATION;
               }
@@ -114,10 +114,13 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
           default:
             break;
         }
-      });
+      }));
 
     }
   }
 
-
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 }

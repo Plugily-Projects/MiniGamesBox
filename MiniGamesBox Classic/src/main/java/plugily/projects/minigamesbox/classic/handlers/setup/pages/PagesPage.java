@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.pages;
 
 import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
@@ -44,18 +45,23 @@ public class PagesPage extends NormalFastInv implements SetupPage {
   @Override
   public void prepare() {
     injectItems();
+    setForceRefresh(true);
     setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
     refresh();
   }
 
   @Override
   public void injectItems() {
-    setItem(1, new ItemBuilder(XMaterial.ORANGE_STAINED_GLASS_PANE.parseMaterial()).build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_LOCATIONS));
-    setItem(3, new ItemBuilder(XMaterial.BLUE_STAINED_GLASS_PANE.parseMaterial()).build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_VALUES));
-    setItem(5, new ItemBuilder(XMaterial.WHITE_STAINED_GLASS_PANE.parseMaterial()).build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_COUNTABLE));
-    setItem(7, new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial()).build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_BOOLEAN));
-    setItem(45, new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).build(), event -> setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI));
+    setItem(1, ClickableItem.of(new ItemBuilder(XMaterial.ORANGE_STAINED_GLASS_PANE.parseMaterial()).name("Edit Location").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_LOCATIONS)));
+    setItem(3, ClickableItem.of(new ItemBuilder(XMaterial.BLUE_STAINED_GLASS_PANE.parseMaterial()).name("Edit Values").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_VALUES)));
+    setItem(5, ClickableItem.of(new ItemBuilder(XMaterial.WHITE_STAINED_GLASS_PANE.parseMaterial()).name("Edit Countable").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_COUNTABLE)));
+    setItem(7, ClickableItem.of(new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial()).name("Edit Booleans").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_BOOLEAN)));
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("Go to Setup Menu").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI)));
   }
 
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 
 }

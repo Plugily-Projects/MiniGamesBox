@@ -25,8 +25,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.handlers.sign.ArenaSign;
@@ -57,6 +57,7 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
   @Override
   public void prepare() {
     injectItems();
+    setForceRefresh(true);
     setupInventory.getPlugin().getSetupUtilities().setDefaultItems(setupInventory, this, XMaterial.GREEN_STAINED_GLASS_PANE.parseItem(), XMaterial.BLUE_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_COUNTABLE), XMaterial.GRAY_STAINED_GLASS_PANE.parseItem(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_GUI));
     refresh();
   }
@@ -109,7 +110,7 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
           signsToUpdate.add(arenaSign.getSign());
         }
       }
-      setupInventory.setArena(new PluginArena(setupInventory.getArena().getId()));
+      setupInventory.setArena(setupInventory.getPlugin().getArenaRegistry().getNewArena(setupInventory.getArena().getId()));
       setupInventory.getArena().setReady(true);
       setupInventory.getArena().setMinimumPlayers(setupInventory.getPlugin().getSetupUtilities().getConfig().getInt("instances." + setupInventory.getArena().getId() + ".minimumplayers"));
       setupInventory.getArena().setMaximumPlayers(setupInventory.getPlugin().getSetupUtilities().getConfig().getInt("instances." + setupInventory.getArena().getId() + ".maximumplayers"));
@@ -130,5 +131,9 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
     }));
   }
 
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 
 }

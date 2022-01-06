@@ -25,9 +25,12 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
+import plugily.projects.minigamesbox.classic.handlers.setup.items.EmptyItem;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
@@ -51,6 +54,7 @@ public class HomePage extends NormalFastInv implements SetupPage {
   @Override
   public void prepare() {
     injectItems();
+    setForceRefresh(true);
     refresh();
   }
 
@@ -76,10 +80,11 @@ public class HomePage extends NormalFastInv implements SetupPage {
             @Override
             public Prompt acceptInput(ConversationContext context, String input) {
               String name = setupInventory.getPlugin().getChatManager().colorRawMessage(input);
-              setupInventory.setArena(setupInventory.getPlugin().getSetupUtilities().createInstanceInConfig(name, event.getWhoClicked().getWorld().getName(), (Player) event.getWhoClicked()));
-              if(setupInventory.getArena() == null) {
+              PluginArena arena = setupInventory.getPlugin().getSetupUtilities().createInstanceInConfig(name, event.getWhoClicked().getWorld().getName(), setupInventory.getPlayer());
+              if(arena == null) {
                 return Prompt.END_OF_CONVERSATION;
               }
+              setupInventory.setArena(setupInventory.getPlayer(), arena);
               setupInventory.open(SetupUtilities.InventoryStage.PAGED_LOCATIONS);
               return Prompt.END_OF_CONVERSATION;
             }
@@ -90,10 +95,11 @@ public class HomePage extends NormalFastInv implements SetupPage {
 
     setItem(25, ClickableItem.of(new ItemBuilder(XMaterial.SLIME_BLOCK.parseItem())
             .name(setupInventory.getPlugin().getChatManager().colorRawMessage("&cContinue Arena Setup"))
-            .lore(ChatColor.GRAY + "Create a fully new arena")
+            .lore(ChatColor.GRAY + "Continue a previous started arena editor")
             .build(), event -> {
           if(setupInventory.getArena() == null) {
             event.getWhoClicked().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "You need to create or edit a arena first"));
+            return;
           }
           setupInventory.open(SetupUtilities.InventoryStage.PAGED_GUI);
         }
@@ -120,9 +126,13 @@ public class HomePage extends NormalFastInv implements SetupPage {
       event.getWhoClicked().sendMessage(setupInventory.getPlugin().getChatManager().getPrefix() + setupInventory.getPlugin().getChatManager().colorRawMessage("&6Check out this video: " + setupInventory.getPlugin().getSetupUtilities().VIDEO_LINK + SetupUtilities.InventoryStage.SETUP_GUI.getTutorial()));
     }));
 
-    setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
-    refresh();
+    setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
   }
 
+
+  @Override
+  protected void onClick(InventoryClickEvent event) {
+    refresh();
+  }
 
 }
