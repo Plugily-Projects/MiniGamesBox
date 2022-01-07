@@ -76,11 +76,11 @@ public class KitMenuHandler implements Listener {
           return;
         }
         if(!kit.isUnlockedByPlayer(player)) {
-          player.sendMessage(plugin.getChatManager().colorMessage("KIT_NOT_UNLOCKED").replace("%kit%", kit.getName()));
+          player.sendMessage(plugin.getChatManager().colorMessage("KIT_NOT_UNLOCKED").replace("%value%", kit.getName()));
           return;
         }
         plugin.getUserManager().getUser(player).setKit(kit);
-        player.sendMessage(plugin.getChatManager().colorMessage("KIT_CHOOSE").replace("%kit%", kit.getName()));
+        player.sendMessage(plugin.getChatManager().colorMessage("KIT_CHOOSE").replace("%value%", kit.getName()));
       });
     }
     gui.open(player);
