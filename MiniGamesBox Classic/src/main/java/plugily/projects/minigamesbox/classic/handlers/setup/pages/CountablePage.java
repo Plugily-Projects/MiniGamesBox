@@ -96,6 +96,7 @@ public class CountablePage extends NormalFastInv implements SetupPage {
 
   @Override
   protected void onClick(InventoryClickEvent event) {
+    injectItems();
     refresh();
   }
 }

@@ -132,6 +132,7 @@ public class HomePage extends NormalFastInv implements SetupPage {
 
   @Override
   protected void onClick(InventoryClickEvent event) {
+    injectItems();
     refresh();
   }
 

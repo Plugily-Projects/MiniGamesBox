@@ -89,6 +89,7 @@ public class ValuePage extends NormalFastInv implements SetupPage {
 
   @Override
   protected void onClick(InventoryClickEvent event) {
+    injectItems();
     refresh();
   }
 
