@@ -70,10 +70,8 @@ public class ChatEvents implements Listener {
           eventMessage = eventMessage.replaceAll(Pattern.quote(regexChar), "");
         }
       }
-      event.setMessage(ChatColor.stripColor(eventMessage));
-
-      String format = formatChatPlaceholders(plugin.getChatManager().colorMessage("IN_GAME_GAME_CHAT_FORMAT"), plugin.getUserManager().getUser(event.getPlayer()));
-      event.setFormat(format);
+      String message = formatChatPlaceholders(plugin.getChatManager().colorMessage("IN_GAME_GAME_CHAT_FORMAT"), plugin.getUserManager().getUser(event.getPlayer()), arena, eventMessage);
+      event.setMessage(message);
     }
     if(!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
       event.getRecipients().removeIf(player -> !plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player));
@@ -81,10 +79,9 @@ public class ChatEvents implements Listener {
     }
   }
 
-  private String formatChatPlaceholders(String message, User user) {
+  private String formatChatPlaceholders(String message, User user, PluginArena arena, String saidMessage) {
     String formatted = message;
     formatted = plugin.getChatManager().colorRawMessage(formatted);
-    formatted = StringUtils.replace(formatted, "%level%", Integer.toString(user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
     if(user.isSpectator()) {
       formatted = StringUtils.replace(formatted, "%kit%", plugin.getChatManager().colorMessage("IN_GAME_DEATH_TAG"));
     } else {
@@ -98,7 +95,8 @@ public class ChatEvents implements Listener {
     Player player = user.getPlayer();
 
     formatted = StringUtils.replace(formatted, "%player%", player.getName());
-    formatted = StringUtils.replace(formatted, "%message%", "%2$s");
+    formatted = StringUtils.replace(formatted, "%message%", ChatColor.stripColor(saidMessage));
+    formatted = plugin.getChatManager().formatMessage(arena, formatted, player);
     if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       formatted = PlaceholderAPI.setPlaceholders(player, formatted);
     }
