@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.kits;
 import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
-import plugily.projects.minigamesbox.classic.kits.free.ExampleKit;
+import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.List;
@@ -41,10 +41,7 @@ public class KitRegistry {
   //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
-    if(!plugin.getConfig().getBoolean("Kits", false)) {
-      return;
-    }
-    setDefaultKit(new ExampleKit());
+    setDefaultKit(new EmptyKit());
   }
 
   /**
@@ -53,6 +50,10 @@ public class KitRegistry {
    * @param kit Kit to register
    */
   public void registerKit(Kit kit) {
+    if(!plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getDebugger().debug("Kit " + kit.getName() + " can't be added as kits are disabled");
+      return;
+    }
     if(kits.contains(kit)) {
       plugin.getDebugger().debug("Kit " + kit.getName() + " can't be added as its already registered");
       return;
@@ -72,6 +73,7 @@ public class KitRegistry {
    * @return default game kit
    */
   public Kit getDefaultKit() {
+    plugin.getDebugger().debug("getDefaultKit is {0}", defaultKit);
     return defaultKit;
   }
 
@@ -81,6 +83,7 @@ public class KitRegistry {
    * @param defaultKit default kit to set, must be FreeKit
    */
   public void setDefaultKit(Kit defaultKit) {
+    plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit);
     this.defaultKit = defaultKit;
   }
 

@@ -34,11 +34,11 @@ import java.util.List;
  * <p>
  * Created at 02.12.2021
  */
-public class ExampleKit extends FreeKit {
+public class EmptyKit extends FreeKit {
 
-  public ExampleKit() {
-    setName(getPlugin().getChatManager().colorMessage("KITS_EXAMPLE_NAME"));
-    List<String> description = getPlugin().getBukkitHelper().splitString(getPlugin().getChatManager().colorMessage("KITS_EXAMPLE_DESCRIPTION"), 40);
+  public EmptyKit() {
+    setName("");
+    List<String> description = getPlugin().getBukkitHelper().splitString("", 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);
   }
@@ -50,15 +50,11 @@ public class ExampleKit extends FreeKit {
 
   @Override
   public void giveKitItems(Player player) {
-    player.getInventory().addItem(WeaponHelper.getUnBreakingSword(WeaponHelper.ResourceType.WOOD, 10));
-    ArmorHelper.setArmor(player, ArmorHelper.ArmorType.LEATHER);
-    player.getInventory().addItem(new ItemStack(XMaterial.COOKED_PORKCHOP.parseMaterial(), 8));
-
   }
 
   @Override
   public Material getMaterial() {
-    return XMaterial.WOODEN_SWORD.parseMaterial();
+    return XMaterial.BEDROCK.parseMaterial();
   }
 
   @Override
