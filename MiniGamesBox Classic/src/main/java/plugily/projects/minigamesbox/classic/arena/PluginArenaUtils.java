@@ -85,13 +85,15 @@ public class PluginArenaUtils {
       player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NOT_PLAYING"));
       return;
     }
-
-    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
-      arena.setArenaState(ArenaState.STARTING);
-      arena.setForceStart(true);
-      arena.setTimer(timer);
-      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
+    if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getArenaState() != ArenaState.FULL_GAME) {
+      return;
     }
+
+    plugin.getDebugger().debug("Arena {0} got force started by {1} with timer {2}", arena.getId(), player.getName(), timer);
+    arena.setArenaState(ArenaState.STARTING);
+    arena.setForceStart(true);
+    arena.setTimer(timer);
+    plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
   }
 
 }

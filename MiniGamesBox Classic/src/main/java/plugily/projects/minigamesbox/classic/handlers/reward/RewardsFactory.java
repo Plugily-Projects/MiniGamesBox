@@ -142,6 +142,9 @@ public class RewardsFactory {
     if(arena == null && player != null)
       arena = plugin.getArenaRegistry().getArena(player);
     for(Reward reward : rewards) {
+      if(reward == null) {
+        continue;
+      }
       executeReward(player, arena, reward);
     }
   }
@@ -152,6 +155,9 @@ public class RewardsFactory {
       return;
     }
     String command = reward.getExecutableCode();
+    if(command == null || command.equalsIgnoreCase("")) {
+      return;
+    }
 
     if(player != null) {
       command = StringUtils.replace(command, "%player%", player.getName());
