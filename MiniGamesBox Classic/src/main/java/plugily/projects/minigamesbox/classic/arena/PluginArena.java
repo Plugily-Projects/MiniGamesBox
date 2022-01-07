@@ -150,6 +150,7 @@ public class PluginArena extends BukkitRunnable {
 
   public void addGameStateHandler(ArenaState arenaState, ArenaStateHandler arenaStateHandler) {
     gameStateHandlers.put(arenaState, arenaStateHandler);
+    arenaStateHandler.init(plugin);
   }
 
   public void setScoreboardManager(PluginScoreboardManager scoreboardManager) {
