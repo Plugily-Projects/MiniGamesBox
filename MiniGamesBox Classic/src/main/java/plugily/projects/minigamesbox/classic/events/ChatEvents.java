@@ -88,7 +88,11 @@ public class ChatEvents implements Listener {
     if(user.isSpectator()) {
       formatted = StringUtils.replace(formatted, "%kit%", plugin.getChatManager().colorMessage("IN_GAME_DEATH_TAG"));
     } else {
-      formatted = StringUtils.replace(formatted, "%kit%", user.getKit().getName());
+      if(user.getKit() == null) {
+        formatted = StringUtils.replace(formatted, "%kit%", "-");
+      } else {
+        formatted = StringUtils.replace(formatted, "%kit%", user.getKit().getName());
+      }
     }
 
     Player player = user.getPlayer();
