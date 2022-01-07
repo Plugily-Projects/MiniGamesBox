@@ -96,11 +96,11 @@ public class SpecialItemEvent implements Listener {
       return;
     }
     plugin.getRewardsHandler().performReward(player, arena, relatedSpecialItem.getRewards());
-    if(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").equals(relatedSpecialItem)) {
+    if(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").getPath().equals(relatedSpecialItem.getPath())) {
       PluginArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
       return;
     }
-    if(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").equals(relatedSpecialItem) || plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").equals(relatedSpecialItem)) {
+    if(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").getPath().equals(relatedSpecialItem.getPath()) || plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").getPath().equals(relatedSpecialItem.getPath())) {
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         plugin.getBungeeManager().connectToHub(player);
       } else {
@@ -108,12 +108,16 @@ public class SpecialItemEvent implements Listener {
       }
       return;
     }
-    if(plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").equals(relatedSpecialItem)) {
+    if(plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").getPath().equals(relatedSpecialItem.getPath())) {
       plugin.getSpectatorItemsManager().openSpectatorMenu(player, arena);
       return;
     }
-    if(plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_SETTINGS").equals(relatedSpecialItem)) {
+    if(plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_SETTINGS").getPath().equals(relatedSpecialItem.getPath())) {
       plugin.getSpectatorItemsManager().getSpectatorSettingsMenu().getInventory().open(player);
+      return;
+    }
+    if(plugin.getSpecialItemManager().getSpecialItem("KIT_SELECTOR_MENU").getPath().equals(relatedSpecialItem.getPath())) {
+      plugin.getKitMenuHandler().createMenu(player);
     }
   }
 

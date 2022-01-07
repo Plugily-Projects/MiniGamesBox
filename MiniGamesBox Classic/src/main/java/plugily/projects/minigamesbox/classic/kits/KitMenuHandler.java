@@ -46,14 +46,11 @@ public class KitMenuHandler implements Listener {
   private final PluginMain plugin;
   private final String unlockedString;
   private final String lockedString;
-  private final SpecialItem kitItem;
 
   public KitMenuHandler(PluginMain plugin) {
     this.plugin = plugin;
-    this.kitItem = plugin.getSpecialItemManager().getSpecialItem("KIT_SELECTOR_MENU");
     unlockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCKED");
     lockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_LOCKED");
-    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   public void createMenu(Player player) {
@@ -87,18 +84,6 @@ public class KitMenuHandler implements Listener {
       });
     }
     gui.open(player);
-  }
-
-  @EventHandler
-  public void onKitMenuItemClick(PlugilyPlayerInteractEvent e) {
-    if(!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-      return;
-    }
-    if(!VersionUtils.getItemInHand(e.getPlayer()).equals(kitItem.getItemStack())) {
-      return;
-    }
-    e.setCancelled(true);
-    createMenu(e.getPlayer());
   }
 
 }
