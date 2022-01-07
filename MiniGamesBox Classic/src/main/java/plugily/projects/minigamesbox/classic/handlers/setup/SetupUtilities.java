@@ -23,6 +23,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
@@ -85,7 +86,7 @@ public class SetupUtilities {
   }
 
   public String isOptionDoneSection(String path, int minimum, PluginSetupInventory setupInventory) {
-    org.bukkit.configuration.ConfigurationSection section = config.getConfigurationSection("instances." + setupInventory.getArena().getId() + "." + path);
+    ConfigurationSection section = config.getConfigurationSection("instances." + setupInventory.getArena().getId() + "." + path);
 
     if(section != null) {
       int keysSize = section.getKeys(false).size();

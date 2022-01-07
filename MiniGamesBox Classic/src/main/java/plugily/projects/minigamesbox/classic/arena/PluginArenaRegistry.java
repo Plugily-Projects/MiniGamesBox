@@ -159,15 +159,13 @@ public class PluginArenaRegistry {
 
       PluginArena arena = getNewArena(id);
 
+      arena.setMapName(section.getString(id + ".mapname", "none"));
+
       if(!additionalValidatorChecks(section, arena, id)) {
         arena.setReady(false);
         registerArena(arena);
         continue;
       }
-
-      arena.setMapName(section.getString(id + ".mapname", "none"));
-      arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 1));
-      arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 2));
 
 
       registerArena(arena);
@@ -180,9 +178,9 @@ public class PluginArenaRegistry {
   }
 
   public boolean additionalValidatorChecks(ConfigurationSection section, PluginArena arena, String id) {
-    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".Startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
+    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
     Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".Endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
+    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
 
     if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
         || endLoc == null || endLoc.getWorld() == null) {
