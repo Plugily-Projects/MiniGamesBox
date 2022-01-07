@@ -194,7 +194,7 @@ public class ChatManager {
       if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
         continue;
       }
-      returnString = StringUtils.replace(returnString, "%arena_" + placeholder.getId() + "%", placeholder.getValue(arena));
+      returnString = StringUtils.replace(returnString, "%" + placeholder.getId() + "%", placeholder.getValue(arena));
     }
     return returnString;
   }
@@ -206,7 +206,7 @@ public class ChatManager {
       if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
         continue;
       }
-      returnString = StringUtils.replace(returnString, "%arena_" + placeholder.getId() + "%", placeholder.getValue(player, arena));
+      returnString = StringUtils.replace(returnString, "%" + placeholder.getId() + "%", placeholder.getValue(player, arena));
     }
     return returnString;
   }
