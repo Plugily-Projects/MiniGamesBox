@@ -80,12 +80,12 @@ public class BossbarManager {
     if(currentLine >= lines) {
       currentLine = 0;
     }
+    String bossbarMessage = plugin.getChatManager().formatMessage(values.get(currentLine), arena);
     if(arena.getArenaOption("BAR_TOGGLE_VALUE") > interval) {
       currentLine++;
       arena.setArenaOption("BAR_TOGGLE_VALUE", 0);
       arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
     }
-    String bossbarMessage = plugin.getChatManager().formatMessage(values.get(currentLine), arena);
 
     gameBar.setTitle(bossbarMessage);
     arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
