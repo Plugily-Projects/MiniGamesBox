@@ -41,7 +41,6 @@ public class KitRegistry {
   //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
-    setDefaultKit(new EmptyKit());
   }
 
   /**
@@ -73,6 +72,9 @@ public class KitRegistry {
    * @return default game kit
    */
   public Kit getDefaultKit() {
+    if(defaultKit == null) {
+      setDefaultKit(new EmptyKit());
+    }
     plugin.getDebugger().debug("getDefaultKit is {0}", defaultKit);
     return defaultKit;
   }
