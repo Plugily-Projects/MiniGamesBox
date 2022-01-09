@@ -88,7 +88,6 @@ public class RewardsFactory {
     }
     rewardTypes.put(key, rewardType);
     rewards.clear();
-    rewardTypes.clear();
     registerRewards();
   }
 
@@ -107,7 +106,6 @@ public class RewardsFactory {
     }
     rewardTypes.remove(key);
     rewards.clear();
-    rewardTypes.clear();
     registerRewards();
   }
 
