@@ -52,7 +52,7 @@ public class ArenaOptionManager {
   }
 
   private void loadExternals(String key, ArenaOption arenaOption) {
-    plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("_option_" + key.toLowerCase(), Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("option_" + key.toLowerCase(), Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return String.valueOf(arenaOption.getValue());
