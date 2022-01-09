@@ -34,6 +34,8 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 public class PluginRestartingState implements ArenaStateHandler {
 
   private PluginMain plugin;
+  private int arenaTimer = -999;
+  private ArenaState arenaState = ArenaState.RESTARTING;
 
   @Override
   public void init(PluginMain plugin) {
@@ -44,8 +46,6 @@ public class PluginRestartingState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     arena.getMapRestorerManager().fullyRestoreArena();
     arena.getPlayers().clear();
-    arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
-
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
         plugin.getServer().shutdown();
@@ -55,6 +55,26 @@ public class PluginRestartingState implements ArenaStateHandler {
         plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
       }
     }
+    arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
+    arenaState = ArenaState.WAITING_FOR_PLAYERS;
+  }
+
+  @Override
+  public int getArenaTimer() {
+    return arenaTimer;
+  }
+
+  @Override
+  public ArenaState getArenaStateChange() {
+    return arenaState;
+  }
+
+  public void setArenaTimer(int arenaTimer) {
+    this.arenaTimer = arenaTimer;
+  }
+
+  public void setArenaState(ArenaState arenaState) {
+    this.arenaState = arenaState;
   }
 
   public PluginMain getPlugin() {

@@ -35,6 +35,8 @@ import plugily.projects.minigamesbox.classic.user.User;
 public class PluginEndingState implements ArenaStateHandler {
 
   private PluginMain plugin;
+  private int arenaTimer = -999;
+  private ArenaState arenaState = ArenaState.ENDING;
 
   @Override
   public void init(PluginMain plugin) {
@@ -49,7 +51,6 @@ public class PluginEndingState implements ArenaStateHandler {
 
     if(timer <= 0) {
       String teleportedToLobby = plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY");
-
       for(Player player : arena.getPlayers()) {
         PluginArenaUtils.resetPlayerAfterGame(player);
         arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
@@ -66,10 +67,27 @@ public class PluginEndingState implements ArenaStateHandler {
           player.sendMessage(teleportedToLobby);
         }
       }
-
-      arena.setArenaState(ArenaState.RESTARTING);
+      arenaTimer = plugin.getConfig().getInt("Time-Manager.Restarting", 5);
+      arenaState = ArenaState.RESTARTING;
     }
-    arena.setTimer(timer - 1);
+  }
+
+  @Override
+  public int getArenaTimer() {
+    return arenaTimer;
+  }
+
+  @Override
+  public ArenaState getArenaStateChange() {
+    return arenaState;
+  }
+
+  public void setArenaTimer(int arenaTimer) {
+    this.arenaTimer = arenaTimer;
+  }
+
+  public void setArenaState(ArenaState arenaState) {
+    this.arenaState = arenaState;
   }
 
   public PluginMain getPlugin() {

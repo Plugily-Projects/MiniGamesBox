@@ -34,6 +34,8 @@ import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 public class PluginWaitingState implements ArenaStateHandler {
 
   private PluginMain plugin;
+  private int arenaTimer = -999;
+  private ArenaState arenaState = ArenaState.WAITING_FOR_PLAYERS;
 
   @Override
   public void init(PluginMain plugin) {
@@ -43,23 +45,40 @@ public class PluginWaitingState implements ArenaStateHandler {
   @Override
   public void handleCall(PluginArena arena) {
     int minPlayers = arena.getMinimumPlayers();
+    int timer = arena.getTimer();
 
     if(arena.getPlayers().size() < minPlayers) {
-      if(arena.getTimer() <= 0) {
-        arena.setTimer(plugin.getConfig().getInt("Time-Manager.Waiting", 20));
+      if(timer <= 0) {
+        arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
         plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
-        return;
       }
-    } else {
-      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
-      arena.setArenaState(ArenaState.STARTING);
-      arena.setTimer(plugin.getConfig().getInt("Time-Manager.Starting", 60));
-      for(Player player : arena.getPlayers()) {
-        plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
-        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
-      }
+      return;
     }
-    arena.setTimer(arena.getTimer() - 1);
+    plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
+    arenaState = ArenaState.STARTING;
+    arenaTimer = plugin.getConfig().getInt("Time-Manager.Starting", 60);
+    for(Player player : arena.getPlayers()) {
+      plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+    }
+  }
+
+  @Override
+  public int getArenaTimer() {
+    return arenaTimer;
+  }
+
+  @Override
+  public ArenaState getArenaStateChange() {
+    return arenaState;
+  }
+
+  public void setArenaTimer(int arenaTimer) {
+    this.arenaTimer = arenaTimer;
+  }
+
+  public void setArenaState(ArenaState arenaState) {
+    this.arenaState = arenaState;
   }
 
   public PluginMain getPlugin() {

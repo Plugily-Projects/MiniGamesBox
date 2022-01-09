@@ -96,4 +96,7 @@ public class PluginArenaUtils {
     plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
   }
 
+  public static PluginMain getPlugin() {
+    return plugin;
+  }
 }

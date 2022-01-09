@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.arena.states;
 
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
@@ -30,6 +31,8 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 public class PluginInGameState implements ArenaStateHandler {
 
   private PluginMain plugin;
+  private int arenaTimer = -999;
+  private ArenaState arenaState = ArenaState.IN_GAME;
 
   @Override
   public void init(PluginMain plugin) {
@@ -38,7 +41,24 @@ public class PluginInGameState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
-    arena.setTimer(arena.getTimer() - 1);
+  }
+
+  @Override
+  public int getArenaTimer() {
+    return arenaTimer;
+  }
+
+  @Override
+  public ArenaState getArenaStateChange() {
+    return arenaState;
+  }
+
+  public void setArenaTimer(int arenaTimer) {
+    this.arenaTimer = arenaTimer;
+  }
+
+  public void setArenaState(ArenaState arenaState) {
+    this.arenaState = arenaState;
   }
 
   public PluginMain getPlugin() {

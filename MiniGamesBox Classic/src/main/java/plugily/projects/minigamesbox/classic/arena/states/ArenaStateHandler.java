@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.arena.states;
 
 
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
@@ -45,5 +46,18 @@ public interface ArenaStateHandler {
    * @param arena arena to call state update for
    */
   void handleCall(PluginArena arena);
+
+  /**
+   * Handle arena timer change after state is executed.
+   *
+   * @return int which will be used for arena.setTimer(timer)
+   */
+  int getArenaTimer();
+
+  /**
+   *
+   * @return ArenaState that will be executed as next
+   */
+  ArenaState getArenaStateChange();
 
 }
