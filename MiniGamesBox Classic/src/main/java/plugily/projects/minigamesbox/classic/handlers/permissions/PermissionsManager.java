@@ -180,6 +180,7 @@ public class PermissionsManager {
         value += perm.getValue();
       }
     }
+    plugin.getDebugger().debug("Player {0} got value {1} for permission category {2}", player.getName(), value, key);
     return value;
   }
 

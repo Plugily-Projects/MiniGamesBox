@@ -50,7 +50,7 @@ public class PlaceholderManager {
   }
 
   private void insertDefaultPlaceholders() {
-    registerPlaceholder(new Placeholder("arena_players_online", Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("arena_players_online", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
         return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
@@ -66,7 +66,7 @@ public class PlaceholderManager {
         return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
       }
     });
-    registerPlaceholder(new Placeholder("user_statistic_exp_to_next_level", Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("user_statistic_exp_to_next_level", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
         return Double.toString(Math.ceil(Math.pow(50 * plugin.getStatsStorage().getUserStats(player, plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5)));
@@ -83,6 +83,7 @@ public class PlaceholderManager {
         return Integer.toString(arena.getPlayers().size());
       }
     });
+    //dup of arena_option_max_players
     registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
