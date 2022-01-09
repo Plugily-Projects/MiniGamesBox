@@ -106,7 +106,7 @@ public class PluginScoreboardManager {
     EntryBuilder builder = new EntryBuilder();
     List<String> lines;
     if(arena.getArenaState() == ArenaState.FULL_GAME) {
-      lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content.In-Game");
+      lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content.Waiting");
     } else {
       lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content." + arena.getArenaState().getFormattedName());
     }
