@@ -61,6 +61,14 @@ public class ChatManager {
     return formatMessage(arena, colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), player);
   }
 
+  public String colorMessage(String key, Integer integer) {
+    return formatMessage(colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), integer);
+  }
+
+  public String colorMessage(String key, PluginArena arena, Integer integer) {
+    return formatMessage(arena, colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), integer);
+  }
+
   public String colorMessage(String key, PluginArena arena) {
     return formatMessage(colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), arena);
   }
