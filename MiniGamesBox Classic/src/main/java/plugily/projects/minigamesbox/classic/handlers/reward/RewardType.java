@@ -35,7 +35,6 @@ public class RewardType {
 
   static {
     rewardTypes.put("END_GAME", new RewardType("game-end", true));
-    rewardTypes.put("PLAYER_DEATH", new RewardType("player-death", true));
   }
 
   private final String path;
