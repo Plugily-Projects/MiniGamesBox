@@ -172,7 +172,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       //sending did you mean help
       List<StringMatcher.Match> matches = StringMatcher.match(args[0], entry.getValue().stream().map(CommandArgument::getArgumentName).collect(Collectors.toList()));
       if(!matches.isEmpty()) {
-        sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_DID_YOU_MEAN").replace("%value%", label + " " + matches.get(0).getMatch()));
+        sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_DID_YOU_MEAN", label + " " + matches.get(0).getMatch()));
         return true;
       }
     }

@@ -80,8 +80,7 @@ public class SetupArgument {
             registry.getPlugin().openSetupInventory(arena, (Player) sender, SetupUtilities.InventoryStage.PAGED_GUI);
             break;
           default:
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE")
-                .replace("%value%", "/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]"));
+            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE", "/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]"));
         }
       }
     });

@@ -65,6 +65,10 @@ public class ChatManager {
     return formatMessage(colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), integer);
   }
 
+  public String colorMessage(String key, String value) {
+    return formatMessage(colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), value);
+  }
+
   public String colorMessage(String key, PluginArena arena, Integer integer) {
     return formatMessage(arena, colorRawMessage(plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath(key))), integer);
   }
@@ -155,6 +159,13 @@ public class ChatManager {
   public String formatMessage(String message, int integer) {
     String returnString = message;
     returnString = StringUtils.replace(returnString, "%number%", Integer.toString(integer));
+    returnString = colorRawMessage(formatPlaceholders(returnString));
+    return returnString;
+  }
+
+  public String formatMessage(String message, String value) {
+    String returnString = message;
+    returnString = StringUtils.replace(returnString, "%value%", value);
     returnString = colorRawMessage(formatPlaceholders(returnString));
     return returnString;
   }

@@ -68,8 +68,7 @@ public class AddLevelArgument {
           user.setStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL"), user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")) + opt.get());
           sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_ADDED_LEVEL"));
         } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE")
-              .replace("%correct%", "/" + registry.getPlugin().getCommandAdminPrefix() + " addlevel <amount> [player]"));
+          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE", "/" + registry.getPlugin().getCommandAdminPrefix() + " addlevel <amount> [player]"));
         }
       }
     });
