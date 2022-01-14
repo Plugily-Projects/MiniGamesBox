@@ -195,7 +195,6 @@ public class PermissionsManager {
       throw new IllegalStateException("Permissions category with key " + key + " was already registered");
     }
     loadPermissionCategory(key, permissionCategory);
-    permissionCategories.put(key, permissionCategory);
   }
 
   private void loadPermissionCategory(String key, PermissionCategory permissionCategory) {
