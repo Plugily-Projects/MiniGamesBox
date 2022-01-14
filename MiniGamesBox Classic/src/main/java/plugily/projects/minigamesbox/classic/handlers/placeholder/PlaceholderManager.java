@@ -139,7 +139,7 @@ public class PlaceholderManager {
         return Integer.toString(arena.getTimer());
       }
     });
-    plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
+    registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
         return plugin.getUserManager().getUser(player).getKit().getName();
