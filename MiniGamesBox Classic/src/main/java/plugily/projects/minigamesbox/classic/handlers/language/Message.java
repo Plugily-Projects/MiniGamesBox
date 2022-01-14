@@ -121,6 +121,7 @@ public class Message {
     messages.put("IN_GAME_MESSAGES_LOBBY_START_IN", new Message("In-Game.Messages.Lobby.Start-In", "", true));
     messages.put("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS", new Message("In-Game.Messages.Lobby.Waiting-For-Players", "", true));
     messages.put("IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS", new Message("In-Game.Messages.Lobby.Enough-Players-To-Start", "", true));
+    messages.put("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME", new Message("In-Game.Messages.Lobby.Reduced-Time", "", true));
     messages.put("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS", new Message("In-Game.Messages.Lobby.Max-Players", "", true));
     messages.put("IN_GAME_MESSAGES_LOBBY_GAME_START", new Message("In-Game.Messages.Lobby.Game-Started", "", true));
     messages.put("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM", new Message("In-Game.Messages.Lobby.Kicked-For-Premium-Slot", "", true));

@@ -134,10 +134,14 @@ public class PluginArenaUtils {
     arena.setArenaState(ArenaState.STARTING, true);
     if(timer <= 0) {
       arena.setForceStart(true);
+      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
     } else {
+      if(arena.getTimer() <= timer) {
+        return;
+      }
       arena.setTimer(timer, true);
+      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME", timer));
     }
-    plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
   }
 
   public static PluginMain getPlugin() {
