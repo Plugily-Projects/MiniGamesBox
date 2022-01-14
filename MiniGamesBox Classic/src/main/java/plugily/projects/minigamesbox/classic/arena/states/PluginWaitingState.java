@@ -34,8 +34,8 @@ import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 public class PluginWaitingState implements ArenaStateHandler {
 
   private PluginMain plugin;
-  private int arenaTimer = -999;
-  private ArenaState arenaState = ArenaState.WAITING_FOR_PLAYERS;
+  private int arenaTimer;
+  private ArenaState arenaState;
 
   @Override
   public void init(PluginMain plugin) {
@@ -44,6 +44,10 @@ public class PluginWaitingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
+    setArenaState(ArenaState.WAITING_FOR_PLAYERS);
+    setArenaTimer(-999);
+    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+
     int minPlayers = arena.getMinimumPlayers();
     int timer = arena.getTimer();
 
@@ -52,6 +56,8 @@ public class PluginWaitingState implements ArenaStateHandler {
         arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
         plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
       }
+      plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+
       return;
     }
     plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
@@ -61,6 +67,8 @@ public class PluginWaitingState implements ArenaStateHandler {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
+    plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+
   }
 
   @Override

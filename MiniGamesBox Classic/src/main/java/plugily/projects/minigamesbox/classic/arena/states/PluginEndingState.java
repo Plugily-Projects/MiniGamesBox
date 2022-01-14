@@ -35,7 +35,7 @@ import plugily.projects.minigamesbox.classic.user.User;
 public class PluginEndingState implements ArenaStateHandler {
 
   private PluginMain plugin;
-  private int arenaTimer = -999;
+  private int arenaTimer;
   private ArenaState arenaState = ArenaState.ENDING;
 
   @Override
@@ -45,6 +45,9 @@ public class PluginEndingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
+    setArenaState(ArenaState.ENDING);
+    setArenaTimer(-999);
+    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
     arena.getScoreboardManager().stopAllScoreboards();
 
     int timer = arena.getTimer();
@@ -70,6 +73,7 @@ public class PluginEndingState implements ArenaStateHandler {
       arenaTimer = plugin.getConfig().getInt("Time-Manager.Restarting", 5);
       arenaState = ArenaState.RESTARTING;
     }
+    plugin.getDebugger().debug("END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
   }
 
   @Override

@@ -143,21 +143,21 @@
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ftp</artifactId>
-                <version>3.4.3</version>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.5.1</version>
             </extension>
         </extensions>
     </build>
 
     <distributionManagement>
         <repository>
-            <id>plugily-projects-repo</id>
-            <url>ftp://116.202.134.139</url>
+            <id>plugily-projects-releases-repository</id>
+            <url>https://maven.plugily.xyz/releases</url>
         </repository>
         <site>
             <id>plugily-projects-java-docs</id>
-            <name>Commons-Box</name>
-            <url>ftp://116.202.134.139</url>
+            <name>MiniGamesBox</name>
+            <url>sftp://91.229.245.16/var/www/jd</url>
         </site>
     </distributionManagement>
 

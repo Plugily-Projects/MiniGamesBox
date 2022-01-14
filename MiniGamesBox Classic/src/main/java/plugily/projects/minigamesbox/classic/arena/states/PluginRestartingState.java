@@ -34,8 +34,8 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 public class PluginRestartingState implements ArenaStateHandler {
 
   private PluginMain plugin;
-  private int arenaTimer = -999;
-  private ArenaState arenaState = ArenaState.RESTARTING;
+  private int arenaTimer;
+  private ArenaState arenaState;
 
   @Override
   public void init(PluginMain plugin) {
@@ -44,19 +44,27 @@ public class PluginRestartingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
-    arena.getMapRestorerManager().fullyRestoreArena();
-    arena.getPlayers().clear();
-    if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
-      if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
-        plugin.getServer().shutdown();
+    setArenaState(ArenaState.RESTARTING);
+    setArenaTimer(-999);
+    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.RESTARTING, arenaState, arenaTimer);
+    int timer = arena.getTimer();
+
+    if(timer <= 0) {
+      arena.getMapRestorerManager().fullyRestoreArena();
+      if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
+        if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
+          plugin.getServer().shutdown();
+        }
+        plugin.getArenaRegistry().shuffleBungeeArena();
+        for(Player player : Bukkit.getOnlinePlayers()) {
+          plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
+        }
       }
-      plugin.getArenaRegistry().shuffleBungeeArena();
-      for(Player player : Bukkit.getOnlinePlayers()) {
-        plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
-      }
+      arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
+      arenaState = ArenaState.WAITING_FOR_PLAYERS;
     }
-    arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
-    arenaState = ArenaState.WAITING_FOR_PLAYERS;
+    plugin.getDebugger().debug("END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.RESTARTING, arenaState, arenaTimer);
+
   }
 
   @Override

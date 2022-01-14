@@ -54,7 +54,6 @@ public class LeaveArgument {
             registry.getPlugin().getBungeeManager().connectToHub(player);
             registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), arena.getId());
           } else {
-            arena.teleportToEndLocation(player);
             registry.getPlugin().getArenaManager().leaveAttempt(player, arena);
             registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to end location.", player.getName(), arena.getId());
           }

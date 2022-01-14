@@ -20,12 +20,7 @@
 package plugily.projects.minigamesbox.classic.arena;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.PluginMain;
@@ -37,7 +32,6 @@ import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.handlers.party.GameParty;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
-import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.List;
@@ -85,17 +79,14 @@ public class PluginArenaManager {
           if(player.getUniqueId().equals(partyPlayer.getUniqueId())) {
             continue;
           }
-
           PluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
 
           if(partyPlayerGame != null) {
             if(partyPlayerGame.getArenaState() == ArenaState.IN_GAME) {
               continue;
             }
-
             leaveAttempt(partyPlayer, partyPlayerGame);
           }
-
           partyPlayer.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_JOIN_AS_PARTY_MEMBER"), partyPlayer));
           joinAttempt(partyPlayer, arena);
         }
@@ -107,30 +98,12 @@ public class PluginArenaManager {
 
     arena.getPlayers().add(player);
     User user = plugin.getUserManager().getUser(player);
-
     arena.getScoreboardManager().createScoreboard(user);
 
     if((arena.getArenaState() == ArenaState.IN_GAME || ((arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || (arena.getArenaState() == ArenaState.FULL_GAME && arena.getTimer() <= 3)) || arena.getArenaState() == ArenaState.ENDING)) {
-      if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
-        InventorySerializer.saveInventoryToFile(plugin, player);
-      }
-      player.teleport(arena.getStartLocation());
+      PluginArenaUtils.preparePlayerForGame(player, arena.getStartLocation(), true);
       player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR"));
-      player.getInventory().clear();
-
-      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
-
-      player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-      VersionUtils.setMaxHealth(player, VersionUtils.getMaxHealth(player));
-      player.setHealth(VersionUtils.getMaxHealth(player));
-      player.setFoodLevel(20);
-      player.setGameMode(GameMode.SURVIVAL);
-      player.setAllowFlight(true);
-      player.setFlying(true);
-      user.setSpectator(true);
-      player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
       PluginArenaUtils.hidePlayer(player, arena);
-
       for(Player spectator : arena.getPlayers()) {
         if(plugin.getUserManager().getUser(spectator).isSpectator()) {
           VersionUtils.hidePlayer(plugin, player, spectator);
@@ -138,26 +111,16 @@ public class PluginArenaManager {
           VersionUtils.showPlayer(plugin, player, spectator);
         }
       }
-
       additionalSpectatorSettings(player, arena);
-
       plugin.getDebugger().debug("[{0}] Final join attempt as spectator for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
       return;
     }
-    if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
-      InventorySerializer.saveInventoryToFile(plugin, player);
-    }
-    player.teleport(arena.getLobbyLocation());
-    player.setHealth(VersionUtils.getMaxHealth(player));
-    player.setFoodLevel(20);
-    player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
-    player.setFlying(false);
-    player.setAllowFlight(false);
-    player.getInventory().clear();
+    PluginArenaUtils.preparePlayerForGame(player, arena.getLobbyLocation(), false);
+
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
-    if(!user.isSpectator()) {
-      plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.JOIN);
-    }
+
+    plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.JOIN);
+
     user.setKit(plugin.getKitRegistry().getDefaultKit());
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
@@ -166,11 +129,8 @@ public class PluginArenaManager {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
 
-    player.updateInventory();
     for(Player arenaPlayer : arena.getPlayers()) {
       PluginArenaUtils.showPlayer(arenaPlayer, arena);
-      arenaPlayer.setExp(1);
-      arenaPlayer.setLevel(0);
     }
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
@@ -238,11 +198,6 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Initial leave attempt of {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
 
-    //the default fly speed
-    player.setFlySpeed(0.1f);
-    player.setExp(0);
-    player.setLevel(0);
-
     Bukkit.getPluginManager().callEvent(new PlugilyGameLeaveAttemptEvent(player, arena));
 
     User user = plugin.getUserManager().getUser(player);
@@ -256,14 +211,7 @@ public class PluginArenaManager {
 
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
-      for(Player players : arena.getPlayers()) {
-        plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
-        plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);
-      }
-      arena.setArenaState(ArenaState.ENDING);
-      arena.setTimer(0);
-      //needed as no players online and else it is auto canceled
-      arena.getMapRestorerManager().fullyRestoreArena();
+      stopGame(true, arena);
     }
     PluginArenaUtils.resetPlayerAfterGame(player);
     arena.teleportToEndLocation(player);
@@ -283,11 +231,8 @@ public class PluginArenaManager {
     long start = System.currentTimeMillis();
 
     Bukkit.getPluginManager().callEvent(new PlugilyGameStopEvent(arena));
-
     for(Player player : arena.getPlayers()) {
       User user = plugin.getUserManager().getUser(player);
-      arena.getScoreboardManager().removeScoreboard(user);
-
       if(!quickStop) {
         spawnFireworks(arena, player);
       }
@@ -296,10 +241,8 @@ public class PluginArenaManager {
         MiscUtils.sendCenteredMessage(player, plugin.getChatManager().formatMessage(arena, msg, user.getPlayer()));
       }
     }
-    arena.getScoreboardManager().stopAllScoreboards();
-    arena.setTimer(5);
-    arena.getMapRestorerManager().fullyRestoreArena();
-    arena.setArenaState(ArenaState.ENDING);
+    arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
+    arena.setArenaState(ArenaState.ENDING, true);
     for(Player players : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);

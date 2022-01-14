@@ -20,8 +20,15 @@
 package plugily.projects.minigamesbox.classic.arena;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
+import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -53,6 +60,36 @@ public class PluginArenaUtils {
     }
   }
 
+  public static void preparePlayerForGame(Player player, Location location, boolean spectator) {
+    User user = plugin.getUserManager().getUser(player);
+    if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
+      InventorySerializer.saveInventoryToFile(plugin, player);
+    }
+    player.teleport(location);
+    player.getInventory().clear();
+    player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+    VersionUtils.setMaxHealth(player, VersionUtils.getMaxHealth(player));
+    player.setHealth(VersionUtils.getMaxHealth(player));
+    player.setFoodLevel(20);
+    player.setGameMode(GameMode.SURVIVAL);
+    player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
+    player.setExp(1);
+    player.setLevel(0);
+
+    if(spectator) {
+      player.setAllowFlight(true);
+      player.setFlying(true);
+      user.setSpectator(true);
+      player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
+    } else {
+      player.setAllowFlight(false);
+      player.setFlying(false);
+      user.setSpectator(false);
+    }
+    player.updateInventory();
+  }
+
   public static void resetPlayerAfterGame(Player player) {
     for(Player players : plugin.getServer().getOnlinePlayers()) {
       VersionUtils.showPlayer(plugin, players, player);
@@ -69,6 +106,10 @@ public class PluginArenaUtils {
     player.setHealth(VersionUtils.getMaxHealth(player));
     player.setFireTicks(0);
     player.setFoodLevel(20);
+    //the default fly speed
+    player.setFlySpeed(0.1f);
+    player.setExp(0);
+    player.setLevel(0);
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.loadInventory(plugin, player);
     }
@@ -90,9 +131,12 @@ public class PluginArenaUtils {
     }
 
     plugin.getDebugger().debug("Arena {0} got force started by {1} with timer {2}", arena.getId(), player.getName(), timer);
-    arena.setArenaState(ArenaState.STARTING);
-    arena.setForceStart(true);
-    arena.setTimer(timer);
+    arena.setArenaState(ArenaState.STARTING, true);
+    if(timer <= 0) {
+      arena.setForceStart(true);
+    } else {
+      arena.setTimer(timer, true);
+    }
     plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
   }
 

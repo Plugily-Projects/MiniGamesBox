@@ -19,7 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.arena.managers;
 
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
@@ -36,10 +36,14 @@ public class PluginMapRestorerManager {
   }
 
   public void fullyRestoreArena() {
+    arena.getPlugin().getDebugger().debug("Arena {0} Restoring Arena", arena.getId());
     arena.resetArenaOptions();
     arena.getScoreboardManager().stopAllScoreboards();
+    for(Player player : arena.getPlayers()) {
+      arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
+      arena.getPlugin().getArenaManager().leaveAttempt(player, arena);
+    }
     arena.getPlayers().clear();
-    arena.setArenaState(ArenaState.WAITING_FOR_PLAYERS);
   }
 
 }

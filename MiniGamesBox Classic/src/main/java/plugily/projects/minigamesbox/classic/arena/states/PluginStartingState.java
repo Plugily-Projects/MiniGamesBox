@@ -37,8 +37,8 @@ import plugily.projects.minigamesbox.classic.user.User;
 public class PluginStartingState implements ArenaStateHandler {
 
   private PluginMain plugin;
-  private int arenaTimer = -999;
-  private ArenaState arenaState = ArenaState.STARTING;
+  private int arenaTimer;
+  private ArenaState arenaState;
 
   @Override
   public void init(PluginMain plugin) {
@@ -47,6 +47,10 @@ public class PluginStartingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
+    setArenaState(ArenaState.STARTING);
+    setArenaTimer(-999);
+    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+
     int timer = arena.getTimer();
 
     double startWaiting = plugin.getConfig().getDouble("Starting-Waiting-Time", 60);
@@ -59,9 +63,11 @@ public class PluginStartingState implements ArenaStateHandler {
       player.setLevel(timer);
     }
 
-    int minPlayers;
+    int minPlayers = arena.getMinimumPlayers();
 
-    if(!arena.isForceStart() && arena.getPlayers().size() < (minPlayers = arena.getMinimumPlayers())) {
+    plugin.getDebugger().debug("Arena {0} forcestart {1} and players {2} while min is {3}", arena.getId(), arena.isForceStart(), arena.getPlayers().size(), minPlayers);
+
+    if(!arena.isForceStart() && arena.getPlayers().size() < minPlayers) {
       arena.getBossbarManager().setProgress(1.0);
       plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
       arenaState = ArenaState.WAITING_FOR_PLAYERS;
@@ -69,11 +75,13 @@ public class PluginStartingState implements ArenaStateHandler {
         plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
         plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
       }
-      arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 60);
+      arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
       for(Player player : arena.getPlayers()) {
         player.setExp(1);
         player.setLevel(0);
       }
+      plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+
       return;
     }
     if(timer == 0 || arena.isForceStart()) {
@@ -105,6 +113,8 @@ public class PluginStartingState implements ArenaStateHandler {
       arenaState = ArenaState.FULL_GAME;
       plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS"));
     }
+    plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+
   }
 
   @Override

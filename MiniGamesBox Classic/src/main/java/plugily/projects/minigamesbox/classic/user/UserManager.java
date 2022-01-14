@@ -84,7 +84,8 @@ public class UserManager {
 
   public void addExperience(Player player, int i) {
     User user = getUser(player);
-    i += (i * (plugin.getPermissionsManager().getPermissionCategoryValue("EXP_BOOSTER", player) / 100));
+    int expBoost = plugin.getPermissionsManager().getPermissionCategoryValue("EXP_BOOSTER", player);
+    i += (i * (expBoost / 100));
     user.addStat(plugin.getStatsStorage().getStatisticType("XP"), i);
     updateLevelStat(user, plugin.getArenaRegistry().getArena(player));
   }

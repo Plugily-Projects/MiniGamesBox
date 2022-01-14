@@ -189,6 +189,7 @@ public class SpecialItemManager {
       }
       player.getInventory().setItem(specialItem.getSlot(), specialItem.getItemStack());
     }
+    player.updateInventory();
   }
 
   public void removeSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {

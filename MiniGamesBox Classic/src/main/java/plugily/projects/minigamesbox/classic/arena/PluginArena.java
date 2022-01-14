@@ -75,6 +75,7 @@ public class PluginArena extends BukkitRunnable {
   private String mapName = "";
   private boolean forceStart = false;
   private boolean forceArenaState = false;
+  private boolean forceArenaTimer = false;
   private boolean ready = true;
 
   @TestOnly
@@ -186,6 +187,8 @@ public class PluginArena extends BukkitRunnable {
     }
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Running game task", id);
     long start = System.currentTimeMillis();
+    forceArenaState = false;
+    forceArenaTimer = false;
     bossbarManager.bossBarUpdate();
     ArenaStateHandler arenaStateHandler;
     if(arenaState == ArenaState.FULL_GAME) {
@@ -194,13 +197,14 @@ public class PluginArena extends BukkitRunnable {
       arenaStateHandler = gameStateHandlers.get(arenaState);
     }
     arenaStateHandler.handleCall(this);
-    if(arenaStateHandler.getArenaTimer() != -999) {
+    plugin.getDebugger().debug("Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), arenaState);
+    if(!forceArenaTimer && arenaStateHandler.getArenaTimer() != -999) {
       plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
       setTimer(arenaStateHandler.getArenaTimer());
     }
-    if(forceArenaState) {
-      forceArenaState = false;
-    } else if(arenaState != arenaStateHandler.getArenaStateChange()) {
+    plugin.getDebugger().debug("Arena {0} Force State {1}", getId(), forceArenaState);
+    if(!forceArenaState && arenaState != arenaStateHandler.getArenaStateChange()) {
+      plugin.getDebugger().debug("Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
       if(!(arenaState == ArenaState.FULL_GAME && arenaStateHandler.getArenaStateChange() == ArenaState.STARTING)) {
         plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
         setArenaState(arenaStateHandler.getArenaStateChange(), false);
@@ -285,6 +289,19 @@ public class PluginArena extends BukkitRunnable {
     setArenaOption("TIMER", timer);
   }
 
+
+  /**
+   * Modify game timer.
+   *
+   * @param timer           timer of lobby / time to next wave
+   * @param forceArenaTimer should the timer be forced
+   */
+  public void setTimer(int timer, boolean forceArenaTimer) {
+    this.forceArenaTimer = forceArenaTimer;
+    plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} {2}", getId(), timer, forceArenaTimer);
+    setArenaOption("TIMER", timer);
+  }
+
   public int getMaximumPlayers() {
     return getArenaOption("MAXIMUM_PLAYERS");
   }
@@ -306,7 +323,7 @@ public class PluginArena extends BukkitRunnable {
    * Set game state of arena.
    * Calls VillageGameStateChangeEvent
    *
-   * @param arenaState new game state of arena
+   * @param arenaState      new game state of arena
    * @param forceArenaState should it force the arenaState?
    * @see ArenaState
    * @see PlugilyGameStateChangeEvent
@@ -314,7 +331,7 @@ public class PluginArena extends BukkitRunnable {
   public void setArenaState(@NotNull ArenaState arenaState, boolean forceArenaState) {
     this.arenaState = arenaState;
     this.forceArenaState = forceArenaState;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1}", getId(), arenaState);
+    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
     Bukkit.getPluginManager().callEvent(new PlugilyGameStateChangeEvent(this, arenaState));
     plugin.getSignManager().updateSigns();
   }
@@ -330,7 +347,7 @@ public class PluginArena extends BukkitRunnable {
   public void setArenaState(@NotNull ArenaState arenaState) {
     this.arenaState = arenaState;
     this.forceArenaState = true;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1}", getId(), arenaState);
+    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
     Bukkit.getPluginManager().callEvent(new PlugilyGameStateChangeEvent(this, arenaState));
     plugin.getSignManager().updateSigns();
   }
@@ -383,7 +400,7 @@ public class PluginArena extends BukkitRunnable {
   public void start() {
     plugin.getDebugger().debug("[{0}] Instance started", id);
     runTaskTimer(plugin, 20L, 20L);
-    setArenaState(ArenaState.WAITING_FOR_PLAYERS);
+    setArenaState(ArenaState.WAITING_FOR_PLAYERS, true);
   }
 
   public PluginScoreboardManager getScoreboardManager() {
