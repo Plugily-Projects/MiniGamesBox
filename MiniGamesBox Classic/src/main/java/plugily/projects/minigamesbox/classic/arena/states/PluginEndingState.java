@@ -23,8 +23,6 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
-import plugily.projects.minigamesbox.classic.user.User;
 
 
 /**
@@ -48,27 +46,12 @@ public class PluginEndingState implements ArenaStateHandler {
     setArenaState(ArenaState.ENDING);
     setArenaTimer(-999);
     plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
-    arena.getScoreboardManager().stopAllScoreboards();
 
     int timer = arena.getTimer();
 
     if(timer <= 0) {
-      String teleportedToLobby = plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY");
       for(Player player : arena.getPlayers()) {
-        PluginArenaUtils.resetPlayerAfterGame(player);
-        arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-        arena.teleportToEndLocation(player);
-
-        User user = plugin.getUserManager().getUser(player);
-
-        plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
-        user.setSpectator(false);
-        arena.getScoreboardManager().removeScoreboard(user);
         plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("END_GAME"));
-
-        if(!teleportedToLobby.isEmpty()) {
-          player.sendMessage(teleportedToLobby);
-        }
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.Restarting", 5);
       arenaState = ArenaState.RESTARTING;

@@ -39,10 +39,6 @@ public class PluginMapRestorerManager {
     arena.getPlugin().getDebugger().debug("Arena {0} Restoring Arena", arena.getId());
     arena.resetArenaOptions();
     arena.getScoreboardManager().stopAllScoreboards();
-    for(Player player : arena.getPlayers()) {
-      arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-      arena.getPlugin().getArenaManager().leaveAttempt(player, arena);
-    }
     arena.getPlayers().clear();
   }
 

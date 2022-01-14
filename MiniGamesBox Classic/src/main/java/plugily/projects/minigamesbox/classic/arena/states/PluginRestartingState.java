@@ -24,6 +24,8 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
+import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 /**
@@ -50,6 +52,18 @@ public class PluginRestartingState implements ArenaStateHandler {
     int timer = arena.getTimer();
 
     if(timer <= 0) {
+      arena.getScoreboardManager().stopAllScoreboards();
+      for(Player player : arena.getPlayers()) {
+        PluginArenaUtils.resetPlayerAfterGame(player);
+        arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
+        User user = plugin.getUserManager().getUser(player);
+        plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
+        user.setSpectator(false);
+        user.setPermanentSpectator(false);
+        arena.getScoreboardManager().removeScoreboard(user);
+        arena.teleportToEndLocation(player);
+        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY"));
+      }
       arena.getMapRestorerManager().fullyRestoreArena();
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
