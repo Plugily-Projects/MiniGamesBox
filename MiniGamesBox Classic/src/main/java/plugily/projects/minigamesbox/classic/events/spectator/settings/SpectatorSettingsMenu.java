@@ -118,48 +118,47 @@ public class SpectatorSettingsMenu implements Listener {
             player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 0));
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.15f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
             break;
           case SPEED1:
             player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 1));
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.2f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
             break;
           case SPEED2:
             player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 2));
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.25f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
             break;
           case SPEED3:
             player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 3));
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.3f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
             break;
           case SPEED4:
             player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 4));
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.35f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 4, false, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, false, false));
             break;
           case AUTO_TELEPORT:
             if(autoTeleport.contains(player)) {
               autoTeleport.remove(player);
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT").replace("%status%", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
+              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
             } else {
               autoTeleport.add(player);
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT").replace("%status%", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
+              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
             }
             break;
           case NIGHT_VISION:
             if(player.getActivePotionEffects().stream().anyMatch(potionEffect -> potionEffect.getType() == PotionEffectType.NIGHT_VISION)) {
               player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").replace("%status%", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
+              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
             } else {
               player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false));
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").replace("%status%", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
+              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
             }
             break;
           case FIRST_PERSON_MODE:
@@ -178,13 +177,13 @@ public class SpectatorSettingsMenu implements Listener {
               for(Player players : arena.getPlayers()) {
                 VersionUtils.showPlayer(plugin, player, players);
               }
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY").replace("%status%", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
+              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
             } else {
               invisibleSpectators.add(player);
               for(Player players : arena.getPlayers()) {
                 VersionUtils.hidePlayer(plugin, player, players);
               }
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY").replace("%status%", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
+              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
             }
             break;
           case NONE:
