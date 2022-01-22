@@ -29,6 +29,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
@@ -545,6 +546,17 @@ public final class VersionUtils {
 
   public static void playSound(Location loc, String sound) {
     XSound.matchXSound(sound).orElse(XSound.BLOCK_ANVIL_HIT).play(loc, 1, 1);
+  }
+
+  public static int getWorldMaxHeight(World world) {
+    return world.getMaxHeight();
+  }
+
+  public static int getWorldMinHeight(World world) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R3)) {
+      return world.getMinHeight();
+    }
+    return 0;
   }
 
 }
