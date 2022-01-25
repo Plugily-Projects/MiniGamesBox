@@ -109,7 +109,7 @@ public class PermissionsManager {
   }
 
   private void loadPermissions(String key, Permission permission) {
-    permissions.put(key, new Permission(permission.getPath(), config.getString(permission.getPath(), permission.getPermission()), permission.isProtected()));
+    permissions.put(key, new Permission(permission.getPath(), plugin.getPluginNamePrefixLong() + "." + config.getString(permission.getPath(), permission.getPermission()), permission.isProtected()));
     plugin.getDebugger().debug("Loaded permission {0} for key {1}", config.getString(permission.getPath(), permission.getPermission()), key);
   }
 
@@ -202,7 +202,8 @@ public class PermissionsManager {
     if(section != null) {
       Map<String, Integer> customPermissions = new HashMap<>();
       for(String path : section.getKeys(false)) {
-        customPermissions.put(path, section.getInt(path));
+        // adds pluginName. to custom permissions
+        customPermissions.put(plugin.getPluginNamePrefixLong() + "." + path, section.getInt(path));
         plugin.getDebugger().debug("Loaded custom permission {0} for category {1}", path, key);
       }
       permissionCategories.put(key, new PermissionCategory(permissionCategory.getPath(), customPermissions, permissionCategory.isProtected()));
