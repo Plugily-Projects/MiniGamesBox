@@ -98,10 +98,9 @@ public class PluginArenaManager {
 
     arena.getPlayers().add(player);
     User user = plugin.getUserManager().getUser(player);
-    arena.getScoreboardManager().createScoreboard(user);
 
     if((arena.getArenaState() == ArenaState.IN_GAME || ((arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || (arena.getArenaState() == ArenaState.FULL_GAME && arena.getTimer() <= 3)) || arena.getArenaState() == ArenaState.ENDING)) {
-      PluginArenaUtils.preparePlayerForGame(player, arena.getStartLocation(), true);
+      PluginArenaUtils.preparePlayerForGame(arena, player, arena.getStartLocation(), true);
       player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR"));
       PluginArenaUtils.hidePlayer(player, arena);
       for(Player spectator : arena.getPlayers()) {
@@ -115,7 +114,7 @@ public class PluginArenaManager {
       plugin.getDebugger().debug("[{0}] Final join attempt as spectator for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
       return;
     }
-    PluginArenaUtils.preparePlayerForGame(player, arena.getLobbyLocation(), false);
+    PluginArenaUtils.preparePlayerForGame(arena, player, arena.getLobbyLocation(), false);
 
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
 

@@ -60,7 +60,7 @@ public class PluginArenaUtils {
     }
   }
 
-  public static void preparePlayerForGame(Player player, Location location, boolean spectator) {
+  public static void preparePlayerForGame(PluginArena arena, Player player, Location location, boolean spectator) {
     User user = plugin.getUserManager().getUser(player);
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.saveInventoryToFile(plugin, player);
@@ -88,6 +88,7 @@ public class PluginArenaUtils {
       user.setSpectator(false);
     }
     player.updateInventory();
+    arena.getScoreboardManager().createScoreboard(user);
   }
 
   public static void resetPlayerAfterGame(Player player) {
