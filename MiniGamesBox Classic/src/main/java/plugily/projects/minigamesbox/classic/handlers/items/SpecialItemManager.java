@@ -51,7 +51,7 @@ public class SpecialItemManager {
   private final FileConfiguration config;
   private final PluginMain plugin;
 
-  public final SpecialItem INVALID_ITEM = new SpecialItem("INVALID", new ItemStack(Material.BEDROCK), -1, SpecialItem.DisplayStage.LOBBY, null);
+  public final SpecialItem INVALID_ITEM = new SpecialItem("INVALID", new ItemStack(Material.BEDROCK), -1, SpecialItem.DisplayStage.LOBBY, null, false);
 
 
   public SpecialItemManager(PluginMain plugin) {
@@ -99,7 +99,8 @@ public class SpecialItemManager {
     String permission = config.getString(path + ".permission", null);
     ItemStack itemStack = new ItemBuilder(mat).name(name).lore(lore).build();
     int slot = config.getInt(path + ".slot", -1);
-    specialItems.put(key, new SpecialItem(path, permission, itemStack, slot, stage, rewards));
+    boolean force = config.getBoolean(path + ".force", true);
+    specialItems.put(key, new SpecialItem(path, permission, itemStack, slot, stage, rewards, force));
     plugin.getDebugger().debug("Loaded SpecialItem with key {0}, permissions {1}, itemstack {2}, slot {3}, stage {4} and reward {5}", key, permission, itemStack, slot, stage, rewards.stream().map(Reward::getExecutableCode).collect(Collectors.toList()));
   }
 
@@ -187,9 +188,8 @@ public class SpecialItemManager {
           continue;
         }
       }
-      player.getInventory().setItem(specialItem.getSlot(), specialItem.getItemStack());
+      specialItem.setItem(player);
     }
-    player.updateInventory();
   }
 
   public void removeSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {

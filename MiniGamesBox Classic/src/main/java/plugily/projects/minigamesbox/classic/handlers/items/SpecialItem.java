@@ -20,7 +20,9 @@
 package plugily.projects.minigamesbox.classic.handlers.items;
 
 import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 
 import java.util.Collections;
@@ -39,12 +41,12 @@ public class SpecialItem {
 
   static {
     //specialItems.put("KIT_SELECTOR", new SpecialItem("Kit-Selector", false));
-    specialItems.put("LOBBY_LEAVE_ITEM", new SpecialItem("Lobby-Leave", true, null));
-    specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null));
-    specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null));
-    specialItems.put("SPECTATOR_SETTINGS", new SpecialItem("Spectator-Settings", true, null));
-    specialItems.put("SPECTATOR_LEAVE_ITEM", new SpecialItem("Spectator-Leave", true, null));
-    specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null));
+    specialItems.put("LOBBY_LEAVE_ITEM", new SpecialItem("Lobby-Leave", true, null, true));
+    specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null, true));
+    specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null, true));
+    specialItems.put("SPECTATOR_SETTINGS", new SpecialItem("Spectator-Settings", true, null, true));
+    specialItems.put("SPECTATOR_LEAVE_ITEM", new SpecialItem("Spectator-Leave", true, null, true));
+    specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null, true));
   }
 
   private final String path;
@@ -54,8 +56,9 @@ public class SpecialItem {
   private final SpecialItem.DisplayStage displayStage;
   private final boolean protectedOption;
   private final Set<Reward> rewards;
+  private final boolean force;
 
-  public SpecialItem(String path, boolean protectedOption, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards) {
+  public SpecialItem(String path, boolean protectedOption, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force) {
     this.path = path;
     this.protectedOption = protectedOption;
     this.permission = permission;
@@ -63,11 +66,13 @@ public class SpecialItem {
     this.slot = slot;
     this.displayStage = displayStage;
     this.rewards = rewards;
+    this.force = force;
   }
 
-  public SpecialItem(String path, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards) {
+  public SpecialItem(String path, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force) {
     this.path = path;
     this.rewards = rewards;
+    this.force = force;
     this.protectedOption = false;
     this.permission = null;
     this.itemStack = itemStack;
@@ -75,8 +80,9 @@ public class SpecialItem {
     this.displayStage = displayStage;
   }
 
-  public SpecialItem(String path, String permission, ItemStack itemStack, int slot, SpecialItem.DisplayStage displayStage, Set<Reward> rewards) {
+  public SpecialItem(String path, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force) {
     this.path = path;
+    this.force = force;
     this.protectedOption = false;
     this.permission = permission;
     this.itemStack = itemStack;
@@ -85,9 +91,10 @@ public class SpecialItem {
     this.rewards = rewards;
   }
 
-  public SpecialItem(String path, Set<Reward> rewards) {
+  public SpecialItem(String path, Set<Reward> rewards, boolean force) {
     this.path = path;
     this.rewards = rewards;
+    this.force = force;
     this.protectedOption = false;
     this.permission = null;
     this.itemStack = XMaterial.BEDROCK.parseItem();
@@ -95,10 +102,11 @@ public class SpecialItem {
     this.displayStage = DisplayStage.LOBBY;
   }
 
-  public SpecialItem(String path, boolean protectedOption, Set<Reward> rewards) {
+  public SpecialItem(String path, boolean protectedOption, Set<Reward> rewards, boolean force) {
     this.path = path;
     this.protectedOption = protectedOption;
     this.rewards = rewards;
+    this.force = force;
     this.permission = null;
     this.itemStack = XMaterial.BEDROCK.parseItem();
     this.slot = 0;
@@ -131,6 +139,23 @@ public class SpecialItem {
 
   public String getPermission() {
     return permission;
+  }
+
+  public boolean isForce() {
+    return force;
+  }
+
+  public void setItem(Player player) {
+    PlayerInventory playerInventory = player.getInventory();
+    if(!force) {
+      if(playerInventory.getItem(slot) != null && playerInventory.getItem(slot) != XMaterial.AIR.parseItem()) {
+        playerInventory.addItem(itemStack);
+        player.updateInventory();
+        return;
+      }
+    }
+    playerInventory.setItem(slot, itemStack);
+    player.updateInventory();
   }
 
   public enum DisplayStage {

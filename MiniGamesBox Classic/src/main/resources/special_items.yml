@@ -19,6 +19,8 @@
 #  slot: 0
 #  # stage can be: 'lobby' or 'spectator'
 #  stage: lobby
+#  # should the item be forced on slot, or added to inventory if slot not empty?
+#  force: true
 
 Lobby-Leave:
   permission: ""
@@ -30,6 +32,7 @@ Lobby-Leave:
   material: BED
   slot: 8
   stage: LOBBY
+  force: true
 
 Spectator-Leave:
   permission: ""
@@ -41,6 +44,7 @@ Spectator-Leave:
   material: BED
   slot: 8
   stage: SPECTATOR
+  force: true
 
 Player-List:
   permission: ""
@@ -52,6 +56,7 @@ Player-List:
   material: COMPASS
   slot: 0
   stage: SPECTATOR
+  force: true
 
 Spectator-Settings:
   permission: ""
@@ -63,6 +68,7 @@ Spectator-Settings:
   material: COMPASS
   slot: 4
   stage: SPECTATOR
+  force: true
 
 Forcestart:
   permission: "plugily.projects.forcestart"
@@ -75,17 +81,19 @@ Forcestart:
   material: EMERALD
   slot: 2
   stage: ENOUGH_PLAYERS_TO_START
+  force: true
 
 Arena-Selector:
   permission: ""
   execute:
-    - ""
+    - "p:plugilyprojects arenas"
   displayname: "&c&lArena selector &7(Right Click)"
   lore:
     - "&7Right-click to see all arenas"
   material: EMERALD
   slot: 0
   stage: SERVER_JOIN
+  force: false
 
 
 # Don't edit it. But who's stopping you? It's your server!
