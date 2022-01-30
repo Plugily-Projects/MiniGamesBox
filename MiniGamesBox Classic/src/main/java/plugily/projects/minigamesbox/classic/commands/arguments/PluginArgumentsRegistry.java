@@ -205,7 +205,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
     List<LabelData> data = mappedArguments.get(plugin.getCommandAdminPrefixLong()).stream().filter(arg -> arg instanceof LabeledCommandArgument)
         .map(arg -> ((LabeledCommandArgument) arg).getLabelData()).collect(Collectors.toList());
-    data.add(new LabelData("/" + plugin.getPluginNamePrefix() + " &6<arena>&f edit", plugin.getPluginNamePrefix() + " <arena> edit",
+    data.add(new LabelData("/" + plugin.getPluginNamePrefix() + " &6<arena>&f edit", "/" + plugin.getPluginNamePrefix() + " <arena> edit",
         "&7Edit existing arena\n&6Permission: &7" + plugin.getPluginNamePrefixLong() + ".admin.edit"));
     data.addAll(mappedArguments.get(plugin.getPluginNamePrefixLong()).stream().filter(arg -> arg instanceof LabeledCommandArgument)
         .map(arg -> ((LabeledCommandArgument) arg).getLabelData()).collect(Collectors.toList()));

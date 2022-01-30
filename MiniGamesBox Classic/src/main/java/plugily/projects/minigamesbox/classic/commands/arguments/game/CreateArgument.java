@@ -41,7 +41,7 @@ public class CreateArgument {
     public CreateArgument(PluginArgumentsRegistry registry) {
         this.registry = registry;
         registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("create", registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup", CommandArgument.ExecutorType.PLAYER,
-                new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " create &6<arena>", registry.getPlugin().getPluginNamePrefix() + " create <arena>",
+                new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " create &6<arena>", "/" +registry.getPlugin().getPluginNamePrefix() + " create <arena>",
                         "&7Create new arena\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup")) {
             @Override
             public void execute(CommandSender sender, String[] args) {
