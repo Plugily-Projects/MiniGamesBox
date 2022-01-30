@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -161,16 +160,15 @@ public class PluginArenaRegistry {
 
       arena.setMapName(section.getString(id + ".mapname", "none"));
 
-      if(!additionalValidatorChecks(section, arena, id)) {
+      if(!additionalValidatorChecks(section, arena, id) || !validatorChecks(section, arena, id)) {
         arena.setReady(false);
         registerArena(arena);
         continue;
       }
 
-
       registerArena(arena);
       arena.start();
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INSTANCE_STARTED").replace("%arena%", id));
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INSTANCE_STARTED", arena));
     }
     ConfigUtils.saveConfig(plugin, config, "arenas");
 
@@ -178,6 +176,10 @@ public class PluginArenaRegistry {
   }
 
   public boolean additionalValidatorChecks(ConfigurationSection section, PluginArena arena, String id) {
+    return true;
+  }
+
+  private boolean validatorChecks(ConfigurationSection section, PluginArena arena, String id) {
     Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
     Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", "world,364.0,63.0,-72.0,0.0,0.0"));
     Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
@@ -185,22 +187,17 @@ public class PluginArenaRegistry {
     if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
         || endLoc == null || endLoc.getWorld() == null) {
       section.set(id + ".isdone", false);
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "Location world is invalid"));
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION", "Location world is invalid", arena));
       return false;
     }
 
     if(!section.getBoolean(id + ".isdone")) {
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "NOT VALIDATED"));
+      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION", "NOT VALIDATED", arena));
       return false;
     }
     World startLocWorld = arena.getStartLocation().getWorld();
     if(startLocWorld == null) {
       plugin.getDebugger().sendConsoleMsg("Arena world of " + id + " does not exist or not loaded.");
-      return false;
-    }
-    if(startLocWorld.getDifficulty() == Difficulty.PEACEFUL) {
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION").replace("%arena%", id).replace("%error%", "THERE IS A WRONG " +
-          "DIFFICULTY -> SET IT TO ANOTHER ONE THAN PEACEFUL"));
       return false;
     }
     arena.setLobbyLocation(lobbyLoc);

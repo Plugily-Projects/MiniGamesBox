@@ -51,4 +51,28 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <windowtitle>MiniGamesBox Inventory API docs for v${project.version}</windowtitle>
+                    <description>Library box with massive content that could be seen as minigames core.</description>
+                    <destDir>minecraft/minigamesbox/inventory</destDir>
+                    <isOffline>false</isOffline>
+                </configuration>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.5.1</version>
+            </extension>
+        </extensions>
+    </build>
+
 </project>

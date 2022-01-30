@@ -155,7 +155,7 @@ public class PermissionsManager {
    * Returns PermissionCategoryMap
    *
    * @param key option to get value from
-   * @return Map<String, Integer> permissionCategoryMap
+   * @return Map permissionCategoryMap
    */
   public Map<String, Integer> getPermissionCategoryMap(String key) {
     if(!permissionCategories.containsKey(key)) {

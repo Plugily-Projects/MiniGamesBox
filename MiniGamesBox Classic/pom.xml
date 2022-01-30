@@ -84,7 +84,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>8.6.0</version>
+            <version>8.6.0.0.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -149,6 +149,27 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <windowtitle>MiniGamesBox Classic API docs for v${project.version}</windowtitle>
+                    <description>Library box with massive content that could be seen as minigames core.</description>
+                    <destDir>minecraft/minigamesbox/classic</destDir>
+                    <isOffline>false</isOffline>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
                 <configuration>
@@ -197,5 +218,13 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.5.1</version>
+            </extension>
+        </extensions>
     </build>
+
 </project>
