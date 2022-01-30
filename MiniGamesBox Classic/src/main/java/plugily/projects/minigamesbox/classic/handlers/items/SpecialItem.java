@@ -147,6 +147,9 @@ public class SpecialItem {
 
   public void setItem(Player player) {
     PlayerInventory playerInventory = player.getInventory();
+    if(playerInventory.contains(itemStack)) {
+      return;
+    }
     if(!force) {
       if(playerInventory.getItem(slot) != null && playerInventory.getItem(slot) != XMaterial.AIR.parseItem()) {
         playerInventory.addItem(itemStack);
