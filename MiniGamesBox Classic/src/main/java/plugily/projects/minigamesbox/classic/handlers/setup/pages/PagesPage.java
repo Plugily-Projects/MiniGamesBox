@@ -58,11 +58,4 @@ public class PagesPage extends NormalFastInv implements SetupPage {
     setItem(7, ClickableItem.of(new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial()).name("Edit Booleans").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.PAGED_BOOLEAN)));
     setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("Go to Setup Menu").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI)));
   }
-
-  @Override
-  protected void onClick(InventoryClickEvent event) {
-    injectItems();
-    refresh();
-  }
-
 }

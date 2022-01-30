@@ -25,9 +25,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -147,9 +149,6 @@ public class SpecialItem {
 
   public void setItem(Player player) {
     PlayerInventory playerInventory = player.getInventory();
-    if(playerInventory.contains(itemStack)) {
-      return;
-    }
     if(!force) {
       if(playerInventory.getItem(slot) != null && playerInventory.getItem(slot) != XMaterial.AIR.parseItem()) {
         playerInventory.addItem(itemStack);
@@ -157,6 +156,7 @@ public class SpecialItem {
         return;
       }
     }
+    playerInventory.remove(itemStack);
     playerInventory.setItem(slot, itemStack);
     player.updateInventory();
   }

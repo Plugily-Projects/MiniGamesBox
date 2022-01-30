@@ -318,10 +318,4 @@ public class LocationPage extends NormalFastInv implements SetupPage {
       }
     }, true, true, false));
   }
-
-  @Override
-  protected void onClick(InventoryClickEvent event) {
-    injectItems();
-    refresh();
-  }
 }

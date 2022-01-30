@@ -86,11 +86,4 @@ public class ValuePage extends NormalFastInv implements SetupPage {
       }).buildFor(setupInventory.getPlayer());
     }));
   }
-
-  @Override
-  protected void onClick(InventoryClickEvent event) {
-    injectItems();
-    refresh();
-  }
-
 }

@@ -129,11 +129,4 @@ public class HomePage extends NormalFastInv implements SetupPage {
     setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
   }
 
-
-  @Override
-  protected void onClick(InventoryClickEvent event) {
-    injectItems();
-    refresh();
-  }
-
 }
