@@ -134,7 +134,7 @@ public class MysqlManager implements UserDatabase {
 
   @Override
   public void loadStatistics(User user) {
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
       String uuid = user.getUniqueId().toString();
       try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
         String playerName = user.getPlayer().getName();
@@ -149,7 +149,7 @@ public class MysqlManager implements UserDatabase {
       } catch(SQLException exception) {
         throwException(exception);
       }
-    });
+    }, 20L /* required to load stats that are saved on server switch */);
   }
 
   /**
