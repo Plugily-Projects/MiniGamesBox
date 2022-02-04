@@ -43,12 +43,14 @@ public class SpecialItem {
 
   static {
     //specialItems.put("KIT_SELECTOR", new SpecialItem("Kit-Selector", false));
-    specialItems.put("LOBBY_LEAVE_ITEM", new SpecialItem("Lobby-Leave", true, null, true));
+    specialItems.put("LOBBY_LEAVE", new SpecialItem("Lobby-Leave", true, null, true));
     specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null, true));
     specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null, true));
     specialItems.put("SPECTATOR_SETTINGS", new SpecialItem("Spectator-Settings", true, null, true));
-    specialItems.put("SPECTATOR_LEAVE_ITEM", new SpecialItem("Spectator-Leave", true, null, true));
+    specialItems.put("SPECTATOR_LEAVE", new SpecialItem("Spectator-Leave", true, null, true));
     specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null, true));
+    specialItems.put("STATS", new SpecialItem("Stats", true, null, true));
+    specialItems.put("BACK_TO_HUB", new SpecialItem("Back-To-Hub", true, null, true));
   }
 
   private final String path;

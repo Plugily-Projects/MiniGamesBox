@@ -100,13 +100,18 @@ public class SpecialItemEvent implements Listener {
       PluginArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
       return;
     }
-    if(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE_ITEM").getPath().equals(relatedSpecialItem.getPath()) || plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE_ITEM").getPath().equals(relatedSpecialItem.getPath())) {
+    if(plugin.getSpecialItemManager().getSpecialItem("LOBBY_LEAVE").getPath().equals(relatedSpecialItem.getPath()) || plugin.getSpecialItemManager().getSpecialItem("SPECTATOR_LEAVE").getPath().equals(relatedSpecialItem.getPath())) {
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         plugin.getBungeeManager().connectToHub(player);
       } else {
         plugin.getArenaManager().leaveAttempt(player, arena);
       }
       return;
+    }
+    if(plugin.getSpecialItemManager().getSpecialItem("BACK_TO_LOBBY").getPath().equals(relatedSpecialItem.getPath())) {
+      if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
+        plugin.getBungeeManager().connectToHub(player);
+      }
     }
     if(plugin.getSpecialItemManager().getSpecialItem("PLAYERS_LIST").getPath().equals(relatedSpecialItem.getPath())) {
       plugin.getSpectatorItemsManager().openSpectatorMenu(player, arena);

@@ -22,6 +22,7 @@
 #  # should the item be forced on slot, or added to inventory if slot not empty?
 #  force: true
 
+# Uses bungee.yml configuration - if enabled it tries to connect to your hub
 Lobby-Leave:
   permission: ""
   execute:
@@ -34,6 +35,7 @@ Lobby-Leave:
   stage: LOBBY
   force: true
 
+# Uses bungee.yml configuration - if enabled it tries to connect to your hub
 Spectator-Leave:
   permission: ""
   execute:
@@ -91,10 +93,34 @@ Arena-Selector:
   lore:
     - "&7Right-click to see all arenas"
   material: EMERALD
+  slot: 4
+  stage: SERVER_JOIN
+  force: false
+
+Stats:
+  permission: ""
+  execute:
+    - "p:plugilyprojects stats"
+  displayname: "&c&lStats &7(Right Click)"
+  lore:
+    - "&7Right-click to see your Stats"
+  material: HEAD
   slot: 0
   stage: SERVER_JOIN
   force: false
 
+# Uses bungee.yml configuration - if enabled it tries to connect to your hub
+Back-To-Hub:
+  permission: ""
+  execute:
+    - "p:hub"
+  displayname: "&c&lBack to Hub &7(Right Click)"
+  lore:
+    - "&7Right-click to return to lobby"
+  material: Bed
+  slot: 8
+  stage: SERVER_JOIN
+  force: false
 
 # Don't edit it. But who's stopping you? It's your server!
 # Really, don't edit ;p
