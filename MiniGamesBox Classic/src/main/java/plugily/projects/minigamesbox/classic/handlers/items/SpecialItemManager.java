@@ -71,7 +71,7 @@ public class SpecialItemManager {
       if("Do-Not-Edit".startsWith(key)) {
         continue;
       }
-      if(specialItems.containsKey(key)) {
+      if(specialItems.values().stream().anyMatch(specialItem -> specialItem.getPath().equalsIgnoreCase(key))) {
         continue;
       }
       addItem(key, key);
