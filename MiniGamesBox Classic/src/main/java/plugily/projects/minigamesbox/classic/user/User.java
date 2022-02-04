@@ -88,8 +88,8 @@ public class User {
     return spectator;
   }
 
-  public void setSpectator(boolean b) {
-    spectator = b;
+  public void setSpectator(boolean spectator) {
+    this.spectator = spectator;
   }
 
   public boolean isPermanentSpectator() {
@@ -100,55 +100,41 @@ public class User {
     this.permanentSpectator = permanentSpectator;
   }
 
-  public int getStat(String statistic) {
+  public int getStatistic(String statistic) {
     StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
     return stats.computeIfAbsent(statisticType, t -> 0);
   }
 
-  public int getStat(StatisticType s) {
-    return stats.computeIfAbsent(s, t -> 0);
+  public int getStatistic(StatisticType statisticType) {
+    return stats.computeIfAbsent(statisticType, t -> 0);
   }
 
-  public void setStat(StatisticType s, int i) {
-    stats.put(s, i);
-
-    //statistics manipulation events are called async when using mysql
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, s, i));
-    });
+  public void setStatistic(StatisticType statisticType, int value) {
+    changeUserStatistic(statisticType, value);
   }
 
-  public void addStat(StatisticType s, int i) {
-    stats.put(s, getStat(s) + i);
-
-    //statistics manipulation events are called async when using mysql
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, s, getStat(s)));
-    });
-  }
-
-  public void setStat(String statistic, int i) {
+  public void setStatistic(String statistic, int value) {
     StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
-    stats.put(statisticType, i);
+    changeUserStatistic(statisticType, value);
+  }
 
+  private void changeUserStatistic(StatisticType statisticType, int value) {
+    stats.put(statisticType, value);
+    plugin.getDebugger().debug("Set User {0} statistic to {1} for {2} ", statisticType.getName(), value, getPlayer().getName());
     //statistics manipulation events are called async when using mysql
     Bukkit.getScheduler().runTask(plugin, () -> {
       Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, i));
+      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, value));
     });
   }
 
-  public void addStat(String statistic, int i) {
-    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
-    stats.put(statisticType, getStat(statisticType) + i);
+  public void adjustStatistic(StatisticType statisticType, int value) {
+    changeUserStatistic(statisticType, getStatistic(statisticType) + value);
+  }
 
-    //statistics manipulation events are called async when using mysql
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, getStat(statisticType)));
-    });
+  public void adjustStatistic(String statistic, int value) {
+    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    changeUserStatistic(statisticType, getStatistic(statisticType) + value);
   }
 
   public boolean checkCanCastCooldownAndMessage(String cooldown) {
@@ -164,13 +150,13 @@ public class User {
     return false;
   }
 
-  public void setCooldown(String s, int seconds) {
-    cooldowns.put(s, seconds + cooldownCounter);
+  public void setCooldown(String key, int seconds) {
+    cooldowns.put(key, seconds + cooldownCounter);
   }
 
-  public long getCooldown(String s) {
-    long coold = cooldowns.getOrDefault(s, 0L);
-    return coold <= cooldownCounter ? 0 : coold - cooldownCounter;
+  public long getCooldown(String key) {
+    long cooldown = cooldowns.getOrDefault(key, 0L);
+    return cooldown <= cooldownCounter ? 0 : cooldown - cooldownCounter;
   }
 
 }

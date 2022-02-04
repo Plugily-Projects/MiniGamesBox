@@ -86,7 +86,7 @@ public class UserManager {
     User user = getUser(player);
     int expBoost = plugin.getPermissionsManager().getPermissionCategoryValue("EXP_BOOSTER", player);
     i += (i * (expBoost / 100));
-    user.addStat(plugin.getStatsStorage().getStatisticType("XP"), i);
+    user.adjustStatistic(plugin.getStatsStorage().getStatisticType("XP"), i);
     updateLevelStat(user, plugin.getArenaRegistry().getArena(player));
   }
 
@@ -95,16 +95,16 @@ public class UserManager {
   }
 
   public void addStat(User user, StatisticType stat) {
-    user.addStat(stat, 1);
+    user.adjustStatistic(stat, 1);
     updateLevelStat(user, user.getArena());
   }
 
   public void updateLevelStat(User user, PluginArena arena) {
-    if(Math.pow(50.0 * user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5) < user.getStat(plugin.getStatsStorage().getStatisticType("XP"))) {
-      user.addStat(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);
+    if(Math.pow(50.0 * user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5) < user.getStatistic(plugin.getStatsStorage().getStatisticType("XP"))) {
+      user.adjustStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);
       //Arena can be null when player has left the arena before this message is retrieved.
       if(arena != null)
-        user.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_LEVEL_UP"), user.getStat(plugin.getStatsStorage().getStatisticType("LEVEL"))));
+        user.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_LEVEL_UP"), user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"))));
     }
   }
 

@@ -65,7 +65,7 @@ public class AddLevelArgument {
 
         if(opt.isPresent()) {
           User user = registry.getPlugin().getUserManager().getUser(target);
-          user.setStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL"), user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")) + opt.get());
+          user.setStatistic(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL"), user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")) + opt.get());
           sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_ADDED_LEVEL"));
         } else {
           sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE", "/" + registry.getPlugin().getCommandAdminPrefix() + " addlevel <amount> [player]"));

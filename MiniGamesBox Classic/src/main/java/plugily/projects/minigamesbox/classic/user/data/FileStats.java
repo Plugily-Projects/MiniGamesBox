@@ -56,7 +56,7 @@ public class FileStats implements UserDatabase, Runnable {
 
   @Override
   public void saveStatistic(User user, StatisticType stat) {
-    config.set(user.getUniqueId().toString() + "." + stat.getName(), user.getStat(stat));
+    config.set(user.getUniqueId().toString() + "." + stat.getName(), user.getStatistic(stat));
     updateRequired.set(true);
   }
 
@@ -69,7 +69,7 @@ public class FileStats implements UserDatabase, Runnable {
   @Override
   public void loadStatistics(User user) {
     String uuid = user.getUniqueId().toString();
-    plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> user.setStat(statisticType, config.getInt(uuid + "." + statisticType.getName())));
+    plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> user.setStatistic(statisticType, config.getInt(uuid + "." + statisticType.getName())));
   }
 
   @Override
@@ -125,7 +125,7 @@ public class FileStats implements UserDatabase, Runnable {
     plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> {
       if(statisticType.isPersistent()) {
         String path = uuid + "." + statisticType.getName();
-        int value = user.getStat(statisticType);
+        int value = user.getStatistic(statisticType);
         if(value > 0 || config.contains(path)) {
           config.set(path, value);
         }

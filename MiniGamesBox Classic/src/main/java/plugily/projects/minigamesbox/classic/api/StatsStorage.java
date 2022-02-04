@@ -88,7 +88,7 @@ public class StatsStorage {
    * @see StatisticType
    */
   public int getUserStats(Player player, StatisticType statisticType) {
-    return plugin.getUserManager().getUser(player).getStat(statisticType);
+    return plugin.getUserManager().getUser(player).getStatistic(statisticType);
   }
 
 

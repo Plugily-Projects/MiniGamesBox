@@ -48,11 +48,11 @@ public class StatsArgument {
         } else {
           sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER_OTHER").replace("%player%", player.getName()));
         }
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_GAMES_PLAYED") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("GAMES_PLAYED")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_LEVEL") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_EXP") + user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("XP")));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_GAMES_PLAYED") + user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("GAMES_PLAYED")));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_LEVEL") + user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")));
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_EXP") + user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("XP")));
         sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_NEXT_LEVEL_EXP")
-            + Math.ceil(Math.pow(50.0 * user.getStat(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")), 1.5)));
+            + Math.ceil(Math.pow(50.0 * user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")), 1.5)));
         sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_FOOTER"));
       }
     });

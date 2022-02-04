@@ -122,8 +122,8 @@ public class MysqlManager implements UserDatabase {
   @Override
   public void saveStatistic(User user, StatisticType statisticType) {
     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-      database.executeUpdate("UPDATE " + getTableName() + " SET " + statisticType.getName() + "=" + user.getStat(statisticType) + " WHERE UUID='" + user.getUniqueId().toString() + "';");
-      plugin.getDebugger().debug("MySQL Table | Saved {0} statistic to {1} for {2}", statisticType.getName(), user.getStat(statisticType), user.getPlayer().getName());
+      database.executeUpdate("UPDATE " + getTableName() + " SET " + statisticType.getName() + "=" + user.getStatistic(statisticType) + " WHERE UUID='" + user.getUniqueId().toString() + "';");
+      plugin.getDebugger().debug("MySQL Table | Saved {0} statistic to {1} for {2}", statisticType.getName(), user.getStatistic(statisticType), user.getPlayer().getName());
     });
   }
 
@@ -161,11 +161,11 @@ public class MysqlManager implements UserDatabase {
    */
   private void loadUserStats(User user, ResultSet resultSet) throws SQLException {
     //player already exists - get the stats
-    plugin.getDebugger().debug("Loaded User Stats for {0}", user.getPlayer().getName());
     for(Map.Entry<String, StatisticType> entry : plugin.getStatsStorage().getStatistics().entrySet()) {
       StatisticType statisticType = entry.getValue();
       setUserStat(user, statisticType, resultSet.getInt(statisticType.getName()));
     }
+    plugin.getDebugger().debug("Loaded User Stats for {0}", user.getPlayer().getName());
   }
 
   /**
@@ -192,7 +192,7 @@ public class MysqlManager implements UserDatabase {
    */
   private void setUserStat(User user, @NotNull StatisticType statisticType, int value) {
     if(statisticType.isPersistent()) {
-      user.setStat(statisticType, value);
+      user.setStatistic(statisticType, value);
     }
   }
 
@@ -277,7 +277,7 @@ public class MysqlManager implements UserDatabase {
         if(!update.toString().equalsIgnoreCase(" SET ")) {
           update.append(", ");
         }
-        update.append(statisticType.getName()).append("=").append(user.getStat(statisticType));
+        update.append(statisticType.getName()).append("=").append(user.getStatistic(statisticType));
       }
     });
     String executeStatement = "UPDATE " + getTableName() + update + " WHERE UUID='" + user.getUniqueId().toString() + "';";
