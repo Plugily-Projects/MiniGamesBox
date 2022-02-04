@@ -43,8 +43,8 @@ public class UserManager {
   private final List<User> users = new ArrayList<>();
   private final PluginMain plugin;
 
-  public UserManager(PluginMain main) {
-    this.plugin = main;
+  public UserManager(PluginMain plugin) {
+    this.plugin = plugin;
     if(plugin.getConfigPreferences().getOption("DATABASE")) {
       database = new MysqlManager(plugin);
     } else {
