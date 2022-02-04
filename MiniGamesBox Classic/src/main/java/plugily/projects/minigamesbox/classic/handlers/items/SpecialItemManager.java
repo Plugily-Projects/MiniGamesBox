@@ -79,6 +79,9 @@ public class SpecialItemManager {
   }
 
   public void addItem(String key, String path) {
+    if(!config.contains(path)) {
+      return;
+    }
     Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
     String name = plugin.getChatManager().colorRawMessage(config.getString(path + ".displayname"));
     List<String> lore = config.getStringList(path + ".lore").stream()
