@@ -43,7 +43,7 @@ public class LeaderboardArgument {
     this.registry = registry;
     List<String> stats = new ArrayList<>();
     for(StatisticType val : registry.getPlugin().getStatsStorage().getStatistics().values()) {
-      if(!val.isPersistent() || val == registry.getPlugin().getStatsStorage().getStatisticType("XP")) {
+      if(!val.isPersistent() || val == registry.getPlugin().getStatsStorage().getStatisticType("EXP")) {
         continue;
       }
       stats.add(val.getName().toLowerCase());
@@ -58,7 +58,7 @@ public class LeaderboardArgument {
         }
         try {
           StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
-          if(statisticType == registry.getPlugin().getStatsStorage().getStatisticType("XP")) {
+          if(statisticType == registry.getPlugin().getStatsStorage().getStatisticType("EXP")) {
             sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_INVALID_NAME"));
             return;
           }

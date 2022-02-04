@@ -22,9 +22,12 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.user.User;
+
+import java.util.Collection;
 
 /**
  * @author Tigerpanzer_02
@@ -43,17 +46,32 @@ public class StatsArgument {
           return;
         }
         User user = registry.getPlugin().getUserManager().getUser(player);
+        sendLeaderboardHeader(sender, player);
+        sendLeaderboardBody(sender, user);
+        sendLeaderboardFooter(sender);
+      }
+
+      private void sendLeaderboardFooter(CommandSender sender) {
+        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_FOOTER"));
+      }
+
+      private void sendLeaderboardBody(CommandSender sender, User user) {
+        Collection<StatisticType> statisticTypes = registry.getPlugin().getStatsStorage().getStatistics().values();
+        for(StatisticType statisticType : statisticTypes) {
+          if(!statisticType.isPersistent()) {
+            continue;
+          }
+          String statisticKey = statisticType.getName().toUpperCase();
+          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTIC_" + statisticKey, user.getStatistic(statisticType)));
+        }
+      }
+
+      private void sendLeaderboardHeader(CommandSender sender, Player player) {
         if(player == sender) {
           sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER"));
         } else {
           sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER_OTHER").replace("%player%", player.getName()));
         }
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_GAMES_PLAYED") + user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("GAMES_PLAYED")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_LEVEL") + user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_EXP") + user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("XP")));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTICS_NEXT_LEVEL_EXP")
-            + Math.ceil(Math.pow(50.0 * user.getStatistic(registry.getPlugin().getStatsStorage().getStatisticType("LEVEL")), 1.5)));
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_FOOTER"));
       }
     });
   }

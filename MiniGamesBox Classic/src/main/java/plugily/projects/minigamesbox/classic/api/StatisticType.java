@@ -34,9 +34,10 @@ public class StatisticType {
 
 
   static {
-    statistics.put("GAMES_PLAYED", new StatisticType("gamesplayed", true, "int(11) NOT NULL DEFAULT '0'", true));
+    statistics.put("GAMES_PLAYED", new StatisticType("games_played", true, "int(11) NOT NULL DEFAULT '0'", true));
     statistics.put("LEVEL", new StatisticType("level", true, "int(11) NOT NULL DEFAULT '0'", true));
-    statistics.put("XP", new StatisticType("xp", true, "int(11) NOT NULL DEFAULT '0'", true));
+    statistics.put("EXP", new StatisticType("exp", true, "int(11) NOT NULL DEFAULT '0'", true));
+    statistics.put("NEXT_LEVEL_EXP", new StatisticType("next_level_exp", true, "int(11) NOT NULL DEFAULT '0'", true));
   }
 
   private final String name;

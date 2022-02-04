@@ -297,11 +297,11 @@ Leaderboard:
         Header: "&8&m-------------------[&6 Top 10 &8&m]-------------------"
         Format: "&e#%number% %player% - %value% &7%user_statistic%"
   Statistics:
-    Games-Played: "&aGames Played"
-    Level: "&aLevel"
-    Exp: "&aExperience"
-    Next-Level-Exp: "&aExp to Level Up &e"
-  Invalid-Name: "&cName of statistic is invalid! Type: games_played, level"
+    Games-Played: "&aGames Played &e%number%"
+    Level: "&aLevel &e%number%"
+    Exp: "&aExperience &e%number%"
+    Next-Level-Exp: "&aExp to Level Up &e%number%"
+  Invalid-Name: "&cName of statistic is invalid! Type: %value%"
   Unknown-Player: "&fUnknown Player"
 
 
