@@ -205,6 +205,7 @@ public class SpecialItemManager {
   @NotNull
   public SpecialItem getRelatedSpecialItem(ItemStack itemStack) {
     for(SpecialItem item : specialItems.values()) {
+      plugin.getDebugger().debug("Comparing {0} with {1} is {2}", item.getItemStack().toString(), itemStack.toString(), item.getItemStack().isSimilar(itemStack));
       if(item.getItemStack().isSimilar(itemStack)) {
         return item;
       }
