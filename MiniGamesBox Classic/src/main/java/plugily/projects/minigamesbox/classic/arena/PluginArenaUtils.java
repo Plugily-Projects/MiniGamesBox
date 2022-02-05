@@ -119,13 +119,13 @@ public class PluginArenaUtils {
 
   public static void arenaForceStart(Player player, int timer) {
     if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPermissionsManager().getPermissionString("FORCESTART_GAME"))) {
-      new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().player(player).sendPlayer();
+      new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().prefix().player(player).sendPlayer();
       return;
     }
 
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
-      new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
+      new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().prefix().player(player).sendPlayer();
       return;
     }
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getArenaState() != ArenaState.FULL_GAME) {
@@ -136,13 +136,13 @@ public class PluginArenaUtils {
     arena.setArenaState(ArenaState.STARTING, true);
     if(timer <= 0) {
       arena.setForceStart(true);
-      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART").asKey().player(player).arena(arena).sendArena();
+      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART").asKey().prefix().player(player).arena(arena).sendArena();
     } else {
       if(arena.getTimer() <= timer) {
         return;
       }
       arena.setTimer(timer, true);
-      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME").asKey().integer(timer).player(player).arena(arena).sendArena();
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME").asKey().prefix().integer(timer).player(player).arena(arena).sendArena();
     }
   }
 
