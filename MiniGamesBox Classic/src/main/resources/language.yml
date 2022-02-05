@@ -29,7 +29,7 @@ Commands:
   Invalid-Location-Teleport: "&cLocation to teleport is invalid!"
   Wrong-Usage: "&cWrong usage. Do %value%"
   Admin:
-    Added-Level: "&7Added level to the player!"
+    Adjust-Statistic: "&eStatistic %value% of %player% is now %value%!"
     Reload-Success: "&aArenas reloaded!"
     List:
       Header: "&a%plugin_name% &6arenas:"

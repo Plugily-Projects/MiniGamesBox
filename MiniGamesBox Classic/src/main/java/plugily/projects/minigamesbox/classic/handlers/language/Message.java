@@ -66,7 +66,7 @@ public class Message {
     messages.put("COMMANDS_INVALID_LOCATION_TELEPORT", new Message("Commands.Invalid-Location-Teleport", "", true));
     messages.put("COMMANDS_WRONG_USAGE", new Message("Commands.Wrong-Usage", "", true));
     // commands.admin
-    messages.put("COMMANDS_ADMIN_ADDED_LEVEL", new Message("Commands.Admin.Added-Level", "", true));
+    messages.put("COMMANDS_ADMIN_ADJUST_STATISTIC", new Message("Commands.Admin.Adjust-Statistic", "", true));
     messages.put("COMMANDS_ADMIN_RELOAD_SUCCESS", new Message("Commands.Admin.Reload-Success", "", true));
     messages.put("COMMANDS_ADMIN_LIST_HEADER", new Message("Commands.Admin.List.Header", "", true));
     messages.put("COMMANDS_ADMIN_LIST_FORMAT", new Message("Commands.Admin.List.Format", "", true));
