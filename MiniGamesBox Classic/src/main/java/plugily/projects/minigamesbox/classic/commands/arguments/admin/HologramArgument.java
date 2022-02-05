@@ -72,7 +72,7 @@ public class HologramArgument {
     StatisticType statistic;
     try {
       statistic = registry.getPlugin().getStatsStorage().getStatisticType(args[2].toUpperCase());
-    } catch(IllegalArgumentException ex) {
+    } catch(IllegalStateException ex) {
       sendInvalidStatisticMessage(player);
       return;
     }
@@ -120,6 +120,7 @@ public class HologramArgument {
 
   private void handleListArgument(CommandSender sender) {
     FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "internal/leaderboards_data");
+    new MessageBuilder("&aHOLOGRAMS").prefix().send(sender);
     for(String key : config.getConfigurationSection("holograms").getKeys(false)) {
       new MessageBuilder("&aID " + key).prefix().send(sender);
       new MessageBuilder(" &eTop: " + config.getInt("holograms." + key + ".top-amount")
