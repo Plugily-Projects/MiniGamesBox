@@ -141,17 +141,20 @@ public class MessageBuilder {
   }
 
   private void formatPlayer() {
+    if(hasNoPlaceholders()) return;
     message = replace(message, "%player%", player.getName());
     message = replace(message, "%player_uuid%", String.valueOf(player.getUniqueId()));
   }
 
   private void formatPlaceholderAPI() {
+    if(hasNoPlaceholders()) return;
     if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       message = PlaceholderAPI.setPlaceholders(player, message);
     }
   }
 
   private void formatExternalPlayer() {
+    if(hasNoPlaceholders()) return;
     for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
       if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
         continue;
@@ -161,6 +164,7 @@ public class MessageBuilder {
   }
 
   private void formatExternalArena() {
+    if(hasNoPlaceholders()) return;
     for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
       if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
         continue;
@@ -170,6 +174,7 @@ public class MessageBuilder {
   }
 
   private void formatExternalPlayerAndArena() {
+    if(hasNoPlaceholders()) return;
     for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
       if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
         continue;
@@ -179,12 +184,14 @@ public class MessageBuilder {
   }
 
   private void formatPlugin() {
+    if(hasNoPlaceholders()) return;
     message = replace(message, "%plugin_name%", plugin.getName());
     message = replace(message, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
     message = replace(message, "%plugin_short_command%", plugin.getPluginNamePrefix());
   }
 
   private void formatArena() {
+    if(hasNoPlaceholders()) return;
     int timer = arena.getTimer();
     message = replace(message, "%arena_min_players%", Integer.toString(arena.getMinimumPlayers()));
     message = replace(message, "%arena_players%", String.valueOf(arena.getPlayers()));
@@ -199,6 +206,10 @@ public class MessageBuilder {
     message = replace(message, "%arena_state_placeholder%", arena.getArenaState().getPlaceholder());
     message = replace(message, "%arena_time%", Integer.toString(timer));
     message = replace(message, "%arena_formatted_time%", StringFormatUtils.formatIntoMMSS(timer));
+  }
+
+  private boolean hasNoPlaceholders() {
+    return !message.contains("%");
   }
 
   public String build() {
