@@ -44,7 +44,7 @@ public class LeaderboardArgument {
     this.registry = registry;
     List<String> stats = new ArrayList<>();
     for(StatisticType val : registry.getPlugin().getStatsStorage().getStatistics().values()) {
-      if(!val.isPersistent() || val == registry.getPlugin().getStatsStorage().getStatisticType("EXP")) {
+      if(!val.isPersistent()) {
         continue;
       }
       stats.add(val.getName().toLowerCase());
@@ -59,10 +59,6 @@ public class LeaderboardArgument {
         }
         try {
           StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
-          if(statisticType == registry.getPlugin().getStatsStorage().getStatisticType("EXP")) {
-            new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().prefix().send(sender);
-            return;
-          }
           printLeaderboard(sender, statisticType);
         } catch(IllegalArgumentException e) {
           new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().prefix().send(sender);
