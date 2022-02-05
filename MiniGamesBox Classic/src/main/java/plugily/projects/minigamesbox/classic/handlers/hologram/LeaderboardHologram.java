@@ -114,7 +114,7 @@ public class LeaderboardHologram extends BukkitRunnable {
   }
 
   private Message statisticToMessage() {
-    return plugin.getMessageManager().getMessage("LEADERBOARD_STATISTICS_" + statistic.getName());
+    return plugin.getMessageManager().getMessage("LEADERBOARD_STATISTICS_" + statistic.toString());
   }
 
   public int getId() {
