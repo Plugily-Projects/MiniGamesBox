@@ -40,8 +40,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.admin.TeleportAr
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.DeleteArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ForceStartArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.StopArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.level.AddLevelArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.level.SetLevelArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.statistic.AdjustStatisticArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
@@ -106,9 +105,8 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new ReloadArgument(this);
     new StopArgument(this);
 
-    //player level related arguments
-    new AddLevelArgument(this);
-    new SetLevelArgument(this);
+    //player statistic related arguments
+    new AdjustStatisticArgument(this);
 
     //other admin related arguments
     new ListArenasArgument(this);
