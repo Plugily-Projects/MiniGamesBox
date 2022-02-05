@@ -26,6 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.handlers.language.Message;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.hologram.ArmorStandHologram;
 
 import java.util.ArrayList;
@@ -137,6 +138,6 @@ public class LeaderboardHologram extends BukkitRunnable {
   }
 
   private String color(String message) {
-    return plugin.getChatManager().colorRawMessage(message);
+    return new MessageBuilder(message).build();
   }
 }

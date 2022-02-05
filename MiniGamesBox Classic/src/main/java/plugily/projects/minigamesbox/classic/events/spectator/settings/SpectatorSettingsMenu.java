@@ -34,6 +34,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -81,10 +82,10 @@ public class SpectatorSettingsMenu implements Listener {
     for(String type : section.getKeys(false)) {
       String path = "Settings-Menu.Content." + type;
       Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
-      String name = plugin.getChatManager().colorRawMessage(config.getString(path + ".name"));
+      String name = new MessageBuilder(config.getString(path + ".name", "Error!")).build();
       int slot = config.getInt(path + ".slot", -1);
       List<String> description = config.getStringList(path + ".description").stream()
-          .map(itemLore -> itemLore = plugin.getChatManager().colorRawMessage(itemLore))
+          .map(itemLore -> itemLore = new MessageBuilder(itemLore).build())
           .collect(Collectors.toList());
       SpectatorSettingsItem.Type function = SpectatorSettingsItem.Type.NONE;
       try {
@@ -100,7 +101,7 @@ public class SpectatorSettingsMenu implements Listener {
   }
 
   private FastInv setupSpectatorSettings() {
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(45), plugin.getChatManager().colorRawMessage(config.getString("Settings-Menu.Inventory-name", "Settings Menu")));
+    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(45), new MessageBuilder(config.getString("Settings-Menu.Inventory-name", "Settings Menu")).build());
     for(SpectatorSettingsItem item : settingsItems) {
       gui.setItem(item.getSlot(), item.getItemStack(), event -> {
         Player player = (Player) event.getWhoClicked();
@@ -115,30 +116,30 @@ public class SpectatorSettingsMenu implements Listener {
         }
         switch(item.getType()) {
           case DEFAULT_SPEED:
-            player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 0));
+            new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(0).player(player).sendPlayer();
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.15f);
             break;
           case SPEED1:
-            player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 1));
+            new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(1).player(player).sendPlayer();
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.2f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
             break;
           case SPEED2:
-            player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 2));
+            new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(2).player(player).sendPlayer();
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.25f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
             break;
           case SPEED3:
-            player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 3));
+            new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(3).player(player).sendPlayer();
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.3f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
             break;
           case SPEED4:
-            player.sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED"), 4));
+            new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(4).player(player).sendPlayer();
             player.removePotionEffect(PotionEffectType.SPEED);
             player.setFlySpeed(0.35f);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, false, false));
@@ -146,19 +147,19 @@ public class SpectatorSettingsMenu implements Listener {
           case AUTO_TELEPORT:
             if(autoTeleport.contains(player)) {
               autoTeleport.remove(player);
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
+              new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED").asKey().build()).player(player).sendPlayer();
             } else {
               autoTeleport.add(player);
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
+              new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_AUTO_TELEPORT").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED").asKey().build()).player(player).sendPlayer();
             }
             break;
           case NIGHT_VISION:
             if(player.getActivePotionEffects().stream().anyMatch(potionEffect -> potionEffect.getType() == PotionEffectType.NIGHT_VISION)) {
               player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
+              new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED").asKey().build()).player(player).sendPlayer();
             } else {
               player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false));
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
+              new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED").asKey().build()).player(player).sendPlayer();
             }
             break;
           case FIRST_PERSON_MODE:
@@ -166,7 +167,7 @@ public class SpectatorSettingsMenu implements Listener {
               return;
             }
             autoTeleport.remove(player);
-            VersionUtils.sendTitle(player, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE"), 5, 20, 5);
+            VersionUtils.sendTitle(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE").asKey().player(player).arena(arena).build(), 5, 20, 5);
             Player target = targetPlayer.get(player);
             player.setGameMode(GameMode.SPECTATOR);
             player.setSpectatorTarget(target);
@@ -177,13 +178,13 @@ public class SpectatorSettingsMenu implements Listener {
               for(Player players : arena.getPlayers()) {
                 VersionUtils.showPlayer(plugin, player, players);
               }
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED")));
+              new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED").asKey().build()).player(player).sendPlayer();
             } else {
               invisibleSpectators.add(player);
               for(Player players : arena.getPlayers()) {
                 VersionUtils.hidePlayer(plugin, player, players);
               }
-              player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY", plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED")));
+              new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED").asKey().build()).player(player).sendPlayer();
             }
             break;
           case NONE:
@@ -208,12 +209,12 @@ public class SpectatorSettingsMenu implements Listener {
     Player target = targetPlayer.get(player);
     if(!autoTeleport.contains(player)) {
       if(player.getSpectatorTarget() instanceof Player) {
-        VersionUtils.sendActionBar(player, plugin.getChatManager().formatMessage(user.getArena(), plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR"), target));
+        VersionUtils.sendActionBar(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR").asKey().arena(user.getArena()).player(target).build());
       }
       return;
     }
     double distance = player.getLocation().distance(target.getLocation());
-    VersionUtils.sendActionBar(player, plugin.getChatManager().formatMessage(user.getArena(), plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR"), (int) distance, target));
+    VersionUtils.sendActionBar(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR").asKey().arena(user.getArena()).integer((int) distance).player(target).build());
     if(distance <= 15) {
       return;
     }
@@ -233,7 +234,7 @@ public class SpectatorSettingsMenu implements Listener {
     if(!plugin.getArenaRegistry().isInArena(target)) {
       return;
     }
-    VersionUtils.sendTitle(player, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE"), 5, 20, 5);
+    VersionUtils.sendTitle(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE").asKey().player(player).build(), 5, 20, 5);
     targetPlayer.remove(player);
     targetPlayer.put(player, target);
     player.setGameMode(GameMode.SPECTATOR);

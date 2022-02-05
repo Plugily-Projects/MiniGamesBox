@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.ArenaListPage;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.BooleanPage;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.CountablePage;
@@ -79,7 +80,7 @@ public class PluginSetupInventory {
         break;
       case ARENA_LIST:
         if(plugin.getArenaRegistry().getArenas().size() == 0) {
-          player.sendMessage(plugin.getChatManager().colorRawMessage("&cThere are no arenas!"));
+          new MessageBuilder("&cThere are no arenas!").send(player);
           return;
         }
         NormalFastInv arena_list = new ArenaListPage(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this);

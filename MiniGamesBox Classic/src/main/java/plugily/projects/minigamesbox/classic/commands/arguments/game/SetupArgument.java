@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
@@ -53,7 +54,7 @@ public class SetupArgument {
         }
 
         if(args.length == 2) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
           return;
         }
         switch(args[1].toLowerCase()) {
@@ -74,13 +75,13 @@ public class SetupArgument {
           case "edit":
             PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[2]);
             if(arena == null) {
-              sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
+              new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
               return;
             }
             registry.getPlugin().openSetupInventory(arena, (Player) sender, SetupUtilities.InventoryStage.PAGED_GUI);
             break;
           default:
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_WRONG_USAGE", "/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]"));
+            new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().prefix().value("/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]").send(sender);
         }
       }
     });

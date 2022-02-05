@@ -24,6 +24,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,8 +48,7 @@ public class SpyChatArgument {
         if(!disableSpyChat(player)) {
           spyChatters.add(player);
         }
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() +
-            registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_SPYCHAT_TOGGLE", String.valueOf(isSpyChatEnabled(player))));
+        new MessageBuilder("COMMANDS_ADMIN_SPYCHAT_TOGGLE").asKey().value(String.valueOf(isSpyChatEnabled(player))).prefix().send(sender);
       }
     });
   }

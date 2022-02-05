@@ -26,6 +26,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngine;
 
@@ -161,9 +162,9 @@ public class RewardsFactory {
       command = StringUtils.replace(command, "%player%", player.getName());
     }
     if(arena == null) {
-      command = plugin.getChatManager().formatMessage(command);
+      command = new MessageBuilder(command).build();
     } else {
-      command = plugin.getChatManager().formatMessage(command, arena);
+      command = new MessageBuilder(command).arena(arena).build();
     }
     switch(reward.getExecutor()) {
       case CONSOLE:

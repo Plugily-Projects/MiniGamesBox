@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 
 /**
@@ -49,7 +50,7 @@ public class StopArgument {
           }
           if(arena.getArenaState() != ArenaState.ENDING) {
             registry.getPlugin().getArenaManager().stopGame(false, arena);
-            sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_COMMAND_EXECUTED"));
+            new MessageBuilder("COMMANDS_COMMAND_EXECUTED").asKey().prefix().send(sender);
           }
         }
       }

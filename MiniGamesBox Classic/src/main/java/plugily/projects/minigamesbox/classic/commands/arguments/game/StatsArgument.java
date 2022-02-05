@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.Collection;
@@ -42,7 +43,7 @@ public class StatsArgument {
       public void execute(CommandSender sender, String[] args) {
         Player player = args.length == 2 ? Bukkit.getPlayerExact(args[1]) : (Player) sender;
         if(player == null) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_PLAYER_NOT_FOUND"));
+          new MessageBuilder("COMMANDS_PLAYER_NOT_FOUND").asKey().send(sender);
           return;
         }
         User user = registry.getPlugin().getUserManager().getUser(player);
@@ -52,7 +53,7 @@ public class StatsArgument {
       }
 
       private void sendLeaderboardFooter(CommandSender sender) {
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_FOOTER"));
+        new MessageBuilder("LEADERBOARD_TYPE_CHAT_FOOTER").asKey().send(sender);
       }
 
       private void sendLeaderboardBody(CommandSender sender, User user) {
@@ -62,15 +63,15 @@ public class StatsArgument {
             continue;
           }
           String statisticKey = statisticType.getName().toUpperCase();
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_STATISTIC_" + statisticKey, user.getStatistic(statisticType)));
+          new MessageBuilder("LEADERBOARD_STATISTIC_" + statisticKey).asKey().player(user.getPlayer()).integer(user.getStatistic(statisticType)).send(sender);
         }
       }
 
       private void sendLeaderboardHeader(CommandSender sender, Player player) {
         if(player == sender) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER"));
+          new MessageBuilder("LEADERBOARD_TYPE_CHAT_HEADER").asKey().player(player).sendPlayer();
         } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_HEADER_OTHER").replace("%player%", player.getName()));
+          new MessageBuilder("LEADERBOARD_TYPE_CHAT_HEADER").asKey().player(player).send(sender);
         }
       }
     });

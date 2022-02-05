@@ -27,8 +27,9 @@ import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public class PluginScoreboardManager {
   public PluginScoreboardManager(PluginArena arena) {
     this.arena = arena;
     this.plugin = arena.getPlugin();
-    this.boardTitle = plugin.getChatManager().colorMessage("SCOREBOARD_TITLE");
+    this.boardTitle = new MessageBuilder("SCOREBOARD_TITLE").asKey().arena(arena).build();
   }
 
   /**
@@ -111,15 +112,9 @@ public class PluginScoreboardManager {
       lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content." + arena.getArenaState().getFormattedName());
     }
     for(String line : lines) {
-      builder.next(formatScoreboardLine(line, user));
+      builder.next(new MessageBuilder(line).player(user.getPlayer()).arena(arena).build());
     }
     return builder.build();
-  }
-
-  public String formatScoreboardLine(String line, User user) {
-    String formattedLine = line;
-    formattedLine = plugin.getChatManager().formatMessage(arena, formattedLine, user.getPlayer());
-    return formattedLine;
   }
 
 }

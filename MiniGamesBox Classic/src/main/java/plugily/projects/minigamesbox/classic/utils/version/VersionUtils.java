@@ -133,8 +133,7 @@ public final class VersionUtils {
           subTitleField = titleDeclaredClasses[0].getField("SUBTITLE").get(null);
         }
       }
-    } catch(Exception e) {
-      e.printStackTrace();
+    } catch (NoSuchMethodException | NoClassDefFoundError | NoSuchFieldException | IllegalAccessException ignored) {
     }
   }
 

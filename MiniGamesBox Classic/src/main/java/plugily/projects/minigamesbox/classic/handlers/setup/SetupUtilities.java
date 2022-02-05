@@ -32,6 +32,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.items.EmptyItem;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
@@ -121,7 +122,7 @@ public class SetupUtilities {
   }
 
   private String color(String msg) {
-    return plugin.getChatManager().colorRawMessage(msg);
+    return new MessageBuilder(msg).build();
   }
 
 
@@ -143,28 +144,28 @@ public class SetupUtilities {
   public void sendProTip(HumanEntity entity) {
     switch(random.nextInt(35)) {
       case 0:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7We also got premade setups, check them out on &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/setup/maps"));
+        new MessageBuilder("&e&lTIP: &7We also got premade setups, check them out on &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/setup/maps").send(entity);
         break;
       case 1:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7Help us translating plugin to your language here: https://translate.plugily.xyz"));
+        new MessageBuilder("&e&lTIP: &7Help us translating plugin to your language here: https://translate.plugily.xyz").send(entity);
         break;
       case 2:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7PlaceholderApi plugin is supported with our plugin! Check here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/placeholders/placeholderapi"));
+        new MessageBuilder("&e&lTIP: &7PlaceholderApi plugin is supported with our plugin! Check here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/placeholders/placeholderapi").send(entity);
         break;
       case 3:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7Achievements, custom kits and replay ability are things available in our paid addon for this minigame: https://patreon.com/plugily"));
+        new MessageBuilder("&e&lTIP: &7Achievements, custom kits and replay ability are things available in our paid addon for this minigame: https://patreon.com/plugily").send(entity);
         break;
       case 4:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7We are open source! You can always help us by contributing! Check https://github.com/Plugily-Projects/"));
+        new MessageBuilder("&e&lTIP: &7We are open source! You can always help us by contributing! Check https://github.com/Plugily-Projects/").send(entity);
         break;
       case 5:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7Need help? Check wiki &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + " &7or discord https://discord.plugily.xyz"));
+        new MessageBuilder("&e&lTIP: &7Need help? Check wiki &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + " &7or discord https://discord.plugily.xyz").send(entity);
         break;
       case 6:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7If you like our plugins: You can support us on patreon https://patreon.com/plugily"));
+        new MessageBuilder("&e&lTIP: &7If you like our plugins: You can support us on patreon https://patreon.com/plugily").send(entity);
         break;
       case 7:
-        entity.sendMessage(plugin.getChatManager().colorRawMessage("&e&lTIP: &7Suggest new ideas for the plugin or vote on current ones! https://app.feedbacky.net/b/" + plugin.getPluginNamePrefixLong().toLowerCase()));
+        new MessageBuilder("&e&lTIP: &7Suggest new ideas for the plugin or vote on current ones! https://app.feedbacky.net/b/" + plugin.getPluginNamePrefixLong().toLowerCase()).send(entity);
         break;
       default:
         break;
@@ -190,7 +191,7 @@ public class SetupUtilities {
     normalFastInv.setItem(45, ClickableItem.of(left_corner, left_corner_event));
 
     normalFastInv.setItem(48, ClickableItem.of(new ItemBuilder(XMaterial.GOLD_INGOT.parseItem())
-        .name(plugin.getChatManager().colorRawMessage("&6&l► Patreon Addon ◄ &8(AD)"))
+        .name(new MessageBuilder("&6&l► Patreon Addon ◄ &8(AD)").build())
         .lore(ChatColor.GRAY + "Enhance gameplay with paid addon!")
         .lore(ChatColor.GOLD + "Selection of features of the addon:")
         .lore(ChatColor.GOLD + "Custom Kits, Achievements, Replay Ability")
@@ -198,18 +199,18 @@ public class SetupUtilities {
         .enchantment(Enchantment.KNOCKBACK, 5)
         .build(), e -> {
       e.getWhoClicked().closeInventory();
-      e.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview"));
+      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview").prefix().send(e.getWhoClicked());
     }));
     if(pluginSetupInventory.getArena() != null) {
       normalFastInv.setItem(49, new EmptyItem(new ItemBuilder(XMaterial.ANVIL.parseMaterial()).name("&aCurrently editing: " + pluginSetupInventory.getArena().getId()).colorizeItem().build()));
     }
     normalFastInv.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
-        .name(plugin.getChatManager().colorRawMessage("&e&lView Setup Video"))
+        .name(new MessageBuilder("&e&lView Setup Video").build())
         .lore(ChatColor.GRAY + "Having problems with setup or wanna")
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()));
+      new MessageBuilder("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()).prefix().send(event.getWhoClicked());
     }));
 
     normalFastInv.setItem(53, ClickableItem.of(right_corner, right_corner_event));
@@ -237,24 +238,24 @@ public class SetupUtilities {
     itemMap.setItem(45, ClickableItem.of(left_corner.parseItem(), left_corner_event));
 
     itemMap.setItem(48, ClickableItem.of(new ItemBuilder(XMaterial.GOLD_INGOT.parseItem())
-        .name(plugin.getChatManager().colorRawMessage("&6&l► Patreon Addon ◄ &8(AD)"))
+        .name(new MessageBuilder("&6&l► Patreon Addon ◄ &8(AD)").build())
         .lore(ChatColor.GRAY + "Enhance gameplay with paid addon!")
         .lore(ChatColor.GOLD + "Selection of features of the addon:")
         .lore(ChatColor.GOLD + "Custom Kits, Achievements, Replay Ability")
         .lore(ChatColor.GRAY + "Click to get link for patron program!")
         .enchantment(Enchantment.DURABILITY)
-        .build(), e -> {
-      e.getWhoClicked().closeInventory();
-      e.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview"));
+        .build(), event -> {
+      event.getWhoClicked().closeInventory();
+      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview").prefix().send(event.getWhoClicked());
     }));
 
     itemMap.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
-        .name(plugin.getChatManager().colorRawMessage("&e&lView Setup Video"))
+        .name(new MessageBuilder("&e&lView Setup Video").build())
         .lore(ChatColor.GRAY + "Having problems with setup or wanna")
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      event.getWhoClicked().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorRawMessage("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()));
+      new MessageBuilder("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()).prefix().send(event.getWhoClicked());
     }));
 
     itemMap.setItem(53, ClickableItem.of(right_corner.parseItem(), right_corner_event));

@@ -25,6 +25,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -54,13 +55,13 @@ public class PluginWaitingState implements ArenaStateHandler {
     if(arena.getPlayers().size() < minPlayers) {
       if(timer <= 0) {
         arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
-        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().integer(minPlayers).arena(arena).sendArena();
       }
       plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
       return;
     }
-    plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS");
+    new MessageBuilder("IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS").asKey().arena(arena).sendArena();
     arenaState = ArenaState.STARTING;
     arenaTimer = plugin.getConfig().getInt("Time-Manager.Starting", 60);
     for(Player player : arena.getPlayers()) {

@@ -23,6 +23,7 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
 import plugily.projects.minigamesbox.classic.utils.helper.WeaponHelper;
@@ -37,8 +38,8 @@ import java.util.List;
 public class CloneKit extends FreeKit {
 
   public CloneKit() {
-    setName(getPlugin().getChatManager().colorMessage("KITS_EXAMPLE_NAME"));
-    List<String> description = getPlugin().getBukkitHelper().splitString(getPlugin().getChatManager().colorMessage("KITS_EXAMPLE_DESCRIPTION"), 40);
+    setName(new MessageBuilder("KITS_EXAMPLE_NAME").asKey().build());
+    List<String> description = getPlugin().getBukkitHelper().splitString(new MessageBuilder("KITS_EXAMPLE_DESCRIPTION").asKey().build(), 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);
   }

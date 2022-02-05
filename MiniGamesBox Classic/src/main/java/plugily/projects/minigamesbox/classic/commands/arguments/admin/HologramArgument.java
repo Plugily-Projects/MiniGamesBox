@@ -30,6 +30,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgu
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardHologram;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
@@ -51,7 +52,7 @@ public class HologramArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length < 2) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <add/remove/list>"));
+          new MessageBuilder("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <add/remove/list>").prefix().send(sender);
           return;
         }
         if(args[1].equalsIgnoreCase("add")) {
@@ -61,7 +62,7 @@ public class HologramArgument {
         } else if(args[1].equalsIgnoreCase("remove")) {
           handleDeleteArgument(sender, args);
         } else {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cBad arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <add/remove/list>"));
+          new MessageBuilder("&cBad arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <add/remove/list>").prefix().send(sender);
         }
       }
     });
@@ -82,17 +83,17 @@ public class HologramArgument {
     }
 
     if(args.length != 4) {
-      player.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard add <statistic type> <amount>"));
+      new MessageBuilder("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard add <statistic type> <amount>").prefix().player(player).sendPlayer();
       return;
     }
     java.util.Optional<Integer> opt = NumberUtils.parseInt(args[3]);
     if(!opt.isPresent()) {
-      player.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cLeaderboard amount entries must be a number!"));
+      new MessageBuilder("&cLeaderboard amount entries must be a number!").prefix().player(player).sendPlayer();
       return;
     }
     int amount = opt.get();
     if(amount <= 0 || amount > 20) {
-      player.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cLeaderboard amount entries amount are limited to 20 and minimum of 0!"));
+      new MessageBuilder("&cLeaderboard amount entries amount are limited to 20 and minimum of 0!").prefix().player(player).sendPlayer();
       return;
     }
 
@@ -106,8 +107,7 @@ public class HologramArgument {
     LeaderboardHologram leaderboard = new LeaderboardHologram(registry.getPlugin(), nextValue, statistic, amount, player.getLocation());
     leaderboard.initUpdateTask();
     registry.getPlugin().getLeaderboardRegistry().registerHologram(leaderboard);
-
-    player.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&aHologram with ID " + nextValue + " with statistic " + statistic.getName() + " added!"));
+    new MessageBuilder("&aHologram with ID " + nextValue + " with statistic " + statistic.getName() + " added!").prefix().player(player).sendPlayer();
   }
 
   private void sendInvalidStatisticMessage(Player player) {
@@ -115,16 +115,16 @@ public class HologramArgument {
     for(StatisticType value : registry.getPlugin().getStatsStorage().getStatistics().values()) {
       values.append(value).append(' ');
     }
-    player.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cInvalid statistic type! Valid types: &e" + values));
+    new MessageBuilder("&cInvalid statistic type! Valid types: &e" + values).prefix().player(player).sendPlayer();
   }
 
   private void handleListArgument(CommandSender sender) {
     FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "internal/leaderboards_data");
     for(String key : config.getConfigurationSection("holograms").getKeys(false)) {
-      sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&aID " + key));
-      sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage(" &eTop: " + config.getInt("holograms." + key + ".top-amount")
-          + " Stat: " + config.getStringList("holograms." + key + ".statistics")));
-      sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage(" &eLocation: " + getFriendlyLocation(LocationSerializer.getLocation(config.getString("holograms." + key + ".location")))));
+      new MessageBuilder("&aID " + key).prefix().send(sender);
+      new MessageBuilder(" &eTop: " + config.getInt("holograms." + key + ".top-amount")
+          + " Stat: " + config.getStringList("holograms." + key + ".statistics")).prefix().send(sender);
+      new MessageBuilder(" &eLocation: " + getFriendlyLocation(LocationSerializer.getLocation(config.getString("holograms." + key + ".location")))).prefix().send(sender);
     }
   }
 
@@ -134,23 +134,23 @@ public class HologramArgument {
 
   private void handleDeleteArgument(CommandSender sender, String[] args) {
     if(args.length != 3) {
-      sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cPlease type leaderboard ID to remove it!"));
+      new MessageBuilder("&cPlease type leaderboard ID to remove it!").prefix().send(sender);
       return;
     }
     java.util.Optional<Integer> opt = NumberUtils.parseInt(args[2]);
     if(!opt.isPresent()) {
-      sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cLeaderboard ID must be a number!"));
+      new MessageBuilder("&cLeaderboard ID must be a number!").prefix().send(sender);
       return;
     }
     FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "internal/leaderboards_data");
     if(!config.isSet("holograms." + args[2])) {
-      sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&cLeaderboard with that ID doesn't exist!"));
+      new MessageBuilder("&cLeaderboard with that ID doesn't exist!").prefix().send(sender);
       return;
     }
     config.set("holograms." + args[2], null);
     ConfigUtils.saveConfig(registry.getPlugin(), config, "internal/leaderboards_data");
     registry.getPlugin().getLeaderboardRegistry().disableHologram(opt.get());
-    sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&aLeaderboard with ID " + args[2] + " sucessfully deleted!"));
+    new MessageBuilder("&aLeaderboard with ID " + args[2] + " sucessfully deleted!").prefix().send(sender);
   }
 
 }

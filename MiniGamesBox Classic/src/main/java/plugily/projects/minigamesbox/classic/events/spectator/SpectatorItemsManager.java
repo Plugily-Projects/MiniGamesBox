@@ -28,6 +28,7 @@ import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.events.spectator.settings.SpectatorSettingsMenu;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -50,7 +51,7 @@ public class SpectatorItemsManager implements Listener {
   }
 
   public void openSpectatorMenu(Player player, PluginArena arena) {
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME"));
+    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME").asKey().build());
 
     ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
 
@@ -61,11 +62,10 @@ public class SpectatorItemsManager implements Listener {
       ItemStack cloneSkull = skull.clone();
       SkullMeta meta = VersionUtils.setPlayerHead(arenaPlayer, (SkullMeta) cloneSkull.getItemMeta());
       ComplementAccessor.getComplement().setDisplayName(meta, arenaPlayer.getName());
-      ComplementAccessor.getComplement().setLore(meta, Collections.singletonList(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH")
-          .replace("%health%", Double.toString(NumberUtils.round(arenaPlayer.getHealth(), 2)))));
+      ComplementAccessor.getComplement().setLore(meta, Collections.singletonList(new MessageBuilder("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH").asKey().integer(Integer.parseInt(String.valueOf(NumberUtils.round(arenaPlayer.getHealth(), 2)))).build()));
       cloneSkull.setItemMeta(meta);
       gui.addItem(cloneSkull, e -> {
-        e.getWhoClicked().sendMessage(plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT"), arenaPlayer));
+        new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT").asKey().prefix().arena(arena).player(arenaPlayer).send(e.getWhoClicked());
         e.getWhoClicked().closeInventory();
         e.getWhoClicked().teleport(arenaPlayer);
       });

@@ -28,6 +28,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -118,13 +119,13 @@ public class PluginArenaUtils {
 
   public static void arenaForceStart(Player player, int timer) {
     if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPermissionsManager().getPermissionString("FORCESTART_GAME"))) {
-      player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NO_PERMISSION"));
+      new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().player(player).sendPlayer();
       return;
     }
 
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
-      player.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_NOT_PLAYING"));
+      new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
       return;
     }
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getArenaState() != ArenaState.FULL_GAME) {
@@ -135,13 +136,13 @@ public class PluginArenaUtils {
     arena.setArenaState(ArenaState.STARTING, true);
     if(timer <= 0) {
       arena.setForceStart(true);
-      plugin.getChatManager().broadcast(arena, "IN_GAME_MESSAGES_ADMIN_FORCESTART");
+      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART").asKey().player(player).arena(arena).sendArena();
     } else {
       if(arena.getTimer() <= timer) {
         return;
       }
       arena.setTimer(timer, true);
-      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME", timer));
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME").asKey().integer(timer).player(player).arena(arena).sendArena();
     }
   }
 

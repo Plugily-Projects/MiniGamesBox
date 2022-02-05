@@ -31,7 +31,7 @@ import plugily.projects.commonsbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerPowerupPickupEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -77,8 +77,6 @@ public class PowerupRegistry {
     plugin.getDebugger().debug("[PowerupRegistry] Registering power ups");
     long start = System.currentTimeMillis();
 
-    ChatManager chatManager = plugin.getChatManager();
-
     ConfigurationSection section = config.getConfigurationSection("Powerups.Content");
 
     if(section == null) {
@@ -87,12 +85,12 @@ public class PowerupRegistry {
 
     for(String key : section.getKeys(false)) {
       XMaterial mat = XMaterial.matchXMaterial(section.getString(key + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK);
-      String name = chatManager.colorRawMessage(section.getString(key + ".name"));
-      String description = chatManager.colorRawMessage(section.getString(key + ".description"));
+      String name = new MessageBuilder(section.getString(key + ".name", "Error!")).build();
+      String description = new MessageBuilder(section.getString(key + ".description", "Errror!")).build();
 
       List<String> effects = new ArrayList<>(section.getStringList(key + ".potion-effect"));
 
-      description = chatManager.formatMessage(description, getLongestEffect(effects));
+      description = new MessageBuilder(description).integer(getLongestEffect(effects)).build();
 
       BasePowerup.PotionType potionType = BasePowerup.PotionType.PLAYER;
       try {
@@ -120,9 +118,9 @@ public class PowerupRegistry {
 
         if(duration != 0) {
           Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            plugin.getChatManager().broadcastMessage(pickup.getArena(), plugin.getChatManager().formatMessage(pickup.getArena(), config.getString("Powerups.Ended.Chat", ""), pickup.getPlayer()).replace("%powerup%", pickup.getPowerup().getName()));
+            new MessageBuilder(config.getString("Powerups.Ended.Chat", "")).arena(pickup.getArena()).value(pickup.getPowerup().getName()).sendArena();
             for(Player player : pickup.getArena().getPlayers()) {
-              VersionUtils.sendTitles(player, plugin.getChatManager().formatMessage(pickup.getArena(), config.getString("Powerups.Ended.Title", ""), pickup.getPlayer()).replace("%powerup%", pickup.getPowerup().getName()), plugin.getChatManager().formatMessage(pickup.getArena(), config.getString("Powerups.Ended.Subtitle", ""), pickup.getPlayer()).replace("%powerup%", pickup.getPowerup().getName()), 5, 20, 5);
+              VersionUtils.sendTitles(player, new MessageBuilder(config.getString("Powerups.Ended.Title", "")).arena(pickup.getArena()).player(player).value(pickup.getPowerup().getName()).build(), new MessageBuilder(config.getString("Powerups.Ended.Subtitle", "")).arena(pickup.getArena()).player(player).value(pickup.getPowerup().getName()).build(), 5, 20, 5);
             }
           }, duration);
         }
@@ -191,8 +189,7 @@ public class PowerupRegistry {
       if(event.isCancelled()) {
         return;
       }
-
-      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, config.getString("Powerups.Pickup.Chat", ""), player).replace("%powerup%", powerup.getName()));
+      new MessageBuilder(config.getString("Powerups.Pickup.Chat", "")).arena(arena).value(powerup.getName()).sendArena();
 
       powerup.getOnPickup().accept(new PowerupPickupHandler(powerup, arena, player));
       hologram.delete();

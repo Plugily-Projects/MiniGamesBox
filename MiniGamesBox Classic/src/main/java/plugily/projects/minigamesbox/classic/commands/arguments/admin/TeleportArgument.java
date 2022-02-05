@@ -28,6 +28,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -44,18 +45,18 @@ public class TeleportArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
           return;
         }
         if(args.length == 2) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + ChatColor.RED + "Please type location type: END, START, LOBBY");
+          new MessageBuilder(ChatColor.RED + "Please type location type: END, START, LOBBY").prefix().send(sender);
           return;
         }
         PluginArena.GameLocation type;
         try {
           type = PluginArena.GameLocation.valueOf(args[2].toUpperCase());
         } catch(IllegalArgumentException e) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_INVALID_LOCATION_TELEPORT"));
+          new MessageBuilder("COMMANDS_INVALID_LOCATION_TELEPORT").asKey().prefix().send(sender);
           return;
         }
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
@@ -69,7 +70,6 @@ public class TeleportArgument {
   }
 
   private void teleport(Player player, PluginArena arena, PluginArena.GameLocation gameLocation) {
-
     Location location = arena.getLocation(gameLocation);
     if(location == null) {
       player.sendMessage(ChatColor.RED + gameLocation.toString() + " location isn't set for this arena!");

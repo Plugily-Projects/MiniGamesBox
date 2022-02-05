@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
@@ -147,7 +148,7 @@ public class PluginArenaRegistry {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
     ConfigurationSection section = config.getConfigurationSection("instances");
     if(section == null) {
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_NO_INSTANCES_CREATED"));
+      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_NO_INSTANCES_CREATED").asKey().build());
       return;
     }
 
@@ -168,7 +169,7 @@ public class PluginArenaRegistry {
 
       registerArena(arena);
       arena.start();
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INSTANCE_STARTED", arena));
+      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INSTANCE_STARTED").asKey().arena(arena).build());
     }
     ConfigUtils.saveConfig(plugin, config, "arenas");
 
@@ -187,12 +188,12 @@ public class PluginArenaRegistry {
     if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
         || endLoc == null || endLoc.getWorld() == null) {
       section.set(id + ".isdone", false);
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION", "Location world is invalid", arena));
+      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("Location world is invalid").arena(arena).build());
       return false;
     }
 
     if(!section.getBoolean(id + ".isdone")) {
-      plugin.getDebugger().sendConsoleMsg(plugin.getChatManager().colorMessage("VALIDATOR_INVALID_ARENA_CONFIGURATION", "NOT VALIDATED", arena));
+      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("NOT VALIDATED").arena(arena).build());
       return false;
     }
     World startLocWorld = arena.getStartLocation().getWorld();

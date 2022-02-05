@@ -50,8 +50,8 @@ import plugily.projects.minigamesbox.classic.handlers.holiday.HolidayManager;
 import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardRegistry;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemEvent;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
-import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
 import plugily.projects.minigamesbox.classic.handlers.language.LanguageManager;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageManager;
 import plugily.projects.minigamesbox.classic.handlers.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.handlers.party.PartySupportInitializer;
@@ -120,7 +120,6 @@ public class PluginMain extends JavaPlugin {
   private BungeeManager bungeeManager;
   private FileConfiguration languageConfig;
   private FileConfiguration internalData;
-  private ChatManager chatManager;
   private PluginArenaRegistry arenaRegistry;
   private KitRegistry kitRegistry;
   private MessageManager messageManager;
@@ -211,7 +210,7 @@ public class PluginMain extends JavaPlugin {
   public void initializeDefaultClasses() {
     messageManager = new MessageManager(this);
     languageManager = new LanguageManager(this);
-    chatManager = new ChatManager(this);
+    MessageBuilder.init(this);
     languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
@@ -479,10 +478,6 @@ public class PluginMain extends JavaPlugin {
 
   public FileConfiguration getLanguageConfig() {
     return languageConfig;
-  }
-
-  public ChatManager getChatManager() {
-    return chatManager;
   }
 
   public FileConfiguration getInternalData() {

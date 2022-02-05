@@ -28,7 +28,7 @@ import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttem
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameLeaveAttemptEvent;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStopEvent;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
-import plugily.projects.minigamesbox.classic.handlers.language.ChatManager;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.party.GameParty;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
@@ -66,7 +66,7 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Checked join attempt for {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
     if(plugin.getArenaRegistry().isInArena(player)) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_ALREADY_PLAYING"));
+      new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().prefix().arena(arena).player(player).sendPlayer();
       return;
     }
 
@@ -87,11 +87,11 @@ public class PluginArenaManager {
             }
             leaveAttempt(partyPlayer, partyPlayerGame);
           }
-          partyPlayer.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_JOIN_AS_PARTY_MEMBER"), partyPlayer));
+          new MessageBuilder("IN_GAME_JOIN_AS_PARTY_MEMBER").asKey().prefix().arena(arena).player(partyPlayer).sendPlayer();
           joinAttempt(partyPlayer, arena);
         }
       } else {
-        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY"), player));
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY").asKey().prefix().arena(arena).player(player).sendPlayer();
         return;
       }
     }
@@ -101,7 +101,7 @@ public class PluginArenaManager {
 
     if((arena.getArenaState() == ArenaState.IN_GAME || ((arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || (arena.getArenaState() == ArenaState.FULL_GAME && arena.getTimer() <= 3)) || arena.getArenaState() == ArenaState.ENDING)) {
       PluginArenaUtils.preparePlayerForGame(arena, player, arena.getStartLocation(), true);
-      player.sendMessage(plugin.getChatManager().colorMessage("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR"));
+      new MessageBuilder("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR").asKey().player(player).arena(arena).sendPlayer();
       PluginArenaUtils.hidePlayer(player, arena);
       for(Player spectator : arena.getPlayers()) {
         if(plugin.getUserManager().getUser(spectator).isSpectator()) {
@@ -118,7 +118,7 @@ public class PluginArenaManager {
 
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
 
-    plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.JOIN);
+    new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
 
     user.setKit(plugin.getKitRegistry().getDefaultKit());
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
@@ -144,40 +144,40 @@ public class PluginArenaManager {
       return true;
     }
     if(!player.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_FULL_GAME"));
+      new MessageBuilder("IN_GAME_JOIN_FULL_GAME").asKey().player(player).prefix().arena(arena).sendPlayer();
       return false;
     }
-    for(Player players : arena.getPlayers()) {
-      if(players.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
+    for(Player arenaPlayer : arena.getPlayers()) {
+      if(arenaPlayer.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
         continue;
       }
       if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
-        leaveAttempt(players, arena);
-        players.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM"));
-        plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM"), players));
+        leaveAttempt(arenaPlayer, arena);
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM").asKey().player(player).prefix().arena(arena).sendPlayer();
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM").asKey().player(arenaPlayer).arena(arena).sendArena();
       }
       return true;
     }
-    player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_NO_SLOTS_FOR_PREMIUM"));
+    new MessageBuilder("IN_GAME_JOIN_NO_SLOTS_FOR_PREMIUM").asKey().player(player).prefix().arena(arena).sendPlayer();
     return false;
   }
 
   private boolean canJoinArenaAndMessage(Player player, PluginArena arena) {
     if(!arena.isReady()) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_ARENA_NOT_CONFIGURED"));
+      new MessageBuilder("IN_GAME_JOIN_ARENA_NOT_CONFIGURED").asKey().player(player).prefix().arena(arena).sendPlayer();
       return false;
     }
 
     PlugilyGameJoinAttemptEvent event = new PlugilyGameJoinAttemptEvent(player, arena);
     Bukkit.getPluginManager().callEvent(event);
     if(event.isCancelled()) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_CANCEL_API"));
+      new MessageBuilder("IN_GAME_JOIN_CANCEL_API").asKey().player(player).prefix().arena(arena).sendPlayer();
       return false;
     }
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
       if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
-        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_JOIN_NO_PERMISSION", perm.replace("<arena>", arena.getId())));
+        new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().prefix().player(player).value(perm.replace("<arena>", arena.getId())).sendPlayer();
         return false;
       }
     }
@@ -200,10 +200,10 @@ public class PluginArenaManager {
 
     User user = plugin.getUserManager().getUser(player);
     arena.getScoreboardManager().removeScoreboard(user);
-    arena.getPlayers().remove(player);
     if(!user.isSpectator()) {
-      plugin.getChatManager().broadcastAction(arena, player, ChatManager.ActionType.LEAVE);
+      new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
+    arena.getPlayers().remove(player);
     user.setSpectator(false);
     user.setPermanentSpectator(false);
 
@@ -236,7 +236,7 @@ public class PluginArenaManager {
       }
       List<String> summaryMessages = plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary");
       for(String msg : summaryMessages) {
-        MiscUtils.sendCenteredMessage(player, plugin.getChatManager().formatMessage(arena, msg, user.getPlayer()));
+        MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).arena(arena).player(player).build());
       }
     }
     arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);

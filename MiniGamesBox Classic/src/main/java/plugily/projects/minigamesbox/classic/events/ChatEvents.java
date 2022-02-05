@@ -28,6 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class ChatEvents implements Listener {
           eventMessage = eventMessage.replaceAll(Pattern.quote(regexChar), "");
         }
       }
-      String message = formatChatPlaceholders(plugin.getChatManager().colorMessage("IN_GAME_GAME_CHAT_FORMAT"), plugin.getUserManager().getUser(event.getPlayer()), arena, eventMessage);
+      String message = formatChatPlaceholders(new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().arena(arena).build(), plugin.getUserManager().getUser(event.getPlayer()), arena, eventMessage);
       event.setMessage(message);
     }
     if(!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
@@ -81,9 +82,8 @@ public class ChatEvents implements Listener {
 
   private String formatChatPlaceholders(String message, User user, PluginArena arena, String saidMessage) {
     String formatted = message;
-    formatted = plugin.getChatManager().colorRawMessage(formatted);
     if(user.isSpectator()) {
-      formatted = StringUtils.replace(formatted, "%kit%", plugin.getChatManager().colorMessage("IN_GAME_DEATH_TAG"));
+      formatted = StringUtils.replace(formatted, "%kit%", new MessageBuilder("IN_GAME_DEATH_TAG").asKey().build());
     } else {
       if(user.getKit() == null) {
         formatted = StringUtils.replace(formatted, "%kit%", "-");
@@ -94,12 +94,8 @@ public class ChatEvents implements Listener {
 
     Player player = user.getPlayer();
 
-    formatted = StringUtils.replace(formatted, "%player%", player.getName());
     formatted = StringUtils.replace(formatted, "%message%", ChatColor.stripColor(saidMessage));
-    formatted = plugin.getChatManager().formatMessage(arena, formatted, player);
-    if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-      formatted = PlaceholderAPI.setPlaceholders(player, formatted);
-    }
+    formatted = new MessageBuilder(formatted).arena(arena).player(player).build();
     return formatted;
   }
 

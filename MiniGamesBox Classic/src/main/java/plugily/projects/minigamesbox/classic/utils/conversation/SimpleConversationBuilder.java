@@ -24,6 +24,7 @@ import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -44,7 +45,7 @@ public class SimpleConversationBuilder {
           if(listener.gracefulExit()) {
             return;
           }
-          listener.getContext().getForWhom().sendRawMessage(plugin.getChatManager().colorRawMessage("&7Operation cancelled!"));
+          listener.getContext().getForWhom().sendRawMessage(new MessageBuilder("&7Operation cancelled!").build());
         })
         .thatExcludesNonPlayersWithMessage(ChatColor.RED + "Only by players!");
   }

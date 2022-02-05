@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -83,9 +84,9 @@ public class SpecialItemManager {
       return;
     }
     Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
-    String name = plugin.getChatManager().colorRawMessage(config.getString(path + ".displayname"));
+    String name = new MessageBuilder(config.getString(path + ".displayname", "Error!")).build();
     List<String> lore = config.getStringList(path + ".lore").stream()
-        .map(itemLore -> itemLore = plugin.getChatManager().colorRawMessage(itemLore))
+        .map(itemLore -> itemLore = new MessageBuilder(itemLore).build())
         .collect(Collectors.toList());
 
     SpecialItem.DisplayStage stage = SpecialItem.DisplayStage.LOBBY;

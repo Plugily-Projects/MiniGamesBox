@@ -178,7 +178,7 @@ public class MiscUtils {
       sb.append(' ');
       compensated += spaceLength;
     }
-    player.sendMessage(sb.toString() + message);
+    player.sendMessage(sb + message);
   }
 
 

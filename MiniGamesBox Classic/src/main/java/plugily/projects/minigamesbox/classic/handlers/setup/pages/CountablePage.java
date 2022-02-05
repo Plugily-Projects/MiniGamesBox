@@ -24,6 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.handlers.setup.items.CountItem;
@@ -58,7 +59,7 @@ public class CountablePage extends NormalFastInv implements SetupPage {
   public void injectItems() {
     setItem(1, new CountItem(
         new ItemBuilder(Material.COAL).amount(setupInventory.getPlugin().getSetupUtilities().getMinimumValueHigherThanZero("minimumplayers", setupInventory))
-            .name(setupInventory.getPlugin().getChatManager().colorRawMessage("&e&lSet Minimum Players Amount"))
+            .name(new MessageBuilder("&e&lSet Minimum Players Amount").build())
             .lore(ChatColor.GRAY + "LEFT click to decrease")
             .lore(ChatColor.GRAY + "RIGHT click to increase")
             .lore(ChatColor.DARK_GRAY + "(how many players are needed")
@@ -77,7 +78,7 @@ public class CountablePage extends NormalFastInv implements SetupPage {
 
     setItem(10, new CountItem(new ItemBuilder(Material.REDSTONE)
         .amount(setupInventory.getPlugin().getSetupUtilities().getMinimumValueHigherThanZero("maximumplayers", setupInventory))
-        .name(setupInventory.getPlugin().getChatManager().colorRawMessage("&e&lSet Maximum Players Amount"))
+        .name(new MessageBuilder("&e&lSet Maximum Players Amount").build())
         .lore(ChatColor.GRAY + "LEFT click to decrease")
         .lore(ChatColor.GRAY + "RIGHT click to increase")
         .lore(ChatColor.DARK_GRAY + "(how many players arena can hold)")

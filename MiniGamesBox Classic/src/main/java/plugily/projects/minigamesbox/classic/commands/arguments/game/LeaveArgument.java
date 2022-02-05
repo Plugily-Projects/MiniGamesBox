@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 import java.util.logging.Level;
 
@@ -43,7 +44,7 @@ public class LeaveArgument {
           if(!registry.getPlugin().getBukkitHelper().checkIsInGameInstance(player)) {
             return;
           }
-          player.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TELEPORTED_TO_LOBBY"));
+          new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().prefix().player(player).sendPlayer();
           PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(player);
 
           if(arena == null) {

@@ -24,6 +24,7 @@ import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class JoinArguments {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
           return;
         }
         if(!registry.getPlugin().getArenaRegistry().getArenas().isEmpty() && args[1].equalsIgnoreCase("maxplayers") && registry.getPlugin().getArenaRegistry().getArena("maxplayers") == null) {
@@ -77,7 +78,7 @@ public class JoinArguments {
             return;
           }
         }
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
+        new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
       }
     });
 
@@ -100,7 +101,7 @@ public class JoinArguments {
             registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
             return;
           }
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_NO_FREE_ARENAS"));
+          new MessageBuilder("COMMANDS_NO_FREE_ARENAS").asKey().prefix().send(sender);
         }
       });
     }

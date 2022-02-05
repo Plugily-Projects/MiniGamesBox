@@ -25,8 +25,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.handlers.sign.ArenaSign;
@@ -67,13 +69,13 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
     ItemStack registeredItem;
     if(!setupInventory.getArena().isReady()) {
       registeredItem = new ItemBuilder(XMaterial.FIREWORK_ROCKET.parseItem())
-          .name(setupInventory.getPlugin().getChatManager().colorRawMessage("&e&lRegister Arena - Finish Setup"))
+          .name(new MessageBuilder("&e&lRegister Arena - Finish Setup").build())
           .lore(ChatColor.GRAY + "Click this when you're done with configuration.")
           .lore(ChatColor.GRAY + "It will validate and register setupInventory.getArena().")
           .build();
     } else {
       registeredItem = new ItemBuilder(Material.BARRIER)
-          .name(setupInventory.getPlugin().getChatManager().colorRawMessage("&a&lArena Registered - Congratulations"))
+          .name(new MessageBuilder("&a&lArena Registered - Congratulations").build())
           .lore(ChatColor.GRAY + "This arena is already registered!")
           .lore(ChatColor.GRAY + "Good job, you went through whole setup!")
           .lore(ChatColor.GRAY + "You can play on this arena now!")
@@ -90,7 +92,7 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
         String loc = setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + "." + s);
 
         if(loc == null || loc.equals(LocationSerializer.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation()))) {
-          event.getWhoClicked().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&c&l✘ &cArena validation failed! Please configure following spawns properly: " + s + " (cannot be world spawn location)"));
+          new MessageBuilder("&c&l✘ &cArena validation failed! Please configure following spawns properly: " + s + " (cannot be world spawn location)").player((Player) event.getWhoClicked()).sendPlayer();
           return;
         }
       }
@@ -99,7 +101,7 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
         return;
       }
 
-      event.getWhoClicked().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&a&l✔ &aValidation succeeded! Registering new arena instance: " + setupInventory.getArena().getId()));
+      new MessageBuilder("&a&l✔ &aValidation succeeded! Registering new arena instance: " + setupInventory.getArena().getId()).player((Player) event.getWhoClicked()).sendPlayer();
       setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".isdone", true);
       ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
       List<Sign> signsToUpdate = new ArrayList<>();

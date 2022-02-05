@@ -29,12 +29,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -63,9 +65,9 @@ public class HalloweenHoliday implements Holiday, Listener {
   public void applyCreatureEffects(Creature creature) {
     org.bukkit.inventory.EntityEquipment equipment = creature.getEquipment();
 
-    if (equipment != null && equipment.getHelmet() == null) {
+    if(equipment != null && equipment.getHelmet() == null) {
       //randomizing head type
-      if (random.nextBoolean()) {
+      if(random.nextBoolean()) {
         equipment.setHelmet(new ItemStack(Material.JACK_O_LANTERN, 1));
       } else {
         equipment.setHelmet(new ItemStack(Material.PUMPKIN, 1));
@@ -80,25 +82,25 @@ public class HalloweenHoliday implements Holiday, Listener {
     entity.getWorld().strikeLightningEffect(entityLoc);
 
     //randomizing sound
-    if (random.nextBoolean()) {
+    if(random.nextBoolean()) {
       VersionUtils.playSound(entityLoc, "ENTITY_WOLF_HOWL");
     } else {
       VersionUtils.playSound(entityLoc, "ENTITY_WITHER_DEATH");
     }
 
     //randomizing bats spawn chance
-    if (random.nextBoolean()) {
+    if(random.nextBoolean()) {
       final List<Entity> bats = new ArrayList<>();
 
-      for (int i = 0; i < random.nextInt(6); i++) {
+      for(int i = 0; i < random.nextInt(6); i++) {
         final Entity bat = entityLoc.getWorld().spawnEntity(entityLoc, EntityType.BAT);
 
-        bat.setCustomName(plugin.getChatManager().colorRawMessage("&6Halloween!"));
+        bat.setCustomName(new MessageBuilder("&6Halloween!").build());
         bats.add(bat);
       }
 
       Bukkit.getScheduler().runTaskLater(plugin, () -> {
-        for (Entity bat : bats) {
+        for(Entity bat : bats) {
           bat.getWorld().playEffect(bat.getLocation(), Effect.SMOKE, 3);
           bat.remove();
         }
@@ -110,13 +112,13 @@ public class HalloweenHoliday implements Holiday, Listener {
 
   @EventHandler
   public void onBatDamage(EntityDamageEvent e) {
-    if (e.getEntityType() != EntityType.BAT) {
+    if(e.getEntityType() != EntityType.BAT) {
       return;
     }
 
     String customName = e.getEntity().getCustomName();
 
-    if (customName != null && customName.equals(plugin.getChatManager().colorRawMessage("&6Halloween!"))) {
+    if(customName != null && customName.equals(new MessageBuilder("&6Halloween!").build())) {
       e.setCancelled(true);
     }
   }

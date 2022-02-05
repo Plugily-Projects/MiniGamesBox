@@ -26,9 +26,9 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -88,13 +88,13 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
               @Override
               public @NotNull String getPromptText(ConversationContext context) {
                 setupInventory.getPlayer().closeInventory();
-                return setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "&ePlease type in chat 'delete' ! &cType in 'CANCEL' to cancel!");
+                return new MessageBuilder("&ePlease type in chat 'delete' ! &cType in 'CANCEL' to cancel!").prefix().build();
               }
 
               @Override
               public Prompt acceptInput(ConversationContext context, String input) {
                 if(!input.equalsIgnoreCase("delete")) {
-                  setupInventory.getPlayer().sendRawMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&cDelete operation canceled"));
+                  setupInventory.getPlayer().sendRawMessage(new MessageBuilder("&cDelete operation canceled").prefix().build());
                   return Prompt.END_OF_CONVERSATION;
                 }
                 setupInventory.getPlugin().getArenaManager().stopGame(false, arena);
@@ -102,14 +102,14 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
                 config.set("instances." + arena.getId(), null);
                 ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
-                setupInventory.getPlayer().sendRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + setupInventory.getPlugin().getChatManager().colorMessage("COMMANDS_REMOVED_GAME_INSTANCE"));
+                setupInventory.getPlayer().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().prefix().build());
                 setupInventory.open(SetupUtilities.InventoryStage.ARENA_LIST);
                 return Prompt.END_OF_CONVERSATION;
               }
             }).buildFor((Player) event.getWhoClicked());
             break;
           case SHIFT_LEFT:
-            event.getWhoClicked().sendMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&cThis function isn't ready yet!"));
+            new MessageBuilder("&cThis function isn't ready yet!").prefix().send(event.getWhoClicked());
             break;
           default:
             break;

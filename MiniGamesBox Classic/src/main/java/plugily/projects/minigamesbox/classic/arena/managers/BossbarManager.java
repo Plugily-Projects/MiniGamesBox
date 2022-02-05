@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.EnumMap;
@@ -62,7 +63,7 @@ public class BossbarManager {
     }
 
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1) && plugin.getConfigPreferences().getOption("BOSSBAR")) {
-      gameBar = Bukkit.createBossBar(plugin.getChatManager().colorMessage("BOSSBAR_TITLE"), BarColor.BLUE, BarStyle.SOLID);
+      gameBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).build(), BarColor.BLUE, BarStyle.SOLID);
     }
   }
 
@@ -80,7 +81,7 @@ public class BossbarManager {
     if(currentLine >= lines) {
       currentLine = 0;
     }
-    String bossbarMessage = plugin.getChatManager().formatMessage(values.get(currentLine), arena);
+    String bossbarMessage = new MessageBuilder(values.get(currentLine)).arena(arena).build();
     if(arena.getArenaOption("BAR_TOGGLE_VALUE") > interval) {
       currentLine++;
       arena.setArenaOption("BAR_TOGGLE_VALUE", 0);

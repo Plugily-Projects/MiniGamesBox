@@ -25,6 +25,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -39,16 +40,16 @@ public class ListArenasArgument {
             "&7Shows list with all loaded arenas\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.list")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_HEADER"));
+        new MessageBuilder("COMMANDS_ADMIN_LIST_HEADER").asKey().send(sender);
 
         if(registry.getPlugin().getArenaRegistry().getArenas().isEmpty()) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_NO_ARENAS"));
-          sender.sendMessage(registry.getPlugin().getChatManager().colorRawMessage("&e&lTIP: &7You can get free maps with configs at our wiki! Just head to https://wiki.plugily.xyz/" + registry.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/setup/maps"));
+          new MessageBuilder("COMMANDS_ADMIN_LIST_NO_ARENAS").asKey().send(sender);
+          new MessageBuilder("&e&lTIP: &7You can get free maps with configs at our wiki! Just head to https://wiki.plugily.xyz/" + registry.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/setup/maps").send(sender);
           return;
         }
 
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_LIST_FORMAT", arena));
+          new MessageBuilder("COMMANDS_ADMIN_LIST_FORMAT").asKey().arena(arena).send(sender);
         }
       }
     });

@@ -25,6 +25,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 
 import java.util.HashMap;
@@ -102,7 +103,7 @@ public class User {
 
   public int getStatistic(String statistic) {
     StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
-    return stats.computeIfAbsent(statisticType, t -> 0);
+    return getStatistic(statisticType);
   }
 
   public int getStatistic(StatisticType statisticType) {
@@ -143,10 +144,7 @@ public class User {
     if(time <= 0) {
       return true;
     }
-
-    String message = plugin.getChatManager().colorMessage("KIT_COOLDOWN");
-    message = message.replaceFirst("%number%", Long.toString(time));
-    getPlayer().sendMessage(message);
+    new MessageBuilder("KIT_COOLDOWN").asKey().integer((int) time).player(getPlayer()).sendPlayer();
     return false;
   }
 

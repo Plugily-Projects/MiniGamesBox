@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 /**
@@ -46,7 +47,7 @@ public class CreateArgument {
             @Override
             public void execute(CommandSender sender, String[] args) {
                 if (args.length == 1) {
-                    sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
+                    new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
                     return;
                 }
                 Player player = (Player) sender;

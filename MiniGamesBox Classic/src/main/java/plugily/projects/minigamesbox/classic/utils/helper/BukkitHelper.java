@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockIterator;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.ArrayList;
@@ -155,7 +156,7 @@ public class BukkitHelper {
 
   public boolean checkIsInGameInstance(Player player) {
     if(plugin.getArenaRegistry().getArena(player) == null) {
-      player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NOT_PLAYING"));
+      new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().prefix().player(player).sendPlayer();
       return false;
     }
     return true;
@@ -165,7 +166,7 @@ public class BukkitHelper {
     if(sender.hasPermission(perm)) {
       return true;
     }
-    sender.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NO_PERMISSION"));
+    new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().prefix().send(sender);
     return false;
   }
 

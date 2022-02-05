@@ -25,6 +25,7 @@ import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.CompletableArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,18 +54,18 @@ public class LeaderboardArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_TOP_TYPE_NAME"));
+          new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_TYPE_NAME").asKey().prefix().send(sender);
           return;
         }
         try {
           StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
           if(statisticType == registry.getPlugin().getStatsStorage().getStatisticType("EXP")) {
-            sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_INVALID_NAME"));
+            new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().prefix().send(sender);
             return;
           }
           printLeaderboard(sender, statisticType);
         } catch(IllegalArgumentException e) {
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_INVALID_NAME"));
+          new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().prefix().send(sender);
         }
       }
     });
@@ -72,7 +73,7 @@ public class LeaderboardArgument {
 
   private void printLeaderboard(CommandSender sender, StatisticType statisticType) {
     java.util.Map<UUID, Integer> stats = registry.getPlugin().getStatsStorage().getStats(statisticType);
-    sender.sendMessage(registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_TOP_HEADER"));
+    new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_HEADER").asKey().prefix().send(sender);
     String statistic = StringUtils.capitalize(statisticType.toString().toLowerCase().replace('_', ' '));
     UUID[] array = stats.keySet().toArray(new UUID[0]);
     for(int position = 1; position <= 10; position++) {
@@ -90,7 +91,7 @@ public class LeaderboardArgument {
   }
 
   private String formatMessage(String statisticName, String playerName, int position, int value) {
-    String message = registry.getPlugin().getChatManager().colorMessage("LEADERBOARD_TYPE_CHAT_TOP_FORMAT");
+    String message = new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_FORMAT").asKey().prefix().build();
     message = StringUtils.replace(message, "%position%", Integer.toString(position));
     message = StringUtils.replace(message, "%name%", playerName);
     message = StringUtils.replace(message, "%value%", Integer.toString(value));

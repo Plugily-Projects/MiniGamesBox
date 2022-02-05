@@ -27,6 +27,7 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -61,21 +62,21 @@ public class ValuePage extends NormalFastInv implements SetupPage {
   @Override
   public void injectItems() {
     setItem(43, ClickableItem.of(new ItemBuilder(Material.NAME_TAG)
-        .name(setupInventory.getPlugin().getChatManager().colorRawMessage("&e&lChange Map Name"))
+        .name(new MessageBuilder("&e&lChange Map Name").build())
         .lore(ChatColor.GRAY + "Click to set arena map name")
-        .lore("", setupInventory.getPlugin().getChatManager().colorRawMessage("&a&lCurrently: &e" + setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + ".mapname")))
+        .lore("", new MessageBuilder("&a&lCurrently: &e" + setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + ".mapname")).build())
         .build(), event -> {
       event.getWhoClicked().closeInventory();
       new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
         @Override
         public @NotNull String getPromptText(ConversationContext context) {
-          return setupInventory.getPlugin().getChatManager().colorRawMessage(setupInventory.getPlugin().getChatManager().getPrefix() + "&ePlease type in chat arena name! You can use color codes.");
+          return new MessageBuilder("&ePlease type in chat arena name! You can use color codes.").prefix().build();
         }
 
         @Override
         public Prompt acceptInput(ConversationContext context, String input) {
-          String name = setupInventory.getPlugin().getChatManager().colorRawMessage(input);
-          setupInventory.getPlayer().sendRawMessage(setupInventory.getPlugin().getChatManager().colorRawMessage("&e✔ Completed | &aName of arena " + setupInventory.getArena().getId() + " set to " + name));
+          String name = new MessageBuilder(input).build();
+          setupInventory.getPlayer().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of arena " + setupInventory.getArena().getId() + " set to " + name).build());
           setupInventory.getArena().setMapName(name);
           setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".mapname", setupInventory.getArena().getMapName());
           ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");

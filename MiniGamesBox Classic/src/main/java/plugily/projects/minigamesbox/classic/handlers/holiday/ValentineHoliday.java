@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.powerup.Powerup;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -50,8 +51,8 @@ public class ValentineHoliday implements Holiday, Listener {
   @Override
   public void enable(PluginMain plugin) {
     this.plugin = plugin;
-    Powerup powerup = new Powerup("VALENTINES_HEALING", plugin.getChatManager().colorRawMessage("&c&l<3"),
-        plugin.getChatManager().colorRawMessage("&d&lHappy Valentine's Day!"), XMaterial.POPPY, null, null, null, pickup -> {
+    Powerup powerup = new Powerup("VALENTINES_HEALING", new MessageBuilder("&c&l<3").build(),
+        new MessageBuilder("&d&lHappy Valentine's Day!").build(), XMaterial.POPPY, null, null, null, pickup -> {
       pickup.getPlayer().setHealth(VersionUtils.getMaxHealth(pickup.getPlayer()));
       VersionUtils.sendTitle(pickup.getPlayer(), pickup.getPowerup().getDescription(), 5, 30, 5);
     });

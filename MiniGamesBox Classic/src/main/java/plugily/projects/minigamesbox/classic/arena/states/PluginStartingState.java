@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEven
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 
 /**
@@ -69,7 +70,7 @@ public class PluginStartingState implements ArenaStateHandler {
 
     if(!arena.isForceStart() && arena.getPlayers().size() < minPlayers) {
       arena.getBossbarManager().setProgress(1.0);
-      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS"), minPlayers));
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().arena(arena).integer(minPlayers).sendArena();
       arenaState = ArenaState.WAITING_FOR_PLAYERS;
       for(Player player : arena.getPlayers()) {
         plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
@@ -99,7 +100,7 @@ public class PluginStartingState implements ArenaStateHandler {
         user.getKit().giveKitItems(player);
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);
-        player.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_GAME_START"));
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).prefix().player(player).sendPlayer();
         plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
@@ -111,7 +112,7 @@ public class PluginStartingState implements ArenaStateHandler {
     if(arena.getMaximumPlayers() == arena.getPlayers().size() && arena.getTimer() > shorter) {
       arenaTimer = shorter;
       arenaState = ArenaState.FULL_GAME;
-      plugin.getChatManager().broadcastMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS"));
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS").asKey().arena(arena).sendArena();
     }
     plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 

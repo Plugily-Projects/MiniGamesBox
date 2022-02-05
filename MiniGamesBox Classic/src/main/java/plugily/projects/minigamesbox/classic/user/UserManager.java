@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.data.FileStats;
 import plugily.projects.minigamesbox.classic.user.data.MysqlManager;
 import plugily.projects.minigamesbox.classic.user.data.UserDatabase;
@@ -105,7 +106,7 @@ public class UserManager {
       user.setStatistic(plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP"), (int) Math.ceil(Math.pow(50.0 * user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5)));
       //Arena can be null when player has left the arena before this message is retrieved.
       if(arena != null)
-        user.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().formatMessage(arena, plugin.getChatManager().colorMessage("IN_GAME_LEVEL_UP"), user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"))));
+        new MessageBuilder("IN_GAME_LEVEL_UP").asKey().prefix().arena(arena).player(user.getPlayer()).integer(user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"))).sendPlayer();
     }
   }
 

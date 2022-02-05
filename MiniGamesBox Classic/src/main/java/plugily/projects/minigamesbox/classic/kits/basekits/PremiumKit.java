@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.kits.basekits;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 
 /**
@@ -37,7 +38,7 @@ public abstract class PremiumKit extends Kit {
     return new ItemBuilder(getMaterial())
         .name(getName())
         .lore(getDescription())
-        .lore(getPlugin().getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCK_STORE"))
+        .lore(new MessageBuilder("KIT_KIT_MENU_LORE_UNLOCK_STORE").asKey().build())
         .build();
   }
 }

@@ -54,6 +54,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitAr
 import plugily.projects.minigamesbox.classic.commands.arguments.game.SetupArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -136,7 +137,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
           }
           PluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
           if(arena == null) {
-            sender.sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_NO_ARENA_LIKE_THAT"));
+            new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
             return true;
           }
 
@@ -172,7 +173,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       //sending did you mean help
       List<StringMatcher.Match> matches = StringMatcher.match(args[0], entry.getValue().stream().map(CommandArgument::getArgumentName).collect(Collectors.toList()));
       if(!matches.isEmpty()) {
-        sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_DID_YOU_MEAN", label + " " + matches.get(0).getMatch()));
+        new MessageBuilder("COMMANDS_DID_YOU_MEAN").asKey().prefix().value(label + " " + matches.get(0).getMatch()).send(sender);
         return true;
       }
     }
@@ -180,17 +181,16 @@ public class PluginArgumentsRegistry implements CommandExecutor {
   }
 
   private void sendHelpCommand(CommandSender sender) {
-    sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_HEADER"));
+    new MessageBuilder("COMMANDS_MAIN_HEADER").asKey().send(sender);
     List<String> description = plugin.getLanguageManager().getLanguageListFromKey("COMMANDS_MAIN_DESCRIPTION");
-    description.forEach(string -> sender.sendMessage(plugin.getChatManager().formatMessage(string)));
+    description.forEach(string -> new MessageBuilder(string).send(sender));
 
 
     if(sender.hasPermission(plugin.getPluginNamePrefixLong() + ".admin")) {
-      sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION"));
+      new MessageBuilder("COMMANDS_MAIN_ADMIN_BONUS_DESCRIPTION").asKey().send(sender);
       sendAdminHelpCommand(sender);
     }
-
-    sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_MAIN_FOOTER"));
+    new MessageBuilder("COMMANDS_MAIN_FOOTER").asKey().send(sender);
   }
 
   private void sendAdminHelpCommand(CommandSender sender) {
@@ -247,7 +247,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
         if(sender instanceof Player) {
           return true;
         }
-        sender.sendMessage(plugin.getChatManager().colorMessage("COMMANDS_ONLY_BY_PLAYER"));
+        new MessageBuilder("COMMANDS_ONLY_BY_PLAYER").asKey().send(sender);
         return false;
       default:
         return false;

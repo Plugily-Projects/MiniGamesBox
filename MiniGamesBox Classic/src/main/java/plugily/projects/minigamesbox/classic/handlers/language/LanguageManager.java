@@ -197,7 +197,7 @@ public class LanguageManager {
       return getStrings(path);
     }
     if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "not found"))) {
-      return Arrays.asList(plugin.getChatManager().colorRawMessage(prop).split(";"));
+      return Arrays.asList(new MessageBuilder(prop).build().split(";"));
     }
     return getStrings(path);
   }
@@ -212,7 +212,7 @@ public class LanguageManager {
       return getStrings(key);
     }
     if(getString(key).equalsIgnoreCase(defaultLanguageConfig.getString(key, "not found"))) {
-      return Arrays.asList(plugin.getChatManager().colorRawMessage(prop).split(";"));
+      return Arrays.asList(new MessageBuilder(prop).build().split(";"));
     }
     return getStrings(key);
   }
@@ -225,7 +225,7 @@ public class LanguageManager {
       plugin.getDebugger().debug(Level.WARNING, "&cPath: " + path);
       return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
     }
-    return languageConfig.getStringList(path).stream().map(string -> plugin.getChatManager().colorRawMessage(string)).collect(Collectors.toList());
+    return languageConfig.getStringList(path).stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
   }
 
 

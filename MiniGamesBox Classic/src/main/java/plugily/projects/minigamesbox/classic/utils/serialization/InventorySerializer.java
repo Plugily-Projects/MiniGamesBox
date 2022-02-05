@@ -66,7 +66,7 @@ public class InventorySerializer {
     path.mkdirs();
 
     try {
-      File invFile = new File(path, player.getUniqueId().toString() + ".invsave");
+      File invFile = new File(path, player.getUniqueId() + ".invsave");
       if(invFile.exists()) {
         invFile.delete();
       }
@@ -76,7 +76,6 @@ public class InventorySerializer {
       invConfig.set("ExperienceProgress", player.getExp());
       invConfig.set("ExperienceLevel", player.getLevel());
       invConfig.set("Current health", player.getHealth());
-      invConfig.set("Max health", VersionUtils.getMaxHealth(player));
       invConfig.set("Food", player.getFoodLevel());
       invConfig.set("Saturation", player.getSaturation());
       invConfig.set("Fire ticks", player.getFireTicks());
@@ -88,10 +87,18 @@ public class InventorySerializer {
       Collection<PotionEffect> activeEffects = player.getActivePotionEffects();
       List<String> activePotions = new ArrayList<>(activeEffects.size());
 
+      double maxHealth = VersionUtils.getMaxHealth(player);
+
       for(PotionEffect potion : activeEffects) {
         activePotions.add(potion.getType().getName() + "#" + potion.getDuration() + "#" + potion.getAmplifier());
+        if(potion.getType().equals(PotionEffectType.HEALTH_BOOST)) {
+          // Health boost effect gives +2 hearts per level, health is counted in half hearts so amplifier * 4
+          maxHealth -= (potion.getAmplifier() + 1) * 4;
+        }
       }
       invConfig.set("Active potion effects", activePotions);
+      invConfig.set("Max health", maxHealth);
+
       org.bukkit.entity.HumanEntity holder = inventory.getHolder();
       if(holder instanceof Player) {
         invConfig.set("Holder", holder.getName());

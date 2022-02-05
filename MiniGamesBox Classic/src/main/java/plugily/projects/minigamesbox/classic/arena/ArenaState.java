@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.arena;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -36,8 +37,7 @@ public enum ArenaState {
   ArenaState(String formattedName) {
     this.formattedName = formattedName;
     PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
-    placeholder = plugin.getChatManager()
-        .colorRawMessage(plugin.getLanguageManager().getLanguageMessage("Placeholders.Game-States." + formattedName));
+    placeholder = new MessageBuilder(plugin.getLanguageManager().getLanguageMessage("Placeholders.Game-States." + formattedName)).build();
   }
 
   public String getFormattedName() {

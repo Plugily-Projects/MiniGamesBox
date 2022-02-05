@@ -28,6 +28,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsR
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 
 import java.util.HashSet;
@@ -50,8 +51,7 @@ public class ReloadArgument {
         if(!confirmations.contains(sender)) {
           confirmations.add(sender);
           Bukkit.getScheduler().runTaskLater(registry.getPlugin(), () -> confirmations.remove(sender), 20L * 10);
-          sender.sendMessage(registry.getPlugin().getChatManager().getPrefix()
-              + registry.getPlugin().getChatManager().colorRawMessage("&cAre you sure you want to do this action? Type the command again &6within 10 seconds &cto confirm!"));
+          new MessageBuilder("&cAre you sure you want to do this action? Type the command again &6within 10 seconds &cto confirm!").prefix().send(sender);
           return;
         }
         confirmations.remove(sender);
@@ -76,7 +76,7 @@ public class ReloadArgument {
           registry.getPlugin().getArenaManager().stopGame(true, arena);
         }
         registry.getPlugin().getArenaRegistry().registerArenas();
-        sender.sendMessage(registry.getPlugin().getChatManager().getPrefix() + registry.getPlugin().getChatManager().colorMessage("COMMANDS_ADMIN_RELOAD_SUCCESS"));
+        new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().prefix().send(sender);
       }
     });
   }

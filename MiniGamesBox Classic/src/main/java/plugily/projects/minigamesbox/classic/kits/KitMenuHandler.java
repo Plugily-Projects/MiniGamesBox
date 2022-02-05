@@ -22,19 +22,15 @@ package plugily.projects.minigamesbox.classic.kits;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerChooseKitEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
-import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 /**
  * @author Tigerpanzer_02
@@ -49,12 +45,12 @@ public class KitMenuHandler implements Listener {
 
   public KitMenuHandler(PluginMain plugin) {
     this.plugin = plugin;
-    unlockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_UNLOCKED");
-    lockedString = plugin.getChatManager().colorMessage("KIT_KIT_MENU_LORE_LOCKED");
+    unlockedString = new MessageBuilder("KIT_KIT_MENU_LORE_UNLOCKED").asKey().build();
+    lockedString = new MessageBuilder("KIT_KIT_MENU_LORE_LOCKED").asKey().build();
   }
 
   public void createMenu(Player player) {
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), plugin.getChatManager().colorMessage("KIT_KIT_MENU_TITLE"));
+    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
     for(Kit kit : plugin.getKitRegistry().getKits()) {
       ItemStack itemStack = kit.getItemStack();
       itemStack = new ItemBuilder(itemStack)
@@ -76,11 +72,11 @@ public class KitMenuHandler implements Listener {
           return;
         }
         if(!kit.isUnlockedByPlayer(player)) {
-          player.sendMessage(plugin.getChatManager().colorMessage("KIT_NOT_UNLOCKED", kit.getName()));
+          new MessageBuilder("KIT_NOT_UNLOCKED").asKey().value(kit.getName()).player(player).sendPlayer();
           return;
         }
         plugin.getUserManager().getUser(player).setKit(kit);
-        player.sendMessage(plugin.getChatManager().colorMessage("KIT_CHOOSE", kit.getName()));
+        new MessageBuilder("KIT_CHOOSE").asKey().value(kit.getName()).player(player).sendPlayer();
       });
     }
     gui.open(player);

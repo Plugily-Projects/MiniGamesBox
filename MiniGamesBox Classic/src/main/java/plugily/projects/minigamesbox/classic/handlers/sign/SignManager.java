@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -78,7 +79,7 @@ public class SignManager implements Listener {
     }
     String line1 = ComplementAccessor.getComplement().getLine(event, 1);
     if(line1.isEmpty()) {
-      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("COMMANDS_TYPE_ARENA_NAME"));
+      new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().player(event.getPlayer()).sendPlayer();
       return;
     }
     for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {
@@ -86,10 +87,10 @@ public class SignManager implements Listener {
         continue;
       }
       for(int i = 0; i < signLines.size(); i++) {
-        ComplementAccessor.getComplement().setLine(event, i, plugin.getChatManager().formatMessage(signLines.get(i), arena));
+        ComplementAccessor.getComplement().setLine(event, i, new MessageBuilder(signLines.get(i)).arena(arena).build());
       }
       arenaSigns.add(new ArenaSign((Sign) event.getBlock().getState(), arena));
-      event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_CREATED"));
+      new MessageBuilder("SIGNS_CREATED").asKey().player(event.getPlayer()).arena(arena).prefix().sendPlayer();
       String location = event.getBlock().getWorld().getName() + "," + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + ",0.0,0.0";
       FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
       List<String> locs = config.getStringList("instances." + arena.getId() + ".signs");
@@ -98,7 +99,7 @@ public class SignManager implements Listener {
       ConfigUtils.saveConfig(plugin, config, "arenas");
       return;
     }
-    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_ARENA_NOT_FOUND"));
+    new MessageBuilder("SIGNS_ARENA_NOT_FOUND").asKey().player(event.getPlayer()).prefix().sendPlayer();
   }
 
   @EventHandler
@@ -123,11 +124,11 @@ public class SignManager implements Listener {
         signs.remove(location);
         config.set("instances." + arena + ".signs", signs);
         ConfigUtils.saveConfig(plugin, config, "arenas");
-        event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + plugin.getChatManager().colorMessage("SIGNS_REMOVED"));
+        new MessageBuilder("SIGNS_REMOVED").asKey().prefix().player(event.getPlayer()).sendPlayer();
         return;
       }
     }
-    event.getPlayer().sendMessage(plugin.getChatManager().getPrefix() + ChatColor.RED + "Couldn't remove sign from configuration! Please do this manually!");
+    new MessageBuilder(ChatColor.RED + "Couldn't remove sign from configuration! Please do this manually!").prefix().player(event.getPlayer()).sendPlayer();
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -196,7 +197,7 @@ public class SignManager implements Listener {
 
     for(ArenaSign arenaSign : arenaSigns) {
       for(int i = 0; i < signLines.size(); i++) {
-        ComplementAccessor.getComplement().setLine(arenaSign.getSign(), i, plugin.getChatManager().formatMessage(signLines.get(i), arenaSign.getArena()));
+        ComplementAccessor.getComplement().setLine(arenaSign.getSign(), i, new MessageBuilder(signLines.get(i)).arena(arenaSign.getArena()).build());
       }
       if(plugin.getConfig().getBoolean("Signs-Block-States-Enabled", true) && arenaSign.getBehind() != null) {
         Block behind = arenaSign.getBehind();
