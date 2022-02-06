@@ -213,6 +213,7 @@ public class PowerupRegistry {
         throw new IllegalArgumentException("Cannot register new power-up with same ID!");
       }
     }
+    plugin.getDebugger().debug("[PowerupRegistry] Registered power up {0}", powerup.getName());
     registeredPowerups.add(powerup);
   }
 
