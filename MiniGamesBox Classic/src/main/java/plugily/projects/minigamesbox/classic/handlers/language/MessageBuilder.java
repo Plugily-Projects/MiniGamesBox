@@ -42,7 +42,6 @@ import static org.apache.commons.lang.StringUtils.replace;
 public class MessageBuilder {
 
   private String message;
-  private String prefix = "";
   private Player player;
   private String value;
   private int integer;
@@ -72,23 +71,13 @@ public class MessageBuilder {
   }
 
   public MessageBuilder prefix() {
-    prefix = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX"));
-    colorPrefix();
+    message = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")) + message;
     return this;
   }
 
   public MessageBuilder prefix(String prefix) {
-    this.prefix = prefix;
-    colorPrefix();
+    message = prefix + message;
     return this;
-  }
-
-  private void colorPrefix() {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && prefix.indexOf('#') >= 0) {
-      prefix = MiscUtils.matchColorRegex(prefix);
-    }
-
-    prefix = ChatColor.translateAlternateColorCodes('&', prefix);
   }
 
   public MessageBuilder player(Player player) {
@@ -225,27 +214,27 @@ public class MessageBuilder {
     if(arena != null) {
       formatExternalArena();
     }
-    return prefix + message;
+    return message;
   }
 
   public void sendPlayer() {
     build();
     if((message != null) && !message.isEmpty() && player != null) {
-      player.sendMessage(prefix + message);
+      player.sendMessage(message);
     }
   }
 
   public void send(CommandSender commandSender) {
     build();
     if((message != null) && !message.isEmpty()) {
-      commandSender.sendMessage(prefix + message);
+      commandSender.sendMessage(message);
     }
   }
 
   public void send(Player player) {
     build();
     if((message != null) && !message.isEmpty()) {
-      player.sendMessage(prefix + message);
+      player.sendMessage(message);
     }
   }
 
@@ -253,7 +242,7 @@ public class MessageBuilder {
     build();
     if((message != null) && !message.isEmpty()) {
       for(Player arenaPlayer : arena.getPlayers()) {
-        arenaPlayer.sendMessage(prefix + message);
+        arenaPlayer.sendMessage(message);
       }
     }
   }
@@ -262,7 +251,7 @@ public class MessageBuilder {
     build();
     if((message != null) && !message.isEmpty() && (arena != null)) {
       for(Player arenaPlayer : arena.getPlayers()) {
-        arenaPlayer.sendMessage(prefix + message);
+        arenaPlayer.sendMessage(message);
       }
     }
   }
@@ -271,7 +260,7 @@ public class MessageBuilder {
     build();
     if((message != null) && !message.isEmpty() && (arena != null)) {
       for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        onlinePlayer.sendMessage(prefix + message);
+        onlinePlayer.sendMessage(message);
       }
     }
   }
