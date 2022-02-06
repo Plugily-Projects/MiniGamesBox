@@ -226,14 +226,6 @@ public class PluginMain extends JavaPlugin {
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);
-
-    if(configPreferences.getOption("LEADERBOARDS")) {
-      if(!new File(getDataFolder(), "internal/leaderboards_data.yml").exists()) {
-        new File(getDataFolder().getName() + "/internal").mkdir();
-      }
-      leaderboardRegistry = new LeaderboardRegistry(this);
-    }
-
     holidayManager = new HolidayManager(this);
 
     permissionsManager = new PermissionsManager(this);
@@ -262,6 +254,13 @@ public class PluginMain extends JavaPlugin {
     setupUtilities = new SetupUtilities(this);
     PluginArenaUtils.init(this);
     PluginArena.init(this);
+    if(configPreferences.getOption("LEADERBOARDS")) {
+      if(!new File(getDataFolder(), "internal/leaderboards_data.yml").exists()) {
+        new File(getDataFolder().getName() + "/internal").mkdir();
+      }
+      //running later due to plugin specific stats
+      Bukkit.getScheduler().runTaskLater(this, () -> leaderboardRegistry = new LeaderboardRegistry(this), 20L * 15);
+    }
   }
 
   private boolean validateIfPluginShouldStart() {
