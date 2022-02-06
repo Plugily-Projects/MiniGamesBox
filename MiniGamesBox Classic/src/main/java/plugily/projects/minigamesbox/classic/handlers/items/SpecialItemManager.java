@@ -31,6 +31,7 @@ import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
+import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -205,8 +206,11 @@ public class SpecialItemManager {
   @NotNull
   public SpecialItem getRelatedSpecialItem(ItemStack itemStack) {
     for(SpecialItem item : specialItems.values()) {
-      plugin.getDebugger().debug("Comparing {0} with {1} is {2}", item.getItemStack().toString(), itemStack.toString(), item.getItemStack().isSimilar(itemStack));
       if(item.getItemStack().isSimilar(itemStack)) {
+        return item;
+      }
+      //After server restart items aren't similar on some mc versions as it formats the color codes in a different way, e.g. 1.18
+      if(ComplementAccessor.getComplement().getDisplayName(itemStack.getItemMeta()).equalsIgnoreCase(ComplementAccessor.getComplement().getDisplayName(item.getItemStack().getItemMeta()))) {
         return item;
       }
     }
