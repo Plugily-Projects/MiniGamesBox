@@ -30,6 +30,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ public class BossbarManager {
       }
       bossbar.put(arenaState, plugin.getLanguageManager().getLanguageList("Bossbar.Content." + arenaState.getFormattedName()));
     }
+    plugin.getDebugger().debug("Arena {0} loaded Bossbar content: {1}", arena.getId(), bossbar.toString());
 
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1) && plugin.getConfigPreferences().getOption("BOSSBAR")) {
       gameBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).build(), BarColor.BLUE, BarStyle.SOLID);
@@ -73,12 +75,12 @@ public class BossbarManager {
     }
     List<String> values;
     if(arena.getArenaState() == ArenaState.FULL_GAME) {
-      values = bossbar.get(ArenaState.STARTING);
+      values = new ArrayList<>(bossbar.get(ArenaState.STARTING));
     } else {
-      values = bossbar.get(arena.getArenaState());
+      values = new ArrayList<>(bossbar.get(arena.getArenaState()));
     }
     int lines = values.size() - 1;
-    if(currentLine >= lines) {
+    if(currentLine > lines) {
       currentLine = 0;
     }
     String bossbarMessage = new MessageBuilder(values.get(currentLine)).arena(arena).build();
