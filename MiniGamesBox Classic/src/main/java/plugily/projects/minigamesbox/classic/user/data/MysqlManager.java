@@ -238,13 +238,23 @@ public class MysqlManager implements UserDatabase {
       }
 
       try {
-        column.put(UUID.fromString(uuid), resultSet.getInt(statistic.getName()));
+        int database = resultSet.getInt(statistic.getName());
+        int value = getUpdatedColumnData(uuid, statistic, database);
+        column.put(UUID.fromString(uuid), value);
       } catch(IllegalArgumentException exception) {
         plugin.getDebugger().debug(Level.WARNING, "Cannot load the UUID for {0}", uuid);
       }
     }
     plugin.getDebugger().debug("MySQL Table | Fetched column data {0}", column.toString());
     return column;
+  }
+
+  private int getUpdatedColumnData(String uuid, StatisticType statisticType, int fromDatabase) {
+    Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+    if(player != null && player.isOnline()) {
+      return plugin.getStatsStorage().getUserStats(player, statisticType);
+    }
+    return fromDatabase;
   }
 
   @Override
