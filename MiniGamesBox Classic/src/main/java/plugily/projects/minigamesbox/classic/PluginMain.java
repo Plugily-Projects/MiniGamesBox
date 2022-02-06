@@ -537,7 +537,7 @@ public class PluginMain extends JavaPlugin {
   }
 
   public PluginSetupInventory openSetupInventory(PluginArena arena, Player player) {
-      return new PluginSetupInventory(this, arena, player);
+    return new PluginSetupInventory(this, arena, player);
   }
 
   public PluginSetupInventory openSetupInventory(PluginArena arena, Player player, SetupUtilities.InventoryStage inventoryStage) {

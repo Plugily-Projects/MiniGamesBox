@@ -61,7 +61,7 @@ public class PluginArena extends BukkitRunnable {
   private final Set<Player> players = new HashSet<>();
 
   //all arena values that are integers, contains constant and floating values
-  private final Map<String, ArenaOption> arenaOptions = new HashMap<>();
+  private Map<String, ArenaOption> arenaOptions = new HashMap<>();
   //instead of 3 location fields we use map with GameLocation enum
   private final Map<GameLocation, Location> gameLocations = new EnumMap<>(GameLocation.class);
   //all handlers for all game states, we don't include them all in one runnable because it would be too big
@@ -93,13 +93,9 @@ public class PluginArena extends BukkitRunnable {
     loadArenaOptions();
   }
 
-  public void resetArenaOptions() {
-    arenaOptions.clear();
-    loadArenaOptions();
-  }
-
   public void loadArenaOptions() {
-    arenaOptions.putAll(plugin.getArenaOptionManager().getArenaOptions());
+    arenaOptions.clear();
+    arenaOptions = new HashMap<>(plugin.getArenaOptionManager().getArenaOptions());
   }
 
   /**
@@ -132,9 +128,9 @@ public class PluginArena extends BukkitRunnable {
 
   public PluginArena(String id) {
     this.id = id == null ? "" : id;
+    setDefaultValues();
     scoreboardManager = new PluginScoreboardManager(this);
     mapRestorerManager = new PluginMapRestorerManager(this);
-    setDefaultValues();
     gameStateHandlers.put(ArenaState.WAITING_FOR_PLAYERS, new PluginWaitingState());
     gameStateHandlers.put(ArenaState.STARTING, new PluginStartingState());
     gameStateHandlers.put(ArenaState.IN_GAME, new PluginInGameState());

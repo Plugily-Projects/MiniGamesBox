@@ -37,7 +37,7 @@ public class PluginMapRestorerManager {
 
   public void fullyRestoreArena() {
     arena.getPlugin().getDebugger().debug("Arena {0} Restoring Arena", arena.getId());
-    arena.resetArenaOptions();
+    arena.loadArenaOptions();
     arena.getScoreboardManager().stopAllScoreboards();
     arena.getPlayers().clear();
   }
