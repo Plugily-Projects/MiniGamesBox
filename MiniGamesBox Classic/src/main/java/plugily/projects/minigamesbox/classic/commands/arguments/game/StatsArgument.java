@@ -63,7 +63,7 @@ public class StatsArgument {
             continue;
           }
           String statisticKey = statisticType.getName().toUpperCase();
-          new MessageBuilder("LEADERBOARD_STATISTIC_" + statisticKey).asKey().player(user.getPlayer()).integer(user.getStatistic(statisticType)).send(sender);
+          new MessageBuilder("LEADERBOARD_STATISTICS_" + statisticKey).asKey().player(user.getPlayer()).integer(user.getStatistic(statisticType)).send(sender);
         }
       }
 

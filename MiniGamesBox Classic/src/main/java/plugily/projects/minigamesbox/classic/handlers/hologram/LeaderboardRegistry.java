@@ -21,7 +21,10 @@
 package plugily.projects.minigamesbox.classic.handlers.hologram;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
@@ -33,7 +36,7 @@ import java.util.List;
  * <p>
  * Created at 09.10.2021
  */
-public class LeaderboardRegistry {
+public class LeaderboardRegistry implements Listener {
 
   private final List<LeaderboardHologram> leaderboardHolograms = new ArrayList<>();
   private final PluginMain plugin;
@@ -41,6 +44,7 @@ public class LeaderboardRegistry {
   public LeaderboardRegistry(PluginMain plugin) {
     this.plugin = plugin;
     registerHolograms();
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   private void registerHolograms() {
@@ -54,15 +58,18 @@ public class LeaderboardRegistry {
       LeaderboardHologram hologram;
 
       try {
-        hologram = new LeaderboardHologram(plugin, Integer.parseInt(key), plugin.getStatsStorage().getStatisticType(section.getString(key + ".statistics")),
+        hologram = new LeaderboardHologram(plugin, Integer.parseInt(key), plugin.getStatsStorage().getStatisticType(section.getString(key + ".statistics", "LEVEL").toUpperCase()),
             section.getInt(key + ".top-amount"), LocationSerializer.getLocation(section.getString(key + ".location", "")));
       } catch(IllegalArgumentException ex) {
         continue;
       }
-
-      hologram.initUpdateTask();
       registerHologram(hologram);
     }
+  }
+
+  @EventHandler
+  public void onStatisticUpdate(PlugilyPlayerStatisticChangeEvent event) {
+    leaderboardHolograms.forEach(LeaderboardHologram::updateHologram);
   }
 
   public void registerHologram(LeaderboardHologram hologram) {
@@ -75,7 +82,7 @@ public class LeaderboardRegistry {
     }
     for(LeaderboardHologram hologram : leaderboardHolograms) {
       if(hologram.getId() == id) {
-        hologram.cancel();
+        hologram.delete();
         return;
       }
     }
@@ -85,7 +92,7 @@ public class LeaderboardRegistry {
     if(leaderboardHolograms.isEmpty()) {
       return;
     }
-    leaderboardHolograms.forEach(LeaderboardHologram::cancel);
+    leaderboardHolograms.forEach(LeaderboardHologram::delete);
   }
 
 }

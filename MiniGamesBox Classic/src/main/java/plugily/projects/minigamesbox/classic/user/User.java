@@ -102,7 +102,7 @@ public class User {
   }
 
   public int getStatistic(String statistic) {
-    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic.toUpperCase());
     return getStatistic(statisticType);
   }
 

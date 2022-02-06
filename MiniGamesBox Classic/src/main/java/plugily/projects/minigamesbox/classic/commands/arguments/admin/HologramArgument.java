@@ -105,7 +105,6 @@ public class HologramArgument {
     ConfigUtils.saveConfig(registry.getPlugin(), config, "internal/leaderboards_data");
 
     LeaderboardHologram leaderboard = new LeaderboardHologram(registry.getPlugin(), nextValue, statistic, amount, player.getLocation());
-    leaderboard.initUpdateTask();
     registry.getPlugin().getLeaderboardRegistry().registerHologram(leaderboard);
     new MessageBuilder("&aHologram with ID " + nextValue + " with statistic " + statistic.getName() + " added!").prefix().player(player).sendPlayer();
   }
@@ -113,7 +112,7 @@ public class HologramArgument {
   private void sendInvalidStatisticMessage(Player player) {
     StringBuilder values = new StringBuilder();
     for(StatisticType value : registry.getPlugin().getStatsStorage().getStatistics().values()) {
-      values.append(value).append(' ');
+      values.append(value.getName()).append(' ');
     }
     new MessageBuilder("&cInvalid statistic type! Valid types: &e" + values).prefix().player(player).sendPlayer();
   }

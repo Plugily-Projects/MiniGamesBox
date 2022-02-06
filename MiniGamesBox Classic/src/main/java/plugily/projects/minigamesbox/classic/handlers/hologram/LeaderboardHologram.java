@@ -22,7 +22,6 @@ package plugily.projects.minigamesbox.classic.handlers.hologram;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.handlers.language.Message;
@@ -40,7 +39,7 @@ import java.util.UUID;
  * Created at 09.10.2021
  */
 //todo enhanced leaderboards management with leaderboards.yml such as top stats over x amount of time
-public class LeaderboardHologram extends BukkitRunnable {
+public class LeaderboardHologram {
 
   private final PluginMain plugin;
   private final int id;
@@ -58,27 +57,15 @@ public class LeaderboardHologram extends BukkitRunnable {
     this.hologram = new ArmorStandHologram(location);
 
     String header = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_HEADER"));
-    header = StringUtils.replace(header, "%amount%", Integer.toString(topAmount));
+    header = StringUtils.replace(header, "%number%", Integer.toString(topAmount));
 
     Message lm = statisticToMessage();
-    header = StringUtils.replace(header, "%statistic%", lm != null ? color(plugin.getLanguageConfig().getString(lm.getPath())) : "null");
+    header = StringUtils.replace(header, "%value%", lm != null ? color(plugin.getLanguageConfig().getString(lm.getPath())) : "null");
     hologram.appendLine(header);
-
-
+    updateHologram();
   }
 
-  //todo performance!! use stat update event instead!
-  public void initUpdateTask() {
-    runTaskTimerAsynchronously(plugin, 0, 100);
-  }
-
-  @Override
-  public void run() {
-    if(!plugin.isEnabled()) {
-      cancel();
-      return;
-    }
-
+  public void updateHologram() {
     java.util.Map<UUID, Integer> values = plugin.getStatsStorage().getStats(statistic);
     List<UUID> reverseKeys = new ArrayList<>(values.keySet());
     Collections.reverse(reverseKeys);
@@ -90,21 +77,19 @@ public class LeaderboardHologram extends BukkitRunnable {
       if(i < reverseKeys.size()) {
         UUID uuid = reverseKeys.get(i);
         text = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_FORMAT"));
-        text = StringUtils.replace(text, "%nickname%", getPlayerNameSafely(uuid));
+        text = StringUtils.replace(text, "%player%", getPlayerNameSafely(uuid));
         text = StringUtils.replace(text, "%value%", String.valueOf(values.get(uuid)));
       } else {
         text = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT"));
       }
-      text = StringUtils.replace(text, "%place%", Integer.toString(i + 1));
+      text = StringUtils.replace(text, "%number%", Integer.toString(i + 1));
       update.add(text);
     }
 
     hologram.appendLines(update);
   }
 
-  @Override
-  public synchronized void cancel() {
-    super.cancel();
+  public void delete() {
     hologram.delete();
   }
 
@@ -114,7 +99,7 @@ public class LeaderboardHologram extends BukkitRunnable {
   }
 
   private Message statisticToMessage() {
-    return plugin.getMessageManager().getMessage("LEADERBOARD_STATISTICS_" + statistic.toString());
+    return plugin.getMessageManager().getMessage("LEADERBOARD_STATISTICS_" + statistic.getName().toUpperCase());
   }
 
   public int getId() {
