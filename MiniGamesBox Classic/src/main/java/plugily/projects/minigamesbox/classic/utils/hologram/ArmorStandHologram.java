@@ -33,6 +33,7 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,14 +100,32 @@ public class ArmorStandHologram {
     return armorStands;
   }
 
-  public ArmorStandHologram appendLines(@NotNull String... lines) {
+  public ArmorStandHologram overwriteLines(@NotNull String... lines) {
     this.lines = Arrays.asList(lines);
     append();
     return this;
   }
 
-  public ArmorStandHologram appendLines(@NotNull List<String> lines) {
+  public ArmorStandHologram overwriteLines(@NotNull List<String> lines) {
     this.lines = lines;
+    append();
+    return this;
+  }
+
+  public ArmorStandHologram overwriteLine(@NotNull String line) {
+    this.lines = Collections.singletonList(line);
+    append();
+    return this;
+  }
+
+  public ArmorStandHologram appendLines(@NotNull String... lines) {
+    this.lines.addAll(Arrays.asList(lines));
+    append();
+    return this;
+  }
+
+  public ArmorStandHologram appendLines(@NotNull List<String> lines) {
+    this.lines.addAll(lines);
     append();
     return this;
   }
@@ -151,12 +170,13 @@ public class ArmorStandHologram {
     double distanceAbove = -0.27;
     double y = location.getY();
 
-    for(int i = 0; i <= lines.size() - 1; i++) {
+    for(String line : lines) {
       y += distanceAbove;
-      ArmorStand eas = getEntityArmorStand(y);
-      eas.setCustomName(lines.get(i));
-      armorStands.add(eas);
-      plugin.getHologramManager().getArmorStands().add(eas);
+      ArmorStand armorStand = getEntityArmorStand(y);
+      armorStand.setCustomName(line);
+      plugin.getDebugger().debug("Creating armorstand with name {0}", line);
+      armorStands.add(armorStand);
+      plugin.getHologramManager().getArmorStands().add(armorStand);
     }
 
     if(item != null && item.getType() != org.bukkit.Material.AIR) {
@@ -188,9 +208,10 @@ public class ArmorStandHologram {
     World world = loc.getWorld();
     if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R1)) {
       world.getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
-        if(entity instanceof ArmorStand && plugin.getHologramManager().getArmorStands().remove(entity)) {
+        if(entity instanceof ArmorStand && !armorStands.contains(entity) && !plugin.getHologramManager().getArmorStands().contains(entity)) {
           entity.remove();
           entity.setCustomNameVisible(false);
+          plugin.getHologramManager().getArmorStands().remove(entity);
         }
       });
     }
