@@ -258,8 +258,15 @@ public class MysqlManager implements UserDatabase {
   @Override
   public String getPlayerName(UUID uuid) {
     try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
-      return statement.executeQuery("SELECT `name` FROM " + getTableName() + " WHERE UUID='" + uuid.toString() + "'").toString();
-    } catch(SQLException | NullPointerException e) {
+      ResultSet resultSet = statement.executeQuery("SELECT `name` FROM " + getTableName() + " WHERE UUID='" + uuid.toString() + "'");
+      String name = null;
+      while(resultSet.next()) {
+        name = resultSet.getString("name");
+      }
+      plugin.getDebugger().debug("MySQL playername of {0} is {1}", uuid, name);
+      return name;
+    } catch(SQLException | NullPointerException exception) {
+      exception.printStackTrace();
       return null;
     }
   }
