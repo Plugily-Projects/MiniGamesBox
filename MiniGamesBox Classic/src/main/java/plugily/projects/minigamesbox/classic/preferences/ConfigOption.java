@@ -63,7 +63,7 @@ public class ConfigOption {
     options.put("FIRE_DAMAGE", new ConfigOption("Damage.Fire", false, true));
 
     options.put("WEATHER_CYCLE", new ConfigOption("Cycle.Weather", false, true));
-    options.put("DAYLIGHT_CYCLE", new ConfigOption("Cycle.Daylight", false, true));
+    options.put("DAYLIGHT_CYCLE", new ConfigOption("Cycle.Daylight.Enable", false, true));
 
     //Custom Permission
     //Basic Permission

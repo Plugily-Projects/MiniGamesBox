@@ -39,6 +39,7 @@ import plugily.projects.minigamesbox.classic.arena.managers.BungeeManager;
 import plugily.projects.minigamesbox.classic.arena.options.ArenaOptionManager;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.events.ChatEvents;
+import plugily.projects.minigamesbox.classic.events.CycleEvents;
 import plugily.projects.minigamesbox.classic.events.Events;
 import plugily.projects.minigamesbox.classic.events.JoinEvent;
 import plugily.projects.minigamesbox.classic.events.LobbyEvents;
@@ -261,6 +262,7 @@ public class PluginMain extends JavaPlugin {
       //running later due to plugin specific stats
       Bukkit.getScheduler().runTaskLater(this, () -> leaderboardRegistry = new LeaderboardRegistry(this), 20L * 15);
     }
+    new CycleEvents(this);
   }
 
   private boolean validateIfPluginShouldStart() {

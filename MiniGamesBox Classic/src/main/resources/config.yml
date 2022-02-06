@@ -127,7 +127,9 @@ Cycle:
   # Should we make permanent clear weather on all worlds where our arenas are?
   Weather: false
   # Should the time on the world your arenas are modified to stay at the same time?
-  Daylight: false
+  Daylight:
+    Enable: false
+    Time: 10000
 
 
 # How many seconds game should take to start.

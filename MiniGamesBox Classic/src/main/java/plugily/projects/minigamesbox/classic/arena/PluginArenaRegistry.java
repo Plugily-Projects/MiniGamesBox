@@ -46,6 +46,7 @@ public class PluginArenaRegistry {
   private final List<PluginArena> arenas = new ArrayList<>();
   private final PluginMain plugin;
   private final List<World> arenaIngameWorlds = new ArrayList<>();
+  private final List<World> arenaWorlds = new ArrayList<>();
 
   private int bungeeArena = -999;
 
@@ -117,18 +118,38 @@ public class PluginArenaRegistry {
     plugin.getDebugger().debug("[{0}] Instance registered", arena.getId());
     arenas.add(arena);
 
-    World startLocWorld = arena.getStartLocation().getWorld();
-    if(startLocWorld != null)
-      arenaIngameWorlds.add(startLocWorld);
+    World startWorld = arena.getStartLocation().getWorld();
+    World endWorld = arena.getEndLocation().getWorld();
+    World lobbyWorld = arena.getLobbyLocation().getWorld();
+    if(startWorld != null) {
+      arenaIngameWorlds.add(startWorld);
+      arenaWorlds.add(startWorld);
+    }
+    if(endWorld != null) {
+      arenaWorlds.add(endWorld);
+    }
+    if(lobbyWorld != null) {
+      arenaWorlds.add(lobbyWorld);
+    }
   }
 
   public void unregisterArena(PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Instance unregistered", arena.getId());
     arenas.remove(arena);
 
-    World startLocWorld = arena.getStartLocation().getWorld();
-    if(startLocWorld != null)
-      arenaIngameWorlds.remove(startLocWorld);
+    World startWorld = arena.getStartLocation().getWorld();
+    World endWorld = arena.getEndLocation().getWorld();
+    World lobbyWorld = arena.getLobbyLocation().getWorld();
+    if(startWorld != null) {
+      arenaIngameWorlds.remove(startWorld);
+      arenaWorlds.remove(startWorld);
+    }
+    if(endWorld != null) {
+      arenaWorlds.remove(endWorld);
+    }
+    if(lobbyWorld != null) {
+      arenaWorlds.remove(lobbyWorld);
+    }
   }
 
   public PluginArena getNewArena(String id) {
@@ -214,6 +235,10 @@ public class PluginArenaRegistry {
 
   public List<World> getArenaIngameWorlds() {
     return arenaIngameWorlds;
+  }
+
+  public List<World> getArenaWorlds() {
+    return arenaWorlds;
   }
 
   public void shuffleBungeeArena() {

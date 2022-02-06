@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.events;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
