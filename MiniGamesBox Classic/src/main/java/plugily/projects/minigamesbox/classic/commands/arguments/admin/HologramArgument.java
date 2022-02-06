@@ -123,7 +123,7 @@ public class HologramArgument {
     for(String key : config.getConfigurationSection("holograms").getKeys(false)) {
       new MessageBuilder("&aID " + key).prefix().send(sender);
       new MessageBuilder(" &eTop: " + config.getInt("holograms." + key + ".top-amount")
-          + " Stat: " + config.getStringList("holograms." + key + ".statistics")).prefix().send(sender);
+          + " Stat: " + config.getString("holograms." + key + ".statistics")).prefix().send(sender);
       new MessageBuilder(" &eLocation: " + getFriendlyLocation(LocationSerializer.getLocation(config.getString("holograms." + key + ".location")))).prefix().send(sender);
     }
   }
