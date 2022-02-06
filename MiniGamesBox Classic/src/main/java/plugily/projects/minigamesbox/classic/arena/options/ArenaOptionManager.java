@@ -47,20 +47,20 @@ public class ArenaOptionManager {
   private void loadArenaOptions() {
     ArenaOption.getOptions().forEach((s, option) -> {
       arenaOptions.put(s, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected()));
-      loadExternals(s, option);
+      loadExternals(s);
     });
   }
 
-  private void loadExternals(String key, ArenaOption arenaOption) {
+  private void loadExternals(String key) {
     plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("option_" + key.toLowerCase(), Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player, PluginArena arena) {
-        return String.valueOf(arenaOption.getValue());
+        return String.valueOf(arena.getArenaOption(key));
       }
 
       @Override
       public String getValue(PluginArena arena) {
-        return String.valueOf(arenaOption.getValue());
+        return String.valueOf(arena.getArenaOption(key));
       }
     });
   }
@@ -77,7 +77,7 @@ public class ArenaOptionManager {
       throw new IllegalStateException("Arena option with path " + name + " was already registered");
     }
     arenaOptions.put(name, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected()));
-    loadExternals(name, option);
+    loadExternals(name);
   }
 
   /**
