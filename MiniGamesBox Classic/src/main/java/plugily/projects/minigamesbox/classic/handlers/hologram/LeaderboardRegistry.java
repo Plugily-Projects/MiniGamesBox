@@ -59,7 +59,7 @@ public class LeaderboardRegistry implements Listener {
 
       try {
         hologram = new LeaderboardHologram(plugin, Integer.parseInt(key), plugin.getStatsStorage().getStatisticType(section.getString(key + ".statistics", "LEVEL").toUpperCase()),
-            section.getInt(key + ".top-amount"), LocationSerializer.getLocation(section.getString(key + ".location", "")));
+            section.getInt(key + ".top-amount", 5), LocationSerializer.getLocation(section.getString(key + ".location", "")));
       } catch(IllegalArgumentException ex) {
         continue;
       }
@@ -69,7 +69,7 @@ public class LeaderboardRegistry implements Listener {
 
   @EventHandler
   public void onStatisticUpdate(PlugilyPlayerStatisticChangeEvent event) {
-    leaderboardHolograms.forEach(LeaderboardHologram::updateHologram);
+    leaderboardHolograms.stream().filter(leaderboardHologram -> event.getStatisticType() == leaderboardHologram.getStatistic()).forEach(LeaderboardHologram::updateHologram);
   }
 
   public void registerHologram(LeaderboardHologram hologram) {
@@ -83,6 +83,7 @@ public class LeaderboardRegistry implements Listener {
     for(LeaderboardHologram hologram : leaderboardHolograms) {
       if(hologram.getId() == id) {
         hologram.delete();
+        leaderboardHolograms.remove(hologram);
         return;
       }
     }

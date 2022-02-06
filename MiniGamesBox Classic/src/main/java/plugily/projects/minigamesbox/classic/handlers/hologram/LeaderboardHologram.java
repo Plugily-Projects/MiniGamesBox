@@ -45,8 +45,9 @@ public class LeaderboardHologram {
   private final int id;
   private final StatisticType statistic;
   private final int topAmount;
-  private final ArmorStandHologram hologram;
+  private ArmorStandHologram hologram;
   private final Location location;
+  private final String header;
 
   public LeaderboardHologram(PluginMain plugin, int id, StatisticType statistic, int amount, Location location) {
     this.plugin = plugin;
@@ -54,14 +55,10 @@ public class LeaderboardHologram {
     this.statistic = statistic;
     this.topAmount = amount;
     this.location = location;
-    this.hologram = new ArmorStandHologram(location);
-
-    String header = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_HEADER"));
-    header = StringUtils.replace(header, "%number%", Integer.toString(topAmount));
-
-    Message lm = statisticToMessage();
-    header = StringUtils.replace(header, "%value%", lm != null ? color(plugin.getLanguageConfig().getString(lm.getPath())) : "null");
-    hologram.appendLine(header);
+    Message statisticMessage = statisticToMessage();
+    this.header = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_HEADER").asKey().integer(topAmount).value(new MessageBuilder(statisticMessage).build().replace("%number%", "")).build();
+    plugin.getDebugger().debug("Loaded ArmorStand {0} with header {1}", id, header);
+    this.hologram = new ArmorStandHologram(location, header);
     updateHologram();
   }
 
@@ -70,32 +67,31 @@ public class LeaderboardHologram {
     List<UUID> reverseKeys = new ArrayList<>(values.keySet());
     Collections.reverse(reverseKeys);
 
-    List<String> update = new ArrayList<>();
+    List<String> update = new ArrayList<>(Collections.singletonList(header));
 
     for(int i = 0; i < topAmount; i++) {
       String text;
       if(i < reverseKeys.size()) {
         UUID uuid = reverseKeys.get(i);
-        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_FORMAT"));
+        text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_FORMAT").asKey().integer(i + 1).value(String.valueOf(values.get(uuid))).build();
         text = StringUtils.replace(text, "%player%", getPlayerNameSafely(uuid));
-        text = StringUtils.replace(text, "%value%", String.valueOf(values.get(uuid)));
       } else {
-        text = color(plugin.getLanguageConfig().getString("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT"));
+        text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT").asKey().integer(i + 1).build();
       }
-      text = StringUtils.replace(text, "%number%", Integer.toString(i + 1));
       update.add(text);
     }
-
-    hologram.appendLines(update);
+    plugin.getDebugger().debug("Updating ArmorStand {0} with lines {1}", id, update.toString());
+    this.hologram = hologram.overwriteLines(update);
   }
 
   public void delete() {
     hologram.delete();
+    this.hologram = null;
   }
 
   private String getPlayerNameSafely(UUID uuid) {
     String name = plugin.getUserManager().getDatabase().getPlayerName(uuid);
-    return name != null ? name : color(plugin.getLanguageConfig().getString("LEADERBOARD_UNKNOWN_PLAYER"));
+    return name != null ? name : new MessageBuilder("LEADERBOARD_UNKNOWN_PLAYER").asKey().build();
   }
 
   private Message statisticToMessage() {
@@ -120,9 +116,5 @@ public class LeaderboardHologram {
 
   public Location getLocation() {
     return location;
-  }
-
-  private String color(String message) {
-    return new MessageBuilder(message).build();
   }
 }
