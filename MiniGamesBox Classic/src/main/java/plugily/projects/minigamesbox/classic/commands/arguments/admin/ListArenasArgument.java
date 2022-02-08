@@ -19,13 +19,17 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 /**
  * @author Tigerpanzer_02
@@ -49,7 +53,16 @@ public class ListArenasArgument {
         }
 
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          new MessageBuilder("COMMANDS_ADMIN_LIST_FORMAT").asKey().arena(arena).send(sender);
+          String listMessage = new MessageBuilder("COMMANDS_ADMIN_LIST_FORMAT").asKey().arena(arena).build();
+          boolean senderIsPlayer = sender instanceof Player;
+          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11_R1) || !senderIsPlayer) {
+            sender.sendMessage(listMessage);
+            return;
+          }
+          TextComponent component = new TextComponent(listMessage);
+          component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId()));
+
+          ((Player) sender).spigot().sendMessage(component);
         }
       }
     });
