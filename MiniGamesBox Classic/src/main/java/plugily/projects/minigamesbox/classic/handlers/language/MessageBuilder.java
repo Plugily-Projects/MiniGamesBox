@@ -71,7 +71,7 @@ public class MessageBuilder {
   }
 
   public MessageBuilder prefix() {
-    message = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")) + message;
+    message = "%plugin_prefix% " + message;
     return this;
   }
 
@@ -174,6 +174,7 @@ public class MessageBuilder {
 
   private void formatPlugin() {
     if(hasNoPlaceholders()) return;
+    message = replace(message, "%plugin_prefix%", new MessageBuilder("IN_GAME_PLUGIN_PREFIX").asKey().build());
     message = replace(message, "%plugin_name%", plugin.getName());
     message = replace(message, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
     message = replace(message, "%plugin_short_command%", plugin.getPluginNamePrefix());

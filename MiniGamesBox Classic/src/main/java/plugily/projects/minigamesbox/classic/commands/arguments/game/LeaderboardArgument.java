@@ -54,14 +54,14 @@ public class LeaderboardArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_TYPE_NAME").asKey().prefix().send(sender);
+          new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_TYPE_NAME").asKey().send(sender);
           return;
         }
         try {
           StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
           printLeaderboard(sender, statisticType);
         } catch(IllegalArgumentException e) {
-          new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().prefix().send(sender);
+          new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().send(sender);
         }
       }
     });

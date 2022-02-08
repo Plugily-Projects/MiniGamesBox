@@ -76,7 +76,7 @@ public class ReloadArgument {
           registry.getPlugin().getArenaManager().stopGame(true, arena);
         }
         registry.getPlugin().getArenaRegistry().registerArenas();
-        new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().prefix().send(sender);
+        new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().send(sender);
       }
     });
   }

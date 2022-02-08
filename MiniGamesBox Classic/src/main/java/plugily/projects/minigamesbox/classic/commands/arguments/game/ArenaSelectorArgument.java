@@ -59,7 +59,7 @@ public class ArenaSelectorArgument implements Listener {
       public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if(registry.getPlugin().getArenaRegistry().getArenas().size() == 0) {
-          new MessageBuilder("COMMANDS_ADMIN_LIST_NO_ARENAS").asKey().prefix().player(player).sendPlayer();
+          new MessageBuilder("COMMANDS_ADMIN_LIST_NO_ARENAS").asKey().player(player).sendPlayer();
           return;
         }
         int slot = 0;
@@ -112,7 +112,7 @@ public class ArenaSelectorArgument implements Listener {
     if(arena != null) {
       plugin.getArenaManager().joinAttempt(player, arena);
     } else {
-      new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().player(player).sendPlayer();
+      new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().player(player).sendPlayer();
     }
   }
 

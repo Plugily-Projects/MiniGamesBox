@@ -50,12 +50,12 @@ public class DeleteArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().send(sender);
           return;
         }
         PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[1]);
         if(arena == null) {
-          new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
+          new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
           return;
         }
         if(!confirmations.contains(sender)) {
@@ -70,7 +70,7 @@ public class DeleteArgument {
         config.set("instances." + args[1], null);
         ConfigUtils.saveConfig(registry.getPlugin(), config, "arenas");
         registry.getPlugin().getArenaRegistry().unregisterArena(arena);
-        new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().prefix().send(sender);
+        new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().send(sender);
       }
     });
   }

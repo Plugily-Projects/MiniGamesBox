@@ -68,7 +68,7 @@ public class AdjustStatisticArgument {
         }
 
         if(target == null) {
-          new MessageBuilder("COMMANDS_PLAYER_NOT_FOUND").asKey().prefix().send(sender);
+          new MessageBuilder("COMMANDS_PLAYER_NOT_FOUND").asKey().send(sender);
           return;
         }
 
@@ -81,9 +81,9 @@ public class AdjustStatisticArgument {
           } else {
             user.adjustStatistic(statisticType, opt.get());
           }
-          new MessageBuilder("COMMANDS_ADMIN_ADJUST_STATISTIC").asKey().player(target).value(statisticType.getName()).integer(user.getStatistic(statisticType)).prefix().send(sender);
+          new MessageBuilder("COMMANDS_ADMIN_ADJUST_STATISTIC").asKey().player(target).value(statisticType.getName()).integer(user.getStatistic(statisticType)).send(sender);
         } else {
-          new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().prefix().value("/" + registry.getPlugin().getCommandAdminPrefix() + " statistic &6<adjust/set> <statistic> <amount> &c[player]").send(sender);
+          new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().value("/" + registry.getPlugin().getCommandAdminPrefix() + " statistic &6<adjust/set> <statistic> <amount> &c[player]").send(sender);
         }
       }
     });

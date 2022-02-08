@@ -79,7 +79,7 @@ public class SignManager implements Listener {
     }
     String line1 = ComplementAccessor.getComplement().getLine(event, 1);
     if(line1.isEmpty()) {
-      new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().player(event.getPlayer()).sendPlayer();
+      new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().player(event.getPlayer()).sendPlayer();
       return;
     }
     for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {
@@ -90,7 +90,7 @@ public class SignManager implements Listener {
         ComplementAccessor.getComplement().setLine(event, i, new MessageBuilder(signLines.get(i)).arena(arena).build());
       }
       arenaSigns.add(new ArenaSign((Sign) event.getBlock().getState(), arena));
-      new MessageBuilder("SIGNS_CREATED").asKey().player(event.getPlayer()).arena(arena).prefix().sendPlayer();
+      new MessageBuilder("SIGNS_CREATED").asKey().player(event.getPlayer()).arena(arena).sendPlayer();
       String location = event.getBlock().getWorld().getName() + "," + event.getBlock().getX() + "," + event.getBlock().getY() + "," + event.getBlock().getZ() + ",0.0,0.0";
       FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
       List<String> locs = config.getStringList("instances." + arena.getId() + ".signs");
@@ -99,7 +99,7 @@ public class SignManager implements Listener {
       ConfigUtils.saveConfig(plugin, config, "arenas");
       return;
     }
-    new MessageBuilder("SIGNS_ARENA_NOT_FOUND").asKey().player(event.getPlayer()).prefix().sendPlayer();
+    new MessageBuilder("SIGNS_ARENA_NOT_FOUND").asKey().player(event.getPlayer()).sendPlayer();
   }
 
   @EventHandler
@@ -124,7 +124,7 @@ public class SignManager implements Listener {
         signs.remove(location);
         config.set("instances." + arena + ".signs", signs);
         ConfigUtils.saveConfig(plugin, config, "arenas");
-        new MessageBuilder("SIGNS_REMOVED").asKey().prefix().player(event.getPlayer()).sendPlayer();
+        new MessageBuilder("SIGNS_REMOVED").asKey().player(event.getPlayer()).sendPlayer();
         return;
       }
     }

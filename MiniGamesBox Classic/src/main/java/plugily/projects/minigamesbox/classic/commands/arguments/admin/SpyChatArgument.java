@@ -48,7 +48,7 @@ public class SpyChatArgument {
         if(!disableSpyChat(player)) {
           spyChatters.add(player);
         }
-        new MessageBuilder("COMMANDS_ADMIN_SPYCHAT_TOGGLE").asKey().value(String.valueOf(isSpyChatEnabled(player))).prefix().send(sender);
+        new MessageBuilder("COMMANDS_ADMIN_SPYCHAT_TOGGLE").asKey().value(String.valueOf(isSpyChatEnabled(player))).send(sender);
       }
     });
   }

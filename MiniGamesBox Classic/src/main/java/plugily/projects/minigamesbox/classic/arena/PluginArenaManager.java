@@ -66,7 +66,7 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Checked join attempt for {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
     if(plugin.getArenaRegistry().isInArena(player)) {
-      new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().prefix().arena(arena).player(player).sendPlayer();
+      new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().arena(arena).player(player).sendPlayer();
       return;
     }
 
@@ -87,11 +87,11 @@ public class PluginArenaManager {
             }
             leaveAttempt(partyPlayer, partyPlayerGame);
           }
-          new MessageBuilder("IN_GAME_JOIN_AS_PARTY_MEMBER").asKey().prefix().arena(arena).player(partyPlayer).sendPlayer();
+          new MessageBuilder("IN_GAME_JOIN_AS_PARTY_MEMBER").asKey().arena(arena).player(partyPlayer).sendPlayer();
           joinAttempt(partyPlayer, arena);
         }
       } else {
-        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY").asKey().prefix().arena(arena).player(player).sendPlayer();
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY").asKey().arena(arena).player(player).sendPlayer();
         return;
       }
     }
@@ -144,7 +144,7 @@ public class PluginArenaManager {
       return true;
     }
     if(!player.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
-      new MessageBuilder("IN_GAME_JOIN_FULL_GAME").asKey().player(player).prefix().arena(arena).sendPlayer();
+      new MessageBuilder("IN_GAME_JOIN_FULL_GAME").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
     for(Player arenaPlayer : arena.getPlayers()) {
@@ -153,31 +153,31 @@ public class PluginArenaManager {
       }
       if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
         leaveAttempt(arenaPlayer, arena);
-        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM").asKey().player(player).prefix().arena(arena).sendPlayer();
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM").asKey().player(player).arena(arena).sendPlayer();
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM").asKey().player(arenaPlayer).arena(arena).sendArena();
       }
       return true;
     }
-    new MessageBuilder("IN_GAME_JOIN_NO_SLOTS_FOR_PREMIUM").asKey().player(player).prefix().arena(arena).sendPlayer();
+    new MessageBuilder("IN_GAME_JOIN_NO_SLOTS_FOR_PREMIUM").asKey().player(player).arena(arena).sendPlayer();
     return false;
   }
 
   private boolean canJoinArenaAndMessage(Player player, PluginArena arena) {
     if(!arena.isReady()) {
-      new MessageBuilder("IN_GAME_JOIN_ARENA_NOT_CONFIGURED").asKey().player(player).prefix().arena(arena).sendPlayer();
+      new MessageBuilder("IN_GAME_JOIN_ARENA_NOT_CONFIGURED").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
 
     PlugilyGameJoinAttemptEvent event = new PlugilyGameJoinAttemptEvent(player, arena);
     Bukkit.getPluginManager().callEvent(event);
     if(event.isCancelled()) {
-      new MessageBuilder("IN_GAME_JOIN_CANCEL_API").asKey().player(player).prefix().arena(arena).sendPlayer();
+      new MessageBuilder("IN_GAME_JOIN_CANCEL_API").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
       if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
-        new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().prefix().player(player).value(perm.replace("<arena>", arena.getId())).sendPlayer();
+        new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId())).sendPlayer();
         return false;
       }
     }

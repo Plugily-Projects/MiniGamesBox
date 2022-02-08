@@ -48,7 +48,7 @@ public class JoinArguments {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length == 1) {
-          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().send(sender);
           return;
         }
         if(!registry.getPlugin().getArenaRegistry().getArenas().isEmpty() && args[1].equalsIgnoreCase("maxplayers") && registry.getPlugin().getArenaRegistry().getArena("maxplayers") == null) {
@@ -78,7 +78,7 @@ public class JoinArguments {
             return;
           }
         }
-        new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
+        new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
       }
     });
 
@@ -101,7 +101,7 @@ public class JoinArguments {
             registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
             return;
           }
-          new MessageBuilder("COMMANDS_NO_FREE_ARENAS").asKey().prefix().send(sender);
+          new MessageBuilder("COMMANDS_NO_FREE_ARENAS").asKey().send(sender);
         }
       });
     }

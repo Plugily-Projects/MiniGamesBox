@@ -127,7 +127,7 @@ public class Events implements Listener {
       return;
     }
     event.setCancelled(true);
-    new MessageBuilder("IN_GAME_COMMANDS_BLOCKED").asKey().prefix().player(event.getPlayer()).arena(arena).sendPlayer();
+    new MessageBuilder("IN_GAME_COMMANDS_BLOCKED").asKey().player(event.getPlayer()).arena(arena).sendPlayer();
   }
 
 

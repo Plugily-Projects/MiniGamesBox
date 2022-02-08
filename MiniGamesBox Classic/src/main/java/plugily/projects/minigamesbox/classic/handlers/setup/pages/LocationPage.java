@@ -156,7 +156,7 @@ public class LocationPage extends NormalFastInv implements SetupPage {
       }
 
       setupInventory.getPlugin().getSignManager().getArenaSigns().add(new ArenaSign((Sign) block.getState(), setupInventory.getArena()));
-      new MessageBuilder("SIGNS_CREATED").asKey().prefix().send(event.getWhoClicked());
+      new MessageBuilder("SIGNS_CREATED").asKey().send(event.getWhoClicked());
       List<String> locs = setupInventory.getPlugin().getSetupUtilities().getConfig().getStringList("instances." + setupInventory.getArena().getId() + ".signs");
       locs.add(location.getWorld().getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ() + ",0.0,0.0");
       setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".signs", locs);
@@ -178,7 +178,7 @@ public class LocationPage extends NormalFastInv implements SetupPage {
           }
 
           setupInventory.getPlugin().getSignManager().getArenaSigns().add(new ArenaSign((Sign) block.getState(), setupInventory.getArena()));
-          new MessageBuilder("SIGNS_CREATED").asKey().prefix().send(event.getPlayer());
+          new MessageBuilder("SIGNS_CREATED").asKey().send(event.getPlayer());
 
           List<String> locs = setupInventory.getPlugin().getSetupUtilities().getConfig().getStringList("instances." + setupInventory.getArena().getId() + ".signs");
           locs.add(location.getWorld().getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ() + ",0.0,0.0");

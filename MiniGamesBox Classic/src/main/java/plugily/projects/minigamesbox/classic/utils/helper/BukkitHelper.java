@@ -156,7 +156,7 @@ public class BukkitHelper {
 
   public boolean checkIsInGameInstance(Player player) {
     if(plugin.getArenaRegistry().getArena(player) == null) {
-      new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().prefix().player(player).sendPlayer();
+      new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
       return false;
     }
     return true;
@@ -166,7 +166,7 @@ public class BukkitHelper {
     if(sender.hasPermission(perm)) {
       return true;
     }
-    new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().prefix().send(sender);
+    new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().send(sender);
     return false;
   }
 

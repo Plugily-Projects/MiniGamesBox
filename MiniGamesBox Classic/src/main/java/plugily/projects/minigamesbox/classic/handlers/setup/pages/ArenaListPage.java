@@ -102,7 +102,7 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
                 config.set("instances." + arena.getId(), null);
                 ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
-                setupInventory.getPlayer().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().prefix().build());
+                setupInventory.getPlayer().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().build());
                 setupInventory.open(SetupUtilities.InventoryStage.ARENA_LIST);
                 return Prompt.END_OF_CONVERSATION;
               }

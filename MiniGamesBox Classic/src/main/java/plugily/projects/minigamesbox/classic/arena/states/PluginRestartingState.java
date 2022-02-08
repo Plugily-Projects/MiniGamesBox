@@ -63,7 +63,7 @@ public class PluginRestartingState implements ArenaStateHandler {
         user.setPermanentSpectator(false);
         arena.getScoreboardManager().removeScoreboard(user);
         arena.teleportToEndLocation(player);
-        new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).arena(arena).prefix().sendPlayer();
+        new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).arena(arena).sendPlayer();
       }
       arena.getMapRestorerManager().fullyRestoreArena();
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {

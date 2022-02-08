@@ -100,7 +100,7 @@ public class PluginStartingState implements ArenaStateHandler {
         user.getKit().giveKitItems(player);
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);
-        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).prefix().player(player).sendPlayer();
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).player(player).sendPlayer();
         plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);

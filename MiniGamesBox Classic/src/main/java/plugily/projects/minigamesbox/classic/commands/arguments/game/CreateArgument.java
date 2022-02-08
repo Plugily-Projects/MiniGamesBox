@@ -37,34 +37,34 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
  */
 public class CreateArgument {
 
-    private final PluginArgumentsRegistry registry;
+  private final PluginArgumentsRegistry registry;
 
-    public CreateArgument(PluginArgumentsRegistry registry) {
-        this.registry = registry;
-        registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("create", registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup", CommandArgument.ExecutorType.PLAYER,
-                new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " create &6<arena>", "/" +registry.getPlugin().getPluginNamePrefix() + " create <arena>",
-                        "&7Create new arena\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup")) {
-            @Override
-            public void execute(CommandSender sender, String[] args) {
-                if (args.length == 1) {
-                    new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
-                    return;
-                }
-                Player player = (Player) sender;
-                for (PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-                    if (arena.getId().equalsIgnoreCase(args[1])) {
-                        player.sendMessage(ChatColor.DARK_RED + "Arena with that ID already exists!");
-                        player.sendMessage(ChatColor.DARK_RED + "Usage: /vd create <ID>");
-                        return;
-                    }
-                }
-                if (ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[1])) {
-                    player.sendMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
-                } else {
-                    registry.getPlugin().getSetupUtilities().createInstanceInConfig(args[1], player.getWorld().getName(), player);
-                }
-            }
-        });
-    }
+  public CreateArgument(PluginArgumentsRegistry registry) {
+    this.registry = registry;
+    registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("create", registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup", CommandArgument.ExecutorType.PLAYER,
+        new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " create &6<arena>", "/" + registry.getPlugin().getPluginNamePrefix() + " create <arena>",
+            "&7Create new arena\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup")) {
+      @Override
+      public void execute(CommandSender sender, String[] args) {
+        if(args.length == 1) {
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().send(sender);
+          return;
+        }
+        Player player = (Player) sender;
+        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+          if(arena.getId().equalsIgnoreCase(args[1])) {
+            new MessageBuilder(ChatColor.DARK_RED + "Arena with that ID already exists!").prefix().send(player);
+            new MessageBuilder(ChatColor.DARK_RED + "Usage: /vd create <ID>").prefix().send(player);
+            return;
+          }
+        }
+        if(ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[1])) {
+          new MessageBuilder(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!").prefix().send(player);
+        } else {
+          registry.getPlugin().getSetupUtilities().createInstanceInConfig(args[1], player.getWorld().getName(), player);
+        }
+      }
+    });
+  }
 
 }

@@ -106,7 +106,7 @@ public class UserManager {
       user.setStatistic(plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP"), (int) Math.ceil(Math.pow(50.0 * user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5)));
       //Arena can be null when player has left the arena before this message is retrieved.
       if(arena != null)
-        new MessageBuilder("IN_GAME_LEVEL_UP").asKey().prefix().arena(arena).player(user.getPlayer()).integer(user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"))).sendPlayer();
+        new MessageBuilder("IN_GAME_LEVEL_UP").asKey().arena(arena).player(user.getPlayer()).integer(user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"))).sendPlayer();
     }
   }
 

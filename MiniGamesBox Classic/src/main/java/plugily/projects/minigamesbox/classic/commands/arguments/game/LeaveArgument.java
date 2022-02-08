@@ -44,7 +44,7 @@ public class LeaveArgument {
           if(!registry.getPlugin().getBukkitHelper().checkIsInGameInstance(player)) {
             return;
           }
-          new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().prefix().player(player).sendPlayer();
+          new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).sendPlayer();
           PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(player);
 
           if(arena == null) {

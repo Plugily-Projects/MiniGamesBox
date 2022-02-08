@@ -54,20 +54,20 @@ public class SetupArgument {
         }
 
         if(args.length == 2) {
-          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().prefix().send(sender);
+          new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().send(sender);
           return;
         }
         switch(args[1].toLowerCase()) {
           case "create":
             for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
               if(arena.getId().equalsIgnoreCase(args[2])) {
-                player.sendMessage(ChatColor.DARK_RED + "Arena with that ID already exists!");
-                player.sendMessage(ChatColor.DARK_RED + "Usage: /" + registry.getPlugin().getCommandAdminPrefix() + " setup edit <ID>");
+                new MessageBuilder(ChatColor.DARK_RED + "Arena with that ID already exists!").prefix().send(player);
+                new MessageBuilder(ChatColor.DARK_RED + "Usage: /" + registry.getPlugin().getCommandAdminPrefix() + " setup edit <ID>").prefix().send(player);
                 return;
               }
             }
             if(ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[2])) {
-              player.sendMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
+              new MessageBuilder(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!").prefix().send(player);
             } else {
               registry.getPlugin().getSetupUtilities().createInstanceInConfig(args[2], player.getWorld().getName(), player);
             }
@@ -75,13 +75,13 @@ public class SetupArgument {
           case "edit":
             PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[2]);
             if(arena == null) {
-              new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
+              new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
               return;
             }
             registry.getPlugin().openSetupInventory(arena, (Player) sender, SetupUtilities.InventoryStage.PAGED_GUI);
             break;
           default:
-            new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().prefix().value("/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]").send(sender);
+            new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().value("/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]").send(sender);
         }
       }
     });

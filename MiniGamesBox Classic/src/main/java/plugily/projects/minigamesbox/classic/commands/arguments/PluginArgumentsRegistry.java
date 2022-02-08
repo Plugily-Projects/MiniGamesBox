@@ -135,7 +135,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
           }
           PluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
           if(arena == null) {
-            new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().prefix().send(sender);
+            new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
             return true;
           }
 
@@ -171,7 +171,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       //sending did you mean help
       List<StringMatcher.Match> matches = StringMatcher.match(args[0], entry.getValue().stream().map(CommandArgument::getArgumentName).collect(Collectors.toList()));
       if(!matches.isEmpty()) {
-        new MessageBuilder("COMMANDS_DID_YOU_MEAN").asKey().prefix().value(label + " " + matches.get(0).getMatch()).send(sender);
+        new MessageBuilder("COMMANDS_DID_YOU_MEAN").asKey().value(label + " " + matches.get(0).getMatch()).send(sender);
         return true;
       }
     }
