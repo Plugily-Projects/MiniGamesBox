@@ -60,7 +60,7 @@ public class ListArenasArgument {
             return;
           }
           TextComponent component = new TextComponent(listMessage);
-          component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId()));
+          component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId()));
 
           ((Player) sender).spigot().sendMessage(component);
         }
