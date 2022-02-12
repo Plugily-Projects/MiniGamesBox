@@ -174,7 +174,7 @@ public class MessageBuilder {
 
   private void formatPlugin() {
     if(hasNoPlaceholders()) return;
-    message = replace(message, "%plugin_prefix%", new MessageBuilder("IN_GAME_PLUGIN_PREFIX").asKey().build());
+    message = replace(message, "%plugin_prefix%", plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")));
     message = replace(message, "%plugin_name%", plugin.getName());
     message = replace(message, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
     message = replace(message, "%plugin_short_command%", plugin.getPluginNamePrefix());
@@ -203,7 +203,6 @@ public class MessageBuilder {
   }
 
   public String build() {
-    colorRawMessage();
     formatPlugin();
     formatPlaceholderAPI();
     if(player != null && arena != null) {
@@ -215,6 +214,7 @@ public class MessageBuilder {
     if(arena != null) {
       formatExternalArena();
     }
+    colorRawMessage();
     return message;
   }
 
