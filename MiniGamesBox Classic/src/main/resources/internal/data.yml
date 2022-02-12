@@ -8,9 +8,9 @@
 #
 ###############################[IMPORTANT]###############################
 Plugin:
-  Prefix:
-    Default: plugily
-    Default-Long: ${project.name}
+  Name:
+    Shot: plugily
+    Long: ${project.name}
   Id:
     Spigot: 0
     BStats: 0

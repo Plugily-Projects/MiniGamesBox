@@ -185,8 +185,8 @@ public class PluginMain extends JavaPlugin {
     setupPluginMetrics(internalData.getInt("Plugin.Id.BStats", 0));
 
     //set command prefixes
-    pluginNamePrefix = internalData.getString("Plugin.Prefix.Default", getName().toLowerCase());
-    pluginNamePrefixLong = internalData.getString("Plugin.Prefix.Default-Long", getName().toLowerCase());
+    pluginNamePrefix = internalData.getString("Plugin.Name.Short", getName().toLowerCase());
+    pluginNamePrefixLong = internalData.getString("Plugin.Name.Long", getName().toLowerCase());
 
     //setup InvManager
     FastInvManager.register(this);
