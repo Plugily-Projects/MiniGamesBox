@@ -226,29 +226,35 @@ public class RewardsFactory {
 
     Map<RewardType, Integer> registeredRewards = new HashMap<>();
     for(RewardType rewardType : rewardTypes.values()) {
-      if(rewardType.getExecutorType() == RewardType.ExecutorType.NUMBER) {
+      if(config.isConfigurationSection("rewards." + rewardType.getPath())) {
         ConfigurationSection section = config.getConfigurationSection("rewards." + rewardType.getPath());
-        if(section == null) {
-          plugin.getDebugger().debug(Level.WARNING, "Rewards section {0} is missing! Was it manually removed?", rewardType.getPath());
-          continue;
-        }
-        for(String key : section.getKeys(false)) {
-          for(String reward : section.getStringList(key)) {
-            rewards.add(new Reward(rewardType, reward, Integer.parseInt(key)));
-            registeredRewards.put(rewardType, registeredRewards.getOrDefault(rewardType, 0) + 1);
-          }
-        }
-        continue;
-      }
-      for(String reward : config.getStringList("rewards." + rewardType.getPath())) {
-        rewards.add(new Reward(rewardType, reward));
-        registeredRewards.put(rewardType, registeredRewards.getOrDefault(rewardType, 0) + 1);
+        addNumberReward(registeredRewards, rewardType, section);
+        plugin.getDebugger().debug(Level.WARNING, "Rewards section {0} found. Registering as number reward", rewardType.getPath());
+      } else {
+        addReward(registeredRewards, rewardType);
+        plugin.getDebugger().debug(Level.WARNING, "Rewards section {0} not found. Registering as normal reward", rewardType.getPath());
       }
     }
     for(Map.Entry<RewardType, Integer> entry : registeredRewards.entrySet()) {
       plugin.getDebugger().debug("[RewardsFactory] Registered {0} {1} rewards!", entry.getValue(), entry.getKey().getPath());
     }
     plugin.getDebugger().debug("[RewardsFactory] Registered all rewards took {0}ms", System.currentTimeMillis() - start);
+  }
+
+  private void addReward(Map<RewardType, Integer> registeredRewards, RewardType rewardType) {
+    for(String reward : config.getStringList("rewards." + rewardType.getPath())) {
+      rewards.add(new Reward(rewardType, reward));
+      registeredRewards.put(rewardType, registeredRewards.getOrDefault(rewardType, 0) + 1);
+    }
+  }
+
+  private void addNumberReward(Map<RewardType, Integer> registeredRewards, RewardType rewardType, ConfigurationSection section) {
+    for(String key : section.getKeys(false)) {
+      for(String reward : section.getStringList(key)) {
+        rewards.add(new Reward(rewardType, reward, Integer.parseInt(key)));
+        registeredRewards.put(rewardType, registeredRewards.getOrDefault(rewardType, 0) + 1);
+      }
+    }
   }
 
 }
