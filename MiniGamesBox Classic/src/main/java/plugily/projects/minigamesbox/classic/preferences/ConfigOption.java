@@ -43,7 +43,8 @@ public class ConfigOption {
     options.put("LEAVE_COMMAND", new ConfigOption("Leave-Command", false, true));
     //WHITELIST_COMMANDS
     options.put("SHORT_COMMANDS", new ConfigOption("Short-Commands", true, true));
-    options.put("BLOCK_IN_GAME_COMMANDS", new ConfigOption("Block-In-Game-Commands", true, true));
+    options.put("BLOCK_IN_GAME_COMMANDS", new ConfigOption("Block.In-Game.Commands", true, true));
+    options.put("BLOCK_IN_GAME_ITEM_MOVE", new ConfigOption("Block.In-Game.Item-Move", true, true));
     options.put("DATABASE", new ConfigOption("Database", false, true));
     options.put("REWARDS", new ConfigOption("Rewards", true, true));
     options.put("PLUGIN_CHAT_FORMAT", new ConfigOption("Plugin-Chat-Format", true, true));

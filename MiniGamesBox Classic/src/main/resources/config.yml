@@ -50,8 +50,13 @@ Whitelisted-Commands:
 # Should we enable short commands such as /start and /leave
 Short-Commands: true
 
-# Should we block every not plugin associated commands in game?
-Block-In-Game-Commands: true
+# Block some functions of your players
+Block:
+  In-Game:
+    # Should we block every not plugin associated commands in game?
+    Commands: true
+    # Cancels Item Movement into player crafting, enchantment tables, anvils ...
+    Item-Move: true
 
 # Enable this option when you're using MySQL, otherwise it won't work.
 # Be careful when changing this because there is NO migrator between

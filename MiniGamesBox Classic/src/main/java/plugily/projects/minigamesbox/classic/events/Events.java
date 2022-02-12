@@ -104,8 +104,11 @@ public class Events implements Listener {
 
   @EventHandler
   public void onCommandExecute(PlayerCommandPreprocessEvent event) {
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_COMMANDS")) {
+      return;
+    }
     PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
-    if(arena == null || !plugin.getConfig().getBoolean("Block-Commands-In-Game", true)) {
+    if(arena == null) {
       return;
     }
 
@@ -132,18 +135,22 @@ public class Events implements Listener {
 
 
   @EventHandler
-  public void onItemMove(InventoryClickEvent e) {
-    if(!(e.getWhoClicked() instanceof Player)) {
+  public void onItemMove(InventoryClickEvent event) {
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ITEM_MOVE")) {
       return;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArena(((Player) e.getWhoClicked()));
+    if(!(event.getWhoClicked() instanceof Player)) {
+      return;
+    }
+    PluginArena arena = plugin.getArenaRegistry().getArena(((Player) event.getWhoClicked()));
     if(arena == null) {
       return;
     }
     if(arena.getArenaState() != ArenaState.IN_GAME) {
-      if(e.getClickedInventory() == e.getWhoClicked().getInventory()) {
-        if(e.getView().getType() == InventoryType.CRAFTING || e.getView().getType() == InventoryType.PLAYER) {
-          e.setResult(Event.Result.DENY);
+      if(event.getClickedInventory() == event.getWhoClicked().getInventory()) {
+        if(event.getView().getType() == InventoryType.WORKBENCH || event.getView().getType() == InventoryType.ANVIL || event.getView().getType() == InventoryType.ENCHANTING || event.getView().getType() == InventoryType.CRAFTING || event.getView().getType() == InventoryType.PLAYER) {
+          event.setResult(Event.Result.DENY);
+          event.setCancelled(true);
         }
       }
     }
