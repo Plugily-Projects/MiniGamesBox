@@ -60,12 +60,12 @@ public class PowerupRegistry {
   private PluginMain plugin;
 
   public PowerupRegistry(PluginMain plugin) {
+    this.plugin = plugin;
     if(!plugin.getConfigPreferences().getOption("POWERUPS")) {
       return;
     }
     config = ConfigUtils.getConfig(plugin, "powerups");
     enabled = true;
-    this.plugin = plugin;
     registerPowerups();
     if(registeredPowerups.isEmpty()) {
       plugin.getDebugger().debug(Level.WARNING, "[PowerupRegistry] Disabling power up module, all power ups disabled");

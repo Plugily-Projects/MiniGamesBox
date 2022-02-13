@@ -22,6 +22,7 @@ package plugily.projects.minigamesbox.classic.utils.items;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -30,6 +31,7 @@ import org.bukkit.plugin.Plugin;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -58,7 +60,15 @@ public class ItemManager {
   }
 
   public static List<HandlerItem> getItems() {
-    return items;
+    return Collections.unmodifiableList(items);
+  }
+
+  public static void addItem(HandlerItem handlerItem) {
+    items.add(handlerItem);
+  }
+
+  public static void removeItem(HandlerItem handlerItem) {
+    items.remove(handlerItem);
   }
 
   public static final class ItemListener implements Listener {
@@ -111,15 +121,29 @@ public class ItemManager {
     }
 
     @EventHandler
-    public void onPluginDisable(PluginDisableEvent e) {
-      if(e.getPlugin() == this.plugin) {
-        ItemManager.getItems().clear();
+    public void onInventoryClickEvent(InventoryClickEvent event) {
+      HandlerItem handlerItem = getInteractItem(event.getCurrentItem());
+      if(handlerItem == null) {
+        return;
+      }
+      boolean wasCancelled = event.isCancelled();
+      event.setCancelled(true);
+      handlerItem.handleInventoryClickEvent(event);
+      if(!wasCancelled && !event.isCancelled()) {
+        event.setCancelled(false);
+      }
+    }
+
+    @EventHandler
+    public void onPluginDisable(PluginDisableEvent event) {
+      if(event.getPlugin() == this.plugin) {
+        items.clear();
         REGISTERED.set(false);
       }
     }
 
     private HandlerItem getInteractItem(ItemStack itemStack) {
-      for(HandlerItem item : ItemManager.getItems()) {
+      for(HandlerItem item : items) {
         if(item.getItemStack().equals(itemStack)) {
           return item;
         }

@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
+import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,15 +41,15 @@ public class SpecialItem {
   private static final Map<String, SpecialItem> specialItems = new HashMap<>();
 
   static {
-    //specialItems.put("KIT_SELECTOR", new SpecialItem("Kit-Selector", false));
-    specialItems.put("LOBBY_LEAVE", new SpecialItem("Lobby-Leave", true, null, true));
-    specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null, true));
-    specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null, true));
-    specialItems.put("SPECTATOR_SETTINGS", new SpecialItem("Spectator-Settings", true, null, true));
-    specialItems.put("SPECTATOR_LEAVE", new SpecialItem("Spectator-Leave", true, null, true));
-    specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null, true));
-    specialItems.put("STATS", new SpecialItem("Stats", true, null, true));
-    specialItems.put("BACK_TO_HUB", new SpecialItem("Back-To-Hub", true, null, true));
+    //specialItems.put("KIT_SELECTOR", new SpecialItem("Kit-Selector", false, null, true, false));
+    specialItems.put("LOBBY_LEAVE", new SpecialItem("Lobby-Leave", true, null, true, false));
+    specialItems.put("PLAYERS_LIST", new SpecialItem("Player-List", true, null, true, false));
+    specialItems.put("FORCESTART", new SpecialItem("Forcestart", true, null, true, false));
+    specialItems.put("SPECTATOR_SETTINGS", new SpecialItem("Spectator-Settings", true, null, true, false));
+    specialItems.put("SPECTATOR_LEAVE", new SpecialItem("Spectator-Leave", true, null, true, false));
+    specialItems.put("ARENA_SELECTOR", new SpecialItem("Arena-Selector", true, null, true, false));
+    specialItems.put("STATS", new SpecialItem("Stats", true, null, true, false));
+    specialItems.put("BACK_TO_HUB", new SpecialItem("Back-To-Hub", true, null, true, false));
   }
 
   private final String path;
@@ -59,8 +60,9 @@ public class SpecialItem {
   private final boolean protectedOption;
   private final Set<Reward> rewards;
   private final boolean force;
+  private final boolean move;
 
-  public SpecialItem(String path, boolean protectedOption, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force) {
+  public SpecialItem(String path, boolean protectedOption, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force, boolean move) {
     this.path = path;
     this.protectedOption = protectedOption;
     this.permission = permission;
@@ -69,12 +71,14 @@ public class SpecialItem {
     this.displayStage = displayStage;
     this.rewards = rewards;
     this.force = force;
+    this.move = move;
   }
 
-  public SpecialItem(String path, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force) {
+  public SpecialItem(String path, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force, boolean move) {
     this.path = path;
     this.rewards = rewards;
     this.force = force;
+    this.move = move;
     this.protectedOption = false;
     this.permission = null;
     this.itemStack = itemStack;
@@ -82,9 +86,10 @@ public class SpecialItem {
     this.displayStage = displayStage;
   }
 
-  public SpecialItem(String path, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force) {
+  public SpecialItem(String path, String permission, ItemStack itemStack, int slot, DisplayStage displayStage, Set<Reward> rewards, boolean force, boolean move) {
     this.path = path;
     this.force = force;
+    this.move = move;
     this.protectedOption = false;
     this.permission = permission;
     this.itemStack = itemStack;
@@ -93,10 +98,11 @@ public class SpecialItem {
     this.rewards = rewards;
   }
 
-  public SpecialItem(String path, Set<Reward> rewards, boolean force) {
+  public SpecialItem(String path, Set<Reward> rewards, boolean force, boolean move) {
     this.path = path;
     this.rewards = rewards;
     this.force = force;
+    this.move = move;
     this.protectedOption = false;
     this.permission = null;
     this.itemStack = XMaterial.BEDROCK.parseItem();
@@ -104,11 +110,12 @@ public class SpecialItem {
     this.displayStage = DisplayStage.LOBBY;
   }
 
-  public SpecialItem(String path, boolean protectedOption, Set<Reward> rewards, boolean force) {
+  public SpecialItem(String path, boolean protectedOption, Set<Reward> rewards, boolean force, boolean move) {
     this.path = path;
     this.protectedOption = protectedOption;
     this.rewards = rewards;
     this.force = force;
+    this.move = move;
     this.permission = null;
     this.itemStack = XMaterial.BEDROCK.parseItem();
     this.slot = 0;
@@ -149,6 +156,11 @@ public class SpecialItem {
 
   public void setItem(Player player) {
     PlayerInventory playerInventory = player.getInventory();
+    ItemStack itemStack = getItemStack();
+    if(!move) {
+      HandlerItem handlerItem = new HandlerItem(itemStack);
+      handlerItem.setMovementCancel(true);
+    }
     if(!force) {
       if(playerInventory.getItem(slot) != null && playerInventory.getItem(slot) != XMaterial.AIR.parseItem()) {
         playerInventory.addItem(itemStack);
