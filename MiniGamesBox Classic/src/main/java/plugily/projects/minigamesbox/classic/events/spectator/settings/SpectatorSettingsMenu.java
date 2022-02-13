@@ -62,9 +62,10 @@ public class SpectatorSettingsMenu implements Listener {
   private final FastInv inventory;
   private final FileConfiguration config;
   public List<SpectatorSettingsItem> settingsItems = new ArrayList<>();
-  public List<Player> autoTeleport;
+  public List<Player> firstPersonMode = new ArrayList<>();
+  public List<Player> autoTeleport = new ArrayList<>();
   public Map<Player, Player> targetPlayer = new HashMap<>();
-  public List<Player> invisibleSpectators;
+  public List<Player> invisibleSpectators = new ArrayList<>();
 
   public SpectatorSettingsMenu(PluginMain plugin) {
     this.plugin = plugin;
@@ -114,6 +115,7 @@ public class SpectatorSettingsMenu implements Listener {
             return;
           }
         }
+        plugin.getDebugger().debug("!!! SpectatorSettings " + item.getType());
         switch(item.getType()) {
           case DEFAULT_SPEED:
             new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(0).player(player).sendPlayer();
@@ -154,7 +156,7 @@ public class SpectatorSettingsMenu implements Listener {
             }
             break;
           case NIGHT_VISION:
-            if(player.getActivePotionEffects().stream().anyMatch(potionEffect -> potionEffect.getType() == PotionEffectType.NIGHT_VISION)) {
+            if(player.getActivePotionEffects().stream().anyMatch(potionEffect -> potionEffect.getType().equals(PotionEffectType.NIGHT_VISION))) {
               player.removePotionEffect(PotionEffectType.NIGHT_VISION);
               new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED").asKey().build()).player(player).sendPlayer();
             } else {
@@ -167,6 +169,7 @@ public class SpectatorSettingsMenu implements Listener {
               return;
             }
             autoTeleport.remove(player);
+            firstPersonMode.add(player);
             VersionUtils.sendTitle(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE").asKey().player(player).arena(arena).build(), 5, 20, 5);
             Player target = targetPlayer.get(player);
             player.setGameMode(GameMode.SPECTATOR);
@@ -182,6 +185,9 @@ public class SpectatorSettingsMenu implements Listener {
             } else {
               invisibleSpectators.add(player);
               for(Player players : arena.getPlayers()) {
+                if(!plugin.getUserManager().getUser(player).isSpectator()) {
+                  continue;
+                }
                 VersionUtils.hidePlayer(plugin, player, players);
               }
               new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_VISIBILITY").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED").asKey().build()).player(player).sendPlayer();
@@ -200,6 +206,13 @@ public class SpectatorSettingsMenu implements Listener {
   public void onPlayerMovement(PlayerMoveEvent event) {
     Player player = event.getPlayer();
     User user = plugin.getUserManager().getUser(player);
+    if(user.getArena() != null) {
+      firstPersonMode.forEach(spectator -> {
+        if(spectator.getSpectatorTarget() instanceof Player) {
+          VersionUtils.sendActionBar(spectator, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR").asKey().arena(user.getArena()).player((Player) spectator.getSpectatorTarget()).build());
+        }
+      });
+    }
     if(!user.isSpectator()) {
       return;
     }
@@ -207,12 +220,6 @@ public class SpectatorSettingsMenu implements Listener {
       return;
     }
     Player target = targetPlayer.get(player);
-    if(!autoTeleport.contains(player)) {
-      if(player.getSpectatorTarget() instanceof Player) {
-        VersionUtils.sendActionBar(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR").asKey().arena(user.getArena()).player(target).build());
-      }
-      return;
-    }
     double distance = player.getLocation().distance(target.getLocation());
     VersionUtils.sendActionBar(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR").asKey().arena(user.getArena()).integer((int) distance).player(target).build());
     if(distance <= 15) {
@@ -234,11 +241,13 @@ public class SpectatorSettingsMenu implements Listener {
     if(!plugin.getArenaRegistry().isInArena(target)) {
       return;
     }
-    VersionUtils.sendTitle(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE").asKey().player(player).build(), 5, 20, 5);
     targetPlayer.remove(player);
     targetPlayer.put(player, target);
-    player.setGameMode(GameMode.SPECTATOR);
-    player.setSpectatorTarget(target);
+    if(!autoTeleport.contains(player)) {
+      VersionUtils.sendTitle(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_TITLE").asKey().player(player).build(), 5, 20, 5);
+      player.setGameMode(GameMode.SPECTATOR);
+      player.setSpectatorTarget(target);
+    }
   }
 
   @EventHandler
@@ -250,6 +259,7 @@ public class SpectatorSettingsMenu implements Listener {
     if(!(player.getSpectatorTarget() instanceof Player)) {
       return;
     }
+    firstPersonMode.remove(player);
     player.setSpectatorTarget(null);
     player.setGameMode(GameMode.SURVIVAL);
   }
