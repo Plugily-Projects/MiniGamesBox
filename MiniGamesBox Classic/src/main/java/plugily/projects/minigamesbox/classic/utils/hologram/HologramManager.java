@@ -60,6 +60,10 @@ public class HologramManager implements Listener {
     if(!(event.getEntity() instanceof Player)) {
       return;
     }
+    Player player = (Player) event.getEntity();
+    if(plugin.getUserManager().getUser(player).getArena() == null) {
+      return;
+    }
     for(ArmorStandHologram hologram : holograms) {
       if(!hologram.hasPickupHandler()) {
         continue;
@@ -67,7 +71,6 @@ public class HologramManager implements Listener {
       Item entityItem = hologram.getEntityItem();
       Item item = event.getItem();
       if(item.equals(entityItem)) {
-        Player player = (Player) event.getEntity();
         if(plugin.getUserManager().getUser(player).isSpectator()) {
           return;
         }
