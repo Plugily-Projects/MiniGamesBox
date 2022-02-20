@@ -227,8 +227,11 @@ public class ArmorStandHologram {
    *
    * @param handler which should be executed on pickup
    */
-  public void setPickupHandler(PickupHandler handler) {
+  public ArmorStandHologram setPickupHandler(PickupHandler handler) {
+    plugin.getHologramManager().getHolograms().remove(this);
     this.pickupHandler = handler;
+    plugin.getHologramManager().getHolograms().add(this);
+    return this;
   }
 
   public PickupHandler getPickupHandler() {
