@@ -204,6 +204,12 @@ public class SpecialItemManager {
     }
   }
 
+  public void removeSpecialItems(Player player) {
+    for(SpecialItem specialItem : getSpecialItems().values()) {
+      player.getInventory().remove(specialItem.getItemStack());
+    }
+  }
+
   @NotNull
   public SpecialItem getRelatedSpecialItem(ItemStack itemStack) {
     for(SpecialItem item : specialItems.values()) {

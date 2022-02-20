@@ -23,8 +23,10 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
+import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -162,12 +164,23 @@ public class SpecialItem {
       handlerItem.setMovementCancel(true);
     }
     if(!force) {
-      if(playerInventory.getItem(slot) != null && playerInventory.getItem(slot) != XMaterial.AIR.parseItem()) {
-        playerInventory.addItem(itemStack);
-        player.updateInventory();
+      ItemStack slotItem = playerInventory.getItem(slot);
+      if(slotItem == null) {
+        forceItem(player, playerInventory);
         return;
       }
+      if(slotItem.getType() == XMaterial.AIR.parseMaterial() || new MessageBuilder(ComplementAccessor.getComplement().getDisplayName(slotItem.getItemMeta())).build().equalsIgnoreCase(new MessageBuilder(ComplementAccessor.getComplement().getDisplayName(itemStack.getItemMeta())).build())) {
+        forceItem(player, playerInventory);
+        return;
+      }
+      playerInventory.addItem(itemStack);
+      player.updateInventory();
+      return;
     }
+    forceItem(player, playerInventory);
+  }
+
+  private void forceItem(Player player, PlayerInventory playerInventory) {
     playerInventory.remove(itemStack);
     playerInventory.setItem(slot, itemStack);
     player.updateInventory();
