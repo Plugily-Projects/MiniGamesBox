@@ -20,7 +20,6 @@
 package plugily.projects.minigamesbox.classic.events;
 
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +30,6 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 /**
  * @author Tigerpanzer_02
@@ -41,7 +39,6 @@ import java.util.regex.Pattern;
 public class ChatEvents implements Listener {
 
   private final PluginMain plugin;
-  private final String[] regexChars = {"$", "\\"};
 
   public ChatEvents(PluginMain plugin) {
     this.plugin = plugin;
@@ -63,24 +60,19 @@ public class ChatEvents implements Listener {
       }
       return;
     }
-    if(plugin.getConfigPreferences().getOption("PLUGIN_CHAT_FORMAT")) {
-      String eventMessage = event.getMessage();
-      for(String regexChar : regexChars) {
-        if(eventMessage.contains(regexChar)) {
-          eventMessage = eventMessage.replaceAll(Pattern.quote(regexChar), "");
-        }
-      }
-      String message = formatChatPlaceholders(new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().arena(arena).build(), plugin.getUserManager().getUser(event.getPlayer()), arena, eventMessage);
-      event.setMessage(message);
-    }
     if(!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
       event.getRecipients().removeIf(player -> !plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player));
       event.getRecipients().addAll(new ArrayList<>(arena.getPlayers()));
     }
+    if(plugin.getConfigPreferences().getOption("PLUGIN_CHAT_FORMAT")) {
+      String format = formatChatPlaceholders(plugin.getUserManager().getUser(event.getPlayer()), arena);
+      event.setFormat(format);
+      event.setMessage(event.getMessage());
+    }
   }
 
-  private String formatChatPlaceholders(String message, User user, PluginArena arena, String saidMessage) {
-    String formatted = message;
+  private String formatChatPlaceholders(User user, PluginArena arena) {
+    String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().arena(arena).build();
     if(user.isSpectator()) {
       formatted = StringUtils.replace(formatted, "%kit%", new MessageBuilder("IN_GAME_DEATH_TAG").asKey().build());
     } else {
@@ -90,11 +82,10 @@ public class ChatEvents implements Listener {
         formatted = StringUtils.replace(formatted, "%kit%", user.getKit().getName());
       }
     }
-
-    Player player = user.getPlayer();
-
-    formatted = StringUtils.replace(formatted, "%message%", ChatColor.stripColor(saidMessage));
-    formatted = new MessageBuilder(formatted).arena(arena).player(player).build();
+    formatted = StringUtils.replace(formatted, "%player%", "%1$s");
+    formatted = StringUtils.replace(formatted, "%message%", "%2$s");
+    formatted = new MessageBuilder(formatted).arena(arena).player(user.getPlayer()).build();
+    //notice - unresolved % could throw UnknownFormatException
     return formatted;
   }
 
