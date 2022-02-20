@@ -75,7 +75,6 @@ import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
-import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionLogHandler;
@@ -361,17 +360,8 @@ public class PluginMain extends JavaPlugin {
     Bukkit.getLogger().removeHandler(exceptionLogHandler);
     if(arenaRegistry != null) {
       for(PluginArena arena : arenaRegistry.getArenas()) {
-        arena.getScoreboardManager().stopAllScoreboards();
         for(Player player : arena.getPlayers()) {
-          arena.teleportToEndLocation(player);
-          player.setFlySpeed(0.1f);
-          player.getInventory().clear();
-          player.getInventory().setArmorContents(null);
-          player.getActivePotionEffects().forEach(pe -> player.removePotionEffect(pe.getType()));
-          arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-          if(configPreferences != null && configPreferences.getOption("INVENTORY_MANAGER")) {
-            InventorySerializer.loadInventory(this, player);
-          }
+          arenaManager.leaveAttempt(player, arena);
         }
         arena.getMapRestorerManager().fullyRestoreArena();
       }
