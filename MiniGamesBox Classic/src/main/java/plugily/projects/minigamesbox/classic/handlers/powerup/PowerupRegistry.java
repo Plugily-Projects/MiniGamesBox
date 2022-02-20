@@ -176,7 +176,7 @@ public class PowerupRegistry {
     final BasePowerup powerup = getRandomPowerup();
 
 
-    ArmorStandHologram hologram = new ArmorStandHologram(loc.clone().add(0.0, 1.2, 0.0))
+    ArmorStandHologram hologram = new ArmorStandHologram(loc.clone())
         .appendItem(powerup.getMaterial().parseItem()).appendLine(powerup.getName());
 
     hologram.setPickupHandler(player -> {
