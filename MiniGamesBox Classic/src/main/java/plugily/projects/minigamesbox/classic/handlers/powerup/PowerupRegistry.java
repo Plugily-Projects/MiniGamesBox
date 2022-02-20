@@ -189,7 +189,7 @@ public class PowerupRegistry {
       if(event.isCancelled()) {
         return;
       }
-      new MessageBuilder(config.getString("Powerups.Pickup.Chat", "")).arena(arena).value(powerup.getName()).sendArena();
+      new MessageBuilder(config.getString("Powerups.Pickup.Chat", "")).arena(arena).player(player).value(powerup.getName()).sendArena();
 
       powerup.getOnPickup().accept(new PowerupPickupHandler(powerup, arena, player));
       hologram.delete();
