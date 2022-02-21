@@ -23,6 +23,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -35,7 +36,6 @@ import plugily.projects.minigamesbox.classic.handlers.setup.pages.PagesPage;
 import plugily.projects.minigamesbox.classic.handlers.setup.pages.ValuePage;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
-import javax.annotation.Nullable;
 
 /**
  * @author Tigerpanzer_02
