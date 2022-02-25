@@ -56,7 +56,7 @@
         </repository>
         <repository>
             <id>plugilyprojects-repo</id>
-            <url>https://maven.plugily.xyz/</url>
+            <url>https://maven.plugily.xyz/releases</url>
         </repository>
     </repositories>
 
