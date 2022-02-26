@@ -286,7 +286,8 @@ public class PluginMain extends JavaPlugin {
     return true;
   }
 
-  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("internal/data", "internal/leaderboards_data", "arenas", "arena_selector", "bungee", "leaderboards", "rewards", "spectator", "stats", "permissions", "special_items", "mysql", "signs"));
+  // "arena_selector", "leaderboards", "signs"
+  private final ArrayList<String> fileNames = new ArrayList<>(Arrays.asList("internal/data", "internal/leaderboards_data", "arenas", "bungee", "rewards", "spectator", "stats", "permissions", "special_items", "mysql"));
 
   public ArrayList<String> getFileNames() {
     return fileNames;
@@ -301,7 +302,7 @@ public class PluginMain extends JavaPlugin {
     setupFiles();
   }
 
-  private void setupFiles() {
+  public void setupFiles() {
     for(String fileName : fileNames) {
       File file = new File(getDataFolder(), fileName + ".yml");
       if(!file.exists()) {
