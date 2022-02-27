@@ -80,7 +80,7 @@ public class Debugger {
    * @param msg   debugged message
    */
   public void debug(Level level, String msg) {
-    if(!enabled && (level != Level.WARNING || level != Level.SEVERE)) {
+    if(!enabled && (level != Level.WARNING && level != Level.SEVERE)) {
       return;
     }
     logger.log(level, debuggerPrefix + ChatColor.translateAlternateColorCodes('&', msg));
@@ -99,7 +99,7 @@ public class Debugger {
    * @param msg   debugged message
    */
   public void debug(Level level, String msg, Object... params) {
-    if(!enabled && (level != Level.WARNING || level != Level.SEVERE)) {
+    if(!enabled && (level != Level.WARNING && level != Level.SEVERE)) {
       return;
     }
     logger.log(level, debuggerPrefix + msg, params);
