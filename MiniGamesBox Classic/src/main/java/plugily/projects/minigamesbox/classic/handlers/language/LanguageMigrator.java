@@ -27,11 +27,9 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.migrator.MigratorUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 
 /*
@@ -71,15 +69,16 @@ public class LanguageMigrator {
     FileConfiguration config = ConfigUtils.getConfig(plugin, "config");
     if(config.isSet("Version")) {
       moveAllPluginFiles("OLD_FILES");
-      copyFile("OLD_FILES/arenas", "arenas");
-      FileConfiguration arenas = ConfigUtils.getConfig(plugin, "arenas");
+      FileConfiguration arenas = ConfigUtils.getConfig(plugin, "OLD_FILES/arenas");
       ConfigurationSection section = arenas.getConfigurationSection("instances");
       if(section != null) {
         for(String id : section.getKeys(false)) {
-          String startLoc = section.getString(id + ".startlocation", "null");
-          String endLoc = section.getString(id + ".endlocation", "null");
+          String startLoc = section.getString(id + ".Startlocation", "null");
+          String endLoc = section.getString(id + ".Endlocation", "null");
           section.set(id + ".startlocation", startLoc);
           section.set(id + ".endlocation", endLoc);
+          section.set(id + ".Startlocation", null);
+          section.set(id + ".Endlocation", null);
         }
         ConfigUtils.saveConfig(plugin, arenas, "arenas");
       }
@@ -142,48 +141,20 @@ public class LanguageMigrator {
       plugin.getDebugger().debug(Level.WARNING, "[System notify] &cFile " + oldFile + ".yml does not exits!");
       return;
     }
-    if(oldFile.renameTo(new File(plugin.getDataFolder(), plugin.getDataFolder() + "/" + renamedFilePrefix + oldFile + ".yml"))) {
-      plugin.getDebugger().debug(Level.WARNING, "[System notify] &aRenamed file " + oldFile + ".yml");
-      return;
+    try {
+      Files.move(Paths.get(oldFile.getPath()), Paths.get(plugin.getDataFolder().getPath() + "/" + renamedFilePrefix + oldFile.getName()));
+      plugin.getDebugger().debug(Level.WARNING, "[System notify] &aRenamed file " + oldFile + "");
+    } catch(IOException e) {
+      plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't rename file " + oldFile + ". Problems might occur!");
     }
-    plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't rename file " + oldFile + ".yml. Problems might occur!");
   }
 
 
   public void copyFile(String from, String to) {
-    InputStream inStream = null;
-    OutputStream outStream = null;
     try {
-      File fromFile = new File(plugin.getDataFolder() + "/" + from + ".yml");
-      File toFile = new File(plugin.getDataFolder() + "/" + to + ".yml");
-
-      inStream = new FileInputStream(fromFile);
-      outStream = new FileOutputStream(toFile);
-
-      byte[] buffer = new byte[1024];
-
-      int length;
-      while((length = inStream.read(buffer)) > 0) {
-        outStream.write(buffer, 0, length);
-        outStream.flush();
-      }
-    } catch(IOException ignored) {
+      Files.copy(Paths.get(plugin.getDataFolder() + "/" + from + ".yml"), Paths.get(plugin.getDataFolder() + "/" + to + ".yml"));
+    } catch(IOException e) {
       plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't copy file " + from + ".yml. Problems might occur!");
-    } finally {
-      if(inStream != null) {
-        try {
-          inStream.close();
-        } catch(IOException ignored) {
-          plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't copy file " + from + ".yml. Problems might occur!");
-        }
-      }
-      if(outStream != null) {
-        try {
-          outStream.close();
-        } catch(IOException ignored) {
-          plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't copy file " + from + ".yml. Problems might occur!");
-        }
-      }
     }
   }
 
@@ -191,8 +162,10 @@ public class LanguageMigrator {
     plugin.getDebugger().debug(Level.WARNING, "[System notify] &aMoving all files to the to the subfolder " + newSubFolderName + "...");
     plugin.getDebugger().debug(Level.WARNING, "[System notify] &aDon't worry! Old files will be renamed not overridden!");
     File folder = new File(plugin.getDataFolder() + "");
-    if(!folder.exists()) {
-      return;
+    try {
+      Files.createDirectory(Paths.get(plugin.getDataFolder() + "/" + newSubFolderName));
+    } catch(IOException e) {
+      plugin.getDebugger().debug(Level.WARNING, "[System notify] &cCouldn't create subfolder " + newSubFolderName + ". Problems might occur!");
     }
     for(File fileEntry : folder.listFiles()) {
       renameFile(fileEntry, newSubFolderName + "/");
