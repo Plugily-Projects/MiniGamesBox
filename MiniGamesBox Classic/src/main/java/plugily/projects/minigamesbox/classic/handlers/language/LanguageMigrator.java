@@ -82,6 +82,7 @@ public class LanguageMigrator {
         }
         ConfigUtils.saveConfig(plugin, arenas, "arenas");
       }
+      plugin.saveDefaultConfig();
       plugin.setupFiles();
       return;
     }
