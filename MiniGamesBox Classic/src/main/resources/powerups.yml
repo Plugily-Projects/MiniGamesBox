@@ -10,7 +10,8 @@ Powerups:
   Drop:
     Chance: 1
   Content:
-    Healing:
+    Heal:
+      active: false
       name: "Healing"
       description: "Let player heal"
       material: REDSTONE
@@ -18,6 +19,20 @@ Powerups:
       # Format: PotionName, Duration, Amplifier
       potion-effect:
         - "REGENERATION, 30, 10"
+      # PLAYER for pickup player | ALL for all arena players
+      potion-type: PLAYER
+      # like rewards
+      execute:
+        - ""
+    Speed:
+      active: true
+      name: "&a&lSPEED BOOSTER"
+      description: "&7Double speed for %number% seconds!"
+      material: FEATHER
+      # Add as many potion effects as you want
+      # Format: PotionName, Duration, Amplifier
+      potion-effect:
+        - "SPEED, 15, 1"
       # PLAYER for pickup player | ALL for all arena players
       potion-type: PLAYER
       # like rewards
