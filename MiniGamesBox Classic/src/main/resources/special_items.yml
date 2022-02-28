@@ -15,7 +15,7 @@
 #  displayname: "&b&lKit Menu &7(Right Click)"
 #  lore:
 #    - "&7Right-click to select in-game kit"
-#  material-name: NETHER_STAR
+#  material: NETHER_STAR
 #  slot: 0
 #  # stage can be: 'lobby' or 'spectator'
 #  stage: lobby
