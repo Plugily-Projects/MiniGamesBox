@@ -84,6 +84,9 @@ public class PowerupRegistry {
     }
 
     for(String key : section.getKeys(false)) {
+      if(!section.getBoolean(key + ".active", true)) {
+        continue;
+      }
       XMaterial mat = XMaterial.matchXMaterial(section.getString(key + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK);
       String name = new MessageBuilder(section.getString(key + ".name", "Error!")).build();
       String description = new MessageBuilder(section.getString(key + ".description", "Errror!")).build();
