@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.arena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -96,6 +97,13 @@ public class PluginArena extends BukkitRunnable {
   public void loadArenaOptions() {
     arenaOptions.clear();
     arenaOptions = new HashMap<>(plugin.getArenaOptionManager().getArenaOptions());
+    FileConfiguration arenas = ConfigUtils.getConfig(plugin, "arenas");
+    for(Map.Entry<String, ArenaOption> options : plugin.getArenaOptionManager().getArenaOptions().entrySet()) {
+      if("null".equals(options.getValue().getPath())) {
+        continue;
+      }
+      setArenaOption(options.getKey(), arenas.getInt("instances." + id + "." + options.getValue().getPath(), options.getValue().getValue()));
+    }
   }
 
   /**

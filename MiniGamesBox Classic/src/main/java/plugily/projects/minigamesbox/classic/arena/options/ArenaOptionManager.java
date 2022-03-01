@@ -46,7 +46,7 @@ public class ArenaOptionManager {
 
   private void loadArenaOptions() {
     ArenaOption.getOptions().forEach((s, option) -> {
-      arenaOptions.put(s, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected()));
+      arenaOptions.put(s, new ArenaOption(option.getPath(), option.getValue(), option.isProtected()));
       loadExternals(s);
     });
   }
@@ -76,7 +76,7 @@ public class ArenaOptionManager {
     if(arenaOptions.containsKey(name)) {
       throw new IllegalStateException("Arena option with path " + name + " was already registered");
     }
-    arenaOptions.put(name, new ArenaOption(option.getPath(), plugin.getConfig().getInt(option.getPath(), option.getValue()), option.isProtected()));
+    arenaOptions.put(name, new ArenaOption(option.getPath(), option.getValue(), option.isProtected()));
     loadExternals(name);
   }
 
