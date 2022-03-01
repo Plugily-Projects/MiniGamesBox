@@ -118,12 +118,12 @@ public class Events implements Listener {
     if(index >= 0)
       command = command.substring(0, index);
 
-    for(String msg : plugin.getConfig().getStringList("Whitelisted-Commands")) {
+    for(String msg : plugin.getConfig().getStringList("Commands.Whitelist")) {
       if(command.equalsIgnoreCase(msg)) {
         return;
       }
     }
-    if(command.equalsIgnoreCase(plugin.getPluginNamePrefixLong()) || event.getMessage().contains("leave") || event.getMessage().contains("stats") || command.equalsIgnoreCase(plugin.getCommandAdminPrefix()) || command.equalsIgnoreCase(plugin.getCommandAdminPrefixLong()) || command.equalsIgnoreCase(plugin.getPluginNamePrefixLong())) {
+    if(command.equalsIgnoreCase(plugin.getPluginNamePrefixLong()) || event.getMessage().contains("leave") || event.getMessage().contains("stats") || command.equalsIgnoreCase(plugin.getCommandAdminPrefix()) || command.equalsIgnoreCase(plugin.getCommandAdminPrefixLong())) {
       return;
     }
     if(event.getPlayer().isOp() || event.getPlayer().hasPermission(plugin.getPluginNamePrefixLong() + ".command.override")) {

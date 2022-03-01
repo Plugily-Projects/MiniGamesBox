@@ -32,7 +32,6 @@ public class ConfigOption {
 
   private static final Map<String, ConfigOption> options = new HashMap<>();
 
-
   static {
     //LOCALE
     options.put("DEBUG", new ConfigOption("Debug", false, true));
@@ -41,8 +40,8 @@ public class ConfigOption {
     options.put("BUNGEEMODE", new ConfigOption("Bungee-Mode", false, true));
     options.put("INVENTORY_MANAGER", new ConfigOption("Inventory-Manager", true, true));
     options.put("BLOCKED_LEAVE_COMMAND", new ConfigOption("Block.In-Game.Leave", false, true));
-    //WHITELIST_COMMANDS
-    options.put("SHORT_COMMANDS", new ConfigOption("Short-Commands", true, true));
+    //Commands.Whitelist
+    //Commands.Shorter
     options.put("BLOCK_IN_GAME_COMMANDS", new ConfigOption("Block.In-Game.Commands", true, true));
     options.put("BLOCK_IN_GAME_ITEM_MOVE", new ConfigOption("Block.In-Game.Item-Move", true, true));
     options.put("DATABASE", new ConfigOption("Database", false, true));

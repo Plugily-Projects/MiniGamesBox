@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
 
 /**
  * @author Tigerpanzer_02
@@ -43,16 +44,12 @@ public class PluginArenaEvents implements Listener {
 
 
   @EventHandler
-  public void playerCommandExecution(PlayerCommandPreprocessEvent e) {
-    if(plugin.getConfigPreferences().getOption("SHORT_COMMANDS")) {
-      if(e.getMessage().equalsIgnoreCase("/start")) {
-        e.getPlayer().performCommand(plugin.getCommandAdminPrefix() + " forcestart");
-        e.setCancelled(true);
+  public void playerCommandExecution(PlayerCommandPreprocessEvent event) {
+    for(CommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
+      if(event.getMessage().equalsIgnoreCase(commandShorter.getShortCommand())) {
+        event.getPlayer().performCommand(commandShorter.getExecuteCommand());
+        event.setCancelled(true);
         return;
-      }
-      if(e.getMessage().equalsIgnoreCase("/leave")) {
-        e.getPlayer().performCommand(plugin.getPluginNamePrefix() + " leave");
-        e.setCancelled(true);
       }
     }
   }

@@ -19,10 +19,13 @@
 
 package plugily.projects.minigamesbox.classic.preferences;
 
+import org.bukkit.configuration.ConfigurationSection;
 import plugily.projects.minigamesbox.classic.PluginMain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,14 +37,31 @@ public class ConfigPreferences {
 
   private final PluginMain plugin;
   private final Map<String, ConfigOption> options = new HashMap<>();
+  private static final List<CommandShorter> commandShorts = new ArrayList<>();
 
   public ConfigPreferences(PluginMain plugin) {
     this.plugin = plugin;
     loadOptions();
+    loadCommandShortener();
   }
 
   private void loadOptions() {
     ConfigOption.getOptions().forEach((s, option) -> options.put(s, new ConfigOption(option.getPath(), plugin.getConfig().getBoolean(option.getPath(), option.getValue()), option.isProtected())));
+  }
+
+  private void loadCommandShortener() {
+    ConfigurationSection section = plugin.getConfig().getConfigurationSection("Commands.Shorter");
+    if(section == null) {
+      return;
+    }
+    for(String id : section.getKeys(false)) {
+      if(section.getBoolean(id + ".Enabled", true)) {
+        continue;
+      }
+      String shortCommand = section.getString(id + ".Short", "start");
+      String executeCommand = section.getString(id + ".Executes", plugin.getCommandAdminPrefix() + " forcestart");
+      addCommandShorter(new CommandShorter(shortCommand, executeCommand));
+    }
   }
 
   /**
@@ -91,4 +111,11 @@ public class ConfigPreferences {
     return Collections.unmodifiableMap(options);
   }
 
+  public List<CommandShorter> getCommandShorts() {
+    return Collections.unmodifiableList(commandShorts);
+  }
+
+  public void addCommandShorter(CommandShorter commandShorter) {
+    commandShorts.add(commandShorter);
+  }
 }

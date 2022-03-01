@@ -7,6 +7,7 @@
 #   You don't want to break anything, do you?
 #
 
+
 # Select locale of PlugilyProjects, default it's English.
 # Available locales:
 #    default - English language. Uses 'language.yml'.
@@ -22,11 +23,13 @@
 #    th - Thai
 locale: default
 
+
 # Should we display a boss bar with additional arena information?
 Bossbar:
   Display: true
   # Interval in seconds between messages
   Interval: 10
+
 
 # Should we hook into bungeecord? (If you wanna use arena per server option)
 # This option will let you access bungee.yml and its options.
@@ -34,20 +37,41 @@ Bossbar:
 # Check here for more info: https://wiki.plugily.xyz/
 Bungee-Mode: false
 
+
 # Enable Inventory Manager for your games? (VERY USEFUL feature for MULTI ARENA)
 # This saves inventory of players and restores it after player leaves arena.
 # Saved elements: max health, health, food, experience, full inventory, armor contents, fire ticks, active potions
 Inventory-Manager: true
 
 
+Commands:
+  # Commands which can be used in game, remove all of them to disable (only works if Block.In-Game.Commands = true)
+  Whitelist:
+    - me
+    - help
+  # Enable and Disable predefined shortened commands or add your own
+  Shorter:
+    '1':
+      Short: "start"
+      Executes: "plugilyprojectsadmin forcestart"
+      Enabled: true
+    '2':
+      Short: "leave"
+      Executes: "plugilyprojects leave"
+      Enabled: true
+    '3':
+      Short: "kit"
+      Executes: "plugilyprojects selectkit"
+      Enabled: false
+    '4':
+      Short: "stats"
+      Executes: "plugilyprojects stats"
+      Enabled: false
+    '5':
+      Short: "top"
+      Executes: "plugilyprojects top"
+      Enabled: true
 
-# Commands which can be used in game, remove all of them to disable
-Whitelisted-Commands:
-  - me
-  - help
-
-# Should we enable short commands such as /start and /leave
-Short-Commands: true
 
 # Block some functions of your players
 Block:
@@ -59,27 +83,33 @@ Block:
     # Cancels Item Movement into player crafting, enchantment tables, anvils ...
     Item-Move: true
 
+
 # Enable this option when you're using MySQL, otherwise it won't work.
 # Be careful when changing this because there is NO migrator between
 # flat file and MySQL for player stats.
 # If this option is disabled it means all stats will be saved as flat file!
 Database: false
 
+
 # Should we enable in game rewards? See rewards.yml for more...
 # You should also check out our script engine tutorial for rewards! https://tutorial.plugily.xyz
 Rewards: true
+
 
 # Enable in game (eg. '[KIT][LEVEL] Tigerpanzer_02: hey') special formatting?
 # Formatting is configurable in language.yml
 # You can use PlaceholderAPI placeholders in chat format!
 Plugin-Chat-Format: true
 
+
 # Should we enable a separate arena chat for players inside a arena
 # Useful on multi arena servers that don't want the same chat for all players on the server
 Separate-Arena-Chat: true
 
+
 # Should we fire some cool fireworks at locations of every player at special events such as the game end?
 Firework: true
+
 
 # Should blocks behind game signs change their color based on game state?
 # They will change color to:
