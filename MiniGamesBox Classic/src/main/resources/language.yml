@@ -194,7 +194,7 @@ In-Game:
         - "&a&m--------------------------------------------------"
       Placeholders:
         Win: "You won the game"
-        Lose: "You lose the game"
+        Lose: "You lost the game"
     Admin:
       Set-Starting-In-To-0: "&bAn admin set waiting time to 0. The game starts now!"
 
