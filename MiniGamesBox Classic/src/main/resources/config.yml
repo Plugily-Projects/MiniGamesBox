@@ -39,8 +39,7 @@ Bungee-Mode: false
 # Saved elements: max health, health, food, experience, full inventory, armor contents, fire ticks, active potions
 Inventory-Manager: true
 
-# Should the leave command be blocked inside arena?
-Leave-Command: false
+
 
 # Commands which can be used in game, remove all of them to disable
 Whitelisted-Commands:
@@ -55,6 +54,8 @@ Block:
   In-Game:
     # Should we block every not plugin associated commands in game?
     Commands: true
+    # Should the leave command be blocked inside arena?
+    Leave: false
     # Cancels Item Movement into player crafting, enchantment tables, anvils ...
     Item-Move: true
 

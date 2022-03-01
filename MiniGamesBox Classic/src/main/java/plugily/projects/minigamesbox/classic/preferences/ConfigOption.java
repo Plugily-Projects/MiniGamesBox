@@ -40,7 +40,7 @@ public class ConfigOption {
     options.put("BOSSBAR", new ConfigOption("Bossbar", true, true));
     options.put("BUNGEEMODE", new ConfigOption("Bungee-Mode", false, true));
     options.put("INVENTORY_MANAGER", new ConfigOption("Inventory-Manager", true, true));
-    options.put("LEAVE_COMMAND", new ConfigOption("Leave-Command", false, true));
+    options.put("BLOCKED_LEAVE_COMMAND", new ConfigOption("Block.In-Game.Leave", false, true));
     //WHITELIST_COMMANDS
     options.put("SHORT_COMMANDS", new ConfigOption("Short-Commands", true, true));
     options.put("BLOCK_IN_GAME_COMMANDS", new ConfigOption("Block.In-Game.Commands", true, true));

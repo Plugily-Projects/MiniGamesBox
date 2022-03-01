@@ -39,25 +39,26 @@ public class LeaveArgument {
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new CommandArgument("leave", "", CommandArgument.ExecutorType.PLAYER) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        if(!registry.getPlugin().getConfig().getBoolean("Disable-Leave-Command")) {
-          Player player = (Player) sender;
-          if(!registry.getPlugin().getBukkitHelper().checkIsInGameInstance(player)) {
-            return;
-          }
-          new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).sendPlayer();
-          PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(player);
+        if(registry.getPlugin().getConfigPreferences().getOption("BLOCKED_LEAVE_COMMAND")) {
+          return;
+        }
+        Player player = (Player) sender;
+        if(!registry.getPlugin().getBukkitHelper().checkIsInGameInstance(player)) {
+          return;
+        }
+        new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).sendPlayer();
+        PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(player);
 
-          if(arena == null) {
-            return;
-          }
+        if(arena == null) {
+          return;
+        }
 
-          if(registry.getPlugin().getConfigPreferences().getOption("BUNGEEMODE")) {
-            registry.getPlugin().getBungeeManager().connectToHub(player);
-            registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), arena.getId());
-          } else {
-            registry.getPlugin().getArenaManager().leaveAttempt(player, arena);
-            registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to end location.", player.getName(), arena.getId());
-          }
+        if(registry.getPlugin().getConfigPreferences().getOption("BUNGEEMODE")) {
+          registry.getPlugin().getBungeeManager().connectToHub(player);
+          registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), arena.getId());
+        } else {
+          registry.getPlugin().getArenaManager().leaveAttempt(player, arena);
+          registry.getPlugin().getDebugger().debug(Level.INFO, "{0} has left the arena {1}! Teleported to end location.", player.getName(), arena.getId());
         }
       }
     });
