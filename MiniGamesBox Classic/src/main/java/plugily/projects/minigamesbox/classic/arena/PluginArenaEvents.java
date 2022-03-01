@@ -55,39 +55,46 @@ public class PluginArenaEvents implements Listener {
   }
 
   @EventHandler
-  public void onEntityDamageEvent(EntityDamageEvent e) {
-    if(e.getEntityType() != EntityType.PLAYER) {
+  public void onEntityDamageEvent(EntityDamageEvent event) {
+    if(event.getEntityType() != EntityType.PLAYER) {
       return;
     }
-    Player victim = (Player) e.getEntity();
+    Player victim = (Player) event.getEntity();
     PluginArena arena = plugin.getArenaRegistry().getArena(victim);
     if(arena == null) {
       return;
     }
-    if(e.getCause() == EntityDamageEvent.DamageCause.DROWNING && plugin.getConfigPreferences().getOption("DROWNING_DAMAGE")) {
-      e.setCancelled(true);
-    }
-    if((e.getCause() == EntityDamageEvent.DamageCause.FIRE || e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) && plugin.getConfigPreferences().getOption("FIRE_DAMAGE")) {
-      e.setCancelled(true);
-    }
-    if(e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-      if(!plugin.getConfigPreferences().getOption("FALL_DAMAGE")) {
-        if(e.getDamage() >= 20.0) {
+    switch(event.getCause()) {
+      case DROWNING:
+        if(!plugin.getConfigPreferences().getOption("DROWNING_DAMAGE")) {
+          event.setCancelled(true);
+        }
+        break;
+      case FIRE:
+      case FIRE_TICK:
+        if(!plugin.getConfigPreferences().getOption("FIRE_DAMAGE")) {
+          event.setCancelled(true);
+        }
+        break;
+      case FALL:
+        if(!plugin.getConfigPreferences().getOption("FALL_DAMAGE")) {
+          event.setCancelled(true);
+        } else if(event.getDamage() >= 20.0) {
           //kill the player for suicidal death, else do not
           victim.damage(1000.0);
         }
-      }
-      e.setCancelled(true);
-    }
-    //kill the player on void
-    if(e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-      if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
-        victim.damage(0);
-        victim.teleport(arena.getLobbyLocation());
-      } else {
-        victim.damage(1000.0);
-        victim.teleport(arena.getStartLocation());
-      }
+        break;
+      case VOID:
+        if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
+          victim.damage(0);
+          victim.teleport(arena.getLobbyLocation());
+        } else {
+          victim.damage(1000.0);
+          victim.teleport(arena.getStartLocation());
+        }
+        break;
+      default:
+        break;
     }
   }
 }
