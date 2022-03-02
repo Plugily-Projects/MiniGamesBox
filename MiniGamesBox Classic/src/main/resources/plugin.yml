@@ -1,19 +1,19 @@
 name: PlugilyProjects
 main: plugily.projects.PlugilyProjects.Main
-authors: [PlugilyProjects, Tigerpanzer_02]
+authors: [ PlugilyProjects, Tigerpanzer_02 ]
 version: ${project.version}
-softdepend: [HolographicDisplays, PlaceholderAPI, Parties, Spigot-Party-API-PAF, PartyAndFriends]
+softdepend: [ HolographicDisplays, PlaceholderAPI, Parties, Spigot-Party-API-PAF, PartyAndFriends, ViaVersion, ProtocolSupport ]
 api-version: 1.13
 
 commands:
   PlugilyProjects:
     description: PlugilyProjects Commands
     usage: "\u00A76Correct usage: /PlugilyProjects [option]"
-    aliases: [PlugilyProjects, PlugilyProjects]
+    aliases: [ PlugilyProjects, PlugilyProjects ]
   PlugilyProjectsAdmin:
     description:
     usage: "\u00A76Correct usage: /PlugilyProjectsa [option]"
-    aliases: [PlugilyProjectsa, PlugilyProjectsadmin]
+    aliases: [ PlugilyProjectsa, PlugilyProjectsadmin ]
 
 permissions:
   PlugilyProjects.admin.*:
