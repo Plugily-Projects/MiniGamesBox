@@ -10,6 +10,23 @@
 #            like %player%, %kit% etc.
 
 #
+# Color scheme
+#
+Color:
+  Placeholder:
+    Value: "&a"
+    Number: "&a"
+    Player: "&b"
+    Other: "&a"
+  Chat:
+    Issue: "&c"
+    Messages: "&7"
+    Special-Char:
+      Contains: "[,],(,),{,},■,/,|,▸"
+      Before: "&8"
+
+
+#
 # Command messages
 #
 Commands:

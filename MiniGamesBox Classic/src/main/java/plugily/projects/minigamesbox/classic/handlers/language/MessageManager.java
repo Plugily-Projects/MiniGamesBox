@@ -19,10 +19,15 @@
 
 package plugily.projects.minigamesbox.classic.handlers.language;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,14 +42,23 @@ import java.util.Map;
 public class MessageManager {
   private final PluginMain plugin;
   private final Map<String, Message> options = new HashMap<>();
+  private final List<String> specialChars = new ArrayList<>();
 
   public MessageManager(PluginMain plugin) {
     this.plugin = plugin;
     loadMessages();
+    loadSpecialChars();
   }
 
   private void loadMessages() {
-    Message.getMessages().forEach((s, message) -> options.put(s, new Message(message.getPath(), plugin.getConfig().getString(message.getPath(), message.getValue()), message.isProtected())));
+    FileConfiguration language = ConfigUtils.getConfig(plugin, "language");
+    Message.getMessages().forEach((s, message) -> options.put(s, new Message(message.getPath(), language.getString(message.getPath(), message.getValue()), message.isProtected())));
+  }
+
+  private void loadSpecialChars() {
+    String specialCharsList = getMessage("COLOR_CHAT_SPECIAL_CONTAINS").getValue();
+    String[] splitSpecialCharsList = specialCharsList.split(",");
+    specialChars.addAll(Arrays.asList(splitSpecialCharsList));
   }
 
   /**
@@ -104,5 +118,9 @@ public class MessageManager {
 
   public Map<String, Message> getAllMessages() {
     return Collections.unmodifiableMap(options);
+  }
+
+  public List<String> getSpecialChars() {
+    return Collections.unmodifiableList(specialChars);
   }
 }

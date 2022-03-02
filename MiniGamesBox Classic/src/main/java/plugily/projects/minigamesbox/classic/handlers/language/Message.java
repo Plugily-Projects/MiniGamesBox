@@ -49,6 +49,15 @@ public class Message {
   // %arena_formatted_time% - Formatted timer
   // %player% - The player in context, mostly executed player
   static {
+    // color
+    messages.put("COLOR_PLACEHOLDER_VALUE", new Message("Color.Placeholder.Value", "", true));
+    messages.put("COLOR_PLACEHOLDER_NUMBER", new Message("Color.Placeholder.Number", "", true));
+    messages.put("COLOR_PLACEHOLDER_PLAYER", new Message("Color.Placeholder.Player", "", true));
+    messages.put("COLOR_PLACEHOLDER_OTHER", new Message("Color.Placeholder.Other", "", true));
+    messages.put("COLOR_CHAT_ISSUE", new Message("Color.Chat.Issue", "", true));
+    messages.put("COLOR_CHAT_MESSAGES", new Message("Color.Chat.Messages", "", true));
+    messages.put("COLOR_CHAT_SPECIAL_CONTAINS", new Message("Color.Chat.Special-Char.Contains", "", true));
+    messages.put("COLOR_CHAT_SPECIAL_BEFORE", new Message("Color.Chat.Special-Char.Before", "", true));
     // commands
     messages.put("COMMANDS_DID_YOU_MEAN", new Message("Commands.Did-You-Mean", "", true));
     messages.put("COMMANDS_COMMAND_EXECUTED", new Message("Commands.Command-Executed", "", true));
@@ -157,7 +166,6 @@ public class Message {
     // Kit
     messages.put("KIT_NOT_UNLOCKED", new Message("Kit.Not-Unlocked", "", false));
     messages.put("KIT_CHOOSE", new Message("Kit.Choose", "", false));
-    messages.put("KIT_OPEN_MENU", new Message("Kit.Open-Menu", "", false));
     messages.put("KIT_COOLDOWN", new Message("Kit.Cooldown", "", false));
 
     // kit.menu

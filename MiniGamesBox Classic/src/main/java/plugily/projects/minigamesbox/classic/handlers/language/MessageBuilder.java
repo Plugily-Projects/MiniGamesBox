@@ -41,6 +41,13 @@ import static org.apache.commons.lang.StringUtils.replace;
  */
 public class MessageBuilder {
 
+  private final String placeholderColorValue = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_VALUE"));
+  private final String placeholderColorNumber = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_NUMBER"));
+  private final String placeholderColorPlayer = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_PLAYER"));
+  private final String placeholderColorOther = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_OTHER"));
+  private String messageColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_MESSAGES"));
+  private final String messageIssueColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
+  private final String messageSpecialCharBefore = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_SPECIAL_BEFORE"));
   private String message;
   private Player player;
   private String value;
@@ -54,15 +61,27 @@ public class MessageBuilder {
 
   public MessageBuilder(String message) {
     this.message = message;
+    colorChatIssue();
   }
 
   public MessageBuilder(@NotNull ActionType actionType) {
-    Message message = plugin.getMessageManager().getMessage("IN_GAME_MESSAGES_" + actionType);
-    this.message = plugin.getLanguageManager().getLanguageMessage(message.getPath());
+    Message actionTypeMessage = plugin.getMessageManager().getMessage("IN_GAME_MESSAGES_" + actionType);
+    this.message = plugin.getLanguageManager().getLanguageMessage(actionTypeMessage.getPath());
+    colorChatIssue();
   }
 
   public MessageBuilder(@NotNull Message message) {
     this.message = plugin.getLanguageManager().getLanguageMessage(message.getPath());
+    colorChatIssue();
+  }
+
+  private void colorChatIssue() {
+    if(!hasNoPlaceholders()) {
+      if(message.contains("%color_chat_issue%")) {
+        messageColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
+      }
+      message = replace(message, "%color_chat_issue%", messageIssueColor);
+    }
   }
 
   public MessageBuilder asKey() {
@@ -71,12 +90,12 @@ public class MessageBuilder {
   }
 
   public MessageBuilder prefix() {
-    message = "%plugin_prefix% " + message;
+    message = placeholderColorOther + "%plugin_prefix%" + messageColor + message;
     return this;
   }
 
   public MessageBuilder prefix(String prefix) {
-    message = prefix + message;
+    message = prefix + messageColor + message;
     return this;
   }
 
@@ -104,9 +123,13 @@ public class MessageBuilder {
     return this;
   }
 
-  public MessageBuilder plugin(PluginMain plugin) {
-    MessageBuilder.plugin = plugin;
-    return this;
+  private void formatSpecialChars() {
+    if(plugin.getMessageManager().getSpecialChars().isEmpty()) {
+      return;
+    }
+    for(String specialChar : plugin.getMessageManager().getSpecialChars()) {
+      message = replace(message, specialChar, messageSpecialCharBefore + specialChar + messageColor);
+    }
   }
 
   private void colorRawMessage() {
@@ -122,80 +145,85 @@ public class MessageBuilder {
   }
 
   private void formatInteger() {
-    message = replace(message, "%number%", Integer.toString(integer));
+    message = replace(message, "%number%", placeholderColorNumber + integer + messageColor);
   }
 
   private void formatValue() {
-    message = replace(message, "%value%", value);
+    message = replace(message, "%value%", placeholderColorValue + value + messageColor);
   }
 
   private void formatPlayer() {
-    if(hasNoPlaceholders()) return;
-    message = replace(message, "%player%", player.getName());
-    message = replace(message, "%player_uuid%", String.valueOf(player.getUniqueId()));
+    if(!hasNoPlaceholders()) {
+      message = replace(message, "%player%", placeholderColorPlayer + player.getName() + messageColor);
+      message = replace(message, "%player_uuid%", placeholderColorPlayer + player.getUniqueId() + messageColor);
+    }
   }
 
   private void formatPlaceholderAPI() {
-    if(hasNoPlaceholders()) return;
-    if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+    if(!hasNoPlaceholders() && plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       message = PlaceholderAPI.setPlaceholders(player, message);
     }
   }
 
   private void formatExternalPlayer() {
-    if(hasNoPlaceholders()) return;
-    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
-        continue;
+    if(!hasNoPlaceholders()) {
+      for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+        if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
+          continue;
+        }
+        message = replace(message, "%" + placeholder.getId() + "%", placeholderColorOther + placeholder.getValue(player) + messageColor);
       }
-      message = replace(message, "%" + placeholder.getId() + "%", placeholder.getValue(player));
     }
   }
 
   private void formatExternalArena() {
-    if(hasNoPlaceholders()) return;
-    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
-        continue;
+    if(!hasNoPlaceholders()) {
+      for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+        if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
+          continue;
+        }
+        message = replace(message, "%" + placeholder.getId() + "%", placeholderColorOther + placeholder.getValue(arena) + messageColor);
       }
-      message = replace(message, "%" + placeholder.getId() + "%", placeholder.getValue(arena));
     }
   }
 
   private void formatExternalPlayerAndArena() {
-    if(hasNoPlaceholders()) return;
-    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-      if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
-        continue;
+    if(!hasNoPlaceholders()) {
+      for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+        if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
+          continue;
+        }
+        message = replace(message, "%" + placeholder.getId() + "%", placeholderColorOther + placeholder.getValue(player, arena) + messageColor);
       }
-      message = replace(message, "%" + placeholder.getId() + "%", placeholder.getValue(player, arena));
     }
   }
 
   private void formatPlugin() {
-    if(hasNoPlaceholders()) return;
-    message = replace(message, "%plugin_prefix%", plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")));
-    message = replace(message, "%plugin_name%", plugin.getName());
-    message = replace(message, "%plugin_name_uppercase%", plugin.getName().toUpperCase());
-    message = replace(message, "%plugin_short_command%", plugin.getPluginNamePrefix());
+    if(!hasNoPlaceholders()) {
+      message = replace(message, "%plugin_prefix%", placeholderColorOther + plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")) + messageColor);
+      message = replace(message, "%plugin_name%", placeholderColorOther + plugin.getName() + messageColor);
+      message = replace(message, "%plugin_name_uppercase%", placeholderColorOther + plugin.getName().toUpperCase() + messageColor);
+      message = replace(message, "%plugin_short_command%", placeholderColorOther + plugin.getPluginNamePrefix() + messageColor);
+    }
   }
 
   private void formatArena() {
-    if(hasNoPlaceholders()) return;
-    int timer = arena.getTimer();
-    message = replace(message, "%arena_min_players%", Integer.toString(arena.getMinimumPlayers()));
-    message = replace(message, "%arena_players%", String.valueOf(arena.getPlayers()));
-    message = replace(message, "%arena_players_size%", Integer.toString(arena.getPlayers().size()));
-    message = replace(message, "%arena_players_left%", String.valueOf(arena.getPlayersLeft()));
-    message = replace(message, "%arena_players_left_size%", Integer.toString(arena.getPlayersLeft().size()));
-    message = replace(message, "%arena_max_players%", Integer.toString(arena.getMaximumPlayers()));
-    message = replace(message, "%arena_name%", arena.getMapName());
-    message = replace(message, "%arena_id%", arena.getId());
-    message = replace(message, "%arena_state%", String.valueOf(arena.getArenaState()));
-    message = replace(message, "%arena_state_formatted%", arena.getArenaState().getFormattedName());
-    message = replace(message, "%arena_state_placeholder%", arena.getArenaState().getPlaceholder());
-    message = replace(message, "%arena_time%", Integer.toString(timer));
-    message = replace(message, "%arena_formatted_time%", StringFormatUtils.formatIntoMMSS(timer));
+    if(!hasNoPlaceholders()) {
+      int timer = arena.getTimer();
+      message = replace(message, "%arena_min_players%", placeholderColorOther + arena.getMinimumPlayers() + messageColor);
+      message = replace(message, "%arena_players%", placeholderColorOther + arena.getPlayers() + messageColor);
+      message = replace(message, "%arena_players_size%", placeholderColorOther + arena.getPlayers().size() + messageColor);
+      message = replace(message, "%arena_players_left%", placeholderColorOther + arena.getPlayersLeft() + messageColor);
+      message = replace(message, "%arena_players_left_size%", placeholderColorOther + arena.getPlayersLeft().size() + messageColor);
+      message = replace(message, "%arena_max_players%", placeholderColorOther + arena.getMaximumPlayers() + messageColor);
+      message = replace(message, "%arena_name%", placeholderColorOther + arena.getMapName() + messageColor);
+      message = replace(message, "%arena_id%", placeholderColorOther + arena.getId() + messageColor);
+      message = replace(message, "%arena_state%", placeholderColorOther + arena.getArenaState() + messageColor);
+      message = replace(message, "%arena_state_formatted%", placeholderColorOther + arena.getArenaState().getFormattedName() + messageColor);
+      message = replace(message, "%arena_state_placeholder%", placeholderColorOther + arena.getArenaState().getPlaceholder() + messageColor);
+      message = replace(message, "%arena_time%", placeholderColorOther + timer + messageColor);
+      message = replace(message, "%arena_formatted_time%", placeholderColorOther + StringFormatUtils.formatIntoMMSS(timer) + messageColor);
+    }
   }
 
   private boolean hasNoPlaceholders() {
@@ -203,6 +231,7 @@ public class MessageBuilder {
   }
 
   public String build() {
+    colorChatIssue();
     formatPlugin();
     formatPlaceholderAPI();
     if(player != null && arena != null) {
@@ -214,6 +243,8 @@ public class MessageBuilder {
     if(arena != null) {
       formatExternalArena();
     }
+    formatSpecialChars();
+    message = messageColor + message;
     colorRawMessage();
     return message;
   }
