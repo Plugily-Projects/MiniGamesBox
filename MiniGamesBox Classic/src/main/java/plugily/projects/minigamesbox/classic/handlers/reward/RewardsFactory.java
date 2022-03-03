@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.handlers.reward;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -157,15 +156,14 @@ public class RewardsFactory {
     if(command == null || command.equalsIgnoreCase("")) {
       return;
     }
-
+    MessageBuilder messageBuilder = new MessageBuilder(command);
     if(player != null) {
-      command = StringUtils.replace(command, "%player%", player.getName());
+      messageBuilder = messageBuilder.player(player);
     }
-    if(arena == null) {
-      command = new MessageBuilder(command).build();
-    } else {
-      command = new MessageBuilder(command).arena(arena).build();
+    if(arena != null) {
+      messageBuilder = messageBuilder.arena(arena);
     }
+    command = messageBuilder.build();
     switch(reward.getExecutor()) {
       case CONSOLE:
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
