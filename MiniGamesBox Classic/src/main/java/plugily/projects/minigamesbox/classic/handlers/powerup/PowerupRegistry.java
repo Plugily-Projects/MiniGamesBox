@@ -32,6 +32,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerPowerupPickupEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+import plugily.projects.minigamesbox.classic.handlers.language.TitleBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -122,9 +123,7 @@ public class PowerupRegistry {
         if(duration != 0) {
           Bukkit.getScheduler().runTaskLater(plugin, () -> {
             new MessageBuilder(config.getString("Powerups.Ended.Chat", "")).arena(pickup.getArena()).player(pickup.getPlayer()).value(pickup.getPowerup().getName()).sendArena();
-            for(Player player : pickup.getArena().getPlayers()) {
-              VersionUtils.sendTitles(player, new MessageBuilder(config.getString("Powerups.Ended.Title", "")).arena(pickup.getArena()).player(pickup.getPlayer()).value(pickup.getPowerup().getName()).build(), new MessageBuilder(config.getString("Powerups.Ended.Subtitle", "")).arena(pickup.getArena()).player(player).value(pickup.getPowerup().getName()).build(), 5, 20, 5);
-            }
+            new TitleBuilder(config.getString("Powerups.Ended.Title", "")).arena(pickup.getArena()).player(pickup.getPlayer()).value(pickup.getPowerup().getName()).sendArena();
           }, duration);
         }
 

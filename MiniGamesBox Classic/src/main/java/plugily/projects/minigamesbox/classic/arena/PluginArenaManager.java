@@ -29,6 +29,7 @@ import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameLeaveAtte
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStopEvent;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+import plugily.projects.minigamesbox.classic.handlers.language.TitleBuilder;
 import plugily.projects.minigamesbox.classic.handlers.party.GameParty;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
@@ -131,6 +132,7 @@ public class PluginArenaManager {
     for(Player arenaPlayer : arena.getPlayers()) {
       PluginArenaUtils.showPlayer(arenaPlayer, arena);
     }
+    new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }

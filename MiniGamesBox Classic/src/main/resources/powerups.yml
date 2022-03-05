@@ -4,8 +4,7 @@ Powerups:
   Pickup:
     Chat: "&a%player% picked the &4Powerup %value% up"
   Ended:
-    Title: "&4Powerup %value% from %player%"
-    Subtitle: "&chas ended"
+    Title: "5,20,5;&4Powerup %value% from %player%;&chas ended"
     Chat: "&4Powerup %value% from %player% has ended%"
   Drop:
     Chance: 1

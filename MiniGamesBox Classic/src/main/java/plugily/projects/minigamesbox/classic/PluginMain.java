@@ -54,6 +54,7 @@ import plugily.projects.minigamesbox.classic.handlers.items.SpecialItemManager;
 import plugily.projects.minigamesbox.classic.handlers.language.LanguageManager;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageManager;
+import plugily.projects.minigamesbox.classic.handlers.language.TitleBuilder;
 import plugily.projects.minigamesbox.classic.handlers.party.PartyHandler;
 import plugily.projects.minigamesbox.classic.handlers.party.PartySupportInitializer;
 import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsManager;
@@ -211,6 +212,7 @@ public class PluginMain extends JavaPlugin {
     messageManager = new MessageManager(this);
     languageManager = new LanguageManager(this);
     MessageBuilder.init(this);
+    TitleBuilder.init(this);
     languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);

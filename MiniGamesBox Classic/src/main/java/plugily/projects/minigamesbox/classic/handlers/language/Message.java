@@ -104,6 +104,7 @@ public class Message {
     messages.put("IN_GAME_JOIN_CANCEL_API", new Message("In-Game.Join.Cancelled-Via-API", "", true));
     messages.put("IN_GAME_JOIN_AS_PARTY_MEMBER", new Message("In-Game.Join.As-Party-Member", "", true));
     messages.put("IN_GAME_JOIN_ARENA_NOT_CONFIGURED", new Message("In-Game.Join.Arena-Not-Configured", "", true));
+    messages.put("IN_GAME_JOIN_TITLE", new Message("In-Game.Join.Title", "", true));
     // in-game.death
     messages.put("IN_GAME_DEATH_TAG", new Message("In-Game.Death.Tag", "", true));
     messages.put("IN_GAME_DEATH_SCREEN", new Message("In-Game.Death.Screen", "", true));
