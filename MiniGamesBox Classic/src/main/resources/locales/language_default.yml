@@ -308,6 +308,8 @@ Leaderboard:
         Header: "&8&m-------------------[&6 Top 10 &8&m]-------------------"
         Format: "&e#%number% %player% - %value% &7%user_statistic%"
   Statistics:
+    Wins: "Wins ▸ %number%"
+    Loses: "Loses ▸ %number%"
     Games-Played: "&aGames Played &e%number%"
     Level: "&aLevel &e%number%"
     Exp: "&aExperience &e%number%"
