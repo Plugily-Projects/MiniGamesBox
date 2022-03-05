@@ -69,6 +69,8 @@ public class ConfigOption {
     //Basic Permission
     //Time-Manager
 
+    options.put("SPECTATORS", new ConfigOption("Spectators", true, true));
+
     options.put("UPDATE_CHECKER", new ConfigOption("Update-Notifier.Stable", true, true));
     options.put("BETA_UPDATE_CHECKER", new ConfigOption("Update-Notifier.Beta", true, true));
   }

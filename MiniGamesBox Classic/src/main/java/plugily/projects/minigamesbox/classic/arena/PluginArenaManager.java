@@ -101,6 +101,10 @@ public class PluginArenaManager {
     User user = plugin.getUserManager().getUser(player);
 
     if((arena.getArenaState() == ArenaState.IN_GAME || ((arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || (arena.getArenaState() == ArenaState.FULL_GAME && arena.getTimer() <= 3)) || arena.getArenaState() == ArenaState.ENDING)) {
+      if(!plugin.getConfigPreferences().getOption("SPECTATORS")) {
+        new MessageBuilder("IN_GAME_SPECTATOR_BLOCKED").asKey().player(player).arena(arena).sendPlayer();
+        return;
+      }
       PluginArenaUtils.preparePlayerForGame(arena, player, arena.getStartLocation(), true);
       new MessageBuilder("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR").asKey().player(player).arena(arena).sendPlayer();
       PluginArenaUtils.hidePlayer(player, arena);

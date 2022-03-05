@@ -109,6 +109,7 @@ public class Message {
     messages.put("IN_GAME_DEATH_TAG", new Message("In-Game.Death.Tag", "", true));
     messages.put("IN_GAME_DEATH_SCREEN", new Message("In-Game.Death.Screen", "", true));
     // in-game.spectator
+    messages.put("IN_GAME_SPECTATOR_BLOCKED", new Message("In-Game.Spectator.Blocked", "", true));
     messages.put("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR", new Message("In-Game.Spectator.You-Are-Spectator", "", true));
     messages.put("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME", new Message("In-Game.Spectator.Spectator-Menu-Name", "", true));
     messages.put("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH", new Message("In-Game.Spectator.Target-Player-Health", "", true));

@@ -179,6 +179,10 @@ Time-Manager:
   Restarting: 5
 
 
+# Allow spectators on arena instances
+Spectators: true
+
+
 Update-Notifier:
   # Should we check for updates on plugin start/after admin join?
   # You REALLY should have this true!

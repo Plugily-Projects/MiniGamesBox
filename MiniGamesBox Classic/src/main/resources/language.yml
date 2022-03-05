@@ -166,6 +166,7 @@ In-Game:
     Tag: "&8Dead"
     Screen: "%color_chat_issue%You died!"
   Spectator:
+    Blocked: "%color_chat_issue%%plugin_prefix% Spectators are disabled for this arena"
     You-Are-Spectator: "%plugin_prefix% You're now a spectator! You can fly now!"
     Spectator-Menu-Name: "%color_chat_issue%Alive players list"
     Target-Player-Health: "%color_chat_issue%Health: %number%"
