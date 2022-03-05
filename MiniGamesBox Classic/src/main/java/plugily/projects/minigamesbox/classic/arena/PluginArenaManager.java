@@ -210,8 +210,9 @@ public class PluginArenaManager {
     user.setPermanentSpectator(false);
 
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-    if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
+    if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && (arena.getPlayers().isEmpty() || arena.getPlayers().size() < arena.getMinimumPlayers())) {
       stopGame(true, arena);
+      new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
     }
     PluginArenaUtils.resetPlayerAfterGame(player);
     arena.teleportToEndLocation(player);
@@ -235,10 +236,10 @@ public class PluginArenaManager {
       User user = plugin.getUserManager().getUser(player);
       if(!quickStop) {
         spawnFireworks(arena, player);
-      }
-      List<String> summaryMessages = plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary");
-      for(String msg : summaryMessages) {
-        MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).arena(arena).player(player).build());
+        List<String> summaryMessages = plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary");
+        for(String msg : summaryMessages) {
+          MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).arena(arena).player(player).build());
+        }
       }
     }
     arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);

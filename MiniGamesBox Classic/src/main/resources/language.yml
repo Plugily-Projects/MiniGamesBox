@@ -215,6 +215,7 @@ In-Game:
       Placeholders:
         Win: "&aYou won the game"
         Lose: "%color_chat_issue%You lost the game"
+        Players: "&cThere are not enough players anymore. Arena got force stopped!"
     Admin:
       Set-Starting-In-To-0: "%plugin_prefix% An admin set waiting time to 0. The game starts now!"
 

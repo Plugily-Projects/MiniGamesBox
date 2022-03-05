@@ -141,6 +141,7 @@ public class Message {
     messages.put("IN_GAME_MESSAGES_GAME_END_SUMMARY", new Message("In-Game.Messages.Game-End.Summary", "", true));
     messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_WIN", new Message("In-Game.Messages.Game-End.Placeholders.Win", "", true));
     messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_LOSE", new Message("In-Game.Messages.Game-End.Placeholders.Lose", "", true));
+    messages.put("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS", new Message("In-Game.Messages.Game-End.Placeholders.Players", "", true));
     // in-game.messages.admin
     messages.put("IN_GAME_MESSAGES_ADMIN_FORCESTART", new Message("In-Game.Messages.Admin.Set-Starting-In-To-0", "", true));
     // Signs messages
