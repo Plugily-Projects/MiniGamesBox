@@ -216,6 +216,8 @@ public class PluginMain extends JavaPlugin {
     languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
+    User.init(this);
+    User.cooldownHandlerTask();
     userManager = new UserManager(this);
     placeholderManager = new PlaceholderManager(this);
     statsStorage = new StatsStorage(this);
@@ -231,8 +233,6 @@ public class PluginMain extends JavaPlugin {
     holidayManager = new HolidayManager(this);
 
     permissionsManager = new PermissionsManager(this);
-    User.init(this);
-    User.cooldownHandlerTask();
     if(configPreferences.getOption("BUNGEEMODE")) {
       debugger.debug("Bungee enabled");
       bungeeManager = new BungeeManager(this);
