@@ -46,6 +46,7 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
@@ -150,7 +151,7 @@ public class SpectatorEvents implements Listener {
     if(arena == null) {
       return;
     }
-    if(player.getLocation().getY() < 1) {
+    if (player.getLocation().getY() < VersionUtils.getWorldMinHeight(player.getWorld())) {
       player.teleport(arena.getStartLocation());
       event.setDamage(0);
     }

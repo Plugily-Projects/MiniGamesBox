@@ -21,7 +21,6 @@ package plugily.projects.minigamesbox.classic.events;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
@@ -41,6 +40,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
@@ -49,6 +49,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerSwapHandItemsEvent;
 
 /**
  * @author Tigerpanzer_02
@@ -62,6 +63,13 @@ public class Events implements Listener {
   public Events(PluginMain plugin) {
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
+  }
+
+  @EventHandler
+  public void onItemSwap(PlugilyPlayerSwapHandItemsEvent event) {
+    if(plugin.getArenaRegistry().isInArena(event.getPlayer())) {
+      event.setCancelled(true);
+    }
   }
 
   @EventHandler
@@ -85,7 +93,7 @@ public class Events implements Listener {
 
   @EventHandler
   public void onDrop(PlayerDropItemEvent event) {
-    if(plugin.getArenaRegistry().getArena(event.getPlayer()) != null && (plugin.getUserManager().getUser(event.getPlayer()).isSpectator() || event.getItemDrop().getItemStack().getType() == Material.SADDLE)) {
+    if(plugin.getArenaRegistry().getArena(event.getPlayer()) != null && (plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
       event.setCancelled(true);
     }
   }
@@ -178,7 +186,7 @@ public class Events implements Listener {
     if(arena == null) {
       return;
     }
-    if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.ENDING) {
+    if(arena.getArenaState() != ArenaState.IN_GAME) {
       event.setFoodLevel(20);
       event.setCancelled(true);
     }
@@ -186,7 +194,24 @@ public class Events implements Listener {
 
   @EventHandler
   public void onCraft(PlugilyPlayerInteractEvent event) {
-    if(plugin.getArenaRegistry().isInArena(event.getPlayer()) && event.getPlayer().getTargetBlock(null, 7).getType() == XMaterial.CRAFTING_TABLE.parseMaterial()) {
+    PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
+    if(arena == null || event.getClickedBlock() == null) {
+      return;
+    }
+    if(event.getPlayer().getTargetBlock(null, 7).getType() == XMaterial.CRAFTING_TABLE.parseMaterial()) {
+      event.setCancelled(true);
+    }
+    if(event.getClickedBlock() == null) {
+      return;
+    }
+    if(event.getClickedBlock().getType() == XMaterial.PAINTING.parseMaterial() || event.getClickedBlock().getType() == XMaterial.FLOWER_POT.parseMaterial()) {
+      event.setCancelled(true);
+    }
+  }
+
+  @EventHandler
+  public void onInGameBedEnter(PlayerBedEnterEvent event) {
+    if(plugin.getArenaRegistry().isInArena(event.getPlayer())) {
       event.setCancelled(true);
     }
   }
@@ -209,23 +234,23 @@ public class Events implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  public void onArmorStandDestroy(EntityDamageByEntityEvent e) {
-    if(!(e.getEntity() instanceof LivingEntity)) {
+  public void onArmorStandDestroy(EntityDamageByEntityEvent event) {
+    if(!(event.getEntity() instanceof LivingEntity)) {
       return;
     }
-    final LivingEntity livingEntity = (LivingEntity) e.getEntity();
+    final LivingEntity livingEntity = (LivingEntity) event.getEntity();
     if(livingEntity.getType() != EntityType.ARMOR_STAND) {
       return;
     }
-    if(e.getDamager() instanceof Player && plugin.getArenaRegistry().isInArena((Player) e.getDamager())) {
-      e.setCancelled(true);
-    } else if(e.getDamager() instanceof Projectile) {
-      Projectile projectile = (Projectile) e.getDamager();
+    if(event.getDamager() instanceof Player && plugin.getArenaRegistry().isInArena((Player) event.getDamager())) {
+      event.setCancelled(true);
+    } else if(event.getDamager() instanceof Projectile) {
+      Projectile projectile = (Projectile) event.getDamager();
       if(projectile.getShooter() instanceof Player && plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
-        e.setCancelled(true);
+        event.setCancelled(true);
         return;
       }
-      e.setCancelled(true);
+      event.setCancelled(true);
     }
   }
 

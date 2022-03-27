@@ -61,40 +61,14 @@ public class PluginArenaManager {
    */
   public void joinAttempt(@NotNull Player player, @NotNull PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial join attempt for {1}", arena.getId(), player.getName());
+    long start = System.currentTimeMillis();
     if(!canJoinArenaAndMessage(player, arena) || !checkFullGamePermission(player, arena)) {
       return;
     }
     plugin.getDebugger().debug("[{0}] Checked join attempt for {1}", arena.getId(), player.getName());
-    long start = System.currentTimeMillis();
-    if(plugin.getArenaRegistry().isInArena(player)) {
-      new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().arena(arena).player(player).sendPlayer();
+
+    if(!joinAsParty(player, arena)) {
       return;
-    }
-
-    //check if player is in party and send party members to the game
-    GameParty party = plugin.getPartyHandler().getParty(player);
-
-    if(party != null && player.getUniqueId().equals(party.getLeader().getUniqueId())) {
-      if(arena.getMaximumPlayers() - arena.getPlayers().size() >= party.getPlayers().size()) {
-        for(Player partyPlayer : party.getPlayers()) {
-          if(player.getUniqueId().equals(partyPlayer.getUniqueId())) {
-            continue;
-          }
-          PluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
-
-          if(partyPlayerGame != null) {
-            if(partyPlayerGame.getArenaState() == ArenaState.IN_GAME) {
-              continue;
-            }
-            leaveAttempt(partyPlayer, partyPlayerGame);
-          }
-          new MessageBuilder("IN_GAME_JOIN_AS_PARTY_MEMBER").asKey().arena(arena).player(partyPlayer).sendPlayer();
-          joinAttempt(partyPlayer, arena);
-        }
-      } else {
-        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY").asKey().arena(arena).player(player).sendPlayer();
-        return;
-      }
     }
 
     arena.getPlayers().add(player);
@@ -105,7 +79,7 @@ public class PluginArenaManager {
         new MessageBuilder("IN_GAME_SPECTATOR_BLOCKED").asKey().player(player).arena(arena).sendPlayer();
         return;
       }
-      PluginArenaUtils.preparePlayerForGame(arena, player, arena.getStartLocation(), true);
+      PluginArenaUtils.preparePlayerForGame(arena, player, arena.getSpectatorLocation(), true);
       new MessageBuilder("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR").asKey().player(player).arena(arena).sendPlayer();
       PluginArenaUtils.hidePlayer(player, arena);
       for(Player spectator : arena.getPlayers()) {
@@ -119,6 +93,7 @@ public class PluginArenaManager {
       plugin.getDebugger().debug("[{0}] Final join attempt as spectator for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
       return;
     }
+
     PluginArenaUtils.preparePlayerForGame(arena, player, arena.getLobbyLocation(), false);
 
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
@@ -139,6 +114,40 @@ public class PluginArenaManager {
     new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
+  }
+
+  private boolean joinAsParty(@NotNull Player player, @NotNull PluginArena arena) {
+    //check if player is in party and send party members to the game
+    GameParty party = plugin.getPartyHandler().getParty(player);
+
+    if(party != null && player.getUniqueId().equals(party.getLeader().getUniqueId())) {
+      if(arena.getMaximumPlayers() - arena.getPlayers().size() >= party.getPlayers().size()) {
+        for(Player partyPlayer : party.getPlayers()) {
+          if(player.getUniqueId().equals(partyPlayer.getUniqueId())) {
+            continue;
+          }
+          PluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
+
+          if(partyPlayerGame != null) {
+            if(partyPlayerGame.getArenaState() == ArenaState.IN_GAME) {
+              continue;
+            }
+            leaveAttempt(partyPlayer, partyPlayerGame);
+          }
+          new MessageBuilder("IN_GAME_JOIN_AS_PARTY_MEMBER").asKey().arena(arena).player(partyPlayer).sendPlayer();
+          joinAttempt(partyPlayer, arena);
+          additionalPartyJoin(player, arena, party.getLeader());
+        }
+      } else {
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY").asKey().arena(arena).player(player).sendPlayer();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public void additionalPartyJoin(Player player, PluginArena arena, Player partyLeader) {
+
   }
 
   public void additionalSpectatorSettings(Player player, PluginArena arena) {
@@ -187,6 +196,10 @@ public class PluginArenaManager {
         return false;
       }
     }
+    if(plugin.getArenaRegistry().isInArena(player)) {
+      new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().arena(arena).player(player).sendPlayer();
+      return false;
+    }
     return true;
   }
 
@@ -216,10 +229,11 @@ public class PluginArenaManager {
     arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && (arena.getPlayers().isEmpty() || arena.getPlayers().size() < arena.getMinimumPlayers())) {
       stopGame(true, arena);
-      new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
+      //new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
     }
     PluginArenaUtils.resetPlayerAfterGame(player);
     arena.teleportToEndLocation(player);
+    plugin.getUserManager().saveAllStatistic(user);
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }

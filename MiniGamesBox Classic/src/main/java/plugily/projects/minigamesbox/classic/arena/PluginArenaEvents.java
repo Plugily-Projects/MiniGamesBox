@@ -30,8 +30,7 @@ import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
 
 /**
  * @author Tigerpanzer_02
- * <p>
- * Created at 01.11.2021
+ *     <p>Created at 01.11.2021
  */
 public class PluginArenaEvents implements Listener {
 
@@ -42,11 +41,10 @@ public class PluginArenaEvents implements Listener {
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
-
   @EventHandler
   public void playerCommandExecution(PlayerCommandPreprocessEvent event) {
-    for(CommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
-      if(event.getMessage().equalsIgnoreCase(commandShorter.getShortCommand())) {
+    for (CommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
+      if (event.getMessage().equalsIgnoreCase(commandShorter.getShortCommand())) {
         event.getPlayer().performCommand(commandShorter.getExecuteCommand());
         event.setCancelled(true);
         return;
@@ -56,45 +54,58 @@ public class PluginArenaEvents implements Listener {
 
   @EventHandler
   public void onEntityDamageEvent(EntityDamageEvent event) {
-    if(event.getEntityType() != EntityType.PLAYER) {
+    if (event.getEntityType() != EntityType.PLAYER) {
       return;
     }
     Player victim = (Player) event.getEntity();
     PluginArena arena = plugin.getArenaRegistry().getArena(victim);
-    if(arena == null) {
+    if (arena == null) {
       return;
     }
-    switch(event.getCause()) {
+    switch (event.getCause()) {
       case DROWNING:
-        if(!plugin.getConfigPreferences().getOption("DROWNING_DAMAGE")) {
+        if (!plugin.getConfigPreferences().getOption("DROWNING_DAMAGE")) {
           event.setCancelled(true);
         }
         break;
       case FIRE:
       case FIRE_TICK:
-        if(!plugin.getConfigPreferences().getOption("FIRE_DAMAGE")) {
+        if (!plugin.getConfigPreferences().getOption("FIRE_DAMAGE")) {
           event.setCancelled(true);
         }
         break;
       case FALL:
-        if(!plugin.getConfigPreferences().getOption("FALL_DAMAGE")) {
+        if(additionalFallDamageRules(victim, arena, event)) {
+          break;
+        }
+        if (!plugin.getConfigPreferences().getOption("FALL_DAMAGE")) {
           event.setCancelled(true);
-        } else if(event.getDamage() >= 20.0) {
-          //kill the player for suicidal death, else do not
+        } else if (event.getDamage() >= 20.0) {
+          // kill the player for suicidal death, else do not
           victim.damage(1000.0);
         }
         break;
       case VOID:
-        if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
+        if (arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS
+            || arena.getArenaState() == ArenaState.STARTING
+            || arena.getArenaState() == ArenaState.FULL_GAME) {
           victim.damage(0);
           victim.teleport(arena.getLobbyLocation());
         } else {
-          victim.damage(1000.0);
-          victim.teleport(arena.getStartLocation());
+          handleIngameVoidDeath(victim, arena);
         }
         break;
       default:
         break;
     }
+  }
+
+  public boolean additionalFallDamageRules(Player victim, PluginArena arena, EntityDamageEvent event) {
+    return false;
+  }
+
+  public void handleIngameVoidDeath(Player victim, PluginArena arena) {
+    victim.damage(1000.0);
+    victim.teleport(arena.getStartLocation());
   }
 }

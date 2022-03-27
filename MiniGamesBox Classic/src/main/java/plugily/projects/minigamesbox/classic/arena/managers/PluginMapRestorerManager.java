@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena.managers;
 
-import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**

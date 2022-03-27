@@ -181,6 +181,8 @@ public class PluginArenaRegistry {
       PluginArena arena = getNewArena(id);
 
       arena.setMapName(section.getString(id + ".mapname", "none"));
+      arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 16));
+      arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 3));
 
       if(!additionalValidatorChecks(section, arena, id) || !validatorChecks(section, arena, id)) {
         arena.setReady(false);
@@ -193,6 +195,7 @@ public class PluginArenaRegistry {
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INSTANCE_STARTED").asKey().arena(arena).build());
     }
     ConfigUtils.saveConfig(plugin, config, "arenas");
+    plugin.getSignManager().loadSigns();
 
     plugin.getDebugger().debug("[ArenaRegistry] Arenas registration completed took {0}ms", System.currentTimeMillis() - start);
   }
@@ -205,9 +208,10 @@ public class PluginArenaRegistry {
     Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
     Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", "world,364.0,63.0,-72.0,0.0,0.0"));
     Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
+    Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
 
     if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
-        || endLoc == null || endLoc.getWorld() == null) {
+        || endLoc == null || endLoc.getWorld() == null|| spectatorLoc == null || spectatorLoc.getWorld() == null) {
       section.set(id + ".isdone", false);
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("Location world is invalid").arena(arena).build());
       return false;
@@ -217,14 +221,10 @@ public class PluginArenaRegistry {
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("NOT VALIDATED").arena(arena).build());
       return false;
     }
-    World startLocWorld = arena.getStartLocation().getWorld();
-    if(startLocWorld == null) {
-      plugin.getDebugger().sendConsoleMsg("Arena world of " + id + " does not exist or not loaded.");
-      return false;
-    }
     arena.setLobbyLocation(lobbyLoc);
     arena.setStartLocation(startLoc);
     arena.setEndLocation(endLoc);
+    arena.setSpectatorLocation(spectatorLoc);
     return true;
   }
 

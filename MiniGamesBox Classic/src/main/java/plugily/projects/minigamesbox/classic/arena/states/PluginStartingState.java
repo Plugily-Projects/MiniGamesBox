@@ -26,6 +26,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEvent;
 import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -92,6 +93,7 @@ public class PluginStartingState implements ArenaStateHandler {
       org.bukkit.Location arenaLoc = arena.getStartLocation();
       for(Player player : arena.getPlayers()) {
         player.teleport(arenaLoc);
+        PluginArenaUtils.hidePlayersOutsideTheGame(player, arena);
         player.setExp(0);
         player.setLevel(0);
         player.getInventory().clear();
@@ -103,6 +105,7 @@ public class PluginStartingState implements ArenaStateHandler {
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).player(player).sendPlayer();
         plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
         plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("START_GAME"));
+        plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
     }

@@ -47,7 +47,6 @@ rewards:
     - say %arena_name% has ended
     - say Ooh and there were playing %arena_players_size% players
 
-
 # Don't edit it. But who's stopping you? It's your server!
 # Really, don't edit ;p
 # You edited it, huh? Next time hurt yourself!

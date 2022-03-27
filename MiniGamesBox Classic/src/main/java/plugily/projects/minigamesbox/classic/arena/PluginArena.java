@@ -25,6 +25,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
@@ -41,13 +42,13 @@ import plugily.projects.minigamesbox.classic.arena.states.PluginWaitingState;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -361,6 +362,26 @@ public class PluginArena extends BukkitRunnable {
     return players;
   }
 
+
+  /**
+   * Get spectator location of arena.
+   *
+   * @return end location of arena
+   */
+  @Nullable
+  public Location getSpectatorLocation() {
+    return gameLocations.get(GameLocation.SPECTATOR);
+  }
+
+  /**
+   * Set spectator location of arena.
+   *
+   * @param spectatorLoc new end location of arena
+   */
+  public void setSpectatorLocation(Location spectatorLoc) {
+    gameLocations.put(GameLocation.SPECTATOR, spectatorLoc);
+  }
+
   public Location getLobbyLocation() {
     return gameLocations.get(GameLocation.LOBBY);
   }
@@ -415,18 +436,10 @@ public class PluginArena extends BukkitRunnable {
     this.mapRestorerManager = mapRestorerManager;
   }
 
+
   @NotNull
   public List<Player> getPlayersLeft() {
-    List<Player> list = new ArrayList<>();
-
-    for(Player player : players) {
-      User user = plugin.getUserManager().getUser(player);
-      if(!user.isSpectator()) {
-        list.add(user.getPlayer());
-      }
-    }
-
-    return list;
+    return plugin.getUserManager().getUsers(this).stream().filter(user -> !user.isSpectator()).map(User::getPlayer).collect(Collectors.toList());
   }
 
   public PluginMain getPlugin() {
@@ -438,7 +451,7 @@ public class PluginArena extends BukkitRunnable {
   }
 
   public enum GameLocation {
-    START, LOBBY, END
+    START, LOBBY, END, SPECTATOR
   }
 
 }

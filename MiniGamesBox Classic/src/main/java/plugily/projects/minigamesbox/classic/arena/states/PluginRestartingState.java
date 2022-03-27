@@ -58,7 +58,6 @@ public class PluginRestartingState implements ArenaStateHandler {
         PluginArenaUtils.resetPlayerAfterGame(player);
         arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
         User user = plugin.getUserManager().getUser(player);
-        plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
         user.setSpectator(false);
         user.setPermanentSpectator(false);
         arena.getScoreboardManager().removeScoreboard(user);

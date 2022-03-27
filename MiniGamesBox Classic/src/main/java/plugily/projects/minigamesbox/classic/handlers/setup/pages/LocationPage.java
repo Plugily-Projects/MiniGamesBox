@@ -316,5 +316,58 @@ public class LocationPage extends NormalFastInv implements SetupPage {
           break;
       }
     }, true, true, false));
+
+    setItem(28, new LocationItem(new ItemBuilder(Material.BAMBOO)
+        .name(new MessageBuilder("&e&lSet Spectator Location").build())
+        .lore(ChatColor.GRAY + "Click to SET the spectator location")
+        .lore(ChatColor.GRAY + "on the place where you are standing.")
+        .lore(ChatColor.DARK_GRAY + "(locations where players will be")
+        .lore(ChatColor.DARK_GRAY + "teleported when they get into spectator)")
+        .lore("", setupInventory.getPlugin().getSetupUtilities().isOptionDoneBool("spectatorlocation", setupInventory))
+        .build(), event -> {
+      String serializedLocation = event.getWhoClicked().getLocation().getWorld().getName() + "," + event.getWhoClicked().getLocation().getX() + "," + event.getWhoClicked().getLocation().getY() + ","
+          + event.getWhoClicked().getLocation().getZ() + "," + event.getWhoClicked().getLocation().getYaw() + ",0.0";
+
+      event.getWhoClicked().closeInventory();
+      setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".spectatorlocation", serializedLocation);
+      setupInventory.getArena().setSpectatorLocation(event.getWhoClicked().getLocation());
+      new MessageBuilder("&e✔ Completed | &aSpectator location for arena " + setupInventory.getArena().getId() + " set at your location!").prefix().send(event.getWhoClicked());
+      ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
+      refresh();
+    }, event -> {
+      switch(event.getAction()) {
+        case LEFT_CLICK_AIR:
+          String serializedLocation = event.getPlayer().getLocation().getWorld().getName() + "," + event.getPlayer().getLocation().getX() + "," + event.getPlayer().getLocation().getY() + ","
+              + event.getPlayer().getLocation().getZ() + "," + event.getPlayer().getLocation().getYaw() + ",0.0";
+
+          setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".spectatorlocation", serializedLocation);
+          setupInventory.getArena().setSpectatorLocation(event.getPlayer().getLocation());
+          new MessageBuilder("&e✔ Completed | &aSpectator location for arena " + setupInventory.getArena().getId() + " set at your location!").prefix().send(event.getPlayer());
+          new MessageBuilder("&cPlease keep in mind to use blocks instead of player location for precise coordinates!").prefix().send(event.getPlayer());
+          ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
+          refresh();
+          break;
+        case RIGHT_CLICK_BLOCK:
+        case RIGHT_CLICK_AIR:
+          setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".spectatorlocation", null);
+          setupInventory.getArena().setSpectatorLocation(null);
+          setupInventory.getArena().setReady(false);
+          new MessageBuilder("&e✔ Removed | &aSpectator location for arena " + setupInventory.getArena().getId() + "!").prefix().send(event.getPlayer());
+          ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
+          refresh();
+          break;
+        case LEFT_CLICK_BLOCK:
+          String serializedBlockLocation = event.getClickedBlock().getLocation().getWorld().getName() + "," + event.getClickedBlock().getLocation().getX() + "," + event.getClickedBlock().getLocation().getY() + 1 + ","
+              + event.getClickedBlock().getLocation().getZ() + "," + event.getClickedBlock().getLocation().getYaw() + ",0.0";
+
+          setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".spectatorlocation", serializedBlockLocation);
+          setupInventory.getArena().setSpectatorLocation(new Location(event.getClickedBlock().getWorld(), event.getClickedBlock().getX(), event.getClickedBlock().getY() + 1, event.getClickedBlock().getZ()));
+          new MessageBuilder("&e✔ Completed | &aSpectator location for arena " + setupInventory.getArena().getId() + " set at your location!").prefix().send(event.getPlayer());
+          ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
+          refresh();
+          break;
+      }
+    }, true, true, false));
+
   }
 }

@@ -222,7 +222,7 @@ public class MessageBuilder {
       message = replace(message, "%arena_state_formatted%", placeholderColorOther + arena.getArenaState().getFormattedName() + messageColor);
       message = replace(message, "%arena_state_placeholder%", placeholderColorOther + arena.getArenaState().getPlaceholder() + messageColor);
       message = replace(message, "%arena_time%", placeholderColorOther + timer + messageColor);
-      message = replace(message, "%arena_formatted_time%", placeholderColorOther + StringFormatUtils.formatIntoMMSS(timer) + messageColor);
+      message = replace(message, "%arena_time_formatted%", placeholderColorOther + StringFormatUtils.formatIntoMMSS(timer) + messageColor);
     }
   }
 

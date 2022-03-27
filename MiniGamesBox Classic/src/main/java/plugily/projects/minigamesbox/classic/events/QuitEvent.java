@@ -18,8 +18,10 @@
  */
 package plugily.projects.minigamesbox.classic.events;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
@@ -42,16 +44,26 @@ public class QuitEvent implements Listener {
 
   @EventHandler
   public void onQuit(PlayerQuitEvent event) {
-    plugin.getSpecialItemManager().removeSpecialItemsOfStage(event.getPlayer(), SpecialItem.DisplayStage.SERVER_JOIN);
-    PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
-    if(arena != null) {
-      plugin.getArenaManager().leaveAttempt(event.getPlayer(), arena);
+    onQuit(event.getPlayer());
+  }
+
+  @EventHandler
+  public void onKick(PlayerKickEvent event) {
+    onQuit(event.getPlayer());
+  }
+
+  private void onQuit(Player player) {
+    plugin
+        .getSpecialItemManager()
+        .removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.SERVER_JOIN);
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    if (arena != null) {
+      plugin.getArenaManager().leaveAttempt(player, arena);
     }
-    User user = plugin.getUserManager().getUser(event.getPlayer());
+    User user = plugin.getUserManager().getUser(player);
     plugin.getUserManager().saveAllStatistic(user);
     plugin.getUserManager().removeUser(user);
 
-    plugin.getArgumentsRegistry().getSpyChat().disableSpyChat(event.getPlayer());
+    plugin.getArgumentsRegistry().getSpyChat().disableSpyChat(player);
   }
-
 }

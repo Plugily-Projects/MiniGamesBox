@@ -239,7 +239,6 @@ public class PluginMain extends JavaPlugin {
       new BungeeEvents(this);
     }
 
-    new PluginArenaEvents(this);
     new SpectatorEvents(this);
     new JoinEvent(this);
     new QuitEvent(this);

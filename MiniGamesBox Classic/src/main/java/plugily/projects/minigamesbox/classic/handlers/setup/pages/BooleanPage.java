@@ -88,7 +88,7 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
         return;
       }
 
-      for(String s : new String[]{"lobbylocation", "startlocation", "endlocation"}) {
+      for(String s : new String[]{"lobbylocation", "startlocation", "endlocation", "spectatorlocation"}) {
         String loc = setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + "." + s);
 
         if(loc == null || loc.equals(LocationSerializer.locationToString(Bukkit.getWorlds().get(0).getSpawnLocation()))) {
@@ -120,6 +120,7 @@ public class BooleanPage extends NormalFastInv implements SetupPage {
       setupInventory.getArena().setLobbyLocation(LocationSerializer.getLocation(setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + ".lobbylocation")));
       setupInventory.getArena().setStartLocation(LocationSerializer.getLocation(setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + ".startlocation")));
       setupInventory.getArena().setEndLocation(LocationSerializer.getLocation(setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + ".endlocation")));
+      setupInventory.getArena().setSpectatorLocation(LocationSerializer.getLocation(setupInventory.getPlugin().getSetupUtilities().getConfig().getString("instances." + setupInventory.getArena().getId() + ".spectatorlocation")));
 
       setupInventory.addAdditionalArenaSetValues(setupInventory.getArena(), setupInventory.getPlugin().getSetupUtilities().getConfig());
 

@@ -81,7 +81,7 @@ public class ValuePage extends NormalFastInv implements SetupPage {
           setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".mapname", setupInventory.getArena().getMapName());
           ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getPlugin().getSetupUtilities().getConfig(), "arenas");
 
-          setupInventory.open(SetupUtilities.InventoryStage.PAGED_LOCATIONS);
+          setupInventory.open(SetupUtilities.InventoryStage.PAGED_VALUES);
           return Prompt.END_OF_CONVERSATION;
         }
       }).buildFor(setupInventory.getPlayer());

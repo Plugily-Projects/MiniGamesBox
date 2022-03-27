@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -27,6 +28,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -49,6 +51,13 @@ public class JoinEvent implements Listener {
     //deleted player won't receive his backup, in case of crash he will get it back
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.loadInventory(plugin, event.getPlayer());
+    }
+    for(Player player : plugin.getServer().getOnlinePlayers()) {
+      if(plugin.getArenaRegistry().getArena(player) == null) {
+        continue;
+      }
+      VersionUtils.hidePlayer(plugin, player, event.getPlayer());
+      VersionUtils.hidePlayer(plugin, event.getPlayer(), player);
     }
     plugin.getSpecialItemManager().addSpecialItemsOfStage(event.getPlayer(), SpecialItem.DisplayStage.SERVER_JOIN);
   }

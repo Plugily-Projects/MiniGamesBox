@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.helper;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,8 +29,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
+import plugily.projects.commonsbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -44,8 +49,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Tigerpanzer_02
- * <p>
- * Created at 19.09.2021
+ *     <p>Created at 19.09.2021
  */
 public class BukkitHelper {
 
@@ -55,8 +59,41 @@ public class BukkitHelper {
     this.plugin = plugin;
   }
 
+  public void applyActionBarCooldown(Player player, int seconds) {
+    new BukkitRunnable() {
+      int ticks = 0;
+
+      @Override
+      public void run() {
+        if (!plugin.getArenaRegistry().isInArena(player)
+            || plugin.getArenaRegistry().getArena(player).getArenaState() != ArenaState.IN_GAME) {
+          this.cancel();
+        }
+        if (ticks >= seconds * 20) {
+          this.cancel();
+        }
+        String progress =
+            StringFormatUtils.getProgressBar(
+                ticks,
+                seconds * 20,
+                10,
+                "■",
+                ChatColor.COLOR_CHAR + "a",
+                ChatColor.COLOR_CHAR + "c");
+        VersionUtils.sendActionBar(
+            player,
+            new MessageBuilder("IN_GAME_MESSAGES_ARENA_COOLDOWN")
+                .asKey()
+                .value(progress)
+                .integer((((seconds * 20) - ticks) / 20))
+                .build());
+        ticks += 10;
+      }
+    }.runTaskTimer(plugin, 0, 10);
+  }
+
   public void takeOneItem(Player player, ItemStack stack) {
-    if(stack.getAmount() <= 1) {
+    if (stack.getAmount() <= 1) {
       VersionUtils.setItemInHand(player, new ItemStack(Material.AIR));
     } else {
       VersionUtils.getItemInHand(player).setAmount(stack.getAmount() - 1);
@@ -64,10 +101,9 @@ public class BukkitHelper {
   }
 
   /**
-   * Serialize int to use it in Inventories size
-   * ex. you have 38 kits and it will serialize it to 45 (9*5)
-   * because it is valid inventory size
-   * next ex. you have 55 items and it will serialize it to 63 (9*7) not 54 because it's too less
+   * Serialize int to use it in Inventories size ex. you have 38 kits and it will serialize it to 45
+   * (9*5) because it is valid inventory size next ex. you have 55 items and it will serialize it to
+   * 63 (9*7) not 54 because it's too less
    *
    * @param i integer to serialize
    * @return serialized number
@@ -80,9 +116,9 @@ public class BukkitHelper {
   public List<Block> getNearbyBlocks(LivingEntity entity, int distance) {
     List<Block> blocks = new LinkedList<>();
     Iterator<Block> itr = new BlockIterator(entity, distance);
-    while(itr.hasNext()) {
+    while (itr.hasNext()) {
       Block block = itr.next();
-      if(!block.getType().isTransparent()) {
+      if (!block.getType().isTransparent()) {
         blocks.add(block);
       }
     }
@@ -100,13 +136,15 @@ public class BukkitHelper {
     int chunkRadius = radius < 16 ? 1 : radius / 16;
     Set<Entity> radiusEntities = new HashSet<>();
 
-    for(int chunkX = -chunkRadius; chunkX <= chunkRadius; chunkX++) {
-      for(int chunkZ = -chunkRadius; chunkZ <= chunkRadius; chunkZ++) {
-        for(Entity e : new Location(world, x + chunkX * 16, y, z + chunkZ * 16).getChunk().getEntities()) {
-          if(!world.getName().equalsIgnoreCase(e.getWorld().getName())) {
+    for (int chunkX = -chunkRadius; chunkX <= chunkRadius; chunkX++) {
+      for (int chunkZ = -chunkRadius; chunkZ <= chunkRadius; chunkZ++) {
+        for (Entity e :
+            new Location(world, x + chunkX * 16, y, z + chunkZ * 16).getChunk().getEntities()) {
+          if (!world.getName().equalsIgnoreCase(e.getWorld().getName())) {
             continue;
           }
-          if(e.getLocation().distanceSquared(loc) <= radius * radius && e.getLocation().getBlock() != locBlock) {
+          if (e.getLocation().distanceSquared(loc) <= radius * radius
+              && e.getLocation().getBlock() != locBlock) {
             radiusEntities.add(e);
           }
         }
@@ -117,9 +155,10 @@ public class BukkitHelper {
 
   public List<String> splitString(String string, int max) {
     List<String> matchList = new ArrayList<>();
-    Matcher regexMatcher = Pattern.compile(".{1," + max + "}(?:\\s|$)", Pattern.DOTALL).matcher(string);
+    Matcher regexMatcher =
+        Pattern.compile(".{1," + max + "}(?:\\s|$)", Pattern.DOTALL).matcher(string);
 
-    while(regexMatcher.find()) {
+    while (regexMatcher.find()) {
       matchList.add(org.bukkit.ChatColor.GRAY + regexMatcher.group());
     }
 
@@ -127,7 +166,7 @@ public class BukkitHelper {
   }
 
   public byte getDoorByte(BlockFace face) {
-    switch(face) {
+    switch (face) {
       case NORTH:
         return 3;
       case SOUTH:
@@ -141,7 +180,7 @@ public class BukkitHelper {
   }
 
   public BlockFace getFacingByByte(byte bt) {
-    switch(bt) {
+    switch (bt) {
       case 2:
         return BlockFace.WEST;
       case 3:
@@ -155,7 +194,7 @@ public class BukkitHelper {
   }
 
   public boolean checkIsInGameInstance(Player player) {
-    if(plugin.getArenaRegistry().getArena(player) == null) {
+    if (plugin.getArenaRegistry().getArena(player) == null) {
       new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
       return false;
     }
@@ -163,11 +202,67 @@ public class BukkitHelper {
   }
 
   public boolean hasPermission(CommandSender sender, String perm) {
-    if(sender.hasPermission(perm)) {
+    if (sender.hasPermission(perm)) {
       return true;
     }
     new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().send(sender);
     return false;
   }
 
+  public static Vector rotateAroundAxisX(Vector v, double angle) {
+    angle = Math.toRadians(angle);
+    double cos = Math.cos(angle),
+        sin = Math.sin(angle),
+        y = v.getY() * cos - v.getZ() * sin,
+        z = v.getY() * sin + v.getZ() * cos;
+    return v.setY(y).setZ(z);
+  }
+
+  public static Vector rotateAroundAxisY(Vector v, double angle) {
+    angle = -angle;
+    angle = Math.toRadians(angle);
+    double cos = Math.cos(angle),
+        sin = Math.sin(angle),
+        x = v.getX() * cos + v.getZ() * sin,
+        z = v.getX() * -sin + v.getZ() * cos;
+    return v.setX(x).setZ(z);
+  }
+
+  public static Location getBlockCenter(Location location) {
+    double x = location.getX();
+    double z = location.getZ();
+    Location center = location.clone();
+    if (x % 1 == 0) {
+      center.add(0.5, 0, 0);
+    }
+    if (z % 1 == 0) {
+      center.add(0, 0, 0.5);
+    }
+    return center;
+  }
+
+  public String matchColorRegex(String s) {
+    String regex = "&?#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})";
+    Matcher matcher = Pattern.compile(regex).matcher(s);
+    while (matcher.find()) {
+      String group = matcher.group(0);
+      String group2 = matcher.group(1);
+      try {
+        s = s.replace(group, net.md_5.bungee.api.ChatColor.of("#" + group2) + "");
+      } catch (Exception e) {
+        plugin.getDebugger().debug("Bad hex color match: " + group);
+      }
+    }
+    return s;
+  }
+
+  /**
+   * Checks whether itemstack is named (not null, has meta and display name)
+   *
+   * @param stack item stack to check
+   * @return true if named, false otherwise
+   */
+  public boolean isNamed(ItemStack stack) {
+    return stack != null && stack.hasItemMeta() && stack.getItemMeta().hasDisplayName();
+  }
 }
