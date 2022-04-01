@@ -195,6 +195,10 @@
                             <pattern>fr.mrmicky.fastinv</pattern>
                             <shadedPattern>plugily.projects.minigamesbox.inventory.utils.fastinv</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.bstats</shadedPattern>
+                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
