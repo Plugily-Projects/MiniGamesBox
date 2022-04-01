@@ -216,7 +216,7 @@ In-Game:
       Placeholders:
         Win: "&aYou won the game"
         Lose: "%color_chat_issue%You lost the game"
-        Players: "&cThere are not enough players anymore. Arena got force stopped!"
+        Players: "%color_chat_issue%%plugin_prefix% There are not enough players anymore. Arena got force stopped!"
         Titles:
           Win: "5,20,5;&aYou won the game!;"
           Lose: "5,20,5;%color_chat_issue%You lost the game!"
