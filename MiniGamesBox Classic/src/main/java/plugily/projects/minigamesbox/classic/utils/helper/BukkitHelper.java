@@ -125,7 +125,7 @@ public class BukkitHelper {
     return blocks;
   }
 
-  public static List<Block> getNearbyBlocks(Location location, int radius) {
+  public List<Block> getNearbyBlocks(Location location, int radius) {
     List<Block> blocks = new ArrayList<>();
 
     org.bukkit.World world = location.getWorld();
@@ -230,7 +230,7 @@ public class BukkitHelper {
     return false;
   }
 
-  public static Vector rotateAroundAxisX(Vector v, double angle) {
+  public Vector rotateAroundAxisX(Vector v, double angle) {
     angle = Math.toRadians(angle);
     double cos = Math.cos(angle),
         sin = Math.sin(angle),
@@ -239,7 +239,7 @@ public class BukkitHelper {
     return v.setY(y).setZ(z);
   }
 
-  public static Vector rotateAroundAxisY(Vector v, double angle) {
+  public Vector rotateAroundAxisY(Vector v, double angle) {
     angle = -angle;
     angle = Math.toRadians(angle);
     double cos = Math.cos(angle),
@@ -249,7 +249,7 @@ public class BukkitHelper {
     return v.setX(x).setZ(z);
   }
 
-  public static Location getBlockCenter(Location location) {
+  public Location getBlockCenter(Location location) {
     double x = location.getX();
     double z = location.getZ();
     Location center = location.clone();
