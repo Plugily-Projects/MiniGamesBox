@@ -31,7 +31,6 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.arena.PluginArenaEvents;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaManager;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaRegistry;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
@@ -341,6 +340,8 @@ public class PluginMain extends JavaPlugin {
     metrics.addCustomChart(new Metrics.SimplePie("database_enabled", () -> String.valueOf(configPreferences
         .getOption("DATABASE"))));
     metrics.addCustomChart(new Metrics.SimplePie("locale_used", () -> languageManager.getPluginLocale().getPrefix()));
+    metrics.addCustomChart(new Metrics.SimplePie("bungeecord_hooked", () -> String.valueOf(configPreferences.getOption("BUNGEEMODE"))) {
+    });
     metrics.addCustomChart(new Metrics.SimplePie("update_notifier", () -> {
       if(getConfig().getBoolean("Update-Notifier.Enabled", true)) {
         return getConfig().getBoolean("Update-Notifier.Notify-Beta-Versions", true) ? "Enabled with beta notifier" : "Enabled";
