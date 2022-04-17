@@ -40,16 +40,23 @@ import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 public class KitMenuHandler implements Listener {
 
   private final PluginMain plugin;
-  private final String unlockedString;
-  private final String lockedString;
+  private String unlockedString = "";
+  private String lockedString = "";
 
   public KitMenuHandler(PluginMain plugin) {
     this.plugin = plugin;
+    if(!plugin.getConfigPreferences().getOption("KITS")) {
+      return;
+    }
     unlockedString = new MessageBuilder("KIT_KIT_MENU_LORE_UNLOCKED").asKey().build();
     lockedString = new MessageBuilder("KIT_KIT_MENU_LORE_LOCKED").asKey().build();
   }
 
   public void createMenu(Player player) {
+    if(!plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getDebugger().debug("Kits are disabled, can not create menu");
+      return;
+    }
     FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
     for(Kit kit : plugin.getKitRegistry().getKits()) {
       ItemStack itemStack = kit.getItemStack();
