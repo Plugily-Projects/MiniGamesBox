@@ -78,6 +78,9 @@ public class LanguageManager {
 
   private void validateMessagesIntegrity() {
     for(Message message : plugin.getMessageManager().getAllMessages().values()) {
+      if(!message.isProtected()) {
+        continue;
+      }
       if(languageConfig.isSet(message.getPath())) {
         continue;
       }

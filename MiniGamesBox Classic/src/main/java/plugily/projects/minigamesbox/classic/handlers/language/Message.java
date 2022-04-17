@@ -194,13 +194,13 @@ public class Message {
     messages.put("LEADERBOARD_TYPE_CHAT_TOP_FORMAT", new Message("Leaderboard.Type.Chat.Top.Format", "", true));
 
     // Leaderboard.statistics
-    messages.put("LEADERBOARD_STATISTICS_GAMES_PLAYED", new Message("Leaderboard.Statistics.Games-Played", "", false));
-    messages.put("LEADERBOARD_STATISTICS_LEVEL", new Message("Leaderboard.Statistics.Level", "", false));
-    messages.put("LEADERBOARD_STATISTICS_EXP", new Message("Leaderboard.Statistics.Exp", "", false));
+    messages.put("LEADERBOARD_STATISTICS_GAMES_PLAYED", new Message("Leaderboard.Statistics.Games-Played", "", true));
+    messages.put("LEADERBOARD_STATISTICS_LEVEL", new Message("Leaderboard.Statistics.Level", "", true));
+    messages.put("LEADERBOARD_STATISTICS_EXP", new Message("Leaderboard.Statistics.Exp", "", true));
     messages.put("LEADERBOARD_STATISTICS_NEXT_LEVEL_EXP", new Message("Leaderboard.Statistics.Next-Level-Exp", "", true));
 
     messages.put("LEADERBOARD_INVALID_NAME", new Message("Leaderboard.Invalid-Name", "", true));
-    messages.put("LEADERBOARD_UNKNOWN_PLAYER", new Message("Leaderboard.Unknown-Player", "", false));
+    messages.put("LEADERBOARD_UNKNOWN_PLAYER", new Message("Leaderboard.Unknown-Player", "", true));
 
 
     // File version
@@ -212,19 +212,19 @@ public class Message {
 
   private final String path;
   private final String value;
-  private final boolean protectedOption;
+  private final boolean protectedMessage;
 
 
-  public Message(String path, String value, boolean protectedOption) {
+  public Message(String path, String value, boolean protectedMessage) {
     this.path = path;
     this.value = value;
-    this.protectedOption = protectedOption;
+    this.protectedMessage = protectedMessage;
   }
 
   public Message(String path, String value) {
     this.path = path;
     this.value = value;
-    this.protectedOption = false;
+    this.protectedMessage = false;
   }
 
   public String getPath() {
@@ -242,7 +242,7 @@ public class Message {
    * @return whether option is protected and cannot be unregistered
    */
   public boolean isProtected() {
-    return protectedOption;
+    return protectedMessage;
   }
 
   public static Map<String, Message> getMessages() {
