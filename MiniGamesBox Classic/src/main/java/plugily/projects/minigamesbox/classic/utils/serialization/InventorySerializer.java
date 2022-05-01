@@ -110,7 +110,7 @@ public class InventorySerializer {
         if(itemInInv != null && itemInInv.getType() != Material.AIR) {
           if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3) && itemInInv.getItemMeta() instanceof SkullMeta) {
             SkullMeta skullMeta = ((SkullMeta) itemInInv.getItemMeta());
-            if(skullMeta.getOwner() == null) {
+            if(skullMeta.getOwner() != null) {
               try {
                 Field profileField = skullMeta.getClass().getDeclaredField("profile");
                 profileField.setAccessible(true);
@@ -121,7 +121,7 @@ public class InventorySerializer {
                 name.set(profile, "plugily");
 
                 itemInInv.setItemMeta(skullMeta);
-              } catch(NoSuchFieldException | IllegalAccessException e) {
+              } catch(NoSuchFieldException | IllegalAccessException | NullPointerException e) {
                 itemInInv = XMaterial.BEDROCK.parseItem();
               }
             }
