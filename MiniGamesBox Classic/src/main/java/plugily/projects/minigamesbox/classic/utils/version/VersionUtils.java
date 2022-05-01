@@ -44,6 +44,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.NameTagVisibility;
@@ -97,7 +98,7 @@ public final class VersionUtils {
     try {
       Particle.class.getMethod("builder");
       isParticleBuilderSupported = true;
-    } catch(NoSuchMethodException ignored) {
+    } catch(NoSuchMethodException | NoClassDefFoundError ignored) {
     }
 
     try {
@@ -133,7 +134,7 @@ public final class VersionUtils {
           subTitleField = titleDeclaredClasses[0].getField("SUBTITLE").get(null);
         }
       }
-    } catch (NoSuchMethodException | NoClassDefFoundError | NoSuchFieldException | IllegalAccessException ignored) {
+    } catch(NoSuchMethodException | NoClassDefFoundError | NoSuchFieldException | IllegalAccessException ignored) {
     }
   }
 
@@ -535,11 +536,15 @@ public final class VersionUtils {
   }
 
   public static ItemStack getPotion(PotionType type, int tier, boolean splash) {
-    ItemStack potion = new ItemStack((ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !splash)
-        ? Material.POTION : Material.SPLASH_POTION, 1);
-    PotionMeta meta = (PotionMeta) potion.getItemMeta();
-    meta.setBasePotionData(new PotionData(type, false, tier >= 2 && !splash));
-    potion.setItemMeta(meta);
+    ItemStack potion;
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
+      potion = new Potion(type, tier, splash).toItemStack(1);
+    } else {
+      potion = new ItemStack(!splash ? Material.POTION : Material.SPLASH_POTION, 1);
+      PotionMeta meta = (PotionMeta) potion.getItemMeta();
+      meta.setBasePotionData(new PotionData(type, false, tier >= 2 && !splash));
+      potion.setItemMeta(meta);
+    }
     return potion;
   }
 
