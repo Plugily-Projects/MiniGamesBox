@@ -317,7 +317,7 @@ public class LocationPage extends NormalFastInv implements SetupPage {
       }
     }, true, true, false));
 
-    setItem(28, new LocationItem(new ItemBuilder(Material.BAMBOO)
+    setItem(28, new LocationItem(new ItemBuilder(Material.BAKED_POTATO)
         .name(new MessageBuilder("&e&lSet Spectator Location").build())
         .lore(ChatColor.GRAY + "Click to SET the spectator location")
         .lore(ChatColor.GRAY + "on the place where you are standing.")
