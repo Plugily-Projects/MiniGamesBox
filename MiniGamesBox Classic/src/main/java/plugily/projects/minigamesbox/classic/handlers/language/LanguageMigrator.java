@@ -79,6 +79,9 @@ public class LanguageMigrator {
           section.set(id + ".endlocation", endLoc);
           section.set(id + ".Startlocation", null);
           section.set(id + ".Endlocation", null);
+          if(!section.contains(id + ".spectatorlocation")) {
+            section.set(id + ".spectatorlocation", startLoc);
+          }
         }
         ConfigUtils.saveConfig(plugin, arenas, "arenas");
       }
