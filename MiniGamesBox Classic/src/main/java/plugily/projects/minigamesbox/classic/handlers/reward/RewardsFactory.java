@@ -156,7 +156,7 @@ public class RewardsFactory {
     if(command == null || command.equalsIgnoreCase("")) {
       return;
     }
-    MessageBuilder messageBuilder = new MessageBuilder(command);
+    MessageBuilder messageBuilder = new MessageBuilder(command, false);
     if(player != null) {
       messageBuilder = messageBuilder.player(player);
     }

@@ -41,13 +41,13 @@ import static org.apache.commons.lang.StringUtils.replace;
  */
 public class MessageBuilder {
 
-  private final String placeholderColorValue = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_VALUE"));
-  private final String placeholderColorNumber = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_NUMBER"));
-  private final String placeholderColorPlayer = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_PLAYER"));
-  private final String placeholderColorOther = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_OTHER"));
+  private String placeholderColorValue = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_VALUE"));
+  private String placeholderColorNumber = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_NUMBER"));
+  private String placeholderColorPlayer = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_PLAYER"));
+  private String placeholderColorOther = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_PLACEHOLDER_OTHER"));
   private String messageColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_MESSAGES"));
-  private final String messageIssueColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
-  private final String messageSpecialCharBefore = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_SPECIAL_BEFORE"));
+  private String messageIssueColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
+  private String messageSpecialCharBefore = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_SPECIAL_BEFORE"));
   private String message;
   private Player player;
   private String value;
@@ -60,7 +60,27 @@ public class MessageBuilder {
   }
 
   public MessageBuilder(String message) {
+    if(message == null) {
+      message = "";
+    }
     this.message = message;
+    colorChatIssue();
+  }
+
+  public MessageBuilder(String message, boolean autoColor) {
+    if(message == null) {
+      message = "";
+    }
+    this.message = message;
+    if(!autoColor) {
+      this.placeholderColorValue = "";
+      this.placeholderColorNumber = "";
+      this.placeholderColorPlayer = "";
+      this.placeholderColorOther = "";
+      this.messageColor = "";
+      this.messageIssueColor = "";
+      this.messageSpecialCharBefore = "";
+    }
     colorChatIssue();
   }
 
