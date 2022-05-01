@@ -194,6 +194,8 @@ public class Message {
     messages.put("LEADERBOARD_TYPE_CHAT_TOP_FORMAT", new Message("Leaderboard.Type.Chat.Top.Format", "", true));
 
     // Leaderboard.statistics
+    messages.put("LEADERBOARD_STATISTICS_WINS", new Message("Leaderboard.Statistics.Wins", "", true));
+    messages.put("LEADERBOARD_STATISTICS_LOSES", new Message("Leaderboard.Statistics.Loses", "", true));
     messages.put("LEADERBOARD_STATISTICS_GAMES_PLAYED", new Message("Leaderboard.Statistics.Games-Played", "", true));
     messages.put("LEADERBOARD_STATISTICS_LEVEL", new Message("Leaderboard.Statistics.Level", "", true));
     messages.put("LEADERBOARD_STATISTICS_EXP", new Message("Leaderboard.Statistics.Exp", "", true));
