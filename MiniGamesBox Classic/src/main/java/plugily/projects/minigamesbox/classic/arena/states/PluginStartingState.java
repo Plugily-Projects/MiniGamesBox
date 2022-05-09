@@ -68,7 +68,10 @@ public class PluginStartingState implements ArenaStateHandler {
     int minPlayers = arena.getMinimumPlayers();
 
     plugin.getDebugger().debug("Arena {0} forcestart {1} and players {2} while min is {3}", arena.getId(), arena.isForceStart(), arena.getPlayers().size(), minPlayers);
-
+    if(arena.getPlayers().size() < minPlayers && arena.isForceStart()) {
+      arena.setForceStart(false);
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().integer(minPlayers).arena(arena).sendArena();
+    }
     if(!arena.isForceStart() && arena.getPlayers().size() < minPlayers) {
       arena.getBossbarManager().setProgress(1.0);
       new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().arena(arena).integer(minPlayers).sendArena();

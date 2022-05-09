@@ -35,33 +35,34 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
  * @author Tigerpanzer_02
- *     <p>Created at 01.11.2021
+ * <p>Created at 01.11.2021
  */
 public class PluginArenaUtils {
 
   private static PluginMain plugin;
 
-  public PluginArenaUtils() {}
+  public PluginArenaUtils() {
+  }
 
   public static void init(PluginMain plugin) {
     PluginArenaUtils.plugin = plugin;
   }
 
   public static void hidePlayer(Player p, PluginArena arena) {
-    for (Player player : arena.getPlayers()) {
+    for(Player player : arena.getPlayers()) {
       VersionUtils.hidePlayer(plugin, player, p);
     }
   }
 
   public static void showPlayer(Player p, PluginArena arena) {
-    for (Player player : arena.getPlayers()) {
+    for(Player player : arena.getPlayers()) {
       VersionUtils.showPlayer(plugin, player, p);
     }
   }
 
   public static void hidePlayersOutsideTheGame(Player player, PluginArena arena) {
-    for (Player players : plugin.getServer().getOnlinePlayers()) {
-      if (arena.getPlayers().contains(players)) {
+    for(Player players : plugin.getServer().getOnlinePlayers()) {
+      if(arena.getPlayers().contains(players)) {
         continue;
       }
       VersionUtils.hidePlayer(plugin, player, players);
@@ -72,7 +73,7 @@ public class PluginArenaUtils {
   public static void preparePlayerForGame(
       PluginArena arena, Player player, Location location, boolean spectator) {
     User user = plugin.getUserManager().getUser(player);
-    if (plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
+    if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.saveInventoryToFile(plugin, player);
     }
     player.teleport(location);
@@ -87,16 +88,16 @@ public class PluginArenaUtils {
     player
         .getInventory()
         .setArmorContents(
-            new ItemStack[] {
-              new ItemStack(Material.AIR),
-              new ItemStack(Material.AIR),
-              new ItemStack(Material.AIR),
-              new ItemStack(Material.AIR)
+            new ItemStack[]{
+                new ItemStack(Material.AIR),
+                new ItemStack(Material.AIR),
+                new ItemStack(Material.AIR),
+                new ItemStack(Material.AIR)
             });
     player.setExp(1);
     player.setLevel(0);
 
-    if (spectator) {
+    if(spectator) {
       player.setAllowFlight(true);
       player.setFlying(true);
       user.setSpectator(true);
@@ -114,9 +115,9 @@ public class PluginArenaUtils {
   }
 
   public static void resetPlayerAfterGame(Player player) {
-    for (Player players : plugin.getServer().getOnlinePlayers()) {
+    for(Player players : plugin.getServer().getOnlinePlayers()) {
       VersionUtils.showPlayer(plugin, player, players);
-      if (!plugin.getArenaRegistry().isInArena(players)) {
+      if(!plugin.getArenaRegistry().isInArena(players)) {
         VersionUtils.showPlayer(plugin, players, player);
       }
     }
@@ -136,13 +137,13 @@ public class PluginArenaUtils {
     player.setExp(0);
     player.setLevel(0);
     VersionUtils.setCollidable(player, true);
-    if (plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
+    if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.loadInventory(plugin, player);
     }
   }
 
   public static void arenaForceStart(Player player, int timer) {
-    if (!plugin
+    if(!plugin
         .getBukkitHelper()
         .hasPermission(
             player, plugin.getPermissionsManager().getPermissionString("FORCESTART_GAME"))) {
@@ -151,11 +152,11 @@ public class PluginArenaUtils {
     }
 
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if (arena == null) {
+    if(arena == null) {
       new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
       return;
     }
-    if (arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS
+    if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS
         && arena.getArenaState() != ArenaState.STARTING
         && arena.getArenaState() != ArenaState.FULL_GAME) {
       return;
@@ -167,7 +168,7 @@ public class PluginArenaUtils {
             "Arena {0} got force started by {1} with timer {2}",
             arena.getId(), player.getName(), timer);
     arena.setArenaState(ArenaState.STARTING, true);
-    if (timer <= 0) {
+    if(timer <= 0) {
       arena.setForceStart(true);
       new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART")
           .asKey()
@@ -175,7 +176,7 @@ public class PluginArenaUtils {
           .arena(arena)
           .sendArena();
     } else {
-      if (arena.getTimer() <= timer) {
+      if(arena.getTimer() <= timer) {
         return;
       }
       arena.setTimer(timer, true);
