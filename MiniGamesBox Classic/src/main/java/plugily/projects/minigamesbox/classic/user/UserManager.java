@@ -51,7 +51,7 @@ public class UserManager {
     } else {
       database = new FileStats(plugin);
     }
-    loadStatsForPlayersOnline();
+    Bukkit.getScheduler().runTaskLater(plugin, this::loadStatsForPlayersOnline, 40);
   }
 
   private void loadStatsForPlayersOnline() {
