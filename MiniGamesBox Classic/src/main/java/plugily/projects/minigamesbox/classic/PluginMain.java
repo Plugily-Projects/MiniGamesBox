@@ -215,6 +215,7 @@ public class PluginMain extends JavaPlugin {
     languageConfig = ConfigUtils.getConfig(this, "language");
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
+    kitRegistry = new KitRegistry(this);
     User.init(this);
     User.cooldownHandlerTask();
     userManager = new UserManager(this);
@@ -225,7 +226,6 @@ public class PluginMain extends JavaPlugin {
     specialItemManager = new SpecialItemManager(this);
     new SpecialItemEvent(this);
     kitMenuHandler = new KitMenuHandler(this);
-    kitRegistry = new KitRegistry(this);
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);
