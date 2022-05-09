@@ -9,7 +9,7 @@
 ###############################[IMPORTANT]###############################
 Plugin:
   Name:
-    Shot: plugily
+    Short: plugily
     Long: ${project.name}
   Id:
     Spigot: 0
