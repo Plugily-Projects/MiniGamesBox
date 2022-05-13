@@ -363,8 +363,10 @@ public class PluginMain extends JavaPlugin {
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
     if(getArenaRegistry() != null) {
       for(PluginArena arena : getArenaRegistry().getArenas()) {
-        for(Player player : arena.getPlayers()) {
-          getArenaManager().leaveAttempt(player, arena);
+        if(!arena.getPlayers().isEmpty()) {
+          for(Player player : arena.getPlayers()) {
+            getArenaManager().leaveAttempt(player, arena);
+          }
         }
         arena.getMapRestorerManager().fullyRestoreArena();
       }
