@@ -295,15 +295,15 @@ public class PluginMain extends JavaPlugin {
 
   //some plugins need to register files such as "kits"
   public void addFileName(String filename) {
-    if(fileNames.contains(filename)) {
+    if(getFileNames().contains(filename)) {
       throw new IllegalStateException("Filename " + filename + " already on the list!");
     }
-    fileNames.add(filename);
+    getFileNames().add(filename);
     setupFiles();
   }
 
   public void setupFiles() {
-    for(String fileName : fileNames) {
+    for(String fileName : getFileNames()) {
       File file = new File(getDataFolder(), fileName + ".yml");
       if(!file.exists()) {
         saveResource(fileName + ".yml", false);
@@ -357,32 +357,32 @@ public class PluginMain extends JavaPlugin {
     if(forceDisable) {
       return;
     }
-    debugger.debug("System disable initialized");
+    getDebugger().debug("System disable initialized");
     long start = System.currentTimeMillis();
 
-    Bukkit.getLogger().removeHandler(exceptionLogHandler);
-    if(arenaRegistry != null) {
-      for(PluginArena arena : arenaRegistry.getArenas()) {
+    Bukkit.getLogger().removeHandler(getExceptionLogHandler());
+    if(getArenaRegistry() != null) {
+      for(PluginArena arena : getArenaRegistry().getArenas()) {
         for(Player player : arena.getPlayers()) {
-          arenaManager.leaveAttempt(player, arena);
+          getArenaManager().leaveAttempt(player, arena);
         }
         arena.getMapRestorerManager().fullyRestoreArena();
       }
     }
-    if(userManager != null) {
-      userManager.getDatabase().disable();
+    if(getUserManager() != null) {
+      getUserManager().getDatabase().disable();
     }
-    if(configPreferences != null && leaderboardRegistry != null && configPreferences.getOption("LEADERBOARDS")) {
-      leaderboardRegistry.disableHolograms();
+    if(getConfigPreferences() != null && getLeaderboardRegistry() != null && getConfigPreferences().getOption("LEADERBOARDS")) {
+      getLeaderboardRegistry().disableHolograms();
     }
-    if(hologramManager != null) {
-      for(ArmorStand armorStand : hologramManager.getArmorStands()) {
+    if(getHologramManager() != null) {
+      for(ArmorStand armorStand : getHologramManager().getArmorStands()) {
         armorStand.remove();
         armorStand.setCustomNameVisible(false);
       }
-      hologramManager.getArmorStands().clear();
+      getHologramManager().getArmorStands().clear();
     }
-    debugger.debug(pluginMessagePrefix + "System disable finished took {0}ms", System.currentTimeMillis() - start);
+    getDebugger().debug(getPluginMessagePrefix() + "System disable finished took {0}ms", System.currentTimeMillis() - start);
   }
 
 
