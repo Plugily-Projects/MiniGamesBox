@@ -42,6 +42,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @author Tigerpanzer_02
@@ -143,6 +144,7 @@ public class InventorySerializer {
       }
 
       invConfig.save(invFile);
+      plugin.getLogger().log(Level.INFO, "Saved inventory of {0}", player.getName());
       return true;
     } catch(Exception ex) {
       ex.printStackTrace();
@@ -276,6 +278,7 @@ public class InventorySerializer {
       }
 
       player.updateInventory();
+      plugin.getLogger().log(Level.INFO, "Loaded inventory of {0}", player.getName());
     } catch(Exception ignored) {
       //ignore any exceptions
     }
