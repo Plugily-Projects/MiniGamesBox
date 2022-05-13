@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.kits;
 
-import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -31,6 +30,8 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
+import plugily.projects.minigamesbox.inventory.common.item.SimpleClickableItem;
+import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
 /**
  * @author Tigerpanzer_02
@@ -57,25 +58,25 @@ public class KitMenuHandler implements Listener {
       plugin.getDebugger().debug("Kits are disabled, can not create menu");
       return;
     }
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
+    NormalFastInv gui = new NormalFastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
     for(Kit kit : plugin.getKitRegistry().getKits()) {
       ItemStack itemStack = kit.getItemStack();
       itemStack = new ItemBuilder(itemStack)
           .lore(kit.isUnlockedByPlayer(player) ? unlockedString : lockedString)
           .build();
 
-      gui.addItem(itemStack, e -> {
-        e.setCancelled(true);
-        if(!(e.isLeftClick() || e.isRightClick()) || !(e.getWhoClicked() instanceof Player) || !ItemUtils.isItemStackNamed(e.getCurrentItem())) {
+      gui.addItem(new SimpleClickableItem(itemStack, event -> {
+        event.setCancelled(true);
+        if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player) || !ItemUtils.isItemStackNamed(event.getCurrentItem())) {
           return;
         }
         PluginArena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }
-        PlugilyPlayerChooseKitEvent event = new PlugilyPlayerChooseKitEvent(player, kit, arena);
-        Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled()) {
+        PlugilyPlayerChooseKitEvent chooseKitEvent = new PlugilyPlayerChooseKitEvent(player, kit, arena);
+        Bukkit.getPluginManager().callEvent(chooseKitEvent);
+        if(chooseKitEvent.isCancelled()) {
           return;
         }
         if(!kit.isUnlockedByPlayer(player)) {
@@ -84,8 +85,9 @@ public class KitMenuHandler implements Listener {
         }
         plugin.getUserManager().getUser(player).setKit(kit);
         new MessageBuilder("KIT_CHOOSE").asKey().value(kit.getName()).player(player).sendPlayer();
-      });
+      }));
     }
+    gui.refresh();
     gui.open(player);
   }
 
