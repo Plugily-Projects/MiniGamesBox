@@ -34,6 +34,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.HologramArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.ListArenasArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.PlaceholderCheckArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.ReloadArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.SpyChatArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.TeleportArgument;
@@ -110,6 +111,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
     //other admin related arguments
     new ListArenasArgument(this);
+    new PlaceholderCheckArgument(this);
     spyChat = new SpyChatArgument(this);
     new TeleportArgument(this);
     if(plugin.getConfigPreferences().getOption("LEADERBOARDS")) {
