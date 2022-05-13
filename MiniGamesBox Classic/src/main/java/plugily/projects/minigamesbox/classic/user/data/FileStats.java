@@ -106,7 +106,10 @@ public class FileStats implements UserDatabase, Runnable {
     }
     updateTask.cancel();
     // Save the last time before disabling
-    run();
+    if(updateRequired.get()) {
+      updateRequired.set(false);
+      ConfigUtils.saveConfig(plugin, config, "stats");
+    }
   }
 
   @Override
