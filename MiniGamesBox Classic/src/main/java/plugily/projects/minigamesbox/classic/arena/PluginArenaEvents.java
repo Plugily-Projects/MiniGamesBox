@@ -38,7 +38,6 @@ public class PluginArenaEvents implements Listener {
 
   public PluginArenaEvents(PluginMain plugin) {
     this.plugin = plugin;
-    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   @EventHandler
