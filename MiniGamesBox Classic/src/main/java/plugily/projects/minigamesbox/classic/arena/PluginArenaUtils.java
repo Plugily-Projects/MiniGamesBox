@@ -134,6 +134,7 @@ public class PluginArenaUtils {
     player.setFoodLevel(20);
     // the default fly speed
     player.setFlySpeed(0.1f);
+    player.setWalkSpeed(0.2f);
     player.setExp(0);
     player.setLevel(0);
     VersionUtils.setCollidable(player, true);
