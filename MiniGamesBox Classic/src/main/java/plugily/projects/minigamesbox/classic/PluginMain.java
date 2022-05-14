@@ -85,6 +85,7 @@ import plugily.projects.minigamesbox.classic.utils.version.events.EventsInitiali
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -363,8 +364,9 @@ public class PluginMain extends JavaPlugin {
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
     if(getArenaRegistry() != null) {
       for(PluginArena arena : getArenaRegistry().getArenas()) {
-        if(!arena.getPlayers().isEmpty()) {
-          for(Player player : arena.getPlayers()) {
+        List<Player> arenaPlayers = new ArrayList<>(arena.getPlayers());
+        if(!arenaPlayers.isEmpty()) {
+          for(Player player : arenaPlayers) {
             getArenaManager().leaveAttempt(player, arena);
           }
         }
