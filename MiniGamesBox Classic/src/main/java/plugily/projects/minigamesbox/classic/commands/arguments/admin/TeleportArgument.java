@@ -60,7 +60,7 @@ public class TeleportArgument {
           return;
         }
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          if(arena.getId().equalsIgnoreCase(args[1])) {
+          if(arena.getId().equalsIgnoreCase(new MessageBuilder(args[1]).build())) {
             teleport((Player) sender, arena, type);
             break;
           }
