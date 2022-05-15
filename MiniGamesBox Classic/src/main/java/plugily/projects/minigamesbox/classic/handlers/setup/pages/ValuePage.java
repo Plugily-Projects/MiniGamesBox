@@ -25,7 +25,6 @@ import org.bukkit.Material;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
@@ -75,7 +74,7 @@ public class ValuePage extends NormalFastInv implements SetupPage {
 
         @Override
         public Prompt acceptInput(ConversationContext context, String input) {
-          String name = new MessageBuilder(input).build();
+          String name = new MessageBuilder(input, false).build();
           setupInventory.getPlayer().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of arena " + setupInventory.getArena().getId() + " set to " + name).build());
           setupInventory.getArena().setMapName(name);
           setupInventory.getPlugin().getSetupUtilities().getConfig().set("instances." + setupInventory.getArena().getId() + ".mapname", setupInventory.getArena().getMapName());

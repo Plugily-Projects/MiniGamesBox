@@ -180,7 +180,7 @@ public class PluginArenaRegistry {
 
       PluginArena arena = getNewArena(id);
 
-      arena.setMapName(section.getString(id + ".mapname", "none"));
+      arena.setMapName(section.getString(id + ".mapname", id));
       arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 16));
       arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 3));
 
@@ -211,7 +211,7 @@ public class PluginArenaRegistry {
     Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
 
     if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
-        || endLoc == null || endLoc.getWorld() == null|| spectatorLoc == null || spectatorLoc.getWorld() == null) {
+        || endLoc == null || endLoc.getWorld() == null || spectatorLoc == null || spectatorLoc.getWorld() == null) {
       section.set(id + ".isdone", false);
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("Location world is invalid").arena(arena).build());
       return false;

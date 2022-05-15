@@ -79,7 +79,7 @@ public class HomePage extends NormalFastInv implements SetupPage {
 
             @Override
             public Prompt acceptInput(ConversationContext context, String input) {
-              String name = new MessageBuilder(input).build();
+              String name = new MessageBuilder(input, false).build();
               PluginArena arena = setupInventory.getPlugin().getSetupUtilities().createInstanceInConfig(name, event.getWhoClicked().getWorld().getName(), setupInventory.getPlayer());
               if(arena == null) {
                 return Prompt.END_OF_CONVERSATION;
