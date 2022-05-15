@@ -144,28 +144,28 @@ public class SetupUtilities {
   public void sendProTip(HumanEntity entity) {
     switch(random.nextInt(35)) {
       case 0:
-        new MessageBuilder("&e&lTIP: &7We also got premade setups, check them out on &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/setup/maps").send(entity);
+        new MessageBuilder("&e&lTIP: &7We also got premade setups, check them out on &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/setup/maps", false).send(entity);
         break;
       case 1:
-        new MessageBuilder("&e&lTIP: &7Help us translating plugin to your language here: https://translate.plugily.xyz").send(entity);
+        new MessageBuilder("&e&lTIP: &7Help us translating plugin to your language here: https://translate.plugily.xyz", false).send(entity);
         break;
       case 2:
-        new MessageBuilder("&e&lTIP: &7PlaceholderApi plugin is supported with our plugin! Check here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/placeholders/placeholderapi").send(entity);
+        new MessageBuilder("&e&lTIP: &7PlaceholderApi plugin is supported with our plugin! Check here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/placeholders/placeholderapi", false).send(entity);
         break;
       case 3:
-        new MessageBuilder("&e&lTIP: &7Achievements, custom kits and replay ability are things available in our paid addon for this minigame: https://patreon.com/plugily").send(entity);
+        new MessageBuilder("&e&lTIP: &7Achievements, custom kits and replay ability are things available in our paid addon for this minigame: https://patreon.com/plugily", false).send(entity);
         break;
       case 4:
-        new MessageBuilder("&e&lTIP: &7We are open source! You can always help us by contributing! Check https://github.com/Plugily-Projects/").send(entity);
+        new MessageBuilder("&e&lTIP: &7We are open source! You can always help us by contributing! Check https://github.com/Plugily-Projects/", false).send(entity);
         break;
       case 5:
-        new MessageBuilder("&e&lTIP: &7Need help? Check wiki &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + " &7or discord https://discord.plugily.xyz").send(entity);
+        new MessageBuilder("&e&lTIP: &7Need help? Check wiki &8https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + " &7or discord https://discord.plugily.xyz", false).send(entity);
         break;
       case 6:
-        new MessageBuilder("&e&lTIP: &7If you like our plugins: You can support us on patreon https://patreon.com/plugily").send(entity);
+        new MessageBuilder("&e&lTIP: &7If you like our plugins: You can support us on patreon https://patreon.com/plugily", false).send(entity);
         break;
       case 7:
-        new MessageBuilder("&e&lTIP: &7Suggest new ideas for the plugin or vote on current ones! https://app.feedbacky.net/b/" + plugin.getPluginNamePrefixLong().toLowerCase()).send(entity);
+        new MessageBuilder("&e&lTIP: &7Suggest new ideas for the plugin or vote on current ones! https://app.feedbacky.net/b/" + plugin.getPluginNamePrefixLong().toLowerCase(), false).send(entity);
         break;
       default:
         break;
@@ -199,7 +199,7 @@ public class SetupUtilities {
         .enchantment(Enchantment.KNOCKBACK, 5)
         .build(), e -> {
       e.getWhoClicked().closeInventory();
-      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview").prefix().send(e.getWhoClicked());
+      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(e.getWhoClicked());
     }));
     if(pluginSetupInventory.getArena() != null) {
       normalFastInv.setItem(49, new EmptyItem(new ItemBuilder(XMaterial.ANVIL.parseMaterial()).name("&aCurrently editing: " + pluginSetupInventory.getArena().getId()).colorizeItem().build()));
@@ -210,7 +210,7 @@ public class SetupUtilities {
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()).prefix().send(event.getWhoClicked());
+      new MessageBuilder("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial(), false).prefix().send(event.getWhoClicked());
     }));
 
     normalFastInv.setItem(53, ClickableItem.of(right_corner, right_corner_event));
@@ -246,7 +246,7 @@ public class SetupUtilities {
         .enchantment(Enchantment.DURABILITY)
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview").prefix().send(event.getWhoClicked());
+      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + plugin.getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(event.getWhoClicked());
     }));
 
     itemMap.setItem(50, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
@@ -255,7 +255,7 @@ public class SetupUtilities {
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial()).prefix().send(event.getWhoClicked());
+      new MessageBuilder("&6Check out this video: " + VIDEO_LINK + pluginSetupInventory.getInventoryStage().getTutorial(), false).prefix().send(event.getWhoClicked());
     }));
 
     itemMap.setItem(53, ClickableItem.of(right_corner.parseItem(), right_corner_event));

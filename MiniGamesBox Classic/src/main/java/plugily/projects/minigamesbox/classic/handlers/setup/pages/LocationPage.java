@@ -151,7 +151,7 @@ public class LocationPage extends NormalFastInv implements SetupPage {
           && event.getClick() != ClickType.SHIFT_RIGHT) {
         new MessageBuilder("&c&l✖ &cWarning | Server spawn protection is set to &6" + Bukkit.getServer().getSpawnRadius()
             + " &cand sign you want to place is in radius of this protection! &c&lNon opped players won't be able to interact with this sign and can't join the game so.").prefix().send(event.getWhoClicked());
-        new MessageBuilder("&cYou can ignore this warning and add sign with Shift + Left Click, but for now &c&loperation is cancelled").prefix().send(event.getWhoClicked());
+        new MessageBuilder(" &cYou can ignore this warning and add sign with Shift + Right Click, but for now &c&loperation is cancelled").prefix().send(event.getWhoClicked());
         return;
       }
 

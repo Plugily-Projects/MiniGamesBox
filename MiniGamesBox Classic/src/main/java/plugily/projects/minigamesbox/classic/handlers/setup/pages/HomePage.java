@@ -114,7 +114,7 @@ public class HomePage extends NormalFastInv implements SetupPage {
         .lore(ChatColor.GRAY + "Click to get link for patron program!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview").prefix().send(event.getWhoClicked());
+      new MessageBuilder(" &6Check patron program here: https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(event.getWhoClicked());
     }));
 
     setItem(41, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
@@ -123,7 +123,7 @@ public class HomePage extends NormalFastInv implements SetupPage {
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder("&6Check out this video: " + setupInventory.getPlugin().getSetupUtilities().VIDEO_LINK + SetupUtilities.InventoryStage.SETUP_GUI.getTutorial()).prefix().send(event.getWhoClicked());
+      new MessageBuilder(" &6Check out this video: " + setupInventory.getPlugin().getSetupUtilities().VIDEO_LINK + SetupUtilities.InventoryStage.SETUP_GUI.getTutorial(), false).prefix().send(event.getWhoClicked());
     }));
 
     setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
