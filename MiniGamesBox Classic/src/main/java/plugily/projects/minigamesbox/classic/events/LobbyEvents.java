@@ -50,16 +50,16 @@ public class LobbyEvents implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onFoodLose(FoodLevelChangeEvent event) {
+  public void onFoodLevelChange(FoodLevelChangeEvent event) {
     if(event.getEntity().getType() != EntityType.PLAYER) {
       return;
     }
-    Player player = (Player) event.getEntity();
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    PluginArena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
     if(arena == null) {
       return;
     }
-    if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+    if(arena.getArenaState() != ArenaState.IN_GAME) {
+      event.setFoodLevel(20);
       event.setCancelled(true);
     }
   }

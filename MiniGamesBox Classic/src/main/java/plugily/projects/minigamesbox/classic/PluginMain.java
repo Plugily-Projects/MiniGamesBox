@@ -69,6 +69,7 @@ import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
+import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
 import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
 import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
@@ -106,6 +107,7 @@ public class PluginMain extends JavaPlugin {
   private UserManager userManager;
   private StatsStorage statsStorage;
   private BukkitHelper bukkitHelper;
+  private CuboidSelector cuboidSelector;
   private SpecialItemManager specialItemManager;
   private RewardsFactory rewardsHandler;
   private KitMenuHandler kitMenuHandler;
@@ -246,7 +248,7 @@ public class PluginMain extends JavaPlugin {
     new Events(this);
     new LobbyEvents(this);
     spectatorItemsManager = new SpectatorItemsManager(this);
-
+    cuboidSelector = new CuboidSelector(this);
     //arena
     arenaOptionManager = new ArenaOptionManager(this);
 
@@ -528,6 +530,10 @@ public class PluginMain extends JavaPlugin {
 
   public SpectatorItemsManager getSpectatorItemsManager() {
     return spectatorItemsManager;
+  }
+
+  public CuboidSelector getCuboidSelector() {
+    return cuboidSelector;
   }
 
   public SetupUtilities getSetupUtilities() {

@@ -35,7 +35,6 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -174,21 +173,6 @@ public class Events implements Listener {
         event.setCancelled(true);
         break;
       }
-    }
-  }
-
-  @EventHandler
-  public void onFoodLevelChange(FoodLevelChangeEvent event) {
-    if(event.getEntity().getType() != EntityType.PLAYER) {
-      return;
-    }
-    PluginArena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
-    if(arena == null) {
-      return;
-    }
-    if(arena.getArenaState() != ArenaState.IN_GAME) {
-      event.setFoodLevel(20);
-      event.setCancelled(true);
     }
   }
 
