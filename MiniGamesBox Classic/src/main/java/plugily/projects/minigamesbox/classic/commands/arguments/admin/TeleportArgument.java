@@ -36,7 +36,7 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
  * Created at 01.11.2021
  */
 public class TeleportArgument {
-
+  //ToDo world teleports
   public TeleportArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("tp", registry.getPlugin().getPluginNamePrefixLong() + ".admin.teleport", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " tp &6<arena> <location type>", "/" + registry.getPlugin().getCommandAdminPrefix() + " tp <arena> <location>",

@@ -42,6 +42,11 @@ public class ValentineHoliday implements Holiday, Listener {
   private PluginMain plugin;
 
   @Override
+  public String getName() {
+    return "Valentine";
+  }
+
+  @Override
   public boolean isHoliday(LocalDateTime dateTime) {
     int day = dateTime.getDayOfMonth();
     int month = dateTime.getMonthValue();

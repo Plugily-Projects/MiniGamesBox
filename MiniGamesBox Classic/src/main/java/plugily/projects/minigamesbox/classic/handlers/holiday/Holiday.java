@@ -29,10 +29,14 @@ import java.time.LocalDateTime;
  * <p>
  * Created at 09.10.2021
  */
+
 /**
  * The interface for all holidays
  */
 public interface Holiday {
+
+  String getName();
+
   /**
    * Check if the date is the holiday
    *
@@ -69,7 +73,7 @@ public interface Holiday {
   /**
    * Apply kill effects to dead and alive entity
    *
-   * @param dead dead player
+   * @param dead  dead player
    * @param alive alive player
    */
   default void applyKillEffects(Entity dead, Entity alive) {

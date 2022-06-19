@@ -35,7 +35,6 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Tigerpanzer_02
@@ -44,8 +43,12 @@ import java.util.Random;
  */
 public class HalloweenHoliday implements Holiday, Listener {
 
-  private Random random;
   private PluginMain plugin;
+
+  @Override
+  public String getName() {
+    return "Halloween";
+  }
 
   @Override
   public boolean isHoliday(LocalDateTime dateTime) {
@@ -56,7 +59,6 @@ public class HalloweenHoliday implements Holiday, Listener {
 
   @Override
   public void enable(PluginMain plugin) {
-    random = new Random();
     this.plugin = plugin;
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
@@ -67,7 +69,7 @@ public class HalloweenHoliday implements Holiday, Listener {
 
     if(equipment != null && equipment.getHelmet() == null) {
       //randomizing head type
-      if(random.nextBoolean()) {
+      if(plugin.getRandom().nextBoolean()) {
         equipment.setHelmet(new ItemStack(Material.JACK_O_LANTERN, 1));
       } else {
         equipment.setHelmet(new ItemStack(Material.PUMPKIN, 1));
@@ -82,17 +84,17 @@ public class HalloweenHoliday implements Holiday, Listener {
     entity.getWorld().strikeLightningEffect(entityLoc);
 
     //randomizing sound
-    if(random.nextBoolean()) {
+    if(plugin.getRandom().nextBoolean()) {
       VersionUtils.playSound(entityLoc, "ENTITY_WOLF_HOWL");
     } else {
       VersionUtils.playSound(entityLoc, "ENTITY_WITHER_DEATH");
     }
 
     //randomizing bats spawn chance
-    if(random.nextBoolean()) {
+    if(plugin.getRandom().nextBoolean()) {
       final List<Entity> bats = new ArrayList<>();
 
-      for(int i = 0; i < random.nextInt(6); i++) {
+      for(int i = 0; i < plugin.getRandom().nextInt(6); i++) {
         final Entity bat = entityLoc.getWorld().spawnEntity(entityLoc, EntityType.BAT);
 
         bat.setCustomName(new MessageBuilder("&6Halloween!").build());

@@ -67,18 +67,18 @@ public class SpectatorEvents implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onSpectatorTarget(EntityTargetEvent e) {
-    if(e.getTarget() instanceof Player && plugin.getUserManager().getUser((Player) e.getTarget()).isSpectator()) {
-      e.setCancelled(true);
-      e.setTarget(null);
+  public void onSpectatorTarget(EntityTargetEvent event) {
+    if(event.getTarget() instanceof Player && plugin.getUserManager().getUser((Player) event.getTarget()).isSpectator()) {
+      event.setCancelled(true);
+      event.setTarget(null);
     }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onSpectatorTarget(EntityTargetLivingEntityEvent e) {
-    if(e.getTarget() instanceof Player && plugin.getUserManager().getUser((Player) e.getTarget()).isSpectator()) {
-      e.setCancelled(true);
-      e.setTarget(null);
+  public void onSpectatorTarget(EntityTargetLivingEntityEvent event) {
+    if(event.getTarget() instanceof Player && plugin.getUserManager().getUser((Player) event.getTarget()).isSpectator()) {
+      event.setCancelled(true);
+      event.setTarget(null);
     }
   }
 
@@ -134,6 +134,7 @@ public class SpectatorEvents implements Listener {
   @EventHandler(priority = EventPriority.HIGH)
   public void onFoodLevelChange(FoodLevelChangeEvent event) {
     if(event.getEntity() instanceof Player && plugin.getUserManager().getUser((Player) event.getEntity()).isSpectator()) {
+      event.setFoodLevel(20);
       event.setCancelled(true);
     }
   }
@@ -151,7 +152,7 @@ public class SpectatorEvents implements Listener {
     if(arena == null) {
       return;
     }
-    if (player.getLocation().getY() < VersionUtils.getWorldMinHeight(player.getWorld())) {
+    if(player.getLocation().getY() < VersionUtils.getWorldMinHeight(player.getWorld())) {
       player.teleport(arena.getStartLocation());
       event.setDamage(0);
     }

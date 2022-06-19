@@ -19,71 +19,59 @@
 package plugily.projects.minigamesbox.classic.handlers.holiday;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.handlers.powerup.Powerup;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 09.10.2021
  */
-public class AprilFoolsHoliday implements Holiday, Listener {
+public class NewYearHoliday implements Holiday, Listener {
+
   private PluginMain plugin;
 
   @Override
   public String getName() {
-    return "AprilFools";
+    return "NewYear";
   }
 
   @Override
   public boolean isHoliday(LocalDateTime dateTime) {
     int day = dateTime.getDayOfMonth();
     int month = dateTime.getMonthValue();
-    return (month == 3 && day >= 29) || (month == 4 && day <= 3);
+    return (month == 12 && day >= 31) || (month == 1 && day <= 1);
   }
 
   @Override
   public void enable(PluginMain plugin) {
     this.plugin = plugin;
-    Powerup powerup = new Powerup("APRIL_FOOL", new MessageBuilder("&a&llololol").build(),
-        new MessageBuilder("&a&lApril Fools!").build(), XMaterial.DIRT, null, null, null, pickup -> {
-      pickup.getPlayer().damage(0);
-      VersionUtils.sendTitle(pickup.getPlayer(), pickup.getPowerup().getDescription(), 5, 30, 5);
-    });
-    plugin.getPowerupRegistry().registerPowerup(powerup);
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   @Override
-  public void applyDeathEffects(Entity entity) {
-    if(!plugin.getRandom().nextBoolean()) {
-      return;
+  public void applyCreatureEffects(Creature creature) {
+    org.bukkit.inventory.EntityEquipment equipment = creature.getEquipment();
+
+    if(equipment != null && equipment.getHelmet() == null) {
+      //randomizing head type
+      if(plugin.getRandom().nextBoolean()) {
+        equipment.setItemInMainHand(new ItemStack(XMaterial.FIREWORK_ROCKET.parseMaterial(), 1));
+      } else {
+        equipment.setItemInMainHand(new ItemStack(XMaterial.FIREWORK_STAR.parseMaterial(), 1));
+      }
     }
-    final List<Item> diamonds = new ArrayList<>();
-    for(int i = 0; i < plugin.getRandom().nextInt(6); i++) {
-      Item item = entity.getWorld().dropItem(entity.getLocation(), XMaterial.DIAMOND.parseItem());
-      item.setPickupDelay(1000000);
-      item.setVelocity(getRandomVector());
-      diamonds.add(item);
-    }
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-      diamonds.forEach(Item::remove);
-      diamonds.clear();
-    }, 30);
   }
 
   @EventHandler
@@ -91,17 +79,16 @@ public class AprilFoolsHoliday implements Holiday, Listener {
     if(e.getEntityType() != org.bukkit.entity.EntityType.PLAYER || plugin.getArenaRegistry().getArena((Player) e.getEntity()) == null) {
       return;
     }
-    if(plugin.getRandom().nextInt(4) == 0) {
-      //chance to make arrow shoot somewhere else
-      e.getProjectile().setVelocity(getRandomVector());
-    }
-  }
-
-  private Vector getRandomVector() {
-    Vector direction = new Vector();
-    direction.setX(0.0D + Math.random() - Math.random());
-    direction.setY(Math.random());
-    direction.setZ(0.0D + Math.random() - Math.random());
-    return direction;
+    Entity en = e.getProjectile();
+    new BukkitRunnable() {
+      @Override
+      public void run() {
+        if(en.isOnGround() || en.isDead()) {
+          cancel();
+          return;
+        }
+        VersionUtils.sendParticles("FIREWORKS_SPARK", (Set<Player>) null, en.getLocation(), 1);
+      }
+    }.runTaskTimer(plugin, 1, 1);
   }
 }
