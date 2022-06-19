@@ -281,4 +281,8 @@ public class PluginArgumentsRegistry implements CommandExecutor {
   public SpyChatArgument getSpyChat() {
     return spyChat;
   }
+
+  public List<PluginArena> getSpecificFilteredArenas(List<PluginArena> arenas, String filter) {
+    return arenas;
+  }
 }

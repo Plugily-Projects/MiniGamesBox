@@ -49,7 +49,7 @@ public class ArenaSelectorArgument {
       @Override
       public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        if(registry.getPlugin().getArenaRegistry().getArenas().size() == 0) {
+        if(registry.getPlugin().getArenaRegistry().getArenas().isEmpty()) {
           new MessageBuilder("COMMANDS_ADMIN_LIST_NO_ARENAS").asKey().player(player).sendPlayer();
           return;
         }

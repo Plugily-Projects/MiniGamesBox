@@ -30,7 +30,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -39,8 +38,6 @@ import java.util.stream.Collectors;
  * Created at 01.11.2021
  */
 public class JoinArguments {
-
-  private final Random random = new Random();
 
   public JoinArguments(PluginArgumentsRegistry registry) {
     //join argument
@@ -53,15 +50,23 @@ public class JoinArguments {
         }
         if(!registry.getPlugin().getArenaRegistry().getArenas().isEmpty() && args[1].equalsIgnoreCase("maxplayers") && registry.getPlugin().getArenaRegistry().getArena("maxplayers") == null) {
           if(registry.getPlugin().getArenaRegistry().getArenaPlayersOnline() == 0) {
-            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, registry.getPlugin().getArenaRegistry().getArenas().get(random.nextInt(registry.getPlugin().getArenaRegistry().getArenas().size())));
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, registry.getPlugin().getArenaRegistry().getArenas().get(registry.getPlugin().getRandom().nextInt(registry.getPlugin().getArenaRegistry().getArenas().size())));
             return;
           }
 
           Map<PluginArena, Integer> arenas = new HashMap<>();
-          for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+          List<PluginArena> arenaList = registry.getPlugin().getArenaRegistry().getArenas();
+          if(args.length > 2) {
+            arenaList = registry.getSpecificFilteredArenas(arenaList, args[2]);
+          }
+          for(PluginArena arena : arenaList) {
             if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) || arena.getPlayers().size() >= arena.getMaximumPlayers())
               continue;
             arenas.put(arena, arena.getPlayers().size());
+          }
+          if(arenas.isEmpty()) {
+            new MessageBuilder("COMMANDS_NO_FREE_ARENAS").asKey().send(sender);
+            return;
           }
           arenas.entrySet()
               .stream()
@@ -90,15 +95,21 @@ public class JoinArguments {
         public void execute(CommandSender sender, String[] args) {
           //check starting arenas -> random
           List<PluginArena> arenas = registry.getPlugin().getArenaRegistry().getArenas().stream().filter(arena -> arena.getArenaState() == ArenaState.STARTING && arena.getPlayers().size() < arena.getMaximumPlayers()).collect(Collectors.toList());
+          if(args.length > 1) {
+            arenas = registry.getSpecificFilteredArenas(arenas, args[1]);
+          }
           if(!arenas.isEmpty()) {
-            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(registry.getPlugin().getRandom().nextInt(arenas.size())));
             return;
           }
           //check waiting arenas -> random
           arenas = registry.getPlugin().getArenaRegistry().getArenas().stream().filter(arena -> (arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING)
               && arena.getPlayers().size() < arena.getMaximumPlayers()).collect(Collectors.toList());
+          if(args.length > 1) {
+            arenas = registry.getSpecificFilteredArenas(arenas, args[1]);
+          }
           if(!arenas.isEmpty()) {
-            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(random.nextInt(arenas.size())));
+            registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arenas.get(registry.getPlugin().getRandom().nextInt(arenas.size())));
             return;
           }
           new MessageBuilder("COMMANDS_NO_FREE_ARENAS").asKey().send(sender);
