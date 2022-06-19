@@ -134,16 +134,20 @@ public class PluginArenaManager {
               continue;
             }
             leaveAttempt(partyPlayer, partyPlayerGame);
+            plugin.getDebugger().debug("[Party] Removed party member " + partyPlayer.getName() + " from other not ingame arena " + player.getName());
           }
           new MessageBuilder("IN_GAME_JOIN_AS_PARTY_MEMBER").asKey().arena(arena).player(partyPlayer).sendPlayer();
           joinAttempt(partyPlayer, arena);
           additionalPartyJoin(player, arena, party.getLeader());
+          plugin.getDebugger().debug("[Party] Added party member " + partyPlayer.getName() + " to arena of " + player.getName());
         }
       } else {
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_NOT_ENOUGH_SPACE_FOR_PARTY").asKey().arena(arena).player(player).sendPlayer();
+        plugin.getDebugger().debug("[Party] Not enough space for party of " + player.getName());
         return false;
       }
     }
+    plugin.getDebugger().debug("[Party] Party check done for " + player.getName());
     return true;
   }
 
@@ -199,6 +203,14 @@ public class PluginArenaManager {
     }
     if(plugin.getArenaRegistry().isInArena(player)) {
       new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().arena(arena).player(player).sendPlayer();
+      return false;
+    }
+    if(arena.getArenaState() == ArenaState.RESTARTING) {
+      if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
+        ComplementAccessor.getComplement().kickPlayer(player, new MessageBuilder(arena.getArenaState().getFormattedName() + "...").prefix().build());
+        return false;
+      }
+      new MessageBuilder(arena.getArenaState().getFormattedName() + "...").prefix().player(player).sendPlayer();
       return false;
     }
     return true;
