@@ -33,6 +33,7 @@ import plugily.projects.minigamesbox.classic.handlers.language.TitleBuilder;
 import plugily.projects.minigamesbox.classic.handlers.party.GameParty;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
+import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.List;
@@ -192,7 +193,7 @@ public class PluginArenaManager {
     if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
       String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
       if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
-        new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId())).sendPlayer();
+        ComplementAccessor.getComplement().kickPlayer(player, new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId())).build());
         return false;
       }
     }
