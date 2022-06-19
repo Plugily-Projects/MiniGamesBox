@@ -96,6 +96,8 @@ public class PluginArenaUtils {
             });
     player.setExp(1);
     player.setLevel(0);
+    player.setWalkSpeed(0.2f);
+    player.setFlySpeed(0.1f);
 
     if(spectator) {
       player.setAllowFlight(true);
