@@ -82,6 +82,8 @@ public class InventorySerializer {
       invConfig.set("Fire ticks", player.getFireTicks());
       invConfig.set("GameMode", player.getGameMode().name());
       invConfig.set("Allow flight", player.getAllowFlight());
+      invConfig.set("Flight speed", player.getFlySpeed());
+      invConfig.set("Walk speed", player.getWalkSpeed());
 
       invConfig.set("Size", inventory.getSize());
       invConfig.set("Max stack size", inventory.getMaxStackSize());
@@ -248,6 +250,8 @@ public class InventorySerializer {
         player.setGameMode(gameMode);
 
         player.setAllowFlight(invConfig.getBoolean("Allow flight"));
+        player.setWalkSpeed((float) invConfig.getDouble("Walk speed"));
+        player.setFlySpeed((float) invConfig.getDouble("Flight speed"));
         List<String> activePotions = invConfig.getStringList("Active potion effects");
         for(String potion : activePotions) {
           String[] splited = potion.split("#", 3);
