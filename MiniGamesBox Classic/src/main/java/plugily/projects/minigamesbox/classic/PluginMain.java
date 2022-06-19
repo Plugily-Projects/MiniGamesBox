@@ -87,6 +87,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 /**
@@ -132,6 +133,7 @@ public class PluginMain extends JavaPlugin {
   private Metrics metrics;
   private SpectatorItemsManager spectatorItemsManager;
   private SetupUtilities setupUtilities;
+  private final Random random = new Random();
 
   @TestOnly
   public PluginMain() {
@@ -546,5 +548,9 @@ public class PluginMain extends JavaPlugin {
 
   public PluginSetupInventory openSetupInventory(PluginArena arena, Player player, SetupUtilities.InventoryStage inventoryStage) {
     return new PluginSetupInventory(this, arena, player, inventoryStage);
+  }
+
+  public Random getRandom() {
+    return random;
   }
 }
