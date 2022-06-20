@@ -83,48 +83,48 @@ public final class VersionUtils {
       PARTICLE_VALUES = Stream.of(XParticleLegacy.values()).map(Enum::toString).collect(Collectors.toList());
     }
 
-    iChatBaseComponent = PacketUtils.classByName("net.minecraft.network.chat", "IChatBaseComponent");
-    chatMessageTypeClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatMessageType");
-
-    if(chatMessageTypeClass != null) {
-      for(Object obj : chatMessageTypeClass.getEnumConstants()) {
-        if(obj.toString().equalsIgnoreCase("GAME_INFO") || obj.toString().equalsIgnoreCase("ACTION_BAR")) {
-          chatMessageType = obj;
-          break;
-        }
-      }
-    }
-
     try {
       Particle.class.getMethod("builder");
       isParticleBuilderSupported = true;
     } catch(NoSuchMethodException | NoClassDefFoundError ignored) {
     }
 
-    try {
-      Class<?> chatcomponentTextClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatComponentText");
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
+      iChatBaseComponent = PacketUtils.classByName("net.minecraft.network.chat", "IChatBaseComponent");
+      chatMessageTypeClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatMessageType");
 
-      if(chatcomponentTextClass != null) {
-        chatComponentTextConstructor = chatcomponentTextClass.getConstructor(String.class);
-      }
-
-      Class<?> packetPlayOutChatClass = PacketUtils.classByName("net.minecraft.network.protocol.game", "PacketPlayOutChat");
-
-      if(packetPlayOutChatClass != null) {
-        if(chatMessageTypeClass == null) {
-          packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent, byte.class);
-        } else if(chatMessageType != null) {
-          try {
-            packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
-                chatMessageTypeClass);
-          } catch(NoSuchMethodException e) {
-            packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
-                chatMessageTypeClass, UUID.class);
+      if(chatMessageTypeClass != null) {
+        for(Object obj : chatMessageTypeClass.getEnumConstants()) {
+          if(obj.toString().equalsIgnoreCase("GAME_INFO") || obj.toString().equalsIgnoreCase("ACTION_BAR")) {
+            chatMessageType = obj;
+            break;
           }
         }
       }
+      try {
+        Class<?> chatcomponentTextClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatComponentText");
 
-      if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
+        if(chatcomponentTextClass != null) {
+          chatComponentTextConstructor = chatcomponentTextClass.getConstructor(String.class);
+        }
+
+        Class<?> packetPlayOutChatClass = PacketUtils.classByName("net.minecraft.network.protocol.game", "PacketPlayOutChat");
+
+        if(packetPlayOutChatClass != null) {
+          if(chatMessageTypeClass == null) {
+            packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent, byte.class);
+          } else if(chatMessageType != null) {
+            try {
+              packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
+                  chatMessageTypeClass);
+            } catch(NoSuchMethodException e) {
+              packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
+                  chatMessageTypeClass, UUID.class);
+            }
+          }
+        }
+
+
         Class<?> playOutTitle = PacketUtils.classByName("net.minecraft.network.protocol.game", "PacketPlayOutTitle");
         Class<?>[] titleDeclaredClasses = playOutTitle.getDeclaredClasses();
 
@@ -133,8 +133,8 @@ public final class VersionUtils {
           titleField = titleDeclaredClasses[0].getField("TITLE").get(null);
           subTitleField = titleDeclaredClasses[0].getField("SUBTITLE").get(null);
         }
+      } catch(NoSuchMethodException | NoClassDefFoundError | NoSuchFieldException | IllegalAccessException ignored) {
       }
-    } catch(NoSuchMethodException | NoClassDefFoundError | NoSuchFieldException | IllegalAccessException ignored) {
     }
   }
 
