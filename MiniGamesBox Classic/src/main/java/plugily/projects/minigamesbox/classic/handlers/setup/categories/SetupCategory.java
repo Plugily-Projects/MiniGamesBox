@@ -17,38 +17,24 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.handlers.setup.items;
-
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
+package plugily.projects.minigamesbox.classic.handlers.setup.categories;
 
 /**
  * @author Tigerpanzer_02
  * <p>
- * Created at 04.01.2022
+ * Created at 21.06.2022
  */
-public class EmptyItem implements ClickableItem {
+public enum SetupCategory {
+  LOCATIONS("locations"), COUNTABLE("countable"), VALUES("values"), SWITCH("switch"), SPECIFIC("%plugin_name%"), CONTROL("control");
 
-  private final ItemStack item;
+  private final String tutorialURL;
 
-  /**
-   * Constructor
-   *
-   * @param item the display item
-   */
-  public EmptyItem(ItemStack item) {
-    this.item = item;
+  SetupCategory(String tutorialURL) {
+    //TODO first time arena setup watch tutorial video
+    this.tutorialURL = "https://wiki.plugily.xyz/plugily/tutorial/setup/gui/" + tutorialURL;
   }
 
-  @Override
-  public ItemStack getItem() {
-    return item;
+  public String getTutorialURL() {
+    return tutorialURL;
   }
-
-  @Override
-  public void onClick(InventoryClickEvent event) {
-    event.setCancelled(true);
-  }
-
 }

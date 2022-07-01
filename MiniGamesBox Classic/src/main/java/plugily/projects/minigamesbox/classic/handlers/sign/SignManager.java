@@ -188,6 +188,7 @@ public class SignManager implements Listener {
         }
       }
     }
+    updateSigns();
     plugin.getDebugger().debug("Sign load event finished took {0}ms", System.currentTimeMillis() - start);
   }
 

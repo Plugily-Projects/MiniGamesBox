@@ -17,20 +17,22 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.handlers.setup.pages;
+package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
-import plugily.projects.minigamesbox.classic.handlers.setup.items.EmptyItem;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
+import plugily.projects.minigamesbox.classic.handlers.setup.items.category.EmptyItem;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
@@ -39,15 +41,19 @@ import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 /**
  * @author Tigerpanzer_02
  * <p>
- * Created at 04.01.2022
+ * Created at 21.06.2022
  */
-public class HomePage extends NormalFastInv implements SetupPage {
+public class HomeInventory extends NormalFastInv implements InventoryHandler {
 
-  private final PluginSetupInventory setupInventory;
+  private final SetupInventory setupInventory;
+  private final PluginMain plugin;
+  private final FileConfiguration config;
 
-  public HomePage(int size, String title, PluginSetupInventory pluginSetupInventory) {
+  public HomeInventory(int size, String title, SetupInventory setupInventory) {
     super(size, title);
-    this.setupInventory = pluginSetupInventory;
+    this.setupInventory = setupInventory;
+    this.plugin = setupInventory.getPlugin();
+    this.config = setupInventory.getConfig();
     prepare();
   }
 
@@ -63,7 +69,7 @@ public class HomePage extends NormalFastInv implements SetupPage {
     setItem(19, ClickableItem.of(new ItemBuilder(XMaterial.REDSTONE_BLOCK.parseItem())
         .name(new MessageBuilder("&cArenas List").build())
         .lore(ChatColor.GRAY + "Edit, delete or copy arenas")
-        .build(), event -> setupInventory.open(SetupUtilities.InventoryStage.ARENA_LIST)
+        .build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_LIST)
     ));
 
     setItem(22, ClickableItem.of(new ItemBuilder(XMaterial.OAK_SIGN.parseItem())
@@ -80,12 +86,12 @@ public class HomePage extends NormalFastInv implements SetupPage {
             @Override
             public Prompt acceptInput(ConversationContext context, String input) {
               String name = new MessageBuilder(input, false).build();
-              PluginArena arena = setupInventory.getPlugin().getSetupUtilities().createInstanceInConfig(name, event.getWhoClicked().getWorld().getName(), setupInventory.getPlayer());
+              PluginArena arena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
               if(arena == null) {
                 return Prompt.END_OF_CONVERSATION;
               }
-              setupInventory.setArena(setupInventory.getPlayer(), arena);
-              setupInventory.open(SetupUtilities.InventoryStage.PAGED_LOCATIONS);
+              setupInventory.setArenaKey(input);
+              setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
               return Prompt.END_OF_CONVERSATION;
             }
           }).buildFor((Player) event.getWhoClicked());
@@ -97,11 +103,11 @@ public class HomePage extends NormalFastInv implements SetupPage {
             .name(new MessageBuilder("&cContinue Arena Setup").build())
             .lore(ChatColor.GRAY + "Continue a previous started arena editor")
             .build(), event -> {
-          if(setupInventory.getArena() == null) {
+          if(setupInventory.getArenaKey() == null) {
             new MessageBuilder("You need to create or edit a arena first").prefix().player((Player) event.getWhoClicked()).sendPlayer();
             return;
           }
-          setupInventory.open(SetupUtilities.InventoryStage.PAGED_GUI);
+          setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
         }
     ));
 
@@ -123,10 +129,9 @@ public class HomePage extends NormalFastInv implements SetupPage {
         .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder(" &6Check out this video: " + setupInventory.getPlugin().getSetupUtilities().VIDEO_LINK + SetupUtilities.InventoryStage.SETUP_GUI.getTutorial(), false).prefix().send(event.getWhoClicked());
+      new MessageBuilder(" &6Check out this video: " + SetupInventoryUtils.SetupInventoryStage.HOME.getTutorialURL(), false).prefix().send(event.getWhoClicked());
     }));
 
     setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
   }
-
 }

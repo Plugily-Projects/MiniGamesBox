@@ -56,7 +56,6 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.SetupArgume
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.ArrayList;
@@ -142,8 +141,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
             new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
             return true;
           }
-
-          plugin.openSetupInventory(arena, (Player) sender, SetupUtilities.InventoryStage.PAGED_GUI);
+          plugin.openSetupInventory((Player) sender, arena.getId());
           return true;
         }
       }

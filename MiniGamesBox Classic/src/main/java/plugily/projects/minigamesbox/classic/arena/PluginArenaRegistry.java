@@ -34,6 +34,7 @@ import plugily.projects.minigamesbox.classic.utils.serialization.LocationSeriali
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 
 /**
@@ -117,7 +118,7 @@ public class PluginArenaRegistry {
   public void registerArena(PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Instance registered", arena.getId());
     arenas.add(arena);
-
+    arena.setReady(true);
     World startWorld = arena.getStartLocation().getWorld();
     World endWorld = arena.getEndLocation().getWorld();
     World lobbyWorld = arena.getLobbyLocation().getWorld();
@@ -159,10 +160,35 @@ public class PluginArenaRegistry {
   public void registerArenas() {
     plugin.getDebugger().debug("[ArenaRegistry] Initial arenas registration");
     long start = System.currentTimeMillis();
-
     if(!arenas.isEmpty()) {
       for(PluginArena arena : new ArrayList<>(arenas)) {
         unregisterArena(arena);
+      }
+    }
+    FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
+    ConfigurationSection section = config.getConfigurationSection("instances");
+    if(section == null) {
+      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_NO_INSTANCES_CREATED").asKey().build());
+      return;
+    }
+    for(String id : section.getKeys(false)) {
+      if(id.equalsIgnoreCase("default")) {
+        continue;
+      }
+      registerArena(id);
+    }
+    plugin.getDebugger().debug("[ArenaRegistry] Arenas registration completed took {0}ms", System.currentTimeMillis() - start);
+  }
+
+  public void registerArena(String key) {
+    plugin.getDebugger().debug("[ArenaRegistry] Initial arena registration for " + key);
+    long start = System.currentTimeMillis();
+    if(!arenas.isEmpty()) {
+      List<PluginArena> sameArenas = arenas.stream().filter(pluginArena -> pluginArena.getId().equals(key)).collect(Collectors.toList());
+      if(!sameArenas.isEmpty()) {
+        for(PluginArena arena : new ArrayList<>(sameArenas)) {
+          unregisterArena(arena);
+        }
       }
     }
 
@@ -173,31 +199,21 @@ public class PluginArenaRegistry {
       return;
     }
 
-    for(String id : section.getKeys(false)) {
-      if(id.equalsIgnoreCase("default")) {
-        continue;
-      }
+    PluginArena arena = getNewArena(key);
 
-      PluginArena arena = getNewArena(id);
-
-      arena.setMapName(section.getString(id + ".mapname", id));
-      arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 16));
-      arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 3));
-
-      if(!additionalValidatorChecks(section, arena, id) || !validatorChecks(section, arena, id)) {
-        arena.setReady(false);
-        registerArena(arena);
-        continue;
-      }
-
+    if(!additionalValidatorChecks(section, arena, key) || !validatorChecks(section, arena, key)) {
+      arena.setReady(false);
+      registerArena(arena);
+    } else {
       registerArena(arena);
       arena.start();
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INSTANCE_STARTED").asKey().arena(arena).build());
     }
+
     ConfigUtils.saveConfig(plugin, config, "arenas");
     plugin.getSignManager().loadSigns();
 
-    plugin.getDebugger().debug("[ArenaRegistry] Arenas registration completed took {0}ms", System.currentTimeMillis() - start);
+    plugin.getDebugger().debug("[ArenaRegistry] Arena registration for " + key + " completed took {0}ms", System.currentTimeMillis() - start);
   }
 
   public boolean additionalValidatorChecks(ConfigurationSection section, PluginArena arena, String id) {
@@ -205,15 +221,19 @@ public class PluginArenaRegistry {
   }
 
   private boolean validatorChecks(ConfigurationSection section, PluginArena arena, String id) {
-    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-    Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
-    Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation", "world,364.0,63.0,-72.0,0.0,0.0"));
 
-    if(lobbyLoc == null || lobbyLoc.getWorld() == null || startLoc == null || startLoc.getWorld() == null
-        || endLoc == null || endLoc.getWorld() == null || spectatorLoc == null || spectatorLoc.getWorld() == null) {
+    arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 3));
+    arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 16));
+    arena.setMapName(section.getString(id + ".mapname", id));
+
+    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation"));
+    Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation"));
+    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation"));
+    Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation"));
+
+    if(lobbyLoc == null || startLoc == null || endLoc == null || spectatorLoc == null) {
       section.set(id + ".isdone", false);
-      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("Location world is invalid").arena(arena).build());
+      plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("LOCATIONS ARE INVALID").arena(arena).build());
       return false;
     }
 

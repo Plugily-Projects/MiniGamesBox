@@ -61,7 +61,7 @@ public class CreateArgument {
         if(ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[1])) {
           new MessageBuilder(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!").prefix().send(player);
         } else {
-          registry.getPlugin().getSetupUtilities().createInstanceInConfig(args[1], player.getWorld().getName(), player);
+          registry.getPlugin().openSetupInventory((Player) sender, args[1]).createInstanceInConfig(args[1], player);
         }
       }
     });

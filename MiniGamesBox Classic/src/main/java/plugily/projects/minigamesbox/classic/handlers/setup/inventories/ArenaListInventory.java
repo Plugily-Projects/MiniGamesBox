@@ -17,11 +17,10 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.handlers.setup.pages;
+package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -29,8 +28,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
@@ -40,15 +39,15 @@ import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 /**
  * @author Tigerpanzer_02
  * <p>
- * Created at 04.01.2022
+ * Created at 21.06.2022
  */
-public class ArenaListPage extends NormalFastInv implements SetupPage {
+public class ArenaListInventory extends NormalFastInv implements InventoryHandler {
 
-  private final PluginSetupInventory setupInventory;
+  private final SetupInventory setupInventory;
 
-  public ArenaListPage(int size, String title, PluginSetupInventory pluginSetupInventory) {
+  public ArenaListInventory(int size, String title, SetupInventory setupInventory) {
     super(size, title);
-    this.setupInventory = pluginSetupInventory;
+    this.setupInventory = setupInventory;
     prepare();
   }
 
@@ -62,7 +61,7 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
 
   @Override
   public void injectItems() {
-    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("Go to Setup Menu").build(), event -> setupInventory.open(SetupUtilities.InventoryStage.SETUP_GUI)));
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("Go to Setup Menu").build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
 
@@ -72,44 +71,63 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
       }
 
       addItem(ClickableItem.of(new ItemBuilder(material)
-          .name(arena.getId() + " | " + arena.getMapName())
-          .lore("&aLeft-Click to edit")
-          .lore("&cRight-Click to delete")
-          .lore("&eShift-Left to clone")
+          .name("ID | " + arena.getId())
+          .lore("&aControls")
+          .lore("&eLEFT_CLICK &7- Edit arena")
+          .lore("&eSHIFT_LEFT_CLICK &7- Clone arena")
+          .lore("&eSHIFT_RIGHT_CLICK &7- Delete arena")
           .colorizeItem()
           .build(), event -> {
         switch(event.getClick()) {
           case LEFT:
-            setupInventory.setArena(arena);
-            setupInventory.open(SetupUtilities.InventoryStage.PAGED_GUI);
+            setupInventory.setArenaKey(arena.getId());
+            setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
             break;
-          case RIGHT:
+          case SHIFT_RIGHT:
+            event.getWhoClicked().closeInventory();
             new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
               @Override
               public @NotNull String getPromptText(ConversationContext context) {
-                setupInventory.getPlayer().closeInventory();
                 return new MessageBuilder("&ePlease type in chat 'delete' ! &cType in 'CANCEL' to cancel!").prefix().build();
               }
 
               @Override
               public Prompt acceptInput(ConversationContext context, String input) {
                 if(!input.equalsIgnoreCase("delete")) {
-                  setupInventory.getPlayer().sendRawMessage(new MessageBuilder("&cDelete operation canceled").prefix().build());
+                  context.getForWhom().sendRawMessage(new MessageBuilder("&cDelete operation canceled").prefix().build());
                   return Prompt.END_OF_CONVERSATION;
                 }
                 setupInventory.getPlugin().getArenaManager().stopGame(false, arena);
-                FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
-                config.set("instances." + arena.getId(), null);
-                ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
+                setupInventory.getConfig().set("instances." + arena.getId(), null);
+                ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
-                setupInventory.getPlayer().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().build());
-                setupInventory.open(SetupUtilities.InventoryStage.ARENA_LIST);
+                context.getForWhom().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().build());
+                setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_LIST);
                 return Prompt.END_OF_CONVERSATION;
               }
             }).buildFor((Player) event.getWhoClicked());
             break;
           case SHIFT_LEFT:
-            new MessageBuilder("&cThis function isn't ready yet!").prefix().send(event.getWhoClicked());
+            event.getWhoClicked().closeInventory();
+            new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
+              @Override
+              public @NotNull String getPromptText(ConversationContext context) {
+                return new MessageBuilder("&ePlease type in chat new arena name ! &cType in 'CANCEL' to cancel!").prefix().build();
+              }
+
+              @Override
+              public Prompt acceptInput(ConversationContext context, String input) {
+                String name = new MessageBuilder(input, false).build();
+                PluginArena arena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
+                if(arena == null) {
+                  return Prompt.END_OF_CONVERSATION;
+                }
+                setupInventory.getConfig().set("instances." + input, setupInventory.getConfig().getConfigurationSection("instances." + arena.getId()));
+                setupInventory.setArenaKey(input);
+                setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
+                return Prompt.END_OF_CONVERSATION;
+              }
+            }).buildFor((Player) event.getWhoClicked());
             break;
           default:
             break;
@@ -118,5 +136,4 @@ public class ArenaListPage extends NormalFastInv implements SetupPage {
 
     }
   }
-
 }

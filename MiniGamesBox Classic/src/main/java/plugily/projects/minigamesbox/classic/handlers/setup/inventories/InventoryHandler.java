@@ -17,17 +17,17 @@
  *
  */
 
-package plugily.projects.minigamesbox.classic.handlers.setup.pages;
-
+package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 /**
  * @author Tigerpanzer_02
  * <p>
- * Created at 04.01.2022
+ * Created at 21.06.2022
  */
-public interface SetupPage {
+public interface InventoryHandler {
 
   void prepare();
 
   void injectItems();
+
 }

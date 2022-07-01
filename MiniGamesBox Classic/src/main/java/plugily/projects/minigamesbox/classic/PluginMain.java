@@ -60,8 +60,8 @@ import plugily.projects.minigamesbox.classic.handlers.permissions.PermissionsMan
 import plugily.projects.minigamesbox.classic.handlers.placeholder.PlaceholderManager;
 import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
-import plugily.projects.minigamesbox.classic.handlers.setup.PluginSetupInventory;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupUtilities;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
@@ -132,7 +132,6 @@ public class PluginMain extends JavaPlugin {
   private PluginArenaManager arenaManager;
   private Metrics metrics;
   private SpectatorItemsManager spectatorItemsManager;
-  private SetupUtilities setupUtilities;
   private final Random random = new Random();
 
   @TestOnly
@@ -256,7 +255,6 @@ public class PluginMain extends JavaPlugin {
 
     signManager = new SignManager(this);
 
-    setupUtilities = new SetupUtilities(this);
     PluginArenaUtils.init(this);
     PluginArena.init(this);
     if(configPreferences.getOption("LEADERBOARDS")) {
@@ -538,16 +536,16 @@ public class PluginMain extends JavaPlugin {
     return cuboidSelector;
   }
 
-  public SetupUtilities getSetupUtilities() {
-    return setupUtilities;
+  public SetupInventory openSetupInventory(Player player) {
+    return new SetupInventory(this, player);
   }
 
-  public PluginSetupInventory openSetupInventory(PluginArena arena, Player player) {
-    return new PluginSetupInventory(this, arena, player);
+  public SetupInventory openSetupInventory(Player player, String arenaKey) {
+    return new SetupInventory(this, player, arenaKey);
   }
 
-  public PluginSetupInventory openSetupInventory(PluginArena arena, Player player, SetupUtilities.InventoryStage inventoryStage) {
-    return new PluginSetupInventory(this, arena, player, inventoryStage);
+  public PluginSetupCategoryManager getSetupCategoryManager(SetupInventory setupInventory) {
+    return new PluginSetupCategoryManager(setupInventory);
   }
 
   public Random getRandom() {
