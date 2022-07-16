@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.items.category;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -117,7 +118,7 @@ public class LocationSelectorItem implements CategoryItemHandler {
     if(getRawLocation() != null) {
       Location location = LocationSerializer.getLocation(getRawLocation());
       if(location != null) {
-        player.teleport(location);
+        PaperLib.teleportAsync(player, location);
         new MessageBuilder("&aTeleported to " + name.toUpperCase() + " Location of arena " + setupInventory.getArenaKey()).prefix().send(player);
         return;
       }

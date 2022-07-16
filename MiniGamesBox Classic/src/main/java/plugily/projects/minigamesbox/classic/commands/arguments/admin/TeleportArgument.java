@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -29,6 +30,8 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgu
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+
+import java.awt.print.Paper;
 
 /**
  * @author Tigerpanzer_02
@@ -75,7 +78,7 @@ public class TeleportArgument {
       player.sendMessage(ChatColor.RED + gameLocation.toString() + " location isn't set for this arena!");
       return;
     }
-    player.teleport(location);
+    PaperLib.teleportAsync(player, location);
     player.sendMessage(ChatColor.GRAY + "Teleported to " + gameLocation.toString() + " location from arena " + arena.getId());
   }
 }

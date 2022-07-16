@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -87,7 +88,7 @@ public class PluginArenaEvents implements Listener {
       case VOID:
         if(arena.getArenaState() != ArenaState.IN_GAME) {
           victim.damage(0);
-          victim.teleport(arena.getLobbyLocation());
+          PaperLib.teleportAsync(victim, arena.getLobbyLocation());
         } else {
           handleIngameVoidDeath(victim, arena);
         }
@@ -103,6 +104,6 @@ public class PluginArenaEvents implements Listener {
 
   public void handleIngameVoidDeath(Player victim, PluginArena arena) {
     victim.damage(1000.0);
-    victim.teleport(arena.getStartLocation());
+    PaperLib.teleportAsync(victim, arena.getStartLocation());
   }
 }

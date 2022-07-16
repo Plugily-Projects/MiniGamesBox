@@ -18,6 +18,7 @@
  */
 package plugily.projects.minigamesbox.classic.events.bungee;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -49,7 +50,7 @@ public class BungeeEvents implements Listener {
     }
 
     if(!plugin.getArenaRegistry().getArenas().isEmpty()) {
-      e.getPlayer().teleport(plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()).getLobbyLocation());
+      PaperLib.teleportAsync(e.getPlayer(), plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()).getLobbyLocation());
     }
   }
 
