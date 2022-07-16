@@ -44,12 +44,6 @@
             <artifactId>FastInv</artifactId>
             <version>3.0.3</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -57,7 +51,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.0</version>
                 <configuration>
                     <windowtitle>MiniGamesBox Inventory API docs for v${project.version}</windowtitle>
                     <description>Library box with massive content that could be seen as minigames core.</description>
@@ -70,9 +64,8 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>3.5.1</version>
+                <version>3.5.2</version>
             </extension>
         </extensions>
     </build>
-
 </project>
