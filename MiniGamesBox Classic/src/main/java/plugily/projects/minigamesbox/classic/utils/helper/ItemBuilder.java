@@ -132,9 +132,7 @@ public class ItemBuilder {
     if(itemMeta.hasLore()) {
       List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
 
-      for(int a = 0; a < lore.size(); a++) {
-        lore.set(a, ChatColor.translateAlternateColorCodes('&', lore.get(a)));
-      }
+      lore.replaceAll(textToTranslate -> ChatColor.translateAlternateColorCodes('&', textToTranslate));
 
       ComplementAccessor.getComplement().setLore(itemMeta, lore);
     }

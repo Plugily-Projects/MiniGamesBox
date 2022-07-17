@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

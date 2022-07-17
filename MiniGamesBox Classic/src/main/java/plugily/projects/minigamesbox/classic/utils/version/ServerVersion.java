@@ -60,7 +60,7 @@ public class ServerVersion {
     private static Version current;
 
     Version() {
-      value = Integer.valueOf(name().replaceAll("[^\\d.]", ""));
+      value = Integer.parseInt(name().replaceAll("[^\\d.]", ""));
     }
 
     public int getValue() {

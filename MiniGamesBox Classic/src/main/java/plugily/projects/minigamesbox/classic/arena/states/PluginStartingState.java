@@ -32,8 +32,6 @@ import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 
-import java.awt.print.Paper;
-
 /**
  * @author Tigerpanzer_02
  * <p>

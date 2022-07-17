@@ -19,10 +19,8 @@
 
 package plugily.projects.minigamesbox.classic.events.spectator.settings;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 
 import java.util.Set;
 

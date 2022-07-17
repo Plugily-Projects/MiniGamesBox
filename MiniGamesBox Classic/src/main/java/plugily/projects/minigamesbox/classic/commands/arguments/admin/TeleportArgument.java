@@ -31,8 +31,6 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 
-import java.awt.print.Paper;
-
 /**
  * @author Tigerpanzer_02
  * <p>
