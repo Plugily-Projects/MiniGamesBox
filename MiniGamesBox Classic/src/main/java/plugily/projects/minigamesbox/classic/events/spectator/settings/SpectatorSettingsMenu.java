@@ -21,7 +21,6 @@ package plugily.projects.minigamesbox.classic.events.spectator.settings;
 
 import com.cryptomorin.xseries.XMaterial;
 import fr.mrmicky.fastinv.FastInv;
-import io.papermc.lib.PaperLib;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -221,7 +220,7 @@ public class SpectatorSettingsMenu implements Listener {
     if(distance <= 15) {
       return;
     }
-    PaperLib.teleportAsync(player, target.getLocation());
+    VersionUtils.teleport(player, target.getLocation());
   }
 
   @EventHandler

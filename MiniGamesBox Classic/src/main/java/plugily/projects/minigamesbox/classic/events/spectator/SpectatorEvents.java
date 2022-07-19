@@ -154,7 +154,7 @@ public class SpectatorEvents implements Listener {
       return;
     }
     if(player.getLocation().getY() < VersionUtils.getWorldMinHeight(player.getWorld())) {
-      PaperLib.teleportAsync(player, arena.getStartLocation());
+      VersionUtils.teleport(player, arena.getStartLocation());
       event.setDamage(0);
     }
     event.setCancelled(true);

@@ -70,7 +70,7 @@ public class SpectatorItemsManager implements Listener {
         new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT").asKey().arena(arena).player(arenaPlayer).send(event.getWhoClicked());
         HumanEntity player1 = event.getWhoClicked();
         player1.closeInventory();
-        PaperLib.teleportAsync(player1, arenaPlayer.getLocation());
+        VersionUtils.teleport(player1, arenaPlayer.getLocation());
       });
     }
     gui.open(player);

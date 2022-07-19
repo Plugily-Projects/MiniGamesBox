@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.utils.hologram;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -194,7 +193,7 @@ public class ArmorStandHologram {
       if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R3)) {
         entityItem.setInvulnerable(true);
       }
-      PaperLib.teleportAsync(entityItem, location);
+      VersionUtils.teleport(entityItem, location);
     }
   }
 

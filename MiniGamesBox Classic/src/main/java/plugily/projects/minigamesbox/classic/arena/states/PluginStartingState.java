@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena.states;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -31,6 +30,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -96,7 +96,7 @@ public class PluginStartingState implements ArenaStateHandler {
       arena.getBossbarManager().setProgress(1.0);
       org.bukkit.Location arenaLoc = arena.getStartLocation();
       for(Player player : arena.getPlayers()) {
-        PaperLib.teleportAsync(player, arenaLoc);
+        VersionUtils.teleport(player, arenaLoc);
         PluginArenaUtils.hidePlayersOutsideTheGame(player, arena);
         player.setExp(0);
         player.setLevel(0);

@@ -77,7 +77,7 @@ public class PluginArenaUtils {
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.saveInventoryToFile(plugin, player);
     }
-    PaperLib.teleportAsync(player, location);
+    VersionUtils.teleport(player, location);
     player.getInventory().clear();
     player
         .getActivePotionEffects()

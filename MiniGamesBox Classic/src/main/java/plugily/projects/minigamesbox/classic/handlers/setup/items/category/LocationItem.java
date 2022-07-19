@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.items.category;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -32,6 +31,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
@@ -176,7 +176,7 @@ public class LocationItem implements CategoryItemHandler {
     if(getRawLocation() != null) {
       Location location = LocationSerializer.getLocation(getRawLocation());
       if(location != null) {
-        PaperLib.teleportAsync(player, location);
+        VersionUtils.teleport(player, location);
         new MessageBuilder("&aTeleported to " + name.toUpperCase() + " Location of arena " + setupInventory.getArenaKey()).prefix().send(player);
         return;
       }

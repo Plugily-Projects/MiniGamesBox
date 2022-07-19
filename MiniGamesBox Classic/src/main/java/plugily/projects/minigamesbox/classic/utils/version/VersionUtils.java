@@ -21,15 +21,11 @@ package plugily.projects.minigamesbox.classic.utils.version;
 
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
+import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
@@ -63,7 +59,7 @@ import java.util.stream.Stream;
 @SuppressWarnings("deprecation")
 public final class VersionUtils {
 
-  private static boolean isPaper = false, isParticleBuilderSupported = false;
+  private static boolean isPaper, isParticleBuilderSupported = false;
   private static Class<?> iChatBaseComponent, chatMessageTypeClass;
   private static Constructor<?> packetPlayOutChatConstructor, chatComponentTextConstructor, titleConstructor;
   private static Object chatMessageType, titleField, subTitleField;
@@ -160,6 +156,14 @@ public final class VersionUtils {
       meta.setOwningPlayer(player);
     }
     return meta;
+  }
+
+  public static void teleport(Entity entity, Location location) {
+    if(isPaper()) {
+      PaperLib.teleportAsync(entity, location);
+    } else {
+      entity.teleport(location);
+    }
   }
 
   public static void sendParticles(String particle, Player player, Location location, int count) {
