@@ -104,6 +104,6 @@ public class PluginArenaEvents implements Listener {
 
   public void handleIngameVoidDeath(Player victim, PluginArena arena) {
     victim.damage(1000.0);
-    VersionUtils.teleport(victim, arena.getLobbyLocation());
+    VersionUtils.teleport(victim, arena.getStartLocation());
   }
 }
