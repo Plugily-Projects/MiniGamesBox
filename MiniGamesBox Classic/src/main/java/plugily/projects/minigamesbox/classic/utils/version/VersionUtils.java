@@ -59,7 +59,7 @@ import java.util.stream.Stream;
 @SuppressWarnings("deprecation")
 public final class VersionUtils {
 
-  private static boolean isPaper, isParticleBuilderSupported = false;
+  private static boolean isPaper, isParticleBuilderSupported;
   private static Class<?> iChatBaseComponent, chatMessageTypeClass;
   private static Constructor<?> packetPlayOutChatConstructor, chatComponentTextConstructor, titleConstructor;
   private static Object chatMessageType, titleField, subTitleField;
