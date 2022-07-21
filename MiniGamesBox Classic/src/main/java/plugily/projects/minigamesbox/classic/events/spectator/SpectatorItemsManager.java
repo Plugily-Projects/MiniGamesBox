@@ -20,7 +20,6 @@ package plugily.projects.minigamesbox.classic.events.spectator;
 
 import com.cryptomorin.xseries.XMaterial;
 import fr.mrmicky.fastinv.FastInv;
-import io.papermc.lib.PaperLib;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -68,9 +67,9 @@ public class SpectatorItemsManager implements Listener {
       cloneSkull.setItemMeta(meta);
       gui.addItem(cloneSkull, event -> {
         new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT").asKey().arena(arena).player(arenaPlayer).send(event.getWhoClicked());
-        HumanEntity player1 = event.getWhoClicked();
-        player1.closeInventory();
-        VersionUtils.teleport(player1, arenaPlayer.getLocation());
+        HumanEntity humanEntity = event.getWhoClicked();
+        humanEntity.closeInventory();
+        VersionUtils.teleport(humanEntity, arenaPlayer.getLocation());
       });
     }
     gui.open(player);
