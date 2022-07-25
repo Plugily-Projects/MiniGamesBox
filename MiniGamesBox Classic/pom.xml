@@ -186,10 +186,6 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>plugily.projects.minigamesbox.classic.utils.bstats</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.paperlib</shadedPattern> <!-- Replace this -->
-                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
