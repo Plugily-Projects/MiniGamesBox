@@ -27,6 +27,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -87,7 +88,7 @@ public class PluginArenaEvents implements Listener {
       case VOID:
         if(arena.getArenaState() != ArenaState.IN_GAME) {
           victim.damage(0);
-          victim.teleport(arena.getLobbyLocation());
+          VersionUtils.teleport(victim, arena.getLobbyLocation());
         } else {
           handleIngameVoidDeath(victim, arena);
         }
@@ -103,6 +104,6 @@ public class PluginArenaEvents implements Listener {
 
   public void handleIngameVoidDeath(Player victim, PluginArena arena) {
     victim.damage(1000.0);
-    victim.teleport(arena.getStartLocation());
+    VersionUtils.teleport(victim, arena.getStartLocation());
   }
 }

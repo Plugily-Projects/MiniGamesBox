@@ -18,6 +18,7 @@
  */
 package plugily.projects.minigamesbox.classic.events.spectator;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
@@ -153,7 +154,7 @@ public class SpectatorEvents implements Listener {
       return;
     }
     if(player.getLocation().getY() < VersionUtils.getWorldMinHeight(player.getWorld())) {
-      player.teleport(arena.getStartLocation());
+      VersionUtils.teleport(player, arena.getStartLocation());
       event.setDamage(0);
     }
     event.setCancelled(true);

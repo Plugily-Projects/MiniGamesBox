@@ -29,6 +29,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgu
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -75,7 +76,7 @@ public class TeleportArgument {
       player.sendMessage(ChatColor.RED + gameLocation.toString() + " location isn't set for this arena!");
       return;
     }
-    player.teleport(location);
+    VersionUtils.teleport(player, location);
     player.sendMessage(ChatColor.GRAY + "Teleported to " + gameLocation.toString() + " location from arena " + arena.getId());
   }
 }

@@ -22,10 +22,7 @@ package plugily.projects.minigamesbox.classic.kits.free;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
-import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
-import plugily.projects.minigamesbox.classic.utils.helper.WeaponHelper;
 
 import java.util.List;
 

@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,6 +42,7 @@ import plugily.projects.minigamesbox.classic.arena.states.PluginStartingState;
 import plugily.projects.minigamesbox.classic.arena.states.PluginWaitingState;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -406,8 +408,7 @@ public class PluginArena extends BukkitRunnable {
       plugin.getBungeeManager().connectToHub(player);
       plugin.getDebugger().debug("{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), this);
     }
-
-    player.teleport(getEndLocation());
+    VersionUtils.teleport(player, getEndLocation());
   }
 
   public Location getEndLocation() {

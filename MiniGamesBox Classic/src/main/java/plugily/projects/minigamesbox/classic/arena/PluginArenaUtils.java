@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -76,7 +77,7 @@ public class PluginArenaUtils {
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.saveInventoryToFile(plugin, player);
     }
-    player.teleport(location);
+    VersionUtils.teleport(player, location);
     player.getInventory().clear();
     player
         .getActivePotionEffects()

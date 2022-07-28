@@ -32,6 +32,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
@@ -180,7 +181,7 @@ public class MultiLocationItem implements CategoryItemHandler {
   private void teleport(HumanEntity player) {
     if(!getLocationsList().isEmpty()) {
       Location location = getLocationsList().get(setupInventory.getPlugin().getRandom().nextInt(getLocationsList().size() - 1));
-      player.teleport(location);
+      VersionUtils.teleport(player, location);
       new MessageBuilder("&aTeleported to " + name.toUpperCase() + " Location of arena " + setupInventory.getArenaKey() + " (" + location + ")").prefix().send(player);
       return;
     }
