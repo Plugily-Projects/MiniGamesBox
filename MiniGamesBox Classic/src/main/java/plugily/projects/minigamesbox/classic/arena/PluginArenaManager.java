@@ -75,7 +75,7 @@ public class PluginArenaManager {
     arena.getPlayers().add(player);
     User user = plugin.getUserManager().getUser(player);
 
-    if((arena.getArenaState() == ArenaState.IN_GAME || ((arena.getArenaState() == ArenaState.STARTING && arena.getTimer() <= 3) || (arena.getArenaState() == ArenaState.FULL_GAME && arena.getTimer() <= 3)) || arena.getArenaState() == ArenaState.ENDING)) {
+    if(arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState().isStartingStage(arena) && arena.getTimer() <= 3 || arena.getArenaState() == ArenaState.ENDING) {
       if(!plugin.getConfigPreferences().getOption("SPECTATORS")) {
         new MessageBuilder("IN_GAME_SPECTATOR_BLOCKED").asKey().player(player).arena(arena).sendPlayer();
         return;
@@ -105,7 +105,7 @@ public class PluginArenaManager {
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
-    } else if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) {
+    } else if(arena.getArenaState().isStartingStage(arena)) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
 
@@ -171,7 +171,7 @@ public class PluginArenaManager {
       if(arenaPlayer.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
         continue;
       }
-      if(arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME || arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+      if(arena.getArenaState().isLobbyStage(arena)) {
         leaveAttempt(arenaPlayer, arena);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM").asKey().player(player).arena(arena).sendPlayer();
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM").asKey().player(arenaPlayer).arena(arena).sendArena();

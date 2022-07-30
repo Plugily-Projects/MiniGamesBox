@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -160,9 +159,7 @@ public class PluginArenaUtils {
       new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
       return;
     }
-    if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS
-        && arena.getArenaState() != ArenaState.STARTING
-        && arena.getArenaState() != ArenaState.FULL_GAME) {
+    if(!arena.getArenaState().isLobbyStage(arena)) {
       return;
     }
 

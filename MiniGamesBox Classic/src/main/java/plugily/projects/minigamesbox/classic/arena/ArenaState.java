@@ -47,4 +47,12 @@ public enum ArenaState {
   public String getPlaceholder() {
     return placeholder;
   }
+
+  public boolean isLobbyStage(PluginArena arena) {
+    return arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME;
+  }
+
+  public boolean isStartingStage(PluginArena arena) {
+    return arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME;
+  }
 }

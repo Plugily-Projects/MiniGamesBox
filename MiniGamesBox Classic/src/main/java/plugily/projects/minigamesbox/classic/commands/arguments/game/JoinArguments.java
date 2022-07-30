@@ -60,7 +60,7 @@ public class JoinArguments {
             arenaList = registry.getSpecificFilteredArenas(arenaList, args[2]);
           }
           for(PluginArena arena : arenaList) {
-            if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) || arena.getPlayers().size() >= arena.getMaximumPlayers())
+            if(!(arena.getArenaState().isLobbyStage(arena)) || arena.getPlayers().size() >= arena.getMaximumPlayers())
               continue;
             arenas.put(arena, arena.getPlayers().size());
           }
@@ -76,8 +76,9 @@ public class JoinArguments {
           return;
         }
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          if(!(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS || arena.getArenaState() == ArenaState.STARTING || arena.getArenaState() == ArenaState.FULL_GAME) || arena.getPlayers().size() >= arena.getMaximumPlayers())
+          if(!arena.getArenaState().isLobbyStage(arena) || arena.getPlayers().size() >= arena.getMaximumPlayers()) {
             continue;
+          }
           if(args[1].equalsIgnoreCase(arena.getId())) {
             registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arena);
             return;
