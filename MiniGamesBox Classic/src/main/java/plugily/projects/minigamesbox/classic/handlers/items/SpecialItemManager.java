@@ -84,6 +84,9 @@ public class SpecialItemManager {
     if(!config.contains(path)) {
       return;
     }
+    if(config.getBoolean(path + ".disabled", false)) {
+      return;
+    }
     Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
     String name = new MessageBuilder(config.getString(path + ".displayname", "Error!")).build();
     List<String> lore = config.getStringList(path + ".lore").stream()
