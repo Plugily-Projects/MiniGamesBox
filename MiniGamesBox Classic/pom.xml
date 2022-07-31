@@ -136,6 +136,13 @@
             <version>2.9.0</version>
             <scope>compile</scope>
         </dependency>
+        <!-- Paper Lib-->
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.7</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -185,6 +192,10 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>plugily.projects.minigamesbox.classic.utils.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>plugily.projects.minigamesbox.classic.utils.paperlib</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
