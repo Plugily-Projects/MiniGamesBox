@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -247,10 +246,10 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
         double distance = player.getLocation().distanceSquared(location);
         if(deleteAll || distance <= 2) {
           setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName, null);
+          setupInventory.setConfig(keyName, null);
           //considerable to add arena method to remove location
           new MessageBuilder("&e✔ Removed | &a" + name.toUpperCase() + " location for arena " + setupInventory.getArenaKey() + "! (" + location + ")").prefix().send(player);
           new MessageBuilder("You can now remove the " + checkMaterial.toString() + "!").prefix().send(player);
-          ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
           return;
         }
       }

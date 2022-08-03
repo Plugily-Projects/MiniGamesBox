@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
@@ -93,8 +92,7 @@ public class ValueItem implements CategoryItemHandler {
           public Prompt acceptInput(ConversationContext context, String input) {
             String name = new MessageBuilder(input, false).build();
             context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " set to " + name).build());
-            setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName, name);
-            ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
+            setupInventory.setConfig(keyName, name);
             return Prompt.END_OF_CONVERSATION;
           }
         }).buildFor((Player) event.getWhoClicked());

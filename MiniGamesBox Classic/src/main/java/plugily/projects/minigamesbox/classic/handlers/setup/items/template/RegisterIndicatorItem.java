@@ -51,13 +51,13 @@ public class RegisterIndicatorItem implements ClickableItem {
     ItemBuilder item;
     if(setupCategoryHandler.isDone()) {
       item = new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial())
-          .name("DONE | " + setupCategory.name().toUpperCase())
+          .name("&aDONE &7| &6" + setupCategory.name().toUpperCase())
           .lore(ChatColor.GREEN + "GREEN Category fully set up!")
           .lore(ChatColor.RED + "RED Category needs set up!")
           .colorizeItem();
     } else {
       item = new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial())
-          .name("NEEDS SETUP | " + setupCategory.name().toUpperCase())
+          .name("&cNEEDS SETUP &7| &6" + setupCategory.name().toUpperCase())
           .lore(ChatColor.GREEN + "GREEN - Category fully set up!")
           .lore(ChatColor.RED + "RED - Category needs set up!")
           .colorizeItem();

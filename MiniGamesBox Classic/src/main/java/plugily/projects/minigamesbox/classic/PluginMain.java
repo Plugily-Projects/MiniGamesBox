@@ -536,11 +536,11 @@ public class PluginMain extends JavaPlugin {
     return cuboidSelector;
   }
 
-  public SetupInventory openSetupInventory(Player player) {
+  public SetupInventory getSetupInventory(Player player) {
     return new SetupInventory(this, player);
   }
 
-  public SetupInventory openSetupInventory(Player player, String arenaKey) {
+  public SetupInventory getSetupInventory(Player player, String arenaKey) {
     return new SetupInventory(this, player, arenaKey);
   }
 

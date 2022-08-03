@@ -54,14 +54,14 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
   @Override
   public void prepare() {
     injectItems();
-    setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
+    setDefaultItem(ClickableItem.of(new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()).name(" ").build()));
     setForceRefresh(true);
     refresh();
   }
 
   @Override
   public void injectItems() {
-    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("Go to Setup Menu").build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("&cGo to Setup Menu").build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
 
@@ -78,6 +78,7 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
           .lore("&eSHIFT_RIGHT_CLICK &7- Delete arena")
           .colorizeItem()
           .build(), event -> {
+        event.setCancelled(true);
         switch(event.getClick()) {
           case LEFT:
             setupInventory.setArenaKey(arena.getId());

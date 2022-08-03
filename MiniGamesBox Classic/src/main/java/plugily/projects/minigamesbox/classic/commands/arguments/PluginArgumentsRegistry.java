@@ -141,7 +141,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
             new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
             return true;
           }
-          plugin.openSetupInventory((Player) sender, arena.getId());
+          plugin.getSetupInventory((Player) sender, arena.getId()).open();
           return true;
         }
       }

@@ -23,6 +23,7 @@ import com.cryptomorin.xseries.XMaterial;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
+import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
@@ -54,7 +55,7 @@ public class ArenaEditorInventory extends NormalFastInv implements InventoryHand
         SetupInventoryUtils.removeSetupInventory(event.getPlayer());
       }
     });
-    setDefaultItem(ClickableItem.of(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
+    setDefaultItem(ClickableItem.of(new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()).name(" ").build()));
     setForceRefresh(true);
     refresh();
   }

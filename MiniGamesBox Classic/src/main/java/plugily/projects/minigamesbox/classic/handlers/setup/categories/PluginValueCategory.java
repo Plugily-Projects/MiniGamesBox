@@ -20,9 +20,6 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.categories;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.configuration.file.FileConfiguration;
-import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.items.category.CategoryItemHandler;
 import plugily.projects.minigamesbox.classic.handlers.setup.items.category.ValueItem;
@@ -39,24 +36,19 @@ import java.util.List;
  */
 public class PluginValueCategory implements SetupCategoryHandler {
 
-  private PluginMain plugin;
-  private PluginArena arena;
-  private FileConfiguration config;
   private SetupInventory setupInventory;
   private List<CategoryItemHandler> itemList = new ArrayList<>();
 
   @Override
   public void init(PluginSetupCategoryManager pluginSetupCategoryManager) {
     this.setupInventory = pluginSetupCategoryManager.getPluginSetupInventory();
-    this.config = setupInventory.getConfig();
-    this.plugin = setupInventory.getPlugin();
   }
 
   @Override
   public void addItems(NormalFastInv gui) {
     ValueItem mapName = new ValueItem(setupInventory, new ItemBuilder(XMaterial.NAME_TAG.parseMaterial()), "Map", "Set another map name... Or stay with it?", "mapname");
     itemList.add(mapName);
-    gui.setItem(1, mapName);
+    gui.setItem((getInventoryLine() * 9) + 1, mapName);
   }
 
   @Override

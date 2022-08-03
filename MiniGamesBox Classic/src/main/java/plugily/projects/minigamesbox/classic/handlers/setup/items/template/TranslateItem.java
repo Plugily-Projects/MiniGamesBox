@@ -45,9 +45,12 @@ public class TranslateItem implements ClickableItem {
     ItemBuilder item = new ItemBuilder(XMaterial.MELON_SLICE.parseMaterial());
     item
         .name("&b&l► Translate our plugins ◄ &8")
-        .lore(ChatColor.GRAY + "Help your country by translating the plugin for all!")
+        .lore(ChatColor.GRAY + "Help your country by translating")
+        .lore(ChatColor.GRAY + "the plugin for all!")
         .lore(ChatColor.AQUA + "We use PoEditor for our language translations")
-        .lore(ChatColor.AQUA + "You can just edit your language.yml or be part of translator pool of plugily by translating the plugin on PoEditor")
+        .lore(ChatColor.AQUA + "You can just edit your language.yml or be part")
+        .lore(ChatColor.AQUA + "of translator pool of plugily by")
+        .lore(ChatColor.AQUA + "translating the plugin on PoEditor")
         .lore(ChatColor.GRAY + "CLICK to get link for our translation program!")
         .colorizeItem();
     return item.build();

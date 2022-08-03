@@ -320,4 +320,32 @@ public class MessageBuilder {
   public enum ActionType {
     JOIN, LEAVE, DEATH
   }
+
+  public String getMessageColor() {
+    return messageColor;
+  }
+
+  public String getMessageIssueColor() {
+    return messageIssueColor;
+  }
+
+  public String getMessageSpecialCharBefore() {
+    return messageSpecialCharBefore;
+  }
+
+  public String getPlaceholderColorNumber() {
+    return placeholderColorNumber;
+  }
+
+  public String getPlaceholderColorOther() {
+    return placeholderColorOther;
+  }
+
+  public String getPlaceholderColorPlayer() {
+    return placeholderColorPlayer;
+  }
+
+  public String getPlaceholderColorValue() {
+    return placeholderColorValue;
+  }
 }

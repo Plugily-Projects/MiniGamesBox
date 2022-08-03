@@ -201,7 +201,7 @@ public class PluginArenaRegistry {
 
     PluginArena arena = getNewArena(key);
 
-    if(!additionalValidatorChecks(section, arena, key) || !validatorChecks(section, arena, key)) {
+    if(!validatorChecks(section, arena, key) || !additionalValidatorChecks(section, arena, key)) {
       arena.setReady(false);
       registerArena(arena);
     } else {

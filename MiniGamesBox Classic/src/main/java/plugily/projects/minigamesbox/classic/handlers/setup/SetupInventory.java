@@ -76,6 +76,10 @@ public class SetupInventory {
         new ArenaListInventory(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this).open(player);
         break;
       case ARENA_EDITOR:
+        if(plugin.getArenaRegistry().getArenas().isEmpty()) {
+          new MessageBuilder("&cThere are no arenas. Create one first!").send(player);
+          return;
+        }
         new ArenaEditorInventory(54, plugin.getPluginMessagePrefix() + "Arena Editor Menu", this).open(player);
         break;
     }
@@ -114,6 +118,12 @@ public class SetupInventory {
 
   public FileConfiguration getConfig() {
     return ConfigUtils.getConfig(plugin, "arenas");
+  }
+
+  public void setConfig(String keyName, Object value) {
+    FileConfiguration arenasFile = getConfig();
+    arenasFile.set("instances." + getArenaKey() + "." + keyName, value);
+    ConfigUtils.saveConfig(getPlugin(), arenasFile, "arenas");
   }
 
 
@@ -204,6 +214,8 @@ public class SetupInventory {
 
     arena.setReady(false);
 
+
+    //TODO DESIGN UPDATE! COMPONENT BUILDER!
     player.sendRawMessage(ChatColor.BOLD + "------------------------------------------");
     player.sendRawMessage(ChatColor.YELLOW + "      Instance " + id + " created!");
     player.sendRawMessage("");

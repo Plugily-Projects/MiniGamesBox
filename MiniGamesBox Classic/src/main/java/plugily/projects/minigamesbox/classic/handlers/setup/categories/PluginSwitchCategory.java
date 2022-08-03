@@ -19,9 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.categories;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.items.category.CategoryItemHandler;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
@@ -36,17 +33,12 @@ import java.util.List;
  */
 public class PluginSwitchCategory implements SetupCategoryHandler {
 
-  private PluginMain plugin;
-  private PluginArena arena;
-  private FileConfiguration config;
   private SetupInventory setupInventory;
   private List<CategoryItemHandler> itemList = new ArrayList<>();
 
   @Override
   public void init(PluginSetupCategoryManager pluginSetupCategoryManager) {
     this.setupInventory = pluginSetupCategoryManager.getPluginSetupInventory();
-    this.config = setupInventory.getConfig();
-    this.plugin = setupInventory.getPlugin();
   }
 
   @Override

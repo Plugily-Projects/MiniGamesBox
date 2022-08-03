@@ -51,6 +51,10 @@ public class PluginSetupCategoryManager {
     categoryHandler.put(SetupCategory.VALUES, new PluginValueCategory());
     categoryHandler.put(SetupCategory.SWITCH, new PluginSwitchCategory());
     categoryHandler.put(SetupCategory.SPECIFIC, new PluginSpecificCategory());
+    init();
+  }
+
+  public void init() {
     for(SetupCategoryHandler handler : categoryHandler.values()) {
       handler.init(this);
     }
@@ -61,7 +65,7 @@ public class PluginSetupCategoryManager {
       setupCategoryHandler.addItems(gui);
       if(setupCategoryHandler.getInventoryLine() < 5) {
         gui.setItem(setupCategoryHandler.getInventoryLine() * 9, new CategoryItem(setupInventory, setupCategory));
-        gui.setItem((setupCategoryHandler.getInventoryLine() * 8) + 8, new RegisterIndicatorItem(setupInventory, setupCategory, setupCategoryHandler));
+        gui.setItem((setupCategoryHandler.getInventoryLine() * 9) + 8, new RegisterIndicatorItem(setupInventory, setupCategory, setupCategoryHandler));
       }
       gui.setItem(45, new MenuItem(setupInventory));
       gui.setItem(47, new TranslateItem(setupInventory));

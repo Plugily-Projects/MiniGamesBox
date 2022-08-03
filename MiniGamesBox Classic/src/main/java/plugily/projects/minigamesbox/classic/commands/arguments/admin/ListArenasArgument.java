@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,6 +62,7 @@ public class ListArenasArgument {
           }
           TextComponent component = new TextComponent(listMessage);
           component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId()));
+          component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId())));
 
           ((Player) sender).spigot().sendMessage(component);
         }

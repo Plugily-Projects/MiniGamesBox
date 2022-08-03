@@ -20,7 +20,6 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.items.template;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.ChatColor;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -48,8 +47,8 @@ public class CategoryItem implements ClickableItem {
   public ItemStack getItem() {
     ItemBuilder item = new ItemBuilder(XMaterial.GOLD_INGOT.parseMaterial());
     item
-        .name("Category | " + setupCategory.name().toUpperCase())
-        .lore(ChatColor.GRAY + "CLICK to get link for category tutorial!")
+        .name("&aCategory &7| &6" + setupCategory.name().toUpperCase())
+        .lore("&eLEFT_CLICK &7- Category Tutorial")
         .colorizeItem();
     return item.build();
   }
@@ -57,6 +56,7 @@ public class CategoryItem implements ClickableItem {
   @Override
   public void onClick(InventoryClickEvent event) {
     event.getWhoClicked().closeInventory();
+    //ToDo
     new MessageBuilder("&6Check tutorial video at " + setupCategory.getTutorialURL()).prefix().send(event.getWhoClicked());
   }
 }

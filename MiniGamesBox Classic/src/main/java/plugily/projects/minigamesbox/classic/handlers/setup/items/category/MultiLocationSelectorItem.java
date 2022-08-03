@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -160,10 +159,9 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
         double distance1 = player.getLocation().distanceSquared(location1);
         double distance2 = player.getLocation().distanceSquared(location2);
         if(distance1 <= 2 || distance2 <= 2) {
-          setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName + "." + key, null);
+          setupInventory.setConfig(keyName + "." + key, null);
           //considerable to add arena method to remove location
           new MessageBuilder("&e✔ Removed | &a" + name.toUpperCase() + " location for arena " + setupInventory.getArenaKey() + "! (" + location1 + ")").prefix().send(player);
-          ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
           return;
         }
       }

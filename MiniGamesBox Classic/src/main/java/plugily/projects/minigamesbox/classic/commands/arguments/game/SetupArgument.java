@@ -49,7 +49,7 @@ public class SetupArgument {
       public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if(args.length == 1) {
-          new SetupInventory(registry.getPlugin(), player);
+          new SetupInventory(registry.getPlugin(), player).open();
           return;
         }
 
@@ -69,7 +69,7 @@ public class SetupArgument {
             if(ConfigUtils.getConfig(registry.getPlugin(), "arenas").contains("instances." + args[2])) {
               new MessageBuilder(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!").prefix().send(player);
             } else {
-              registry.getPlugin().openSetupInventory((Player) sender, args[2]).createInstanceInConfig(args[2], player);
+              registry.getPlugin().getSetupInventory((Player) sender, args[2]).createInstanceInConfig(args[2], player);
             }
             break;
           case "edit":
@@ -78,7 +78,7 @@ public class SetupArgument {
               new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
               return;
             }
-            registry.getPlugin().openSetupInventory((Player) sender, arena.getId());
+            registry.getPlugin().getSetupInventory((Player) sender, arena.getId()).open();
             break;
           default:
             new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().value("/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]").send(sender);

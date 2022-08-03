@@ -50,19 +50,19 @@ public class PluginLocationCategory implements SetupCategoryHandler {
   public void addItems(NormalFastInv gui) {
     LocationItem lobby = new LocationItem(setupInventory, new ItemBuilder(XMaterial.LAPIS_BLOCK.parseMaterial()), "Lobby", "Location where players will be teleported after they join the game", "lobbylocation");
     itemList.add(lobby);
-    gui.setItem(1, lobby);
+    gui.setItem((getInventoryLine() * 9) + 1, lobby);
     LocationItem starting = new LocationItem(setupInventory, new ItemBuilder(XMaterial.EMERALD_BLOCK.parseMaterial()), "Starting", "Location where players will be teleported when the game starts", "startlocation");
     itemList.add(starting);
-    gui.setItem(2, starting);
+    gui.setItem((getInventoryLine() * 9) + 2, starting);
     LocationItem spectator = new LocationItem(setupInventory, new ItemBuilder(XMaterial.BAKED_POTATO.parseMaterial()), "Spectator", "Location where players will be teleported when they get into spectator", "spectatorlocation");
     itemList.add(spectator);
-    gui.setItem(3, spectator);
+    gui.setItem((getInventoryLine() * 9) + 3, spectator);
     LocationItem end = new LocationItem(setupInventory, new ItemBuilder(XMaterial.REDSTONE_BLOCK.parseMaterial()), "Ending", "Location where players will be teleported after the game", "endlocation");
     itemList.add(end);
-    gui.setItem(6, end);
+    gui.setItem((getInventoryLine() * 9) + 6, end);
     MaterialMultiLocationItem sign = new MaterialMultiLocationItem(setupInventory, new ItemBuilder(XMaterial.OAK_SIGN.parseMaterial()), "Game Sign", "Sign registered as Game Sign with join function", "signs", XMaterial.OAK_SIGN.parseMaterial(), true, 0);
     itemList.add(sign);
-    gui.setItem(7, sign);
+    gui.setItem((getInventoryLine() * 9) + 7, sign);
   }
 
   @Override

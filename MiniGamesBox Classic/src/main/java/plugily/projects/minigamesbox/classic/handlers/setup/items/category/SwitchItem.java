@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
@@ -101,8 +100,7 @@ public class SwitchItem implements CategoryItemHandler {
               return Prompt.END_OF_CONVERSATION;
             }
             context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + input).build());
-            setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName, input);
-            ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
+            setupInventory.setConfig(keyName, input);
             return Prompt.END_OF_CONVERSATION;
           }
         }).buildFor((Player) event.getWhoClicked());
@@ -112,8 +110,7 @@ public class SwitchItem implements CategoryItemHandler {
         int position = switches.indexOf(option);
         String newOption = switches.get(switches.size() - 1 <= position ? 0 : position + 1);
         event.getWhoClicked().sendMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + newOption).build());
-        setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName, newOption);
-        ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
+        setupInventory.setConfig(keyName, newOption);
         break;
       default:
         break;

@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
@@ -160,8 +159,7 @@ public class CountItem implements CategoryItemHandler {
   }
 
   private void updateArenaFile(int amount) {
-    setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName, amount);
-    ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
+    setupInventory.setConfig(keyName, amount);
   }
 
   @Override

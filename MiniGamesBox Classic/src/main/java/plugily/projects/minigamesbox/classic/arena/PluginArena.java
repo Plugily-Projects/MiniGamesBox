@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -139,6 +138,7 @@ public class PluginArena extends BukkitRunnable {
 
   public PluginArena(String id) {
     this.id = id == null ? "" : id;
+    this.mapName = id;
     setDefaultValues();
     scoreboardManager = new PluginScoreboardManager(this);
     mapRestorerManager = new PluginMapRestorerManager(this);

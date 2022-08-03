@@ -32,7 +32,6 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
-import plugily.projects.minigamesbox.classic.handlers.setup.items.category.EmptyItem;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
@@ -123,15 +122,18 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
       new MessageBuilder(" &6Check patron program here: https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(event.getWhoClicked());
     }));
 
-    setItem(41, ClickableItem.of(new ItemBuilder(XMaterial.FILLED_MAP.parseItem())
-        .name(new MessageBuilder("&e&lView Setup Video").build())
-        .lore(ChatColor.GRAY + "Having problems with setup or wanna")
-        .lore(ChatColor.GRAY + "know some useful tips? Click to get video link!")
+    setItem(41, ClickableItem.of(new ItemBuilder(XMaterial.MAP.parseItem())
+        .name(new MessageBuilder("&e&l► View Setup Video ◄").build())
+        .lore(ChatColor.GRAY + "Having problems with setup")
+        .lore(ChatColor.GRAY + "or wanna know some")
+        .lore(ChatColor.YELLOW + "useful tips? ")
+        .lore(ChatColor.YELLOW + "Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder(" &6Check out this video: " + SetupInventoryUtils.SetupInventoryStage.HOME.getTutorialURL(), false).prefix().send(event.getWhoClicked());
+      new MessageBuilder(" &cCheck out this video: " + SetupInventoryUtils.SetupInventoryStage.HOME.getTutorialURL(), false).prefix().send(event.getWhoClicked());
     }));
 
-    setDefaultItem(new EmptyItem(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()));
+    setDefaultItem(ClickableItem.of(new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()).name(" ").build()));
   }
 }
+//TODO links component builder
