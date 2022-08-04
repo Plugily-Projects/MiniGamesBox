@@ -73,9 +73,12 @@ public class CountItem implements CategoryItemHandler {
         .lore("&aStatus:")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
-        .lore("&eLEFT_CLICK &7- Increase the amount")
-        .lore("&eSHIFT_LEFT_CLICK &7- Input number on chat")
-        .lore("&eRIGHT_CLICK &7- Decrease the amount")
+        .lore("&eLEFT_CLICK")
+        .lore("&7-> Increase the amount")
+        .lore("&eSHIFT_LEFT_CLICK")
+        .lore("&7-> Input number on chat")
+        .lore("&eRIGHT_CLICK")
+        .lore("&7-> Decrease the amount")
         .colorizeItem();
     this.item = item.build();
     this.clickConsumer = clickConsumer;
@@ -120,9 +123,9 @@ public class CountItem implements CategoryItemHandler {
         new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new NumericPrompt() {
           @Override
           protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext, @NotNull Number number) {
-            int count = number.intValue();
-            updateArenaFile(count);
-            conversationContext.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aCount for " + name.toUpperCase() + " on " + setupInventory.getArenaKey() + " set to " + count).build());
+            int countInput = number.intValue();
+            updateArenaFile(countInput);
+            conversationContext.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aCount for " + name.toUpperCase() + " on " + setupInventory.getArenaKey() + " set to " + countInput).build());
             //considerable to open setup inventory again?
             return Prompt.END_OF_CONVERSATION;
           }
@@ -143,19 +146,16 @@ public class CountItem implements CategoryItemHandler {
       event.getWhoClicked().sendMessage("§c§l✖ §cWarning | Please do not set amount lower than 1! For higher values set the number easily with chat!");
       count = 1;
     }
-    updateCount(event);
     clickConsumer.accept(event);
     InventoryHolder holder = event.getInventory().getHolder();
     if(holder instanceof RefreshableFastInv) {
       ((RefreshableFastInv) holder).refresh();
     }
+    updateCount();
   }
 
-  private void updateCount(InventoryClickEvent event) {
-    ItemStack currentItem = event.getCurrentItem();
-    if(currentItem != null) {
-      updateArenaFile(currentItem.getAmount());
-    }
+  private void updateCount() {
+    updateArenaFile(count);
   }
 
   private void updateArenaFile(int amount) {

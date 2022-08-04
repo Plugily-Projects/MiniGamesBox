@@ -57,7 +57,7 @@ public class ValueItem implements CategoryItemHandler {
         .lore("&aStatus:")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
-        .lore("&eLEFT_CLICK &7- Set the value by typing in chat")
+        .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat")
         .colorizeItem();
 
     this.item = item.build();

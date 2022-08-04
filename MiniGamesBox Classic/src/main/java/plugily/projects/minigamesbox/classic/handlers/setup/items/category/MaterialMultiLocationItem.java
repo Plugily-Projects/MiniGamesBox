@@ -99,10 +99,10 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
       item
           .lore("&7" + getSetupInfo())
           .lore("&aControls")
-          .lore("&eLEFT_CLICK &7- Add the " + name.toUpperCase() + " location at the position you are *looking*")
-          .lore("&eSHIFT_LEFT_CLICK &7- Get the setup item into your inventory")
-          .lore("&eRIGHT_CLICK &7- Remove a " + name.toUpperCase() + " location near your position")
-          .lore("&eSHIFT_RIGHT_CLICK &7- Remove all " + name.toUpperCase() + " locations")
+          .lore("&eLEFT_CLICK \n&7-> Add the " + name.toUpperCase() + " location at the position you are *looking*")
+          .lore("&eSHIFT_LEFT_CLICK \n&7-> Get the setup item into your inventory")
+          .lore("&eRIGHT_CLICK \n&7-> Remove a " + name.toUpperCase() + " location near your position")
+          .lore("&eSHIFT_RIGHT_CLICK \n&7-> Remove all " + name.toUpperCase() + " locations")
           .colorizeItem();
 
     }
@@ -145,12 +145,12 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
                 .lore("&aStatus:")
                 .lore("&7Check in the arena editor!")
                 .lore("&aControls")
-                .lore("&eDROP &7- Remove/Deactivate the item")
-                .lore(physical ? "&ePHYSICAL &7- Not supported" : "&cPHYSICAL - DEACTIVATED")
-                .lore(leftClick ? "&eLEFT_CLICK_AIR &7- Not supported" : "&cLEFT_CLICK_AIR - DEACTIVATED")
-                .lore(leftClick ? "&eLEFT_CLICK_BLOCK &7- Remove a location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
-                .lore(rightClick ? "&eRIGHT_CLICK_AIR &7- Teleport through locations" : "&cRIGHT_CLICK_AIR - DEACTIVATED")
-                .lore(rightClick ? "&eRIGHT_CLICK_BLOCK &7- Add the location at the position you clicked" : "&cRIGHT_CLICK_BLOCK - DEACTIVATED")
+                .lore("&eDROP \n&7-> Remove/Deactivate the item")
+                .lore(physical ? "&ePHYSICAL \n&7-> Not supported" : "&cPHYSICAL - DEACTIVATED")
+                .lore(leftClick ? "&eLEFT_CLICK_AIR \n&7-> Not supported" : "&cLEFT_CLICK_AIR - DEACTIVATED")
+                .lore(leftClick ? "&eLEFT_CLICK_BLOCK \n&7-> Remove a location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
+                .lore(rightClick ? "&eRIGHT_CLICK_AIR \n&7-> Teleport through locations" : "&cRIGHT_CLICK_AIR - DEACTIVATED")
+                .lore(rightClick ? "&eRIGHT_CLICK_BLOCK \n&7-> Add the location at the position you clicked" : "&cRIGHT_CLICK_BLOCK - DEACTIVATED")
                 .colorizeItem()
                 .build();
         HandlerItem handlerItem = new HandlerItem(itemStack);

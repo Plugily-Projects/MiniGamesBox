@@ -71,10 +71,10 @@ public class LocationSelectorItem implements CategoryItemHandler {
         .lore("&aStatus:")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
-        .lore("&eLEFT_CLICK &7- Set the locations of the selector item")
-        .lore("&eSHIFT_LEFT_CLICK &7- Get the selector item into your inventory")
-        .lore("&eRIGHT_CLICK &7- Teleport to location 1")
-        .lore("&eSHIFT_RIGHT_CLICK &7- Remove the location near your position")
+        .lore("&eLEFT_CLICK \n&7-> Set the locations of the selector item")
+        .lore("&eSHIFT_LEFT_CLICK \n&7-> Get the selector item into your inventory")
+        .lore("&eRIGHT_CLICK \n&7-> Teleport to location 1")
+        .lore("&eSHIFT_RIGHT_CLICK \n&7-> Remove the location near your position")
         .colorizeItem();
     this.item = item.build();
     this.clickConsumer = clickConsumer;

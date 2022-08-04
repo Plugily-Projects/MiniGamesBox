@@ -101,6 +101,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
     setItem(25, ClickableItem.of(new ItemBuilder(XMaterial.SLIME_BLOCK.parseItem())
             .name(new MessageBuilder("&cContinue Arena Setup").build())
             .lore(ChatColor.GRAY + "Continue a previous started arena editor")
+            .lore(ChatColor.RED + "Arena: " + setupInventory.getArenaKey())
             .build(), event -> {
           if(setupInventory.getArenaKey() == null) {
             new MessageBuilder("You need to create or edit a arena first").prefix().player((Player) event.getWhoClicked()).sendPlayer();

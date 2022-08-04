@@ -77,10 +77,14 @@ public class LocationItem implements CategoryItemHandler {
         .lore("&aStatus:")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
-        .lore("&eLEFT_CLICK &7- Set the location at the position you are standing")
-        .lore("&eSHIFT_LEFT_CLICK &7- Get the setup item into your inventory")
-        .lore("&eRIGHT_CLICK &7- Teleport to current location")
-        .lore("&eSHIFT_RIGHT_CLICK &7- Remove the location near your position")
+        .lore("&eLEFT_CLICK")
+        .lore("&7-> Set the location at the position you are standing")
+        .lore("&eSHIFT_LEFT_CLICK")
+        .lore("&7-> Get the setup item into your inventory")
+        .lore("&eRIGHT_CLICK")
+        .lore("&7-> Teleport to current location")
+        .lore("&eSHIFT_RIGHT_CLICK")
+        .lore("&7-> Remove the location near your position")
         .colorizeItem();
     this.item = item.build();
     this.clickConsumer = clickConsumer;
@@ -113,11 +117,11 @@ public class LocationItem implements CategoryItemHandler {
                 .lore("&7Check in the arena editor!")
                 .lore("&aControls")
                 .lore("&eDROP &7- Remove/Deactivate the item")
-                .lore(physical ? "&ePHYSICAL &7- Set a location on physical event (e.g. pressure plate)" : "&cPHYSICAL - DEACTIVATED")
-                .lore(leftClick ? "&eLEFT_CLICK_AIR &7- Set the location at the position you are standing" : "&cLEFT_CLICK_AIR - DEACTIVATED")
-                .lore(leftClick ? "&eLEFT_CLICK_BLOCK &7- Set the location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
-                .lore(rightClick ? "&eRIGHT_CLICK_AIR &7- Teleport to current location" : "&cRIGHT_CLICK_AIR - DEACTIVATED")
-                .lore(rightClick ? "&eRIGHT_CLICK_BLOCK &7- Remove the location near your position" : "&cRIGHT_CLICK_BLOCK - DEACTIVATED")
+                .lore(physical ? "&ePHYSICAL \n&7-> Set a location on physical event (e.g. pressure plate)" : "&cPHYSICAL - DEACTIVATED")
+                .lore(leftClick ? "&eLEFT_CLICK_AIR \n&7-> Set the location at the position you are standing" : "&cLEFT_CLICK_AIR - DEACTIVATED")
+                .lore(leftClick ? "&eLEFT_CLICK_BLOCK \n&7-> Set the location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
+                .lore(rightClick ? "&eRIGHT_CLICK_AIR \n&7-> Teleport to current location" : "&cRIGHT_CLICK_AIR - DEACTIVATED")
+                .lore(rightClick ? "&eRIGHT_CLICK_BLOCK \n&7-> Remove the location near your position" : "&cRIGHT_CLICK_BLOCK - DEACTIVATED")
                 .colorizeItem()
                 .build();
         HandlerItem handlerItem = new HandlerItem(itemStack);

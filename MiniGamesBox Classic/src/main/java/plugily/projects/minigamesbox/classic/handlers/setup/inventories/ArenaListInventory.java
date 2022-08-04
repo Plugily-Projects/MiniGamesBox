@@ -73,9 +73,9 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
       addItem(ClickableItem.of(new ItemBuilder(material)
           .name("ID | " + arena.getId())
           .lore("&aControls")
-          .lore("&eLEFT_CLICK &7- Edit arena")
-          .lore("&eSHIFT_LEFT_CLICK &7- Clone arena")
-          .lore("&eSHIFT_RIGHT_CLICK &7- Delete arena")
+          .lore("&eLEFT_CLICK \n&7-> Edit arena")
+          .lore("&eSHIFT_LEFT_CLICK \n&7-> Clone arena")
+          .lore("&eSHIFT_RIGHT_CLICK \n&7-> Delete arena")
           .colorizeItem()
           .build(), event -> {
         event.setCancelled(true);

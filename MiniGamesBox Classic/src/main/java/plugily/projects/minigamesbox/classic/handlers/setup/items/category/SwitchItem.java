@@ -61,8 +61,8 @@ public class SwitchItem implements CategoryItemHandler {
         .lore("&aStatus:")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
-        .lore("&eLEFT_CLICK &7- Set the value by typing in chat")
-        .lore("&eRIGHT_CLICK &7- Switch between the values")
+        .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat")
+        .lore("&eRIGHT_CLICK \n&7-> Switch between the values")
         .colorizeItem();
 
     this.item = item.build();

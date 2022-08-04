@@ -73,13 +73,13 @@ public class SetupInventory {
         new HomeInventory(54, plugin.getPluginMessagePrefix() + "Setup Menu", this).open(player);
         break;
       case ARENA_LIST:
-        new ArenaListInventory(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this).open(player);
-        break;
-      case ARENA_EDITOR:
         if(plugin.getArenaRegistry().getArenas().isEmpty()) {
           new MessageBuilder("&cThere are no arenas. Create one first!").send(player);
           return;
         }
+        new ArenaListInventory(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this).open(player);
+        break;
+      case ARENA_EDITOR:
         new ArenaEditorInventory(54, plugin.getPluginMessagePrefix() + "Arena Editor Menu", this).open(player);
         break;
     }
