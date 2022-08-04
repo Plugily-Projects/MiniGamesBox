@@ -21,7 +21,6 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
@@ -30,6 +29,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
+import plugily.projects.minigamesbox.classic.utils.version.TextComponentBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -50,20 +50,22 @@ public class PlaceholderCheckArgument {
           new MessageBuilder("---- INTERNAL PLACEHOLDERS ----").send(sender);
           for(Placeholder placeholder : registry.getPlugin().getPlaceholderManager().getRegisteredInternalPlaceholders()) {
             String listMessage = new MessageBuilder("&aID #" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + placeholder.getId() + "%").player((Player) sender).arena(registry.getPlugin().getArenaRegistry().getArenas().get(0)).build();
-            TextComponent component = new TextComponent(listMessage);
-            component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("%" + placeholder.getId() + "%")));
-            component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "%" + placeholder.getId() + "%"));
-            ((Player) sender).spigot().sendMessage(component);
+            new TextComponentBuilder(listMessage).player((Player) sender)
+                .setClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "%" + placeholder.getId() + "%")
+                .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "%" + placeholder.getId() + "%")
+                .sendPlayer();
+
           }
         } else {
           new MessageBuilder("---- EXTERNAL (PAPI) PLACEHOLDERS ----").send(sender);
           new MessageBuilder("NOTE: Parsing for specific arenas works with _arenaname:arena").send(sender);
           for(Placeholder placeholder : registry.getPlugin().getPlaceholderManager().getRegisteredPAPIPlaceholders()) {
             String listMessage = new MessageBuilder("&aID #" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%").player((Player) sender).arena(registry.getPlugin().getArenaRegistry().getArenas().get(0)).build();
-            TextComponent component = new TextComponent(listMessage);
-            component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")));
-            component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%"));
-            ((Player) sender).spigot().sendMessage(component);
+            new TextComponentBuilder(listMessage).player((Player) sender)
+                .setClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
+                .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
+                .sendPlayer();
+
           }
         }
       }

@@ -270,9 +270,8 @@ public class MessageBuilder {
   }
 
   public void sendPlayer() {
-    build();
-    if((message != null) && !message.isEmpty() && player != null) {
-      player.sendMessage(message);
+    if(player != null) {
+      send(player);
     }
   }
 
@@ -300,11 +299,8 @@ public class MessageBuilder {
   }
 
   public void sendArena() {
-    build();
-    if((message != null) && !message.isEmpty() && (arena != null)) {
-      for(Player arenaPlayer : arena.getPlayers()) {
-        arenaPlayer.sendMessage(message);
-      }
+    if(arena != null) {
+      send(arena);
     }
   }
 

@@ -21,8 +21,6 @@ package plugily.projects.minigamesbox.classic.commands.arguments;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -57,6 +55,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgume
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
+import plugily.projects.minigamesbox.classic.utils.version.TextComponentBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -219,17 +218,11 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
     for(LabelData labelData : data) {
       if(senderIsPlayer) {
-        TextComponent component = new TextComponent(labelData.getText());
-        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, labelData.getCommand()));
+        new TextComponentBuilder(labelData.getText()).player((Player) sender)
+            .setClickEvent(ClickEvent.Action.SUGGEST_COMMAND, labelData.getCommand())
+            .setHoverEvent(HoverEvent.Action.SHOW_TEXT, labelData.getDescription())
+            .sendPlayer();
 
-        // Backwards compatibility
-        if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1)) {
-          component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(labelData.getDescription())));
-        } else {
-          component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(labelData.getDescription())));
-        }
-
-        ((Player) sender).spigot().sendMessage(component);
       } else {
         //more descriptive for console - split at \n to show only basic description
         plugin.getDebugger().sendConsoleMsg(labelData.getText() + " - " + labelData.getDescription().split("\n", 2)[0]);
