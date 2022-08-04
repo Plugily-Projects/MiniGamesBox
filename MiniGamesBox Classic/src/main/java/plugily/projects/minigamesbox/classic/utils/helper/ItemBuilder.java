@@ -25,6 +25,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.ChatPaginator;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 
 import java.util.Arrays;
@@ -66,7 +67,7 @@ public class ItemBuilder {
   public ItemBuilder data(byte data) {
     org.bukkit.material.MaterialData materialData = this.itemStack.getData();
 
-    if (materialData != null) {
+    if(materialData != null) {
       materialData.setData(data);
     }
     return this;
@@ -116,9 +117,20 @@ public class ItemBuilder {
   }
 
   public ItemBuilder lore(final List<String> name) {
+    lore(name, true);
+    return this;
+  }
+
+  public ItemBuilder lore(final List<String> name, boolean wordWrap) {
     List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
     if(name != null) {
-      lore.addAll(name);
+      if(wordWrap) {
+        for(String line : name) {
+          lore.addAll(Arrays.asList(ChatPaginator.wordWrap(line, 30)));
+        }
+      } else {
+        lore.addAll(name);
+      }
     }
     ComplementAccessor.getComplement().setLore(itemMeta, lore);
     return this;
