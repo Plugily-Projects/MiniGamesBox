@@ -23,6 +23,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
@@ -66,9 +68,17 @@ public class CountItem implements CategoryItemHandler {
     this.name = name;
     this.description = description;
     this.keyName = keyName;
+    setLore(item);
     item
         .name("&7Set &a" + this.name.toUpperCase() + " &7amount")
-        .lore("&aInfo")
+        .colorizeItem();
+    this.item = item.build();
+    this.clickConsumer = clickConsumer;
+    this.count = count >= 0 ? count : 1;
+  }
+
+  private void setLore(ItemBuilder itemBuilder) {
+    itemBuilder.lore("&aInfo")
         .lore("&7" + this.description)
         .lore("&aStatus:")
         .lore("&7" + getSetupInfo())
@@ -78,11 +88,7 @@ public class CountItem implements CategoryItemHandler {
         .lore("&eSHIFT_LEFT_CLICK")
         .lore("&7-> Input number on chat")
         .lore("&eRIGHT_CLICK")
-        .lore("&7-> Decrease the amount")
-        .colorizeItem();
-    this.item = item.build();
-    this.clickConsumer = clickConsumer;
-    this.count = count >= 0 ? count : 1;
+        .lore("&7-> Decrease the amount");
   }
 
   /**
@@ -108,22 +114,24 @@ public class CountItem implements CategoryItemHandler {
   @Override
   public ItemStack getItem() {
     item.setAmount(Math.min(count, 64));
-    return item;
+    ItemBuilder itemBuilder = new ItemBuilder(item).removeLore();
+    setLore(itemBuilder);
+    return itemBuilder.colorizeItem().build();
   }
 
 
   @Override
   public void onClick(InventoryClickEvent event) {
     switch(event.getClick()) {
-      case LEFT:
-        count++;
-        break;
       case SHIFT_LEFT:
-        event.getWhoClicked().closeInventory();
         new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new NumericPrompt() {
           @Override
           protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext, @NotNull Number number) {
             int countInput = number.intValue();
+            if(countInput < 1) {
+              conversationContext.getForWhom().sendRawMessage("§c§l✖ §cWarning | Please do not set amount lower than 1! For higher values set the number easily with chat!");
+              countInput = 1;
+            }
             updateArenaFile(countInput);
             conversationContext.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aCount for " + name.toUpperCase() + " on " + setupInventory.getArenaKey() + " set to " + countInput).build());
             //considerable to open setup inventory again?
@@ -136,6 +144,9 @@ public class CountItem implements CategoryItemHandler {
           }
         }).buildFor((Player) event.getWhoClicked());
         break;
+      case LEFT:
+        count++;
+        break;
       case RIGHT:
         count--;
         break;
@@ -147,11 +158,16 @@ public class CountItem implements CategoryItemHandler {
       count = 1;
     }
     clickConsumer.accept(event);
+    updateCount();
     InventoryHolder holder = event.getInventory().getHolder();
     if(holder instanceof RefreshableFastInv) {
       ((RefreshableFastInv) holder).refresh();
     }
-    updateCount();
+    if(event.getClick() == ClickType.SHIFT_LEFT) {
+      event.getWhoClicked().closeInventory();
+    } else {
+      setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
+    }
   }
 
   private void updateCount() {

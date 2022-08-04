@@ -139,7 +139,9 @@ public class SetupInventory {
 
   public String isSectionOptionDone(String path, int minimum) {
     ConfigurationSection section = getConfig().getConfigurationSection("instances." + getArenaKey() + "." + path);
-
+    if(minimum == 0) {
+      return "&e&l✔ Optional)";
+    }
     if(section != null) {
       int keysSize = section.getKeys(false).size();
 

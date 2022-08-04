@@ -81,10 +81,10 @@ public class RegisterItem implements ClickableItem {
       case ARENA_SETUP:
       default:
         item = new ItemBuilder(XMaterial.BARRIER.parseMaterial())
-            .name(new MessageBuilder("&a&lArena Setup not finished").build())
-            .lore(ChatColor.GRAY + "This arena is already registered!")
-            .lore(ChatColor.GRAY + "Good job, you went through whole setup!")
-            .lore(ChatColor.GRAY + "You can play on this arena now!");
+            .name(new MessageBuilder("&c&lArena Setup not finished").build())
+            .lore(ChatColor.GRAY + "Go ahead with the setup!")
+            .lore(ChatColor.GRAY + "Feel free to watch the tutorials that you can find on the gui!")
+            .lore(ChatColor.GRAY + "Support: https://discord.plugily.xyz - #general-questions");
 
         break;
     }

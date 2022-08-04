@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.ChatPaginator;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 
 import java.util.Arrays;
@@ -108,6 +109,13 @@ public class ItemBuilder {
     return this;
   }
 
+  public ItemBuilder removeLore() {
+    List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
+    lore.clear();
+    ComplementAccessor.getComplement().setLore(itemMeta, lore);
+    return this;
+  }
+
   public ItemBuilder lore(String lore) {
     return lore(Collections.singletonList(lore));
   }
@@ -126,7 +134,11 @@ public class ItemBuilder {
     if(name != null) {
       if(wordWrap) {
         for(String line : name) {
-          lore.addAll(Arrays.asList(ChatPaginator.wordWrap(line, 30)));
+          String lastColor = "";
+          for(String splitLine : ChatPaginator.wordWrap(line, 40)) {
+            lore.add(lastColor + splitLine);
+            lastColor = ChatColor.getLastColors(splitLine);
+          }
         }
       } else {
         lore.addAll(name);
@@ -139,12 +151,12 @@ public class ItemBuilder {
   public ItemBuilder colorizeItem() {
     if(itemMeta.hasDisplayName()) {
       ComplementAccessor.getComplement().setDisplayName(itemMeta,
-          ChatColor.translateAlternateColorCodes('&', ComplementAccessor.getComplement().getDisplayName(itemMeta)));
+          new MessageBuilder(ComplementAccessor.getComplement().getDisplayName(itemMeta)).build());
     }
     if(itemMeta.hasLore()) {
       List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
 
-      lore.replaceAll(textToTranslate -> ChatColor.translateAlternateColorCodes('&', textToTranslate));
+      lore.replaceAll(textToTranslate -> new MessageBuilder(textToTranslate).build());
 
       ComplementAccessor.getComplement().setLore(itemMeta, lore);
     }

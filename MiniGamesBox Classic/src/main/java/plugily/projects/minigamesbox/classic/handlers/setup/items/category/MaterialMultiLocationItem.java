@@ -91,8 +91,8 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     if(removeBungee) {
       item
           .lore("&cOption disabled with BungeeMode activated!")
-          .lore("Bungee mode is meant to be one arena per server")
-          .lore("If you wish to have multi arena, disable BungeeMode in config!")
+          .lore("&7Bungee mode is meant to be one arena per server")
+          .lore("&7If you wish to have multi arena, disable BungeeMode in config!")
           .colorizeItem();
 
     } else {

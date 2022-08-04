@@ -60,7 +60,7 @@ public class PluginLocationCategory implements SetupCategoryHandler {
     LocationItem end = new LocationItem(setupInventory, new ItemBuilder(XMaterial.REDSTONE_BLOCK.parseMaterial()), "Ending", "Location where players will be teleported after the game", "endlocation");
     itemList.add(end);
     gui.setItem((getInventoryLine() * 9) + 6, end);
-    MaterialMultiLocationItem sign = new MaterialMultiLocationItem(setupInventory, new ItemBuilder(XMaterial.OAK_SIGN.parseMaterial()), "Game Sign", "Sign registered as Game Sign with join function", "signs", XMaterial.OAK_SIGN.parseMaterial(), true, 0);
+    MaterialMultiLocationItem sign = new MaterialMultiLocationItem(setupInventory, new ItemBuilder(XMaterial.OAK_SIGN.parseMaterial()), "Game Sign", "Sign registered as Game Sign with join function", "signs", XMaterial.OAK_SIGN.parseMaterial(), setupInventory.getPlugin().getConfigPreferences().getOption("BUNGEEMODE"), 0);
     itemList.add(sign);
     gui.setItem((getInventoryLine() * 9) + 7, sign);
   }

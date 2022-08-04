@@ -45,7 +45,7 @@ public class MenuItem implements ClickableItem {
   public ItemStack getItem() {
     ItemBuilder item = new ItemBuilder(XMaterial.ARROW.parseMaterial());
     item
-        .name("Go Back to Setup Menu")
+        .name("&cGo Back to Setup Menu")
         .lore(ChatColor.GRAY + "Saves the current progress")
         .colorizeItem();
     return item.build();
