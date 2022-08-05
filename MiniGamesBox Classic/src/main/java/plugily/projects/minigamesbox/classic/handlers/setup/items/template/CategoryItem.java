@@ -48,7 +48,8 @@ public class CategoryItem implements ClickableItem {
     ItemBuilder item = new ItemBuilder(XMaterial.GOLD_INGOT.parseMaterial());
     item
         .name("&aCategory &7| &6" + setupCategory.name().toUpperCase())
-        .lore("&eLEFT_CLICK &7- Category Tutorial")
+        .lore("&aControls")
+        .lore("&eCLICK \n&7-> Category Tutorial")
         .colorizeItem();
     return item.build();
   }
@@ -57,6 +58,7 @@ public class CategoryItem implements ClickableItem {
   public void onClick(InventoryClickEvent event) {
     event.getWhoClicked().closeInventory();
     //ToDo
-    new MessageBuilder("&6Check tutorial video at " + setupCategory.getTutorialURL()).prefix().send(event.getWhoClicked());
+    new MessageBuilder("&6Check tutorial video at").prefix().send(event.getWhoClicked());
+    new MessageBuilder("&7" + setupCategory.getTutorialURL(), false).send(event.getWhoClicked());
   }
 }

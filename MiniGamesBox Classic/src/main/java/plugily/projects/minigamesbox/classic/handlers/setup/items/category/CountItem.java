@@ -80,7 +80,7 @@ public class CountItem implements CategoryItemHandler {
   private void setLore(ItemBuilder itemBuilder) {
     itemBuilder.lore("&aInfo")
         .lore("&7" + this.description)
-        .lore("&aStatus:")
+        .lore("&aStatus")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
         .lore("&eLEFT_CLICK")

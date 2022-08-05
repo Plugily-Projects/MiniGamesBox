@@ -19,6 +19,8 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,6 +35,7 @@ import plugily.projects.minigamesbox.classic.handlers.setup.inventories.ArenaLis
 import plugily.projects.minigamesbox.classic.handlers.setup.inventories.HomeInventory;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
+import plugily.projects.minigamesbox.classic.utils.version.TextComponentBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -74,7 +77,7 @@ public class SetupInventory {
         break;
       case ARENA_LIST:
         if(plugin.getArenaRegistry().getArenas().isEmpty()) {
-          new MessageBuilder("&cThere are no arenas. Create one first!").send(player);
+          new MessageBuilder("&cThere are no arenas. Create one first!").prefix().send(player);
           return;
         }
         new ArenaListInventory(54, plugin.getPluginMessagePrefix() + "Setup Menu | Arenas", this).open(player);
@@ -128,7 +131,7 @@ public class SetupInventory {
 
 
   public String isOptionDone(String path) {
-    String option = getConfig().getString("instances." + getArenaKey() + "." + path);
+    Object option = getConfig().get("instances." + getArenaKey() + "." + path);
 
     if(option != null) {
       return "&a&l✔ Completed &7(value: &8" + option + "&7)";
@@ -140,7 +143,7 @@ public class SetupInventory {
   public String isSectionOptionDone(String path, int minimum) {
     ConfigurationSection section = getConfig().getConfigurationSection("instances." + getArenaKey() + "." + path);
     if(minimum == 0) {
-      return "&e&l✔ Optional)";
+      return "&e&l✔ Optional";
     }
     if(section != null) {
       int keysSize = section.getKeys(false).size();
@@ -217,14 +220,21 @@ public class SetupInventory {
     arena.setReady(false);
 
 
-    //TODO DESIGN UPDATE! COMPONENT BUILDER!
     player.sendRawMessage(ChatColor.BOLD + "------------------------------------------");
-    player.sendRawMessage(ChatColor.YELLOW + "      Instance " + id + " created!");
+    player.sendRawMessage(new MessageBuilder("      &eInstance &6" + id + " &ecreated!").build());
     player.sendRawMessage("");
-    player.sendRawMessage(ChatColor.GREEN + "Edit this arena via /" + ChatColor.GOLD + plugin.getCommandAdminPrefix() + " setup edit " + id + ChatColor.GREEN + "!");
-    player.sendRawMessage(ChatColor.GREEN + "Get full setup inventory via /" + ChatColor.GOLD + plugin.getCommandAdminPrefix() + " setup" + ChatColor.GREEN + "!");
-    player.sendRawMessage(ChatColor.GOLD + "Don't know where to start? Check out tutorial video:");
-    player.sendRawMessage(ChatColor.GOLD + TUTORIAL_SITE + getPlugin().getPluginNamePrefixLong());
+    new TextComponentBuilder("&aEdit this arena via &7/" + plugin.getCommandAdminPrefix() + " setup edit " + id).player(player)
+        .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .setClickEvent(ClickEvent.Action.RUN_COMMAND, plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .sendPlayer();
+    player.sendRawMessage("");
+    new TextComponentBuilder("&aEnter Setup Inventory via &7/" + plugin.getCommandAdminPrefix() + " setup").player(player)
+        .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup")
+        .setClickEvent(ClickEvent.Action.RUN_COMMAND, plugin.getCommandAdminPrefix() + " setup")
+        .sendPlayer();
+    player.sendRawMessage("");
+    player.sendRawMessage(ChatColor.GOLD + "&bDon't know where to start? Check out the tutorial video at");
+    player.sendRawMessage(ChatColor.GRAY + TUTORIAL_SITE + getPlugin().getPluginNamePrefixLong());
     player.sendRawMessage(ChatColor.BOLD + "-------------------------------------------");
     return arena;
   }

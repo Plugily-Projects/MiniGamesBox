@@ -24,14 +24,12 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
-import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
 import java.util.function.Consumer;
 
@@ -54,7 +52,7 @@ public class ValueItem implements CategoryItemHandler {
         .name("&7Change &a" + name.toUpperCase() + " &7value")
         .lore("&aInfo")
         .lore("&7" + description)
-        .lore("&aStatus:")
+        .lore("&aStatus")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
         .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat")
@@ -101,10 +99,6 @@ public class ValueItem implements CategoryItemHandler {
         break;
     }
     event.getWhoClicked().closeInventory();
-    InventoryHolder holder = event.getInventory().getHolder();
-    if(holder instanceof RefreshableFastInv) {
-      ((RefreshableFastInv) holder).refresh();
-    }
   }
 
   @Override

@@ -46,12 +46,13 @@ public class PatreonItem implements ClickableItem {
   public ItemStack getItem() {
     ItemBuilder item = new ItemBuilder(XMaterial.GOLD_NUGGET.parseMaterial());
     item
-        .name("&6&l► Support Plugily Projects Development ◄")
-        .lore(ChatColor.GRAY + "We are a open-source organisation and!")
-        .lore(ChatColor.GOLD + "need your attention and mindset of helping each other out")
-        .lore(ChatColor.GOLD + "While you can get with our addon subscription the addon you can also")
-        .lore(ChatColor.GRAY + "support us by donating on paypal, kofi and patreon!")
-        .lore(ChatColor.GRAY + "CLICK to get the link for donation options")
+        .name("&6&l► Support Development ◄")
+        .lore(ChatColor.GRAY + "We are a open-source organisation and")
+        .lore(ChatColor.GOLD + "need your attention and mindset of helping each other out!")
+        .lore(ChatColor.GOLD + "While you can get with our patreon subscription the addon you can also")
+        .lore(ChatColor.GRAY + "support us by donating on other platforms such as paypal!")
+        .lore("&aControls")
+        .lore("&eCLICK \n&7-> Link for donation options")
         .enchantment(Enchantment.LOYALTY)
         .colorizeItem();
     return item.build();
@@ -60,6 +61,7 @@ public class PatreonItem implements ClickableItem {
   @Override
   public void onClick(InventoryClickEvent event) {
     event.getWhoClicked().closeInventory();
-    new MessageBuilder("&6Check our donation possibilities at https://wiki.plugily.xyz/donate").prefix().send(event.getWhoClicked());
+    new MessageBuilder("&6Check our donation possibilities at").prefix().send(event.getWhoClicked());
+    new MessageBuilder("&6 https://wiki.plugily.xyz/donate", false).send(event.getWhoClicked());
   }
 }

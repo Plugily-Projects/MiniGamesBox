@@ -58,6 +58,7 @@ public class RegisterItem implements ClickableItem {
     }
   }
 
+  //ToDo fix server crash
   @Override
   public ItemStack getItem() {
     ItemBuilder item;
@@ -67,7 +68,8 @@ public class RegisterItem implements ClickableItem {
             .name(new MessageBuilder("&a&lArena Setup finished - Congratulation").build())
             .lore(ChatColor.GRAY + "This arena is already registered!")
             .lore(ChatColor.GRAY + "You can play on this arena now!")
-            .lore(ChatColor.GRAY + "CLICK - Reload arena");
+            .lore("&aControls")
+            .lore("&eCLICK \n&7-> Reload arena");
         break;
       case ARENA_REGISTER:
         item = new ItemBuilder(XMaterial.FIREWORK_ROCKET.parseMaterial())
@@ -75,7 +77,8 @@ public class RegisterItem implements ClickableItem {
             .lore(ChatColor.GRAY + "Click this when you're done with configuration.")
             .lore(ChatColor.GRAY + "It will validate and register your arena.")
             .lore(ChatColor.GRAY + "Good job, you went through whole setup!")
-            .lore(ChatColor.GRAY + "CLICK - Register arena")
+            .lore("&aControls")
+            .lore("&eCLICK \n&7-> Register arena")
             .enchantment(Enchantment.DURABILITY);
         break;
       case ARENA_SETUP:
@@ -84,7 +87,7 @@ public class RegisterItem implements ClickableItem {
             .name(new MessageBuilder("&c&lArena Setup not finished").build())
             .lore(ChatColor.GRAY + "Go ahead with the setup!")
             .lore(ChatColor.GRAY + "Feel free to watch the tutorials that you can find on the gui!")
-            .lore(ChatColor.GRAY + "Support: https://discord.plugily.xyz - #general-questions");
+            .lore(ChatColor.GRAY + "Support: discord.plugily.xyz - #general-questions");
 
         break;
     }
@@ -97,6 +100,7 @@ public class RegisterItem implements ClickableItem {
     switch(registerStatus) {
       case ARENA_READY:
       case ARENA_REGISTER:
+        setupInventory.setConfig("isdone", true);
         event.getWhoClicked().closeInventory();
         setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());
         setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);

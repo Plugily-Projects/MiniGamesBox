@@ -90,12 +90,11 @@ public class ItemBuilder {
   }
 
   public ItemBuilder enchantment(Enchantment enchantment) {
-    this.itemStack.addUnsafeEnchantment(enchantment, 1);
-    return this;
+    return enchantment(enchantment, 1);
   }
 
   public ItemBuilder enchantment(Enchantment enchantment, int level) {
-    this.itemStack.addUnsafeEnchantment(enchantment, level);
+    this.itemMeta.addEnchant(enchantment, level, true);
     return this;
   }
 

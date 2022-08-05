@@ -110,7 +110,7 @@ public class MessageBuilder {
   }
 
   public MessageBuilder prefix() {
-    message = placeholderColorOther + "%plugin_prefix%" + messageColor + message;
+    message = placeholderColorOther + "%plugin_prefix% " + messageColor + message;
     return this;
   }
 

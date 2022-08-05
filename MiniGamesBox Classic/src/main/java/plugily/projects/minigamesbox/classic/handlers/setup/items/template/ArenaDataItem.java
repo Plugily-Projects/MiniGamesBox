@@ -45,9 +45,9 @@ public class ArenaDataItem implements ClickableItem {
   @Override
   public ItemStack getItem() {
     ItemBuilder item = new ItemBuilder(XMaterial.BREAD.parseMaterial())
-        .name("&aArena Information")
+        .name("&a&l► Arena Information ◄")
         .lore(ChatColor.GRAY + "Saves the current progress")
-        .lore("&7Controls:")
+        .lore("&aControls")
         .lore("&eLEFT_CLICK \n&7-> Main tutorial video")
         .lore("&eRIGHT_CLICK \n&7-> Reload arena data");
     ConfigurationSection section = setupInventory.getConfig().getConfigurationSection("instances." + setupInventory.getArenaKey());

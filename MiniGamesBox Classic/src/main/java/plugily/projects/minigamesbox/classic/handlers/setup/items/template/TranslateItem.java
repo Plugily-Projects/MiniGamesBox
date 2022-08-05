@@ -51,7 +51,8 @@ public class TranslateItem implements ClickableItem {
         .lore(ChatColor.AQUA + "You can just edit your language.yml or be part")
         .lore(ChatColor.AQUA + "of translator pool of plugily by")
         .lore(ChatColor.AQUA + "translating the plugin on PoEditor")
-        .lore(ChatColor.GRAY + "CLICK to get link for our translation program!")
+        .lore("&aControls")
+        .lore("&eCLICK \n&7-> Translation program link")
         .colorizeItem();
     return item.build();
   }
@@ -59,6 +60,6 @@ public class TranslateItem implements ClickableItem {
   @Override
   public void onClick(InventoryClickEvent event) {
     event.getWhoClicked().closeInventory();
-    new MessageBuilder(" &6Check translation program at https://wiki.plugily.xyz/translate#" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase(), false).prefix().send(event.getWhoClicked());
+    new MessageBuilder("&6Check translation program at https://wiki.plugily.xyz/translate#" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase(), false).prefix().send(event.getWhoClicked());
   }
 }

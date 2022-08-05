@@ -68,7 +68,7 @@ public class LocationSelectorItem implements CategoryItemHandler {
         .name("&7Set &a" + name.toUpperCase() + " &7location selection")
         .lore("&aInfo")
         .lore("&7" + description)
-        .lore("&aStatus:")
+        .lore("&aStatus")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
         .lore("&eLEFT_CLICK \n&7-> Set the locations of the selector item")

@@ -87,7 +87,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
         .name("&7Add &a" + name.toUpperCase() + " &7location")
         .lore("&aInfo")
         .lore("&7" + description)
-        .lore("&aStatus:");
+        .lore("&aStatus");
     if(removeBungee) {
       item
           .lore("&cOption disabled with BungeeMode activated!")
@@ -137,12 +137,12 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
         break;
       case SHIFT_LEFT:
         ItemStack itemStack =
-            new ItemBuilder(item)
+            new ItemBuilder(item.getType())
                 .amount(1)
                 .name("&7Add &a" + name.toUpperCase() + " &7location")
                 .lore("&aInfo")
                 .lore("&7" + description)
-                .lore("&aStatus:")
+                .lore("&aStatus")
                 .lore("&7Check in the arena editor!")
                 .lore("&aControls")
                 .lore("&eDROP \n&7-> Remove/Deactivate the item")
@@ -159,7 +159,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
           dropEvent.getPlayer().getInventory().remove(dropEvent.getItemDrop().getItemStack());
           dropEvent.getItemDrop().remove();
           dropEvent.getPlayer().updateInventory();
-          new MessageBuilder("&aRemoved/Deactivated the " + name.toUpperCase() + " Location item!").prefix().send(dropEvent.getPlayer());
+          new MessageBuilder("&aRemoved/&aDeactivated the " + name.toUpperCase() + " Location item!").prefix().send(dropEvent.getPlayer());
         });
         handlerItem.addConsumeHandler(consumeEvent -> consumeEvent.setCancelled(true));
         handlerItem.addInteractHandler(interactEvent -> {

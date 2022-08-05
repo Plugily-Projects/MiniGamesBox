@@ -54,17 +54,10 @@ public class SwitchItem implements CategoryItemHandler {
   public SwitchItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<String> switches, Consumer<InventoryClickEvent> clickConsumer) {
     this.setupInventory = setupInventory;
     this.switches = switches;
+    setLore(item);
     item
         .name("&7Switch &a" + name.toUpperCase() + " &7value")
-        .lore("&aInfo")
-        .lore("&7" + description)
-        .lore("&aStatus:")
-        .lore("&7" + getSetupInfo())
-        .lore("&aControls")
-        .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat")
-        .lore("&eRIGHT_CLICK \n&7-> Switch between the values")
         .colorizeItem();
-
     this.item = item.build();
     this.name = name;
     this.description = description;
@@ -77,10 +70,21 @@ public class SwitchItem implements CategoryItemHandler {
     });
   }
 
+  private void setLore(ItemBuilder itemBuilder) {
+    itemBuilder.lore("&aInfo")
+        .lore("&7" + description)
+        .lore("&aStatus")
+        .lore("&7" + getSetupInfo())
+        .lore("&aControls")
+        .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat")
+        .lore("&eRIGHT_CLICK \n&7-> Switch between the values");
+  }
 
   @Override
   public ItemStack getItem() {
-    return item;
+    ItemBuilder itemBuilder = new ItemBuilder(item).removeLore();
+    setLore(itemBuilder);
+    return itemBuilder.colorizeItem().build();
   }
 
   @Override
@@ -104,6 +108,7 @@ public class SwitchItem implements CategoryItemHandler {
             return Prompt.END_OF_CONVERSATION;
           }
         }).buildFor((Player) event.getWhoClicked());
+        event.getWhoClicked().closeInventory();
         break;
       case RIGHT:
         String option = setupInventory.getConfig().getString("instances." + setupInventory.getArenaKey() + "." + keyName, switches.get(0));
@@ -111,14 +116,13 @@ public class SwitchItem implements CategoryItemHandler {
         String newOption = switches.get(switches.size() - 1 <= position ? 0 : position + 1);
         event.getWhoClicked().sendMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + newOption).build());
         setupInventory.setConfig(keyName, newOption);
+        InventoryHolder holder = event.getInventory().getHolder();
+        if(holder instanceof RefreshableFastInv) {
+          ((RefreshableFastInv) holder).refresh();
+        }
         break;
       default:
         break;
-    }
-    event.getWhoClicked().closeInventory();
-    InventoryHolder holder = event.getInventory().getHolder();
-    if(holder instanceof RefreshableFastInv) {
-      ((RefreshableFastInv) holder).refresh();
     }
   }
 

@@ -20,7 +20,6 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.items.template;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.ChatColor;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
@@ -51,15 +50,20 @@ public class RegisterIndicatorItem implements ClickableItem {
     ItemBuilder item;
     if(setupCategoryHandler.isDone()) {
       item = new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial())
-          .name("&aDONE &7| &6" + setupCategory.name().toUpperCase())
-          .lore(ChatColor.GREEN + "GREEN Category fully set up!")
-          .lore(ChatColor.RED + "RED Category needs set up!")
+          .name("&aDONE")
+          .lore("&aCategory")
+          .lore("&6" + setupCategory.name().toUpperCase())
+          .lore("&aStatus")
+          .lore("&eCategory fully set up! Look for the red ones -_-")
+
           .colorizeItem();
     } else {
       item = new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial())
-          .name("&cNEEDS SETUP &7| &6" + setupCategory.name().toUpperCase())
-          .lore(ChatColor.GREEN + "GREEN - Category fully set up!")
-          .lore(ChatColor.RED + "RED - Category needs set up!")
+          .name("&cNEEDS SETUP")
+          .lore("&aCategory")
+          .lore("&6" + setupCategory.name().toUpperCase())
+          .lore("&aStatus")
+          .lore("&eCategory needs set up! You missed some required options, make sure to set them up")
           .colorizeItem();
     }
 

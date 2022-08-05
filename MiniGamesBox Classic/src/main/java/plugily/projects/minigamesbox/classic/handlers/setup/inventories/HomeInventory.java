@@ -85,6 +85,10 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
             @Override
             public Prompt acceptInput(ConversationContext context, String input) {
               String name = new MessageBuilder(input, false).build();
+              if(name.contains(" ")) {
+                context.getForWhom().sendRawMessage(new MessageBuilder("&cThe arena key needs to be without spaces. You can give it a nice map name later ;)").prefix().build());
+                return Prompt.END_OF_CONVERSATION;
+              }
               PluginArena arena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
               if(arena == null) {
                 return Prompt.END_OF_CONVERSATION;
@@ -120,7 +124,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
         .lore(ChatColor.GRAY + "Click to get link for patron program!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder(" &6Check patron program here: https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(event.getWhoClicked());
+      new MessageBuilder("&6Check patron program here: https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(event.getWhoClicked());
     }));
 
     setItem(41, ClickableItem.of(new ItemBuilder(XMaterial.MAP.parseItem())
@@ -131,7 +135,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
         .lore(ChatColor.YELLOW + "Click to get video link!")
         .build(), event -> {
       event.getWhoClicked().closeInventory();
-      new MessageBuilder(" &cCheck out this video: " + SetupInventoryUtils.SetupInventoryStage.HOME.getTutorialURL(), false).prefix().send(event.getWhoClicked());
+      new MessageBuilder("&cCheck out this video: " + SetupInventoryUtils.SetupInventoryStage.HOME.getTutorialURL(), false).prefix().send(event.getWhoClicked());
     }));
 
     setDefaultItem(ClickableItem.of(new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()).name(" ").build()));

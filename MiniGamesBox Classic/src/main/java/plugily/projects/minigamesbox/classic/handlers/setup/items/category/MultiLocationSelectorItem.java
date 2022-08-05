@@ -78,7 +78,7 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
         .name("&7Add &a" + name.toUpperCase() + " &7location selection")
         .lore("&aInfo")
         .lore("&7" + description)
-        .lore("&aStatus:")
+        .lore("&aStatus")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
         .lore("&eLEFT_CLICK \n&7-> Add the location at the position you are standing")
@@ -138,7 +138,7 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
     LocationSerializer.saveLoc(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas", "instances." + setupInventory.getArenaKey() + "." + keyName + "." + value + ".1", selection.getFirstPos());
     LocationSerializer.saveLoc(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas", "instances." + setupInventory.getArenaKey() + "." + keyName + "." + value + ".2", selection.getSecondPos());
     String progress = value >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
-    new MessageBuilder(progress + "&a" + name.toUpperCase() + " spawn added! &8(&7" + minimumValue + "/2&8)").prefix().send(player);
+    new MessageBuilder(progress + "&a" + name.toUpperCase() + " spawn added! &8(&7" + value + "/" + minimumValue + "&8)").prefix().send(player);
     if(value == minimumValue) {
       new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
     }

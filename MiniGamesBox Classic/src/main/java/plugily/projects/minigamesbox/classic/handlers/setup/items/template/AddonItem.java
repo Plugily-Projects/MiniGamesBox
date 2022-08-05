@@ -47,9 +47,11 @@ public class AddonItem implements ClickableItem {
     item
         .name("&6&l► Patreon Addon ◄ &8(AD)")
         .lore(ChatColor.GRAY + "Enhance gameplay with paid addon!")
+        .lore(ChatColor.GRAY + "Support the development!")
         .lore(ChatColor.GOLD + "Selection of features of the addon:")
         .lore(ChatColor.GOLD + "Custom Kits, Custom Achievements, Custom ranks, Replay Ability and more!")
-        .lore(ChatColor.GRAY + "CLICK to get link for patron program!")
+        .lore("&aControls")
+        .lore("&eCLICK \n&7-> Link for patreon program")
         .enchantment(Enchantment.LOYALTY)
         .colorizeItem();
     return item.build();
@@ -58,6 +60,7 @@ public class AddonItem implements ClickableItem {
   @Override
   public void onClick(InventoryClickEvent event) {
     event.getWhoClicked().closeInventory();
-    new MessageBuilder(" &6Check patron program at https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).prefix().send(event.getWhoClicked());
+    new MessageBuilder("&6Check patron program at").prefix().send(event.getWhoClicked());
+    new MessageBuilder("&6 https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).send(event.getWhoClicked());
   }
 }
