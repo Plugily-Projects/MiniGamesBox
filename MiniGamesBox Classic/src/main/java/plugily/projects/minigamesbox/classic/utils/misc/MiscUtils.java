@@ -24,6 +24,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
@@ -74,14 +75,14 @@ public class MiscUtils {
 
   // https://www.spigotmc.org/threads/comprehensive-particle-spawning-guide-1-13.343001/
   @Deprecated
-  public static void spawnParticle(org.bukkit.Particle particle, Location loc, int count, double offsetX, double offsetY, double offsetZ, double extra) {
-    if(Version.isCurrentEqualOrHigher(Version.v1_13_R2) && particle == org.bukkit.Particle.REDSTONE) {
-      org.bukkit.Particle.DustOptions dustOptions = new org.bukkit.Particle.DustOptions(Color.RED, 2);
+  public static void spawnParticle(Particle particle, Location loc, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+    if(Version.isCurrentEqualOrHigher(Version.v1_13_R2) && particle == Particle.REDSTONE) {
+      Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 2);
       loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, dustOptions);
-    } else if(particle == org.bukkit.Particle.ITEM_CRACK) {
+    } else if(particle == Particle.ITEM_CRACK) {
       ItemStack itemCrackData = new ItemStack(loc.getBlock().getType());
       loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, itemCrackData);
-    } else if(particle == org.bukkit.Particle.BLOCK_CRACK || particle == org.bukkit.Particle.BLOCK_DUST || particle == org.bukkit.Particle.FALLING_DUST) {
+    } else if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)) {
       loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, loc.getBlock().getType().createBlockData());
     } else {
       loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra);
