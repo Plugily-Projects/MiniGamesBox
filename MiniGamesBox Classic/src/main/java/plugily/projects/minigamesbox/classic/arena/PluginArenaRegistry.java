@@ -203,6 +203,8 @@ public class PluginArenaRegistry {
 
     if(!validatorChecks(section, arena, key) || !additionalValidatorChecks(section, arena, key)) {
       arena.setReady(false);
+      config.set("instances." + arena.getId() + ".isdone", false);
+      ConfigUtils.saveConfig(plugin, config, "arenas");
       registerArena(arena);
     } else {
       registerArena(arena);
@@ -232,7 +234,6 @@ public class PluginArenaRegistry {
     Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation"));
 
     if(lobbyLoc == null || startLoc == null || endLoc == null || spectatorLoc == null) {
-      section.set(id + ".isdone", false);
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("LOCATIONS ARE INVALID").arena(arena).build());
       return false;
     }
