@@ -225,15 +225,15 @@ public class SetupInventory {
     player.sendRawMessage("");
     new TextComponentBuilder("&aEdit this arena via &7/" + plugin.getCommandAdminPrefix() + " setup edit " + id).player(player)
         .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
-        .setClickEvent(ClickEvent.Action.RUN_COMMAND, plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .setClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
         .sendPlayer();
     player.sendRawMessage("");
     new TextComponentBuilder("&aEnter Setup Inventory via &7/" + plugin.getCommandAdminPrefix() + " setup").player(player)
         .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup")
-        .setClickEvent(ClickEvent.Action.RUN_COMMAND, plugin.getCommandAdminPrefix() + " setup")
+        .setClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup")
         .sendPlayer();
     player.sendRawMessage("");
-    player.sendRawMessage(ChatColor.GOLD + "&bDon't know where to start? Check out the tutorial video at");
+    player.sendRawMessage(ChatColor.GOLD + "Don't know where to start? Check out the tutorial video at");
     player.sendRawMessage(ChatColor.GRAY + TUTORIAL_SITE + getPlugin().getPluginNamePrefixLong());
     player.sendRawMessage(ChatColor.BOLD + "-------------------------------------------");
     return arena;
