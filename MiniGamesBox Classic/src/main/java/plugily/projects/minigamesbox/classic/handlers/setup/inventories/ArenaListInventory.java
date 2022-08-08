@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -99,9 +100,12 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
                   return Prompt.END_OF_CONVERSATION;
                 }
                 setupInventory.getPlugin().getArenaManager().stopGame(false, arena);
-                setupInventory.getConfig().set("instances." + arena.getId(), null);
-                ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
+
+                FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
+                setupInventory.getConfig().set("instances." + arena.getId(), null);
+                ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
+
                 context.getForWhom().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().build());
                 setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_LIST);
                 return Prompt.END_OF_CONVERSATION;
@@ -119,12 +123,14 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
               @Override
               public Prompt acceptInput(ConversationContext context, String input) {
                 String name = new MessageBuilder(input, false).build();
-                PluginArena arena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
-                if(arena == null) {
+                PluginArena newArena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
+                if(newArena == null) {
                   return Prompt.END_OF_CONVERSATION;
                 }
-                setupInventory.getConfig().set("instances." + input, setupInventory.getConfig().getConfigurationSection("instances." + arena.getId()));
-                setupInventory.setArenaKey(input);
+                FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
+                config.set("instances." + name, config.getConfigurationSection("instances." + arena.getId()));
+                setupInventory.setArenaKey(name);
+                ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
                 setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
                 return Prompt.END_OF_CONVERSATION;
               }
