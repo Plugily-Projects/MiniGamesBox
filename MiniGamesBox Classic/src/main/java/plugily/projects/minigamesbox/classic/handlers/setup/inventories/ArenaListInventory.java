@@ -123,6 +123,10 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
               @Override
               public Prompt acceptInput(ConversationContext context, String input) {
                 String name = new MessageBuilder(input, false).build();
+                if(name.contains(" ")) {
+                  context.getForWhom().sendRawMessage(new MessageBuilder("&cThe arena key needs to be without spaces. You can give it a nice map name later ;)").prefix().build());
+                  return Prompt.END_OF_CONVERSATION;
+                }
                 PluginArena newArena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
                 if(newArena == null) {
                   return Prompt.END_OF_CONVERSATION;
