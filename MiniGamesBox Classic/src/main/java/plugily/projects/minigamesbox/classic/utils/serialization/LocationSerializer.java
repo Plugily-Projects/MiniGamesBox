@@ -28,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 /**
  * @author Plajer
@@ -49,7 +50,8 @@ public class LocationSerializer {
    * @param loc      location to save
    */
   public static void saveLoc(JavaPlugin plugin, FileConfiguration file, String fileName, String path, Location loc) {
-    String location = loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + loc.getYaw() + "," + loc.getPitch();
+    final DecimalFormat roundFormat = new DecimalFormat("0.00");
+    String location = loc.getWorld().getName() + "," + roundFormat.format(loc.getX()) + "," + roundFormat.format(loc.getY()) + "," + roundFormat.format(loc.getZ()) + "," + roundFormat.format(loc.getYaw()) + "," + roundFormat.format(loc.getPitch());
     file.set(path, location);
     try {
       file.save(new File(plugin.getDataFolder(), fileName + ".yml"));
