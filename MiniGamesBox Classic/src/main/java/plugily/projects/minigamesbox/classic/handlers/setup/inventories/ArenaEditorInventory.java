@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.Bukkit;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
@@ -55,7 +56,11 @@ public class ArenaEditorInventory extends NormalFastInv implements InventoryHand
           setupInventory.setConfig("isdone", true);
           setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());
           SetupInventoryUtils.removeSetupInventory(event.getPlayer());
-          setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME);
+          //workaround for opening of other inventories - ToDo may think about only register and nothing else?
+          Bukkit.getScheduler().runTask(setupInventory.getPlugin(), () -> {
+            event.getPlayer().closeInventory();
+            setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME);
+          });
         }
       }
     });
