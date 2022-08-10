@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 import com.cryptomorin.xseries.XMaterial;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
@@ -49,11 +50,13 @@ public class ArenaEditorInventory extends NormalFastInv implements InventoryHand
     injectItems();
     addCloseHandler(event -> {
       if(pluginSetupCategoryManager.canRegister()) {
-        setupInventory.setConfig("isdone", true);
-        setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());
-        setupInventory.setArenaKey(null);
-        SetupInventoryUtils.removeSetupInventory(event.getPlayer());
-        setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME);
+        PluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
+        if(arena != null && arena.isReady()) {
+          setupInventory.setConfig("isdone", true);
+          setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());
+          SetupInventoryUtils.removeSetupInventory(event.getPlayer());
+          setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME);
+        }
       }
     });
     setDefaultItem(ClickableItem.of(new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()).name(" ").build()));
