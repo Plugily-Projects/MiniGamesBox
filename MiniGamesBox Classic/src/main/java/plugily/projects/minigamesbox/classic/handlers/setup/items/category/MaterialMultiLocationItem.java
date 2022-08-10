@@ -39,8 +39,8 @@ import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPla
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -56,7 +56,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private final String name;
   private final String description;
   private final String keyName;
-  private final List<Material> checkMaterials;
+  private final Set<Material> checkMaterials;
   private final boolean removeBungee;
 
   private final int minimumValue;
@@ -66,31 +66,17 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private final boolean leftClick;
   private final boolean physical;
 
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<Material> checkMaterials, boolean removeBungee, int minimumValue) {
-    this(setupInventory, item, name, description, keyName, checkMaterials, removeBungee, minimumValue, emptyConsumer -> {
-    }, emptyConsumer -> {
-    });
-  }
-
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue) {
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Set<Material> checkMaterial, boolean removeBungee, int minimumValue) {
     this(setupInventory, item, name, description, keyName, checkMaterial, removeBungee, minimumValue, emptyConsumer -> {
     }, emptyConsumer -> {
     });
   }
 
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
-    this(setupInventory, item, name, description, keyName, checkMaterial, removeBungee, minimumValue, clickConsumer, interactConsumer, true, true, false);
-  }
-
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Set<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
     this(setupInventory, item, name, description, keyName, checkMaterials, removeBungee, minimumValue, clickConsumer, interactConsumer, true, true, false);
   }
 
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
-    this(setupInventory, item, name, description, keyName, Collections.singletonList(checkMaterial), removeBungee, minimumValue, clickConsumer, interactConsumer, leftClick, rightClick, physical);
-  }
-
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Set<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
     this.setupInventory = setupInventory;
     this.name = name;
     this.description = description;
