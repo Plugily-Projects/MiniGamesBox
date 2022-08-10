@@ -49,10 +49,11 @@ public class ArenaEditorInventory extends NormalFastInv implements InventoryHand
     injectItems();
     addCloseHandler(event -> {
       if(pluginSetupCategoryManager.canRegister()) {
+        setupInventory.setConfig("isdone", true);
         setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());
-        setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME);
         setupInventory.setArenaKey(null);
         SetupInventoryUtils.removeSetupInventory(event.getPlayer());
+        setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME);
       }
     });
     setDefaultItem(ClickableItem.of(new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE.parseItem()).name(" ").build()));

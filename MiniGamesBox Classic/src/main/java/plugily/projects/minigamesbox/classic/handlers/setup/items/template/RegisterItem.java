@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
-import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
@@ -58,7 +57,6 @@ public class RegisterItem implements ClickableItem {
     }
   }
 
-  //ToDo fix server crash
   @Override
   public ItemStack getItem() {
     ItemBuilder item;
@@ -100,10 +98,7 @@ public class RegisterItem implements ClickableItem {
     switch(registerStatus) {
       case ARENA_READY:
       case ARENA_REGISTER:
-        setupInventory.setConfig("isdone", true);
         event.getWhoClicked().closeInventory();
-        setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());
-        setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
         break;
       case ARENA_SETUP:
       default:
