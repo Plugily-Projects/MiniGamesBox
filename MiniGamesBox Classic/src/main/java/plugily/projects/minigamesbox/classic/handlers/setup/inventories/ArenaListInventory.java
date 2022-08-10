@@ -127,8 +127,8 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
                   context.getForWhom().sendRawMessage(new MessageBuilder("&cThe arena key needs to be without spaces. You can give it a nice map name later ;)").prefix().build());
                   return Prompt.END_OF_CONVERSATION;
                 }
-                PluginArena newArena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
-                if(newArena == null) {
+                setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
+                if(setupInventory.getPlugin().getArenaRegistry().getArena(name) == null) {
                   return Prompt.END_OF_CONVERSATION;
                 }
                 FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");

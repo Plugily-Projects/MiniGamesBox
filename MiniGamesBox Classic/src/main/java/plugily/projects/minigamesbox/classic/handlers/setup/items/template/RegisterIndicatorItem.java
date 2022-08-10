@@ -63,7 +63,7 @@ public class RegisterIndicatorItem implements ClickableItem {
           .lore("&aCategory")
           .lore("&6" + setupCategory.name().toUpperCase())
           .lore("&aStatus")
-          .lore("&eCategory needs set up! You missed some required options, make sure to set them up")
+          .lore("&eCategory needs set up! &eYou missed some required options, &emake sure to set them up")
           .colorizeItem();
     }
 

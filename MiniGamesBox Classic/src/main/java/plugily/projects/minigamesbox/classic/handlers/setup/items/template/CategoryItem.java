@@ -47,7 +47,7 @@ public class CategoryItem implements ClickableItem {
   public ItemStack getItem() {
     ItemBuilder item = new ItemBuilder(XMaterial.GOLD_INGOT.parseMaterial());
     item
-        .name("&aCategory &7| &6" + setupCategory.name().toUpperCase())
+        .name("&bCategory &7| &6" + setupCategory.name().toUpperCase())
         .lore("&aControls")
         .lore("&eCLICK \n&7-> Category Tutorial")
         .colorizeItem();

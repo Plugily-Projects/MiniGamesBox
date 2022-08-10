@@ -28,7 +28,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.inventories.ArenaEditorInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.inventories.ArenaListInventory;
@@ -205,19 +204,17 @@ public class SetupInventory {
     }
   }
 
-  public PluginArena createInstanceInConfig(String id, Player player) {
+  public void createInstanceInConfig(String id, Player player) {
     if(ConfigUtils.getConfig(plugin, "arenas").contains("instances." + id)) {
       player.sendRawMessage(ChatColor.DARK_RED + "Instance/Arena already exists! Use another ID or delete it first!");
-      return null;
+      return;
     }
     String path = "instances." + id + ".";
     FileConfiguration config = ConfigUtils.getConfig(plugin, "arenas");
     config.set(path + "isdone", false);
     ConfigUtils.saveConfig(plugin, config, "arenas");
 
-    PluginArena arena = plugin.getArenaRegistry().getNewArena(id);
-
-    arena.setReady(false);
+    plugin.getArenaRegistry().registerArena(id);
 
 
     player.sendRawMessage(ChatColor.BOLD + "------------------------------------------");
@@ -236,7 +233,6 @@ public class SetupInventory {
     player.sendRawMessage(ChatColor.GOLD + "Don't know where to start? Check out the tutorial video at");
     player.sendRawMessage(ChatColor.GRAY + TUTORIAL_SITE + getPlugin().getPluginNamePrefixLong());
     player.sendRawMessage(ChatColor.BOLD + "-------------------------------------------");
-    return arena;
   }
 
   public final String TUTORIAL_SITE = "https://tutorial.plugily.xyz/";

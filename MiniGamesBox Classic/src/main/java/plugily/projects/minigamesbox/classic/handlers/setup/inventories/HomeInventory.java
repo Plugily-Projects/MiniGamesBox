@@ -28,7 +28,6 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
@@ -89,8 +88,8 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
                 context.getForWhom().sendRawMessage(new MessageBuilder("&cThe arena key needs to be without spaces. You can give it a nice map name later ;)").prefix().build());
                 return Prompt.END_OF_CONVERSATION;
               }
-              PluginArena arena = setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
-              if(arena == null) {
+              setupInventory.createInstanceInConfig(name, (Player) context.getForWhom());
+              if(setupInventory.getPlugin().getArenaRegistry().getArena(name) == null) {
                 return Prompt.END_OF_CONVERSATION;
               }
               setupInventory.setArenaKey(input);
