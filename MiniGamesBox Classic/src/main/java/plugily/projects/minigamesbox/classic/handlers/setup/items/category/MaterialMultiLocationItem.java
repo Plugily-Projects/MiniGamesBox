@@ -39,6 +39,7 @@ import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPla
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -55,7 +56,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private final String name;
   private final String description;
   private final String keyName;
-  private final Material checkMaterial;
+  private final List<Material> checkMaterials;
   private final boolean removeBungee;
 
   private final int minimumValue;
@@ -64,6 +65,12 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private final boolean rightClick;
   private final boolean leftClick;
   private final boolean physical;
+
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<Material> checkMaterials, boolean removeBungee, int minimumValue) {
+    this(setupInventory, item, name, description, keyName, checkMaterials, removeBungee, minimumValue, emptyConsumer -> {
+    }, emptyConsumer -> {
+    });
+  }
 
   public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue) {
     this(setupInventory, item, name, description, keyName, checkMaterial, removeBungee, minimumValue, emptyConsumer -> {
@@ -75,35 +82,43 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     this(setupInventory, item, name, description, keyName, checkMaterial, removeBungee, minimumValue, clickConsumer, interactConsumer, true, true, false);
   }
 
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
+    this(setupInventory, item, name, description, keyName, checkMaterials, removeBungee, minimumValue, clickConsumer, interactConsumer, true, true, false);
+  }
+
   public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
+    this(setupInventory, item, name, description, keyName, Collections.singletonList(checkMaterial), removeBungee, minimumValue, clickConsumer, interactConsumer, leftClick, rightClick, physical);
+  }
+
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, List<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
     this.setupInventory = setupInventory;
     this.name = name;
     this.description = description;
     this.keyName = keyName;
-    this.checkMaterial = checkMaterial;
+    this.checkMaterials = checkMaterials;
     this.removeBungee = removeBungee;
     this.minimumValue = minimumValue;
     item
-        .name("&7Add &a" + name.toUpperCase() + " &7location")
-        .lore("&aInfo")
-        .lore("&7" + description)
-        .lore("&aStatus");
+            .name("&7Add &a" + name.toUpperCase() + " &7location")
+            .lore("&aInfo")
+            .lore("&7" + description)
+            .lore("&aStatus");
     if(removeBungee) {
       item
-          .lore("&cOption disabled with BungeeMode activated!")
-          .lore("&7Bungee mode is meant to be one arena per server")
-          .lore("&7If you wish to have multi arena, disable BungeeMode in config!")
-          .colorizeItem();
+              .lore("&cOption disabled with BungeeMode activated!")
+              .lore("&7Bungee mode is meant to be one arena per server")
+              .lore("&7If you wish to have multi arena, disable BungeeMode in config!")
+              .colorizeItem();
 
     } else {
       item
-          .lore("&7" + getSetupInfo())
-          .lore("&aControls")
-          .lore("&eLEFT_CLICK \n&7-> Add the " + name.toUpperCase() + " location at the position you are *looking*")
-          .lore("&eSHIFT_LEFT_CLICK \n&7-> Get the setup item into your inventory")
-          .lore("&eRIGHT_CLICK \n&7-> Remove a " + name.toUpperCase() + " location near your position")
-          .lore("&eSHIFT_RIGHT_CLICK \n&7-> Remove all " + name.toUpperCase() + " locations")
-          .colorizeItem();
+              .lore("&7" + getSetupInfo())
+              .lore("&aControls")
+              .lore("&eLEFT_CLICK \n&7-> Add the " + name.toUpperCase() + " location at the position you are *looking*")
+              .lore("&eSHIFT_LEFT_CLICK \n&7-> Get the setup item into your inventory")
+              .lore("&eRIGHT_CLICK \n&7-> Remove a " + name.toUpperCase() + " location near your position")
+              .lore("&eSHIFT_RIGHT_CLICK \n&7-> Remove all " + name.toUpperCase() + " locations")
+              .colorizeItem();
 
     }
     this.item = item.build();
@@ -129,30 +144,30 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     switch(event.getClick()) {
       case LEFT:
         Block targetBlock = event.getWhoClicked().getTargetBlock(null, 7);
-        if(targetBlock.getType() != checkMaterial) {
-          new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterial.toString() + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
+        if(!checkMaterials.contains(targetBlock.getType()) ) {
+          new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterials+ " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
           return;
         }
         addLocation(event.getWhoClicked(), event.getWhoClicked().getLocation());
         break;
       case SHIFT_LEFT:
         ItemStack itemStack =
-            new ItemBuilder(item.getType())
-                .amount(1)
-                .name("&7Add &a" + name.toUpperCase() + " &7location")
-                .lore("&aInfo")
-                .lore("&7" + description)
-                .lore("&aStatus")
-                .lore("&7Check in the arena editor!")
-                .lore("&aControls")
-                .lore("&eDROP \n&7-> Remove/Deactivate the item")
-                //.lore(physical ? "&ePHYSICAL \n&7-> Not supported" : "&cPHYSICAL - DEACTIVATED")
-                .lore(leftClick ? "&eLEFT_CLICK_AIR \n&7-> Not supported" : "&cLEFT_CLICK_AIR - DEACTIVATED")
-                .lore(leftClick ? "&eLEFT_CLICK_BLOCK \n&7-> Remove a location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
-                .lore(rightClick ? "&eRIGHT_CLICK_AIR \n&7-> Teleport through locations" : "&cRIGHT_CLICK_AIR - DEACTIVATED")
-                .lore(rightClick ? "&eRIGHT_CLICK_BLOCK \n&7-> Add the location at the position you clicked" : "&cRIGHT_CLICK_BLOCK - DEACTIVATED")
-                .colorizeItem()
-                .build();
+                new ItemBuilder(item.getType())
+                        .amount(1)
+                        .name("&7Add &a" + name.toUpperCase() + " &7location")
+                        .lore("&aInfo")
+                        .lore("&7" + description)
+                        .lore("&aStatus")
+                        .lore("&7Check in the arena editor!")
+                        .lore("&aControls")
+                        .lore("&eDROP \n&7-> Remove/Deactivate the item")
+                        //.lore(physical ? "&ePHYSICAL \n&7-> Not supported" : "&cPHYSICAL - DEACTIVATED")
+                        .lore(leftClick ? "&eLEFT_CLICK_AIR \n&7-> Not supported" : "&cLEFT_CLICK_AIR - DEACTIVATED")
+                        .lore(leftClick ? "&eLEFT_CLICK_BLOCK \n&7-> Remove a location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
+                        .lore(rightClick ? "&eRIGHT_CLICK_AIR \n&7-> Teleport through locations" : "&cRIGHT_CLICK_AIR - DEACTIVATED")
+                        .lore(rightClick ? "&eRIGHT_CLICK_BLOCK \n&7-> Add the location at the position you clicked" : "&cRIGHT_CLICK_BLOCK - DEACTIVATED")
+                        .colorizeItem()
+                        .build();
         HandlerItem handlerItem = new HandlerItem(itemStack);
         handlerItem.addDropHandler(dropEvent -> {
           handlerItem.remove();
@@ -169,25 +184,25 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
           switch(interactEvent.getAction()) {
             case PHYSICAL:
             case LEFT_CLICK_AIR:
-              new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterial.toString() + "!").prefix().send(interactEvent.getPlayer());
+              new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials.toString() + "!").prefix().send(interactEvent.getPlayer());
               break;
             case LEFT_CLICK_BLOCK:
-              if(block.getType() != checkMaterial) {
-                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterial.toString() + " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
+              if(!checkMaterials.contains(block.getType())) {
+                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials+ " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
 
               removeLocation(interactEvent.getPlayer(), false);
               break;
             case RIGHT_CLICK_BLOCK:
-              if(block.getType() != checkMaterial) {
-                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterial.toString() + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
+              if(!checkMaterials.contains(block.getType())) {
+                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
 
               if(location.distance(interactEvent.getClickedBlock().getWorld().getSpawnLocation()) <= Bukkit.getServer().getSpawnRadius()) {
                 new MessageBuilder("&c&l✖ &cWarning | Server spawn protection is set to &6" + Bukkit.getServer().getSpawnRadius()
-                    + " &cand location you want to place is in radius of this protection! &c&lNon opped players won't be able to interact with this " + checkMaterial + " and can't join the game! Reduce the spawn radius (server.properties) or change your location!").prefix().send(interactEvent.getPlayer());
+                        + " &cand location you want to place is in radius of this protection! &c&lNon opped players won't be able to interact with this " + checkMaterials + " and can't join the game! Reduce the spawn radius (server.properties) or change your location!").prefix().send(interactEvent.getPlayer());
               }
               addLocation(interactEvent.getPlayer(), block.getLocation());
               break;
@@ -249,7 +264,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
           setupInventory.setConfig(keyName, null);
           //considerable to add arena method to remove location
           new MessageBuilder("&e✔ Removed | &a" + name.toUpperCase() + " location for arena " + setupInventory.getArenaKey() + "! (" + location + ")").prefix().send(player);
-          new MessageBuilder("You can now remove the " + checkMaterial.toString() + "!").prefix().send(player);
+          new MessageBuilder("You can now remove the " + checkMaterials.toString() + "!").prefix().send(player);
           return;
         }
       }
