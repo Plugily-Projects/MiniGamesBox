@@ -203,7 +203,7 @@ public class PluginArenaRegistry {
 
     if(!validatorChecks(section, arena, key) || !additionalValidatorChecks(section, arena, key)) {
       arena.setReady(false);
-      config.set("instances." + arena.getId() + ".isdone", false);
+      section.set(key + ".isdone", false);
       ConfigUtils.saveConfig(plugin, config, "arenas");
       registerArena(arena);
     } else {
