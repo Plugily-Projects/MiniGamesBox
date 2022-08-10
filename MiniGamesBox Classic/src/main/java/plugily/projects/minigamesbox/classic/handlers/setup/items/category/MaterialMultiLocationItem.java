@@ -146,7 +146,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
                 .lore("&7Check in the arena editor!")
                 .lore("&aControls")
                 .lore("&eDROP \n&7-> Remove/Deactivate the item")
-                .lore(physical ? "&ePHYSICAL \n&7-> Not supported" : "&cPHYSICAL - DEACTIVATED")
+                //.lore(physical ? "&ePHYSICAL \n&7-> Not supported" : "&cPHYSICAL - DEACTIVATED")
                 .lore(leftClick ? "&eLEFT_CLICK_AIR \n&7-> Not supported" : "&cLEFT_CLICK_AIR - DEACTIVATED")
                 .lore(leftClick ? "&eLEFT_CLICK_BLOCK \n&7-> Remove a location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
                 .lore(rightClick ? "&eRIGHT_CLICK_AIR \n&7-> Teleport through locations" : "&cRIGHT_CLICK_AIR - DEACTIVATED")

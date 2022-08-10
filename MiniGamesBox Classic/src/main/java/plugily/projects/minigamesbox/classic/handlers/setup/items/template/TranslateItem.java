@@ -60,6 +60,7 @@ public class TranslateItem implements ClickableItem {
   @Override
   public void onClick(InventoryClickEvent event) {
     event.getWhoClicked().closeInventory();
-    new MessageBuilder("&6Check translation program at https://wiki.plugily.xyz/translate#" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase(), false).prefix().send(event.getWhoClicked());
+    new MessageBuilder("&bCheck translation program at").prefix().send(event.getWhoClicked());
+    new MessageBuilder("&b https://wiki.plugily.xyz/translate#" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase(), false).send(event.getWhoClicked());
   }
 }

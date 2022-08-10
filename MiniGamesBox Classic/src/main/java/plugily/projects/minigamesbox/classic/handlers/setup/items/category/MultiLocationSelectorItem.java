@@ -81,7 +81,7 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
         .lore("&aStatus")
         .lore("&7" + getSetupInfo())
         .lore("&aControls")
-        .lore("&eLEFT_CLICK \n&7-> Add the location at the position you are standing")
+        .lore("&eLEFT_CLICK \n&7-> Add the location you selected with the selector")
         .lore("&eSHIFT_LEFT_CLICK \n&7-> Get the selector item into your inventory")
         .lore("&eRIGHT_CLICK \n&7-> Remove a location near your position")
         .lore("&eSHIFT_RIGHT_CLICK \n&7-> Remove all locations")

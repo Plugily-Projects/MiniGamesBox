@@ -119,7 +119,7 @@ public class MultiLocationItem implements CategoryItemHandler {
                 .lore("&7Check in the arena editor!")
                 .lore("&aControls")
                 .lore("&eDROP \n&7-> Remove/Deactivate the item")
-                .lore(physical ? "&ePHYSICAL \n&7-> Add a location on physical event (e.g. pressure plate)" : "&cPHYSICAL - DEACTIVATED")
+                //.lore(physical ? "&ePHYSICAL \n&7-> Add a location on physical event (e.g. pressure plate)" : "&cPHYSICAL - DEACTIVATED")
                 .lore(leftClick ? "&eLEFT_CLICK_AIR \n&7-> Add the location at the position you are standing" : "&cLEFT_CLICK_AIR - DEACTIVATED")
                 .lore(leftClick ? "&eLEFT_CLICK_BLOCK \n&7-> Add the location at the position you clicked" : "&cLEFT_CLICK_BLOCK - DEACTIVATED")
                 .lore(rightClick ? "&eRIGHT_CLICK_AIR \n&7-> Teleport through locations" : "&cRIGHT_CLICK_AIR - DEACTIVATED")

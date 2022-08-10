@@ -63,10 +63,12 @@ public class ArenaDataItem implements ClickableItem {
     event.getWhoClicked().closeInventory();
     switch(event.getClick()) {
       case LEFT:
-        new MessageBuilder(setupInventory.getTutorialSite()).send(event.getWhoClicked());
+        new MessageBuilder("&aCheck tutorial video at").prefix().send(event.getWhoClicked());
+        new MessageBuilder("&7" + setupInventory.getTutorialSite(), false).send(event.getWhoClicked());
         break;
       case RIGHT:
         setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
+        new MessageBuilder("&aarenas.yml file reloaded ;)").prefix().send(event.getWhoClicked());
         break;
       default:
         break;
