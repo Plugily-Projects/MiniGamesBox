@@ -20,6 +20,9 @@
 package plugily.projects.minigamesbox.classic.handlers.language;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -31,8 +34,6 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-
-import static org.apache.commons.lang.StringUtils.replace;
 
 /**
  * @author Tigerpanzer_02
@@ -85,8 +86,7 @@ public class MessageBuilder {
   }
 
   public MessageBuilder(@NotNull ActionType actionType) {
-    Message actionTypeMessage = plugin.getMessageManager().getMessage("IN_GAME_MESSAGES_" + actionType);
-    this.message = plugin.getLanguageManager().getLanguageMessage(actionTypeMessage.getPath());
+    this.message = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getMessage("IN_GAME_MESSAGES_" + actionType).getPath());
     colorChatIssue();
   }
 
@@ -96,12 +96,11 @@ public class MessageBuilder {
   }
 
   private void colorChatIssue() {
-    if(!hasNoPlaceholders()) {
-      if(message.contains("%color_chat_issue%")) {
-        messageColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
-      }
-      message = replace(message, "%color_chat_issue%", messageIssueColor);
+    if(message.indexOf("%color_chat_issue%") != -1) {
+      messageColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
     }
+
+    message = replace(message, "%color_chat_issue%", () -> messageIssueColor);
   }
 
   public MessageBuilder asKey() {
@@ -144,20 +143,13 @@ public class MessageBuilder {
   }
 
   private void formatSpecialChars() {
-    if(plugin.getMessageManager().getSpecialChars().isEmpty()) {
-      return;
-    }
     for(String specialChar : plugin.getMessageManager().getSpecialChars()) {
-      message = replace(message, specialChar, messageSpecialCharBefore + specialChar + messageColor);
+      message = replace(message, specialChar, () -> messageSpecialCharBefore + specialChar + messageColor);
     }
   }
 
   private void colorRawMessage() {
-    if(message == null || message.isEmpty()) {
-      message = "";
-    }
-
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && message.indexOf('#') >= 0) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && message.indexOf('#') != -1) {
       message = MiscUtils.matchColorRegex(message);
     }
 
@@ -165,89 +157,88 @@ public class MessageBuilder {
   }
 
   private void formatInteger() {
-    message = replace(message, "%number%", placeholderColorNumber + integer + messageColor);
+    message = replace(message, "%number%", () -> placeholderColorNumber + integer + messageColor);
   }
 
   private void formatValue() {
-    message = replace(message, "%value%", placeholderColorValue + value + messageColor);
+    message = replace(message, "%value%", () -> placeholderColorValue + value + messageColor);
   }
 
   private void formatPlayer() {
-    if(!hasNoPlaceholders()) {
-      message = replace(message, "%player%", placeholderColorPlayer + player.getName() + messageColor);
-      message = replace(message, "%player_uuid%", placeholderColorPlayer + player.getUniqueId() + messageColor);
-    }
+    message = replace(message, "%player%", () -> placeholderColorPlayer + player.getName() + messageColor);
+    message = replace(message, "%player_uuid%", () -> placeholderColorPlayer + player.getUniqueId() + messageColor);
   }
 
   private void formatPlaceholderAPI() {
-    if(!hasNoPlaceholders() && plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+    if(plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       message = PlaceholderAPI.setPlaceholders(player, message);
     }
   }
 
   private void formatExternalPlayer() {
-    if(!hasNoPlaceholders()) {
-      for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-        if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
-          continue;
-        }
-        message = replace(message, "%" + placeholder.getId() + "%", placeholderColorOther + placeholder.getValue(player) + messageColor);
+    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+      if(placeholder.getPlaceholderType() != Placeholder.PlaceholderType.ARENA) {
+        message = replace(message, "%" + placeholder.getId() + "%", () -> placeholderColorOther + placeholder.getValue(player) + messageColor);
       }
     }
   }
 
   private void formatExternalArena() {
-    if(!hasNoPlaceholders()) {
-      for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-        if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
-          continue;
-        }
-        message = replace(message, "%" + placeholder.getId() + "%", placeholderColorOther + placeholder.getValue(arena) + messageColor);
+   for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+      if(placeholder.getPlaceholderType() != Placeholder.PlaceholderType.GLOBAL) {
+        message = replace(message, "%" + placeholder.getId() + "%", () -> placeholderColorOther + placeholder.getValue(arena) + messageColor);
       }
     }
   }
 
   private void formatExternalPlayerAndArena() {
-    if(!hasNoPlaceholders()) {
-      for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-        if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.GLOBAL) {
-          continue;
-        }
-        message = replace(message, "%" + placeholder.getId() + "%", placeholderColorOther + placeholder.getValue(player, arena) + messageColor);
+    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+      if(placeholder.getPlaceholderType() != Placeholder.PlaceholderType.GLOBAL) {
+        message = replace(message, "%" + placeholder.getId() + "%", () -> placeholderColorOther + placeholder.getValue(player, arena) + messageColor);
       }
     }
   }
 
   private void formatPlugin() {
-    if(!hasNoPlaceholders()) {
-      message = replace(message, "%plugin_prefix%", placeholderColorOther + plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")) + messageColor);
-      message = replace(message, "%plugin_name%", placeholderColorOther + plugin.getName() + messageColor);
-      message = replace(message, "%plugin_name_uppercase%", placeholderColorOther + plugin.getName().toUpperCase() + messageColor);
-      message = replace(message, "%plugin_short_command%", placeholderColorOther + plugin.getPluginNamePrefix() + messageColor);
-    }
+    message = replace(message, "%plugin_prefix%", () -> placeholderColorOther + plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("IN_GAME_PLUGIN_PREFIX")) + messageColor);
+    message = replace(message, "%plugin_name%", () -> placeholderColorOther + plugin.getName() + messageColor);
+    message = replace(message, "%plugin_name_uppercase%", () -> placeholderColorOther + plugin.getName().toUpperCase() + messageColor);
+    message = replace(message, "%plugin_short_command%", () -> placeholderColorOther + plugin.getPluginNamePrefix() + messageColor);
   }
 
   private void formatArena() {
-    if(!hasNoPlaceholders()) {
-      int timer = arena.getTimer();
-      message = replace(message, "%arena_min_players%", placeholderColorOther + arena.getMinimumPlayers() + messageColor);
-      message = replace(message, "%arena_players%", placeholderColorOther + arena.getPlayers() + messageColor);
-      message = replace(message, "%arena_players_size%", placeholderColorOther + arena.getPlayers().size() + messageColor);
-      message = replace(message, "%arena_players_left%", placeholderColorOther + arena.getPlayersLeft() + messageColor);
-      message = replace(message, "%arena_players_left_size%", placeholderColorOther + arena.getPlayersLeft().size() + messageColor);
-      message = replace(message, "%arena_max_players%", placeholderColorOther + arena.getMaximumPlayers() + messageColor);
-      message = replace(message, "%arena_name%", placeholderColorOther + arena.getMapName() + messageColor);
-      message = replace(message, "%arena_id%", placeholderColorOther + arena.getId() + messageColor);
-      message = replace(message, "%arena_state%", placeholderColorOther + arena.getArenaState() + messageColor);
-      message = replace(message, "%arena_state_formatted%", placeholderColorOther + arena.getArenaState().getFormattedName() + messageColor);
-      message = replace(message, "%arena_state_placeholder%", placeholderColorOther + arena.getArenaState().getPlaceholder() + messageColor);
-      message = replace(message, "%arena_time%", placeholderColorOther + timer + messageColor);
-      message = replace(message, "%arena_time_formatted%", placeholderColorOther + StringFormatUtils.formatIntoMMSS(timer) + messageColor);
-    }
+    final int timer = arena.getTimer();
+    final List<Player> playersLeft = arena.getPlayersLeft();
+
+    message = replace(message, "%arena_min_players%", () -> placeholderColorOther + arena.getMinimumPlayers() + messageColor);
+    message = replace(message, "%arena_players%", () -> placeholderColorOther + arena.getPlayers() + messageColor);
+    message = replace(message, "%arena_players_size%", () -> placeholderColorOther + arena.getPlayers().size() + messageColor);
+    message = replace(message, "%arena_players_left%", () -> placeholderColorOther + playersLeft + messageColor);
+    message = replace(message, "%arena_players_left_size%", () -> placeholderColorOther + playersLeft.size() + messageColor);
+    message = replace(message, "%arena_max_players%", () -> placeholderColorOther + arena.getMaximumPlayers() + messageColor);
+    message = replace(message, "%arena_name%", () -> placeholderColorOther + arena.getMapName() + messageColor);
+    message = replace(message, "%arena_id%", () -> placeholderColorOther + arena.getId() + messageColor);
+    message = replace(message, "%arena_state%", () -> placeholderColorOther + arena.getArenaState() + messageColor);
+    message = replace(message, "%arena_state_formatted%", () -> placeholderColorOther + arena.getArenaState().getFormattedName() + messageColor);
+    message = replace(message, "%arena_state_placeholder%", () -> placeholderColorOther + arena.getArenaState().getPlaceholder() + messageColor);
+    message = replace(message, "%arena_time%", () -> placeholderColorOther + timer + messageColor);
+    message = replace(message, "%arena_time_formatted%", () -> placeholderColorOther + StringFormatUtils.formatIntoMMSS(timer) + messageColor);
   }
 
-  private boolean hasNoPlaceholders() {
-    return !message.contains("%");
+  private String replace(String text, String search, java.util.function.Supplier<String> replacement) {
+    int index = text.indexOf(search);
+
+    if (index == -1) {
+      return text;
+    }
+
+    StringBuilder builder = new StringBuilder(text);
+    int searchLength = search.length();
+
+    while ((index = builder.replace(index, index + searchLength, replacement.get()).indexOf(search)) != -1) {
+    }
+
+    return builder.toString();
   }
 
   public String build() {
@@ -277,21 +268,21 @@ public class MessageBuilder {
 
   public void send(CommandSender commandSender) {
     build();
-    if((message != null) && !message.isEmpty()) {
+    if(message != null && !message.isEmpty()) {
       commandSender.sendMessage(message);
     }
   }
 
   public void send(Player player) {
     build();
-    if((message != null) && !message.isEmpty()) {
+    if(message != null && !message.isEmpty()) {
       player.sendMessage(message);
     }
   }
 
   public void send(PluginArena arena) {
     build();
-    if((message != null) && !message.isEmpty()) {
+    if(message != null && !message.isEmpty()) {
       for(Player arenaPlayer : arena.getPlayers()) {
         arenaPlayer.sendMessage(message);
       }
@@ -306,7 +297,7 @@ public class MessageBuilder {
 
   public void broadcast() {
     build();
-    if((message != null) && !message.isEmpty() && (arena != null)) {
+    if(message != null && arena != null && !message.isEmpty()) {
       for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         onlinePlayer.sendMessage(message);
       }
