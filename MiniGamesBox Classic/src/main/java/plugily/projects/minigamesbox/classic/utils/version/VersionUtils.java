@@ -46,6 +46,8 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.xseries.XParticleLegacy;
 
@@ -53,6 +55,8 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -158,9 +162,27 @@ public final class VersionUtils {
     return meta;
   }
 
+  private static JavaPlugin plugin;
+
   public static void teleport(Entity entity, Location location) {
-    if(isPaper()) {
-      PaperLib.teleportAsync(entity, location);
+    if(isPaper) {
+      // Avoid Future.get() method to be called from the main thread
+
+      if(Bukkit.isPrimaryThread()) { // Checks if the current thread is not async
+        PaperLib.teleportAsync(entity, location);
+        return;
+      }
+
+      if(plugin == null)
+        plugin = JavaPlugin.getPlugin(PluginMain.class);
+
+      try {
+        Bukkit.getScheduler().callSyncMethod(plugin, () -> PaperLib.teleportAsync(entity, location)).get();
+      } catch(InterruptedException | ExecutionException e) {
+        e.printStackTrace();
+      } catch(CancellationException e) {
+        // ignored
+      }
     } else {
       entity.teleport(location);
     }
