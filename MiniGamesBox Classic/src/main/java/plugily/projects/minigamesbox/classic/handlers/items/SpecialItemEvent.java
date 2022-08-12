@@ -50,12 +50,12 @@ public class SpecialItemEvent implements Listener {
     if(!ItemUtils.isItemStackNamed(itemStack)) {
       return false;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null) {
+
+    if(!plugin.getArenaRegistry().isInArena(player)) {
       return false;
     }
-    SpecialItem key = plugin.getSpecialItemManager().getRelatedSpecialItem(itemStack);
-    return key != plugin.getSpecialItemManager().getInvalidItem();
+
+    return plugin.getSpecialItemManager().getRelatedSpecialItem(itemStack) != plugin.getSpecialItemManager().getInvalidItem();
   }
 
   @EventHandler
@@ -71,7 +71,6 @@ public class SpecialItemEvent implements Listener {
       return;
     }
     Player player = event.getPlayer();
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
 
     ItemStack itemStack = VersionUtils.getItemInHand(player);
     if(!ItemUtils.isItemStackNamed(itemStack)) {
@@ -84,12 +83,14 @@ public class SpecialItemEvent implements Listener {
     }
     plugin.getDebugger().debug("Found the item " + relatedSpecialItem.getPath());
     event.setCancelled(true);
-    if(relatedSpecialItem.getPermission() != null && !relatedSpecialItem.getPermission().equalsIgnoreCase("")) {
+    if(relatedSpecialItem.getPermission() != null && !relatedSpecialItem.getPermission().isEmpty()) {
       if(!plugin.getBukkitHelper().hasPermission(player, relatedSpecialItem.getPermission())) {
         return;
       }
     }
     plugin.getDebugger().debug("SpecialItem {0} - Permission check for {1} true", relatedSpecialItem.getPath(), player.getName());
+
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
 
     if(arena == null) {
       plugin.getRewardsHandler().performReward(player, relatedSpecialItem.getRewards());
