@@ -20,7 +20,6 @@
 package plugily.projects.minigamesbox.classic.handlers.language;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -265,13 +264,6 @@ public class MessageBuilder {
     build();
     if(message != null && !message.isEmpty()) {
       commandSender.sendMessage(message);
-    }
-  }
-
-  public void send(Player player) {
-    build();
-    if(message != null && !message.isEmpty()) {
-      player.sendMessage(message);
     }
   }
 
