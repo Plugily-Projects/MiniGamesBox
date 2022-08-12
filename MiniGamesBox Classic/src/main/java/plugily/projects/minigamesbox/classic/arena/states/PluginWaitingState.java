@@ -50,10 +50,9 @@ public class PluginWaitingState implements ArenaStateHandler {
     plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
     int minPlayers = arena.getMinimumPlayers();
-    int timer = arena.getTimer();
 
     if(arena.getPlayers().size() < minPlayers) {
-      if(timer <= 0) {
+      if(arena.getTimer() <= 0) {
         arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().integer(minPlayers).arena(arena).sendArena();
       }

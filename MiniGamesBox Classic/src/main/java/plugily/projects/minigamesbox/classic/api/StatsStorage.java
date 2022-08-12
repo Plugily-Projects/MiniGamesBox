@@ -22,7 +22,6 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
-import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -89,8 +88,7 @@ public class StatsStorage {
    * @see StatisticType
    */
   public int getUserStats(Player player, StatisticType statisticType) {
-    User user = plugin.getUserManager().getUser(player);
-    return user.getStatistic(statisticType);
+    return plugin.getUserManager().getUser(player).getStatistic(statisticType);
   }
 
 
@@ -101,10 +99,13 @@ public class StatsStorage {
    * @return true or false based on user configuration
    */
   public String getStatisticName(String key) {
-    if(!statistics.containsKey(key)) {
+    StatisticType statisticType = statistics.get(key);
+
+    if(statisticType == null) {
       throw new IllegalStateException("Statistic with key " + key + " does not exist");
     }
-    return statistics.get(key).getName();
+
+    return statisticType.getName();
   }
 
 
@@ -115,10 +116,13 @@ public class StatsStorage {
    * @return true or false based on user configuration
    */
   public StatisticType getStatisticType(String key) {
-    if(!statistics.containsKey(key)) {
+    StatisticType statisticType = statistics.get(key);
+
+    if(statisticType == null) {
       throw new IllegalStateException("Statistic with key " + key + " does not exist");
     }
-    return statistics.get(key);
+
+    return statisticType;
   }
 
   /**

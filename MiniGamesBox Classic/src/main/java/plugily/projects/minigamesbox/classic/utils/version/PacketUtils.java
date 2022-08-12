@@ -19,6 +19,9 @@
 
 package plugily.projects.minigamesbox.classic.utils.version;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import org.bukkit.entity.Player;
 
 /**
@@ -28,26 +31,32 @@ import org.bukkit.entity.Player;
  */
 public class PacketUtils {
 
-  private static Class<?> packetClass;
+  private static Method getHandleMethod, sendPacketMethod;
+  private static Field playerConnectionField;
 
   static {
-    packetClass = classByName("net.minecraft.network.protocol", "Packet");
+    try {
+      getHandleMethod = Player.class.getMethod("getHandle");
+    } catch (NoSuchMethodException | SecurityException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void sendPacket(Player player, Object packet) {
     try {
-      Object handle = player.getClass().getMethod("getHandle").invoke(player);
-      Object playerConnection = handle.getClass().getField(
-          (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17_R1) ? "b" : "playerConnection")).get(handle);
-      playerConnection.getClass().getMethod((ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_18_R1) ? "a" : "sendPacket"), packetClass).invoke(playerConnection, packet);
-/*
-java.lang.IllegalArgumentException: argument type mismatch
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
-	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
-	at plugily.projects.buildbattle.minigamesbox.classic.utils.version.PacketUtils.sendPacket(PacketUtils.java:42)
- */
+      Object handle = getHandleMethod.invoke(player);
+
+      if (playerConnectionField == null)
+        playerConnectionField = handle.getClass().getField(
+              (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17_R1) ? "b" : "playerConnection"));
+
+      Object playerConnection = playerConnectionField.get(handle);
+
+      if (sendPacketMethod == null)
+        sendPacketMethod = playerConnection.getClass().getMethod((ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_18_R1) ? "a" : "sendPacket"),
+            classByName("net.minecraft.network.protocol", "Packet"));
+
+      sendPacketMethod.invoke(playerConnection, packet);
     } catch(ReflectiveOperationException ex) {
       ex.printStackTrace();
     }

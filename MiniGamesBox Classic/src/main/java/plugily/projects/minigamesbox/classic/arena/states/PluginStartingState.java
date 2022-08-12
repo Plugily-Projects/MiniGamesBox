@@ -116,12 +116,17 @@ public class PluginStartingState implements ArenaStateHandler {
     if(arena.isForceStart()) {
       arena.setForceStart(false);
     }
-    int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
-    if(arena.getMaximumPlayers() == arena.getPlayers().size() && arena.getTimer() > shorter) {
-      arenaTimer = shorter;
-      arenaState = ArenaState.FULL_GAME;
-      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS").asKey().arena(arena).sendArena();
+
+    if (arena.getMaximumPlayers() == arena.getPlayers().size()) {
+      int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
+
+      if(arena.getTimer() > shorter) {
+        arenaTimer = shorter;
+        arenaState = ArenaState.FULL_GAME;
+        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS").asKey().arena(arena).sendArena();
+      }
     }
+
     plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
   }

@@ -86,7 +86,6 @@ import plugily.projects.minigamesbox.classic.utils.version.events.EventsInitiali
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -306,9 +305,8 @@ public class PluginMain extends JavaPlugin {
   }
 
   public void setupFiles() {
-    for(String fileName : getFileNames()) {
-      File file = new File(getDataFolder(), fileName + ".yml");
-      if(!file.exists()) {
+    for(String fileName : fileNames) {
+      if(!new File(getDataFolder(), fileName + ".yml").exists()) {
         saveResource(fileName + ".yml", false);
       }
     }
@@ -364,13 +362,10 @@ public class PluginMain extends JavaPlugin {
     long start = System.currentTimeMillis();
 
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
-    if(getArenaRegistry() != null) {
-      for(PluginArena arena : getArenaRegistry().getArenas()) {
-        List<Player> arenaPlayers = new ArrayList<>(arena.getPlayers());
-        if(!arenaPlayers.isEmpty()) {
-          for(Player player : arenaPlayers) {
-            getArenaManager().leaveAttempt(player, arena);
-          }
+    if(arenaRegistry != null) {
+      for(PluginArena arena : arenaRegistry.getArenas()) {
+        for(Player player : new ArrayList<>(arena.getPlayers())) {
+          arenaManager.leaveAttempt(player, arena);
         }
         arena.getMapRestorerManager().fullyRestoreArena();
       }

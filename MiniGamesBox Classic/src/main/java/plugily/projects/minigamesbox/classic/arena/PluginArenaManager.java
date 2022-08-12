@@ -36,8 +36,6 @@ import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
-import java.util.List;
-
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -73,7 +71,6 @@ public class PluginArenaManager {
     }
 
     arena.getPlayers().add(player);
-    User user = plugin.getUserManager().getUser(player);
 
     if(arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState().isStartingStage(arena) && arena.getTimer() <= 3 || arena.getArenaState() == ArenaState.ENDING) {
       if(!plugin.getConfigPreferences().getOption("SPECTATORS")) {
@@ -101,7 +98,7 @@ public class PluginArenaManager {
 
     new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
 
-    user.setKit(plugin.getKitRegistry().getDefaultKit());
+    plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
@@ -264,11 +261,10 @@ public class PluginArenaManager {
 
     Bukkit.getPluginManager().callEvent(new PlugilyGameStopEvent(arena));
     for(Player player : arena.getPlayers()) {
-      User user = plugin.getUserManager().getUser(player);
       if(!quickStop) {
         spawnFireworks(arena, player);
-        List<String> summaryMessages = plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary");
-        for(String msg : summaryMessages) {
+
+        for(String msg : plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary")) {
           MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).arena(arena).player(player).build());
         }
       }

@@ -43,13 +43,13 @@ import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -115,24 +115,33 @@ public class PluginArena extends BukkitRunnable {
    * @return true or false based on user configuration
    */
   public Integer getArenaOption(String name) {
-    if(!arenaOptions.containsKey(name)) {
+    ArenaOption arenaOption = arenaOptions.get(name);
+
+    if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-    return arenaOptions.get(name).getValue();
+
+    return arenaOption.getValue();
   }
 
   public void setArenaOption(String name, int value) {
-    if(!arenaOptions.containsKey(name)) {
+    ArenaOption arenaOption = arenaOptions.get(name);
+
+    if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-    arenaOptions.get(name).setValue(value);
+
+    arenaOption.setValue(value);
   }
 
   public void changeArenaOptionBy(String name, int value) {
-    if(!arenaOptions.containsKey(name)) {
+    ArenaOption arenaOption = arenaOptions.get(name);
+
+    if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-    arenaOptions.get(name).setValue(arenaOptions.get(name).getValue() + value);
+
+    arenaOption.setValue(arenaOption.getValue() + value);
   }
 
 
@@ -172,8 +181,11 @@ public class PluginArena extends BukkitRunnable {
 
   private void setDefaultValues() {
     loadArenaOptions();
+
+    Location firstWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+
     for(GameLocation location : GameLocation.values()) {
-      gameLocations.put(location, Bukkit.getWorlds().get(0).getSpawnLocation());
+      gameLocations.put(location, firstWorldSpawn);
     }
   }
 
@@ -440,7 +452,15 @@ public class PluginArena extends BukkitRunnable {
 
   @NotNull
   public List<Player> getPlayersLeft() {
-    return plugin.getUserManager().getUsers(this).stream().filter(user -> !user.isSpectator()).map(User::getPlayer).collect(Collectors.toList());
+    List<Player> playersLeft = new ArrayList<>();
+
+    for (User user : plugin.getUserManager().getUsers(this)) {
+      if (!user.isSpectator()) {
+        playersLeft.add(user.getPlayer());
+      }
+    }
+
+    return playersLeft;
   }
 
   public PluginMain getPlugin() {

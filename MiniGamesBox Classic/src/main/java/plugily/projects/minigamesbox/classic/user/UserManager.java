@@ -31,7 +31,6 @@ import plugily.projects.minigamesbox.classic.user.data.UserDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -74,7 +73,13 @@ public class UserManager {
   }
 
   public List<User> getUsers(PluginArena arena) {
-    return arena.getPlayers().stream().map(this::getUser).collect(Collectors.toList());
+    List<User> users = new ArrayList<>(arena.getPlayers().size());
+
+    for (Player player : arena.getPlayers()) {
+      users.add(getUser(player));
+    }
+
+    return users;
   }
 
   public void saveStatistic(User user, StatisticType stat) {
@@ -101,12 +106,18 @@ public class UserManager {
   }
 
   public void updateLevelStat(User user, PluginArena arena) {
-    if(user.getStatistic(plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP")) < user.getStatistic(plugin.getStatsStorage().getStatisticType("EXP"))) {
+    StatisticType nextLevelExp = plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP");
+
+    if(user.getStatistic(nextLevelExp) < user.getStatistic(plugin.getStatsStorage().getStatisticType("EXP"))) {
       user.adjustStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);
-      user.setStatistic(plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP"), (int) Math.ceil(Math.pow(50.0 * user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL")), 1.5)));
+
+      int level = user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"));
+
+      user.setStatistic(nextLevelExp, (int) Math.ceil(Math.pow(50.0 * level, 1.5)));
+
       //Arena can be null when player has left the arena before this message is retrieved.
       if(arena != null)
-        new MessageBuilder("IN_GAME_LEVEL_UP").asKey().arena(arena).player(user.getPlayer()).integer(user.getStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"))).sendPlayer();
+        new MessageBuilder("IN_GAME_LEVEL_UP").asKey().arena(arena).player(user.getPlayer()).integer(level).sendPlayer();
     }
   }
 

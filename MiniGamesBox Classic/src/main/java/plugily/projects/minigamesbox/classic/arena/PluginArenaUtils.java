@@ -191,8 +191,9 @@ public class PluginArenaUtils {
   }
 
   public static boolean areInSameArena(Player one, Player two) {
-    return plugin.getArenaRegistry().getArena(one) != null
-        && plugin.getArenaRegistry().getArena(one).equals(plugin.getArenaRegistry().getArena(two));
+    PluginArena arena = plugin.getArenaRegistry().getArena(one);
+
+    return arena != null && arena.equals(plugin.getArenaRegistry().getArena(two));
   }
 
   public static PluginMain getPlugin() {

@@ -102,8 +102,7 @@ public class User {
   }
 
   public int getStatistic(String statistic) {
-    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic.toUpperCase());
-    return getStatistic(statisticType);
+    return getStatistic(plugin.getStatsStorage().getStatisticType(statistic.toUpperCase()));
   }
 
   public int getStatistic(StatisticType statisticType) {
@@ -115,18 +114,22 @@ public class User {
   }
 
   public void setStatistic(String statistic, int value) {
-    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
-    changeUserStatistic(statisticType, value);
+    changeUserStatistic(plugin.getStatsStorage().getStatisticType(statistic), value);
   }
 
   private void changeUserStatistic(StatisticType statisticType, int value) {
     stats.put(statisticType, value);
-    plugin.getDebugger().debug("Set User {0} statistic to {1} for {2} ", statisticType.getName(), value, getPlayer().getName());
-    //statistics manipulation events are called async when using mysql
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      Player player = getPlayer();
-      Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, value));
-    });
+
+    Player player = getPlayer();
+
+    if (player != null) {
+      plugin.getDebugger().debug("Set User {0} statistic to {1} for {2} ", statisticType.getName(), value, player.getName());
+
+      //statistics manipulation events are called async when using mysql
+      Bukkit.getScheduler().runTask(plugin, () -> {
+        Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, value));
+      });
+    }
   }
 
   public void adjustStatistic(StatisticType statisticType, int value) {

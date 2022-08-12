@@ -38,10 +38,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
  */
 public class SetupArgument {
 
-  private final PluginArgumentsRegistry registry;
-
   public SetupArgument(PluginArgumentsRegistry registry) {
-    this.registry = registry;
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("setup", registry.getPlugin().getCommandAdminPrefixLong() + ".admin.setup", CommandArgument.ExecutorType.PLAYER,
         new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]", "/" + registry.getPlugin().getCommandAdminPrefixLong() + " setup [create/edit] [arena]",
             "&7Used for all setup configuration \n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.setup")) {
