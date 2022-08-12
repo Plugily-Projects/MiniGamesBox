@@ -70,10 +70,13 @@ public class RewardsFactory {
    * @return RewardType
    */
   public RewardType getRewardType(String key) {
-    if(!rewardTypes.containsKey(key)) {
+    RewardType rewardType = rewardTypes.get(key);
+
+    if(rewardType == null) {
       throw new IllegalStateException("RewardType with name " + key + " does not exist");
     }
-    return rewardTypes.get(key);
+
+    return rewardType;
   }
 
   /**
@@ -153,7 +156,7 @@ public class RewardsFactory {
       return;
     }
     String command = reward.getExecutableCode();
-    if(command == null || command.equalsIgnoreCase("")) {
+    if(command == null || command.isEmpty()) {
       return;
     }
     MessageBuilder messageBuilder = new MessageBuilder(command, false);

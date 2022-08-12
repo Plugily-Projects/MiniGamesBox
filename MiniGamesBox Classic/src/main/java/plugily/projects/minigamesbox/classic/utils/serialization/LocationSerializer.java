@@ -68,14 +68,19 @@ public class LocationSerializer {
    * @see #saveLoc(JavaPlugin, FileConfiguration, String, String, Location)
    */
   public static Location getLocation(String path) {
-    String[] loc;
-    if(path == null || (loc = path.split(",")).length == 0) {
+    if (path == null)
+      return null;
+
+    String[] loc = path.split(",");
+
+    if(loc.length == 0) {
       return null;
     }
 
-    World world = Bukkit.getServer().getWorld(loc[0]);
+    String worldName = loc[0];
+    World world = Bukkit.getServer().getWorld(worldName);
     if(world == null && !Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
-      world = Bukkit.createWorld(new WorldCreator(loc[0]));
+      world = Bukkit.createWorld(new WorldCreator(worldName));
     }
 
     if(loc.length == 1) {

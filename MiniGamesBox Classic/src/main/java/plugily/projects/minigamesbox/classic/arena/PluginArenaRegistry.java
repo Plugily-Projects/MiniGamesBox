@@ -228,20 +228,21 @@ public class PluginArenaRegistry {
     arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 16));
     arena.setMapName(section.getString(id + ".mapname", id));
 
-    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation"));
-    Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation"));
-    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation"));
-    Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation"));
+    Location startLoc = LocationSerializer.getLocation(section.getString(id + ".startlocation", null));
+    Location lobbyLoc = LocationSerializer.getLocation(section.getString(id + ".lobbylocation", null));
+    Location endLoc = LocationSerializer.getLocation(section.getString(id + ".endlocation", null));
+    Location spectatorLoc = LocationSerializer.getLocation(section.getString(id + ".spectatorlocation", null));
 
     if(lobbyLoc == null || startLoc == null || endLoc == null || spectatorLoc == null) {
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("LOCATIONS ARE INVALID").arena(arena).build());
       return false;
     }
 
-    if(!section.getBoolean(id + ".isdone")) {
+    if(!section.getBoolean(id + ".isdone", false)) {
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INVALID_ARENA_CONFIGURATION").asKey().value("NOT VALIDATED").arena(arena).build());
       return false;
     }
+
     arena.setLobbyLocation(lobbyLoc);
     arena.setStartLocation(startLoc);
     arena.setEndLocation(endLoc);

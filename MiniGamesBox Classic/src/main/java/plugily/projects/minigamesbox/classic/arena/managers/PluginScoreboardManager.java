@@ -105,15 +105,12 @@ public class PluginScoreboardManager {
 
   public List<Entry> formatScoreboard(User user) {
     EntryBuilder builder = new EntryBuilder();
-    List<String> lines;
-    if(arena.getArenaState() == ArenaState.FULL_GAME) {
-      lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content.Waiting");
-    } else {
-      lines = plugin.getLanguageManager().getLanguageList("Scoreboard.Content." + arena.getArenaState().getFormattedName());
-    }
-    for(String line : lines) {
+
+    for(String line : plugin.getLanguageManager().getLanguageList(arena.getArenaState() == ArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
+        : "Scoreboard.Content." + arena.getArenaState().getFormattedName())) {
       builder.next(new MessageBuilder(line).player(user.getPlayer()).arena(arena).build());
     }
+
     return builder.build();
   }
 

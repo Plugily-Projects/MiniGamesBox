@@ -68,10 +68,13 @@ public class MessageManager {
    * @return Message
    */
   public Message getMessage(String name) {
-    if(!options.containsKey(name)) {
+    Message message = options.get(name);
+
+    if(message == null) {
       throw new IllegalStateException("Message with name " + name + " does not exist");
     }
-    return options.get(name);
+
+    return message;
   }
 
   /**
@@ -81,10 +84,13 @@ public class MessageManager {
    * @return String path
    */
   public String getPath(String name) {
-    if(!options.containsKey(name)) {
+    Message message = options.get(name);
+
+    if(message == null) {
       throw new IllegalStateException("Message with name " + name + " does not exist");
     }
-    return options.get(name).getPath();
+
+    return message.getPath();
   }
 
   /**

@@ -157,12 +157,12 @@ public class SpecialItem {
   }
 
   public void setItem(Player player) {
-    PlayerInventory playerInventory = player.getInventory();
-    ItemStack itemStack = getItemStack();
     if(!move) {
-      HandlerItem handlerItem = new HandlerItem(itemStack);
-      handlerItem.setMovementCancel(true);
+      new HandlerItem(itemStack).setMovementCancel(true);
     }
+
+    PlayerInventory playerInventory = player.getInventory();
+
     if(!force) {
       ItemStack slotItem = playerInventory.getItem(slot);
       if(slotItem == null) {

@@ -61,10 +61,13 @@ public class PermissionsManager {
    * @return Permission
    */
   public Permission getPermission(String key) {
-    if(!permissions.containsKey(key)) {
+    Permission permission = permissions.get(key);
+
+    if(permission == null) {
       throw new IllegalStateException("Permission with key " + key + " does not exist");
     }
-    return permissions.get(key);
+
+    return permission;
   }
 
 
@@ -75,10 +78,13 @@ public class PermissionsManager {
    * @return String the permission
    */
   public String getPermissionString(String key) {
-    if(!permissions.containsKey(key)) {
+    Permission permission = permissions.get(key);
+
+    if(permission == null) {
       throw new IllegalStateException("Permission with key " + key + " does not exist");
     }
-    return permissions.get(key).getPermission();
+
+    return permission.getPermission();
   }
 
   /**
@@ -88,10 +94,13 @@ public class PermissionsManager {
    * @return String the permission
    */
   public boolean hasPermissionString(String key, Player player) {
-    if(!permissions.containsKey(key)) {
+    Permission permission = permissions.get(key);
+
+    if(permission == null) {
       throw new IllegalStateException("Permission with key " + key + " does not exist");
     }
-    return player.hasPermission(permissions.get(key).getPermission());
+
+    return player.hasPermission(permission.getPermission());
   }
 
   /**
@@ -145,10 +154,13 @@ public class PermissionsManager {
    * @return PermissionCategory
    */
   public PermissionCategory getPermissionCategory(String key) {
-    if(!permissionCategories.containsKey(key)) {
+    PermissionCategory permissionCategory = permissionCategories.get(key);
+
+    if(permissionCategory == null) {
       throw new IllegalStateException("Permission category with key " + key + " does not exist");
     }
-    return permissionCategories.get(key);
+
+    return permissionCategory;
   }
 
   /**
@@ -158,10 +170,13 @@ public class PermissionsManager {
    * @return Map permissionCategoryMap
    */
   public Map<String, Integer> getPermissionCategoryMap(String key) {
-    if(!permissionCategories.containsKey(key)) {
+    PermissionCategory permissionCategory = permissionCategories.get(key);
+
+    if(permissionCategory == null) {
       throw new IllegalStateException("Permission category with key " + key + " does not exist");
     }
-    return permissionCategories.get(key).getCustomPermissions();
+
+    return permissionCategory.getCustomPermissions();
   }
 
   /**

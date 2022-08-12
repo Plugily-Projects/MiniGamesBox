@@ -73,17 +73,15 @@ public class BossbarManager {
     if(gameBar == null) {
       return;
     }
-    List<String> values;
-    if(arena.getArenaState() == ArenaState.FULL_GAME) {
-      values = new ArrayList<>(bossbar.get(ArenaState.STARTING));
-    } else {
-      values = new ArrayList<>(bossbar.get(arena.getArenaState()));
-    }
-    int lines = values.size() - 1;
-    if(currentLine > lines) {
+
+    List<String> values = new ArrayList<>(bossbar.get(arena.getArenaState() == ArenaState.FULL_GAME ? ArenaState.STARTING : arena.getArenaState()));
+
+    if(currentLine > values.size() - 1) {
       currentLine = 0;
     }
+
     String bossbarMessage = new MessageBuilder(values.get(currentLine)).arena(arena).build();
+
     if(arena.getArenaOption("BAR_TOGGLE_VALUE") > interval) {
       currentLine++;
       arena.setArenaOption("BAR_TOGGLE_VALUE", 0);

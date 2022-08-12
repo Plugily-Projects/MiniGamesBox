@@ -50,9 +50,8 @@ public class PluginRestartingState implements ArenaStateHandler {
     setArenaState(ArenaState.RESTARTING);
     setArenaTimer(-999);
     plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.RESTARTING, arenaState, arenaTimer);
-    int timer = arena.getTimer();
 
-    if(timer <= 0) {
+    if(arena.getTimer() <= 0) {
       arena.getScoreboardManager().stopAllScoreboards();
       for(Player player : arena.getPlayers()) {
         PluginArenaUtils.resetPlayerAfterGame(player);

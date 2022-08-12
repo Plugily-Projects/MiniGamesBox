@@ -71,10 +71,13 @@ public class ConfigPreferences {
    * @return true or false based on user configuration
    */
   public boolean getOption(String name) {
-    if(!options.containsKey(name)) {
+    ConfigOption configOption = options.get(name);
+
+    if(configOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-    return options.get(name).getValue();
+
+    return configOption.getValue();
   }
 
 

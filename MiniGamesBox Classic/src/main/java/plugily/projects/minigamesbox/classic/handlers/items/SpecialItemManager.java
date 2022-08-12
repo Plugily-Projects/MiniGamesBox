@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -87,7 +88,7 @@ public class SpecialItemManager {
     if(config.getBoolean(path + ".disabled", false)) {
       return;
     }
-    Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase()).orElse(XMaterial.BEDROCK).parseMaterial();
+    Material mat = XMaterial.matchXMaterial(config.getString(path + ".material", "BEDROCK").toUpperCase(Locale.ENGLISH)).orElse(XMaterial.BEDROCK).parseMaterial();
     String name = new MessageBuilder(config.getString(path + ".displayname", "Error!")).build();
     List<String> lore = config.getStringList(path + ".lore").stream()
         .map(itemLore -> itemLore = new MessageBuilder(itemLore).build())
@@ -95,8 +96,8 @@ public class SpecialItemManager {
 
     SpecialItem.DisplayStage stage = SpecialItem.DisplayStage.LOBBY;
     try {
-      stage = SpecialItem.DisplayStage.valueOf(config.getString(path + ".stage").toUpperCase());
-    } catch(Exception ex) {
+      stage = SpecialItem.DisplayStage.valueOf(config.getString(path + ".stage", "LOBBY").toUpperCase(Locale.ENGLISH));
+    } catch(IllegalArgumentException ex) {
       plugin.getDebugger().debug(Level.WARNING, "Invalid display stage of special item " + path + " in special_items.yml! Please use SERVER_JOIN, WAITING_FOR_PLAYERS, ENOUGH_PLAYERS_TO_START, LOBBY, IN_GAME, SPECTATOR or ENDING!");
     }
 
@@ -120,10 +121,13 @@ public class SpecialItemManager {
    * @return ItemStack
    */
   public ItemStack getSpecialItemStack(String key) {
-    if(!specialItems.containsKey(key)) {
-      return getInvalidItem().getItemStack();
+    SpecialItem specialItem = specialItems.get(key);
+
+    if(specialItem == null) {
+      return INVALID_ITEM.getItemStack();
     }
-    return specialItems.get(key).getItemStack();
+
+    return specialItem.getItemStack();
   }
 
   /**
@@ -134,10 +138,7 @@ public class SpecialItemManager {
    */
   @NotNull
   public SpecialItem getSpecialItem(String key) {
-    if(!specialItems.containsKey(key)) {
-      return getInvalidItem();
-    }
-    return specialItems.get(key);
+    return specialItems.getOrDefault(key, INVALID_ITEM);
   }
 
   /**
@@ -192,7 +193,7 @@ public class SpecialItemManager {
 
   public void addSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {
     for(SpecialItem specialItem : getSpecialItemsOfStage(stage)) {
-      if(specialItem.getPermission() != null && !specialItem.getPermission().equalsIgnoreCase("")) {
+      if(specialItem.getPermission() != null && !specialItem.getPermission().isEmpty()) {
         if(!plugin.getBukkitHelper().hasPermission(player, specialItem.getPermission())) {
           continue;
         }
@@ -224,7 +225,7 @@ public class SpecialItemManager {
         return item;
       }
     }
-    return getInvalidItem();
+    return INVALID_ITEM;
   }
 
   public SpecialItem getInvalidItem() {
