@@ -228,8 +228,9 @@ public class MessageBuilder {
 
     StringBuilder builder = new StringBuilder(text);
     int searchLength = search.length();
+    int replacementLength = replacement.get().length();
 
-    while ((index = builder.replace(index, index + searchLength, replacement.get()).indexOf(search)) != -1) {
+    while ((index = builder.replace(index, index + searchLength, replacement.get()).indexOf(search, index += replacementLength)) != -1) {
     }
 
     return builder.toString();
