@@ -21,8 +21,6 @@ package plugily.projects.minigamesbox.classic.handlers.language;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -207,22 +205,19 @@ public class MessageBuilder {
   }
 
   private void formatArena() {
-    final int timer = arena.getTimer();
-    final List<Player> playersLeft = arena.getPlayersLeft();
-
     message = replace(message, "%arena_min_players%", () -> placeholderColorOther + arena.getMinimumPlayers() + messageColor);
     message = replace(message, "%arena_players%", () -> placeholderColorOther + arena.getPlayers() + messageColor);
     message = replace(message, "%arena_players_size%", () -> placeholderColorOther + arena.getPlayers().size() + messageColor);
-    message = replace(message, "%arena_players_left%", () -> placeholderColorOther + playersLeft + messageColor);
-    message = replace(message, "%arena_players_left_size%", () -> placeholderColorOther + playersLeft.size() + messageColor);
+    message = replace(message, "%arena_players_left%", () -> placeholderColorOther + arena.getPlayersLeft() + messageColor);
+    message = replace(message, "%arena_players_left_size%", () -> placeholderColorOther + arena.getPlayersLeft().size() + messageColor);
     message = replace(message, "%arena_max_players%", () -> placeholderColorOther + arena.getMaximumPlayers() + messageColor);
     message = replace(message, "%arena_name%", () -> placeholderColorOther + arena.getMapName() + messageColor);
     message = replace(message, "%arena_id%", () -> placeholderColorOther + arena.getId() + messageColor);
     message = replace(message, "%arena_state%", () -> placeholderColorOther + arena.getArenaState() + messageColor);
     message = replace(message, "%arena_state_formatted%", () -> placeholderColorOther + arena.getArenaState().getFormattedName() + messageColor);
     message = replace(message, "%arena_state_placeholder%", () -> placeholderColorOther + arena.getArenaState().getPlaceholder() + messageColor);
-    message = replace(message, "%arena_time%", () -> placeholderColorOther + timer + messageColor);
-    message = replace(message, "%arena_time_formatted%", () -> placeholderColorOther + StringFormatUtils.formatIntoMMSS(timer) + messageColor);
+    message = replace(message, "%arena_time%", () -> placeholderColorOther + arena.getTimer() + messageColor);
+    message = replace(message, "%arena_time_formatted%", () -> placeholderColorOther + StringFormatUtils.formatIntoMMSS(arena.getTimer()) + messageColor);
   }
 
   private String replace(String text, String search, java.util.function.Supplier<String> replacement) {
