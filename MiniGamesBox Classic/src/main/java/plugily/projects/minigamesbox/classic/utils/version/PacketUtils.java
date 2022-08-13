@@ -31,20 +31,15 @@ import org.bukkit.entity.Player;
  */
 public class PacketUtils {
 
-  private static Method getHandleMethod, sendPacketMethod;
+  private static Method playerHandleMethod, sendPacketMethod;
   private static Field playerConnectionField;
-
-  static {
-    try {
-      getHandleMethod = Player.class.getMethod("getHandle");
-    } catch (NoSuchMethodException | SecurityException e) {
-      e.printStackTrace();
-    }
-  }
 
   public static void sendPacket(Player player, Object packet) {
     try {
-      Object handle = getHandleMethod.invoke(player);
+      if (playerHandleMethod == null)
+        playerHandleMethod = player.getClass().getDeclaredMethod("getHandle");
+
+      Object handle = playerHandleMethod.invoke(player);
 
       if (playerConnectionField == null)
         playerConnectionField = handle.getClass().getField(
