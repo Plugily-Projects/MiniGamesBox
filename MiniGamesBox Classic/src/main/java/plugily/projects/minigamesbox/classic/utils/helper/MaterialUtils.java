@@ -41,6 +41,27 @@ public class MaterialUtils {
     }
   };
 
+  public static final Set<Material> BASIC_SIGNS = new HashSet<Material>() {
+    {
+      add(getMat("SIGN"));
+      add(getMat("ACACIA_SIGN"));
+      add(getMat("BIRCH_SIGN"));
+      add(getMat("DARK_OAK_SIGN"));
+      add(getMat("JUNGLE_SIGN"));
+      add(getMat("OAK_SIGN"));
+      add(getMat("SPRUCE_SIGN"));
+      add(getMat("WARPED_SIGN"));
+      add(getMat("CRIMSON_SIGN"));
+    }
+  };
+
+  public static final Set<Material> ALL_SIGNS = new HashSet<Material>() {
+    {
+      addAll(WALL_SIGNS);
+      addAll(BASIC_SIGNS);
+    }
+  };
+
   private static final Set<Material> DOORS = new HashSet<Material>() {
     {
       add(getMat("WOODEN_DOOR"));
