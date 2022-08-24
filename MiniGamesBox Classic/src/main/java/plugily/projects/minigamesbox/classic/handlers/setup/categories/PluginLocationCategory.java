@@ -25,6 +25,7 @@ import plugily.projects.minigamesbox.classic.handlers.setup.items.category.Categ
 import plugily.projects.minigamesbox.classic.handlers.setup.items.category.LocationItem;
 import plugily.projects.minigamesbox.classic.handlers.setup.items.category.MaterialMultiLocationItem;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
+import plugily.projects.minigamesbox.classic.utils.helper.MaterialUtils;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class PluginLocationCategory implements SetupCategoryHandler {
 
   private SetupInventory setupInventory;
 
-  private List<CategoryItemHandler> itemList = new ArrayList<>();
+  final private List<CategoryItemHandler> itemList = new ArrayList<>();
 
   @Override
   public void init(PluginSetupCategoryManager pluginSetupCategoryManager) {
@@ -60,7 +61,7 @@ public class PluginLocationCategory implements SetupCategoryHandler {
     LocationItem end = new LocationItem(setupInventory, new ItemBuilder(XMaterial.REDSTONE_BLOCK.parseMaterial()), "Ending", "Location where players will be teleported after the game", "endlocation");
     itemList.add(end);
     gui.setItem((getInventoryLine() * 9) + 6, end);
-    MaterialMultiLocationItem sign = new MaterialMultiLocationItem(setupInventory, new ItemBuilder(XMaterial.OAK_SIGN.parseMaterial()), "Game Sign", "Sign registered as Game Sign with join function", "signs", XMaterial.OAK_SIGN.parseMaterial(), setupInventory.getPlugin().getConfigPreferences().getOption("BUNGEEMODE"), 0);
+    MaterialMultiLocationItem sign = new MaterialMultiLocationItem(setupInventory, new ItemBuilder(XMaterial.OAK_SIGN.parseMaterial()), "Game Sign", "Sign registered as Game Sign with join function", "signs", MaterialUtils.ALL_SIGNS, setupInventory.getPlugin().getConfigPreferences().getOption("BUNGEEMODE"), 0);
     itemList.add(sign);
     gui.setItem((getInventoryLine() * 9) + 7, sign);
   }

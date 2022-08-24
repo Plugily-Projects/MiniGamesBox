@@ -40,6 +40,7 @@ import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -55,7 +56,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private final String name;
   private final String description;
   private final String keyName;
-  private final Material checkMaterial;
+  private final Set<Material> checkMaterials;
   private final boolean removeBungee;
 
   private final int minimumValue;
@@ -65,22 +66,22 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private final boolean leftClick;
   private final boolean physical;
 
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue) {
-    this(setupInventory, item, name, description, keyName, checkMaterial, removeBungee, minimumValue, emptyConsumer -> {
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Set<Material> checkMaterials, boolean removeBungee, int minimumValue) {
+    this(setupInventory, item, name, description, keyName, checkMaterials, removeBungee, minimumValue, emptyConsumer -> {
     }, emptyConsumer -> {
     });
   }
 
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
-    this(setupInventory, item, name, description, keyName, checkMaterial, removeBungee, minimumValue, clickConsumer, interactConsumer, true, true, false);
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Set<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
+    this(setupInventory, item, name, description, keyName, checkMaterials, removeBungee, minimumValue, clickConsumer, interactConsumer, true, true, false);
   }
 
-  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
+  public MaterialMultiLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Set<Material> checkMaterials, boolean removeBungee, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
     this.setupInventory = setupInventory;
     this.name = name;
     this.description = description;
     this.keyName = keyName;
-    this.checkMaterial = checkMaterial;
+    this.checkMaterials = checkMaterials;
     this.removeBungee = removeBungee;
     this.minimumValue = minimumValue;
     item
@@ -129,8 +130,8 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     switch(event.getClick()) {
       case LEFT:
         Block targetBlock = event.getWhoClicked().getTargetBlock(null, 7);
-        if(targetBlock.getType() != checkMaterial) {
-          new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterial.toString() + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
+        if(!checkMaterials.contains(targetBlock.getType())) {
+          new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
           return;
         }
         addLocation(event.getWhoClicked(), event.getWhoClicked().getLocation());
@@ -169,25 +170,25 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
           switch(interactEvent.getAction()) {
             case PHYSICAL:
             case LEFT_CLICK_AIR:
-              new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterial.toString() + "!").prefix().send(interactEvent.getPlayer());
+              new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
               break;
             case LEFT_CLICK_BLOCK:
-              if(block.getType() != checkMaterial) {
-                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterial.toString() + " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
+              if(!checkMaterials.contains(block.getType())) {
+                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
 
               removeLocation(interactEvent.getPlayer(), false);
               break;
             case RIGHT_CLICK_BLOCK:
-              if(block.getType() != checkMaterial) {
-                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterial.toString() + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
+              if(!checkMaterials.contains(block.getType())) {
+                new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
 
               if(location.distance(interactEvent.getClickedBlock().getWorld().getSpawnLocation()) <= Bukkit.getServer().getSpawnRadius()) {
                 new MessageBuilder("&c&l✖ &cWarning | Server spawn protection is set to &6" + Bukkit.getServer().getSpawnRadius()
-                    + " &cand location you want to place is in radius of this protection! &c&lNon opped players won't be able to interact with this " + checkMaterial + " and can't join the game! Reduce the spawn radius (server.properties) or change your location!").prefix().send(interactEvent.getPlayer());
+                    + " &cand location you want to place is in radius of this protection! &c&lNon opped players won't be able to interact with this " + checkMaterials + " and can't join the game! Reduce the spawn radius (server.properties) or change your location!").prefix().send(interactEvent.getPlayer());
               }
               addLocation(interactEvent.getPlayer(), block.getLocation());
               break;
@@ -249,7 +250,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
           setupInventory.setConfig(keyName, null);
           //considerable to add arena method to remove location
           new MessageBuilder("&e✔ Removed | &a" + name.toUpperCase() + " location for arena " + setupInventory.getArenaKey() + "! (" + location + ")").prefix().send(player);
-          new MessageBuilder("You can now remove the " + checkMaterial.toString() + "!").prefix().send(player);
+          new MessageBuilder("You can now remove the " + checkMaterials.toString() + "!").prefix().send(player);
           return;
         }
       }
