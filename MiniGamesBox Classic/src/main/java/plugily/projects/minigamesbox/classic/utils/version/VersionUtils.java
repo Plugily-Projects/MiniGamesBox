@@ -263,7 +263,7 @@ public final class VersionUtils {
     }
   }
 
-  // Some of the particle in new versions needs their own data type
+  // Some particle in new versions needs their own data type
   private static Object getParticleDataType(Particle particle, Location location) {
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13_R2) && particle == Particle.REDSTONE) {
       return new Particle.DustOptions(Color.RED, 2);

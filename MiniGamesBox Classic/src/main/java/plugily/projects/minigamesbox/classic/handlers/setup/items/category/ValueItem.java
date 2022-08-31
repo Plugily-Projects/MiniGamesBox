@@ -48,14 +48,9 @@ public class ValueItem implements CategoryItemHandler {
 
   public ValueItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Consumer<InventoryClickEvent> clickConsumer) {
     this.setupInventory = setupInventory;
+    setLore(item);
     item
         .name("&7Change &a" + name.toUpperCase() + " &7value")
-        .lore("&aInfo")
-        .lore("&7" + description)
-        .lore("&aStatus")
-        .lore("&7" + getSetupInfo())
-        .lore("&aControls")
-        .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat")
         .colorizeItem();
 
     this.item = item.build();
@@ -71,9 +66,21 @@ public class ValueItem implements CategoryItemHandler {
   }
 
 
+  private void setLore(ItemBuilder itemBuilder) {
+    itemBuilder.lore("&aInfo")
+        .lore("&aInfo")
+        .lore("&7" + description)
+        .lore("&aStatus")
+        .lore("&7" + getSetupInfo())
+        .lore("&aControls")
+        .lore("&eLEFT_CLICK \n&7-> Set the value by typing in chat");
+  }
+
   @Override
   public ItemStack getItem() {
-    return item;
+    ItemBuilder itemBuilder = new ItemBuilder(item).removeLore();
+    setLore(itemBuilder);
+    return itemBuilder.colorizeItem().build();
   }
 
   @Override
@@ -89,7 +96,7 @@ public class ValueItem implements CategoryItemHandler {
           @Override
           public Prompt acceptInput(ConversationContext context, String input) {
             String name = new MessageBuilder(input, false).build();
-            context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " set to " + name).build());
+            context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of " + setupInventory.getArenaKey() + " set to " + name).build());
             setupInventory.setConfig(keyName, name);
             return Prompt.END_OF_CONVERSATION;
           }

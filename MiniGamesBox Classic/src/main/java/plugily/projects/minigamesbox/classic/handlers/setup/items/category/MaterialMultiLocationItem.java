@@ -165,6 +165,10 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
         handlerItem.addConsumeHandler(consumeEvent -> consumeEvent.setCancelled(true));
         handlerItem.addInteractHandler(interactEvent -> {
           interactEvent.setCancelled(true);
+          if(interactEvent.getClickedBlock() == null) {
+            new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
+            return;
+          }
           Location location = interactEvent.getClickedBlock().getLocation();
           Block block = location.getBlock();
           switch(interactEvent.getAction()) {
@@ -235,7 +239,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     int value = (configurationSection != null ? configurationSection.getKeys(false).size() : 0) + 1;
     LocationSerializer.saveLoc(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas", "instances." + setupInventory.getArenaKey() + "." + keyName + "." + value, location);
     String progress = value >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
-    new MessageBuilder(progress + "&a" + name.toUpperCase() + " location added! &8(&7" + minimumValue + "/2&8)").prefix().send(player);
+    new MessageBuilder(progress + "&a" + name.toUpperCase() + " location added! &8(&7" + value + "/" + minimumValue + "&8)").prefix().send(player);
     if(value == minimumValue) {
       new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + name.toUpperCase() + " location! " + minimumValue + " is just a minimum!").prefix().send(player);
     }

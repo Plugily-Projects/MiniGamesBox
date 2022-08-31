@@ -58,6 +58,6 @@ public class MenuItem implements ClickableItem {
     setupInventory.setArenaKey(null);
     SetupInventoryUtils.removeSetupInventory(event.getWhoClicked());
     ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
-    setupInventory.getPlugin().getSetupInventory((Player) event.getWhoClicked());
+    setupInventory.getPlugin().getSetupInventory((Player) event.getWhoClicked()).open(SetupInventoryUtils.SetupInventoryStage.HOME);
   }
 }
