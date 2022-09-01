@@ -46,7 +46,7 @@ public class User {
   private boolean permanentSpectator = false;
   private Kit kit = plugin.getKitRegistry().getDefaultKit();
   private final Map<StatisticType, Integer> stats = new HashMap<>();
-  private final Map<String, Long> cooldowns = new HashMap<>();
+  private final Map<String, Double> cooldowns = new HashMap<>();
 
   @Deprecated
   public User(Player player) {
@@ -122,7 +122,7 @@ public class User {
 
     Player player = getPlayer();
 
-    if (player != null) {
+    if(player != null) {
       plugin.getDebugger().debug("Set User {0} statistic to {1} for {2} ", statisticType.getName(), value, player.getName());
 
       //statistics manipulation events are called async when using mysql
@@ -142,7 +142,7 @@ public class User {
   }
 
   public boolean checkCanCastCooldownAndMessage(String cooldown) {
-    long time = getCooldown(cooldown);
+    double time = getCooldown(cooldown);
 
     if(time <= 0) {
       return true;
@@ -151,12 +151,12 @@ public class User {
     return false;
   }
 
-  public void setCooldown(String key, int seconds) {
+  public void setCooldown(String key, double seconds) {
     cooldowns.put(key, seconds + cooldownCounter);
   }
 
-  public long getCooldown(String key) {
-    long cooldown = cooldowns.getOrDefault(key, 0L);
+  public double getCooldown(String key) {
+    double cooldown = cooldowns.getOrDefault(key, 0.0);
     return cooldown <= cooldownCounter ? 0 : cooldown - cooldownCounter;
   }
 
