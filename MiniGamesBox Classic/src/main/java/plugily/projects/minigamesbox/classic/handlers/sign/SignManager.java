@@ -181,6 +181,7 @@ public class SignManager implements Listener {
             org.bukkit.block.BlockState state = loc.getBlock().getState();
             if(state instanceof Sign) {
               arenaSigns.add(new ArenaSign((Sign) state, arena));
+              plugin.getDebugger().debug(Level.WARNING, "Block at location {0} for arena {1} added as sign!", sign, path);
               continue;
             }
           }

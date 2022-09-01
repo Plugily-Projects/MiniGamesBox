@@ -41,7 +41,7 @@ public class AdjustStatisticArgument {
 
   public AdjustStatisticArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("statistic", registry.getPlugin().getPluginNamePrefixLong() + ".admin.statistic",
-        CommandArgument.ExecutorType.BOTH, new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " statistic &6<adjust/set> <statistic> <amount> &c[player]", "/" + registry.getPlugin().getCommandAdminPrefix() + " statistic &6<adjust/set> <statistic> <amount>",
+        CommandArgument.ExecutorType.BOTH, new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " statistic <adjust/set> <statistic> <amount> &c[player]", "/" + registry.getPlugin().getCommandAdminPrefix() + " statistic &6<adjust/set> <statistic> <amount>",
         "&7Add statistics to yourself or target player\n&7Can be used from console too\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.statistic (for yourself)\n"
             + "&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.statistic.others (for others)")) {
       @Override

@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
@@ -31,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -237,7 +239,14 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private void addLocation(HumanEntity player, Location location) {
     ConfigurationSection configurationSection = getRawLocations();
     int value = (configurationSection != null ? configurationSection.getKeys(false).size() : 0) + 1;
-    LocationSerializer.saveLoc(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas", "instances." + setupInventory.getArenaKey() + "." + keyName + "." + value, location);
+
+    FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
+    List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
+    String signLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
+    locs.add(signLoc);
+    config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
+    ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
+
     String progress = value >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
     new MessageBuilder(progress + "&a" + name.toUpperCase() + " location added! &8(&7" + value + "/" + minimumValue + "&8)").prefix().send(player);
     if(value == minimumValue) {
