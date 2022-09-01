@@ -229,9 +229,6 @@ public class PluginArenaManager {
 
     User user = plugin.getUserManager().getUser(player);
     arena.getScoreboardManager().removeScoreboard(user);
-    if(!user.isSpectator()) {
-      new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
-    }
     arena.getPlayers().remove(player);
     user.setSpectator(false);
     user.setPermanentSpectator(false);
@@ -243,6 +240,9 @@ public class PluginArenaManager {
     }
     PluginArenaUtils.resetPlayerAfterGame(player);
     arena.teleportToEndLocation(player);
+    if(!user.isSpectator()) {
+      new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
+    }
     plugin.getUserManager().saveAllStatistic(user);
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);

@@ -37,6 +37,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -444,6 +445,14 @@ public final class VersionUtils {
       return player.getItemInHand();
     }
     return player.getInventory().getItemInMainHand();
+  }
+
+  public static void setVisualItemCooldown(HumanEntity entity, Material material, int ticks) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
+      ///no method on 1.8!
+      return;
+    }
+    entity.setCooldown(material, ticks);
   }
 
   public static void setItemInHand(Player player, ItemStack stack) {
