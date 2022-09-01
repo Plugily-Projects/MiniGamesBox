@@ -447,7 +447,7 @@ public final class VersionUtils {
     return player.getInventory().getItemInMainHand();
   }
 
-  public static void setVisualItemCooldown(HumanEntity entity, Material material, int ticks) {
+  public static void setMaterialCooldown(HumanEntity entity, Material material, int ticks) {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
       ///no method on 1.8!
       return;
