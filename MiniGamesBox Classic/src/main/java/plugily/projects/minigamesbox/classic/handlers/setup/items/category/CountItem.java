@@ -164,7 +164,7 @@ public class CountItem implements CategoryItemHandler {
       ((RefreshableFastInv) holder).refresh();
     }
     if(event.getClick() == ClickType.SHIFT_LEFT) {
-      event.getWhoClicked().closeInventory();
+      setupInventory.closeInventory(event.getWhoClicked());
     } else {
       setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
     }

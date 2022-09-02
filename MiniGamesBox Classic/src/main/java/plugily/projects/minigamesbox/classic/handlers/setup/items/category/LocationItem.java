@@ -168,7 +168,7 @@ public class LocationItem implements CategoryItemHandler {
         break;
     }
     clickConsumer.accept(event);
-    event.getWhoClicked().closeInventory();
+    setupInventory.closeInventory(event.getWhoClicked());
     InventoryHolder holder = event.getInventory().getHolder();
     if(holder instanceof RefreshableFastInv) {
       ((RefreshableFastInv) holder).refresh();

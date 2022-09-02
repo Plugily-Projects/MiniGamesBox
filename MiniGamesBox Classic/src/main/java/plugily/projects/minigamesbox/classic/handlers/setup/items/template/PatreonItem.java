@@ -60,7 +60,7 @@ public class PatreonItem implements ClickableItem {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    event.getWhoClicked().closeInventory();
+    setupInventory.closeInventory(event.getWhoClicked());
     new MessageBuilder("&6Check our donation possibilities at").prefix().send(event.getWhoClicked());
     new MessageBuilder("&6 https://wiki.plugily.xyz/donate", false).send(event.getWhoClicked());
   }

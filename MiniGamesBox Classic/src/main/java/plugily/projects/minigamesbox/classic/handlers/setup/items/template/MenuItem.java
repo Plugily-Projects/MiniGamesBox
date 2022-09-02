@@ -54,7 +54,7 @@ public class MenuItem implements ClickableItem {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    event.getWhoClicked().closeInventory();
+    setupInventory.closeInventory(event.getWhoClicked());
     setupInventory.setArenaKey(null);
     SetupInventoryUtils.removeSetupInventory(event.getWhoClicked());
     ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");

@@ -59,7 +59,7 @@ public class AddonItem implements ClickableItem {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    event.getWhoClicked().closeInventory();
+    setupInventory.closeInventory(event.getWhoClicked());
     new MessageBuilder("&6Check patron program at").prefix().send(event.getWhoClicked());
     new MessageBuilder("&6 https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).send(event.getWhoClicked());
   }

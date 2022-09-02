@@ -60,7 +60,7 @@ public class ArenaDataItem implements ClickableItem {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    event.getWhoClicked().closeInventory();
+    setupInventory.closeInventory(event.getWhoClicked());
     switch(event.getClick()) {
       case LEFT:
         new MessageBuilder("&aCheck tutorial video at").prefix().send(event.getWhoClicked());

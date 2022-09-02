@@ -86,7 +86,7 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
             setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
             break;
           case SHIFT_RIGHT:
-            event.getWhoClicked().closeInventory();
+            setupInventory.closeInventory(event.getWhoClicked());
             new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
               @Override
               public @NotNull String getPromptText(ConversationContext context) {
@@ -113,7 +113,7 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
             }).buildFor((Player) event.getWhoClicked());
             break;
           case SHIFT_LEFT:
-            event.getWhoClicked().closeInventory();
+            setupInventory.closeInventory(event.getWhoClicked());
             new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
               @Override
               public @NotNull String getPromptText(ConversationContext context) {

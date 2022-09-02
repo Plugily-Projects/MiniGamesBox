@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.handlers.setup;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -239,5 +240,9 @@ public class SetupInventory {
 
   public String getTutorialSite() {
     return TUTORIAL_SITE;
+  }
+
+  public void closeInventory(HumanEntity humanEntity) {
+    Bukkit.getScheduler().runTask(plugin, () -> humanEntity.closeInventory());
   }
 }

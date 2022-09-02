@@ -98,7 +98,7 @@ public class RegisterItem implements ClickableItem {
     switch(registerStatus) {
       case ARENA_READY:
       case ARENA_REGISTER:
-        event.getWhoClicked().closeInventory();
+        setupInventory.closeInventory(event.getWhoClicked());
         break;
       case ARENA_SETUP:
       default:

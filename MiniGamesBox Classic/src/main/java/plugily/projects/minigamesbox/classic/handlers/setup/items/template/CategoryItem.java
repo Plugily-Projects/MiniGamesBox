@@ -56,7 +56,7 @@ public class CategoryItem implements ClickableItem {
 
   @Override
   public void onClick(InventoryClickEvent event) {
-    event.getWhoClicked().closeInventory();
+    setupInventory.closeInventory(event.getWhoClicked());
     //ToDo
     new MessageBuilder("&6Check tutorial video at").prefix().send(event.getWhoClicked());
     new MessageBuilder("&7" + setupCategory.getTutorialURL(), false).send(event.getWhoClicked());

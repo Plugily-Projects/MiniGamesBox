@@ -108,7 +108,7 @@ public class SwitchItem implements CategoryItemHandler {
             return Prompt.END_OF_CONVERSATION;
           }
         }).buildFor((Player) event.getWhoClicked());
-        event.getWhoClicked().closeInventory();
+        setupInventory.closeInventory(event.getWhoClicked());
         break;
       case RIGHT:
         String option = setupInventory.getConfig().getString("instances." + setupInventory.getArenaKey() + "." + keyName, switches.get(0));

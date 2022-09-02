@@ -74,7 +74,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
             .name(new MessageBuilder("&cCreate Arena").build())
             .lore(ChatColor.GRAY + "Create a fully new arena")
             .build(), event -> {
-          event.getWhoClicked().closeInventory();
+          setupInventory.closeInventory(event.getWhoClicked());
           new SimpleConversationBuilder(setupInventory.getPlugin()).withPrompt(new StringPrompt() {
             @Override
             public @NotNull String getPromptText(ConversationContext context) {
@@ -92,7 +92,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
               if(setupInventory.getPlugin().getArenaRegistry().getArena(name) == null) {
                 return Prompt.END_OF_CONVERSATION;
               }
-              setupInventory.setArenaKey(input);
+              setupInventory.setArenaKey(name);
               setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
               return Prompt.END_OF_CONVERSATION;
             }
@@ -122,7 +122,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
         .lore(ChatColor.GOLD + "Custom Kits, Achievements, Replay Ability")
         .lore(ChatColor.GRAY + "Click to get link for patron program!")
         .build(), event -> {
-      event.getWhoClicked().closeInventory();
+      setupInventory.closeInventory(event.getWhoClicked());
       new MessageBuilder("&6Check patron program at").prefix().send(event.getWhoClicked());
       new MessageBuilder("&6 https://wiki.plugily.xyz/" + setupInventory.getPlugin().getPluginNamePrefixLong().toLowerCase() + "/addon/overview", false).send(event.getWhoClicked());
     }));
@@ -134,7 +134,7 @@ public class HomeInventory extends NormalFastInv implements InventoryHandler {
         .lore(ChatColor.YELLOW + "useful tips? ")
         .lore(ChatColor.YELLOW + "Click to get video link!")
         .build(), event -> {
-      event.getWhoClicked().closeInventory();
+      setupInventory.closeInventory(event.getWhoClicked());
       new MessageBuilder("&6Check the tutorial videos at").prefix().send(event.getWhoClicked());
       new MessageBuilder("&e " + SetupInventoryUtils.SetupInventoryStage.HOME.getTutorialURL(), false).send(event.getWhoClicked());
     }));
