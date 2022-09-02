@@ -62,7 +62,7 @@ public class MaterialUtils {
     }
   };
 
-  private static final Set<Material> DOORS = new HashSet<Material>() {
+  public static final Set<Material> DOORS = new HashSet<Material>() {
     {
       add(getMat("WOODEN_DOOR"));
       add(getMat("ACACIA_DOOR"));
