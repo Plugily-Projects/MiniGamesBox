@@ -23,7 +23,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -237,19 +236,18 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   }
 
   private void addLocation(HumanEntity player, Location location) {
-    ConfigurationSection configurationSection = getRawLocations();
-    int value = (configurationSection != null ? configurationSection.getKeys(false).size() : 0) + 1;
-
     FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
     List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
     String signLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
-    locs.add(signLoc);
-    config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
-    ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
+    if(!locs.contains(signLoc)) {
+      locs.add(signLoc);
+      config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
+      ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
+    }
 
-    String progress = value >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
-    new MessageBuilder(progress + "&a" + name.toUpperCase() + " location added! &8(&7" + value + "/" + minimumValue + "&8)").prefix().send(player);
-    if(value == minimumValue) {
+    String progress = locs.size() >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
+    new MessageBuilder(progress + "&a" + name.toUpperCase() + " location added! &8(&7" + locs.size() + "/" + minimumValue + "&8)").prefix().send(player);
+    if(locs.size() == minimumValue) {
       new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + name.toUpperCase() + " location! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
   }
@@ -272,16 +270,16 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   }
 
   @Nullable
-  private ConfigurationSection getRawLocations() {
-    return setupInventory.getConfig().getConfigurationSection("instances." + setupInventory.getArenaKey() + "." + keyName);
+  private List<String> getRawLocations() {
+    return setupInventory.getConfig().getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
   }
 
   private List<Location> getLocationsList() {
     List<Location> locations = new ArrayList<>();
-    ConfigurationSection configurationSection = getRawLocations();
-    if(configurationSection != null) {
-      for(String key : configurationSection.getKeys(false)) {
-        locations.add(LocationSerializer.getLocation(configurationSection.getString(key)));
+    List<String> configurationSection = getRawLocations();
+    if(!configurationSection.isEmpty()) {
+      for(String key : configurationSection) {
+        locations.add(LocationSerializer.getLocation(key));
       }
     }
     return locations;

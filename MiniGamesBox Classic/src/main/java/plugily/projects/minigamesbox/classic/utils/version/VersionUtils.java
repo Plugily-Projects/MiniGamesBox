@@ -238,27 +238,31 @@ public final class VersionUtils {
   }
 
   public static void sendParticles(String particle, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ) {
+    sendParticles(particle, players, location, count, offsetX, offsetY, offsetZ, 0);
+  }
+
+  public static void sendParticles(String particle, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
       Particle pa = Particle.valueOf(particle);
       Object dataType = getParticleDataType(pa, location);
 
       if(dataType != null) {
-        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0, dataType);
+        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, extra, dataType);
       } else {
-        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0);
+        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, extra);
       }
     } else if(isParticleBuilderSupported) {
       Particle p = XParticle.getParticle(particle);
       Object dataType = getParticleDataType(p, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).offset(offsetX, offsetY, offsetZ).spawn();
+        p.builder().location(location).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).offset(offsetX, offsetY, offsetZ).spawn();
+        p.builder().location(location).data(dataType).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, (float) offsetX, (float) offsetY, (float) offsetZ, 0, count, true);
+        XParticleLegacy.valueOf(particle).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, true);
       } catch(Exception ignored) {
       }
     }
