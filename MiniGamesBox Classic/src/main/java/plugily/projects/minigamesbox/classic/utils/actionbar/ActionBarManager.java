@@ -85,7 +85,7 @@ public class ActionBarManager extends BukkitRunnable {
         removeFinishedActionBar(player, actionBar);
       });
       for(ActionBar actionBar : bars) {
-        if(actionBar.getActionBarType() == ActionBar.ActionBarType.COOLDOWN) {
+        if(actionBar.getActionBarType() == ActionBar.ActionBarType.COOLDOWN || actionBar.getActionBarType() == ActionBar.ActionBarType.PROGRESS) {
           actionBar.addExecutedTicks(period);
         }
         removeFinishedActionBar(player, actionBar);

@@ -25,6 +25,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -135,7 +136,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
           new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
           return;
         }
-        addLocation(event.getWhoClicked(), event.getWhoClicked().getLocation());
+        addLocation(event.getWhoClicked(), targetBlock.getLocation());
         break;
       case SHIFT_LEFT:
         ItemStack itemStack =
@@ -166,7 +167,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
         handlerItem.addConsumeHandler(consumeEvent -> consumeEvent.setCancelled(true));
         handlerItem.addInteractHandler(interactEvent -> {
           interactEvent.setCancelled(true);
-          if(interactEvent.getClickedBlock() == null) {
+          if(interactEvent.getClickedBlock() == null && (interactEvent.getAction() != Action.RIGHT_CLICK_AIR)) {
             new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
             return;
           }
@@ -250,6 +251,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     if(locs.size() == minimumValue) {
       new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + name.toUpperCase() + " location! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
+    setupInventory.getPlugin().getSignManager().loadSigns();
   }
 
   private void removeLocation(HumanEntity player, boolean deleteAll) {
@@ -257,8 +259,16 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
       for(Location location : getLocationsList()) {
         double distance = player.getLocation().distanceSquared(location);
         if(deleteAll || distance <= 2) {
-          setupInventory.getConfig().set("instances." + setupInventory.getArenaKey() + "." + keyName, null);
-          setupInventory.setConfig(keyName, null);
+          FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
+          List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
+          if(deleteAll) {
+            locs.clear();
+          } else {
+            String signLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
+            locs.remove(signLoc);
+          }
+          config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
+          ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
           //considerable to add arena method to remove location
           new MessageBuilder("&e✔ Removed | &a" + name.toUpperCase() + " location for arena " + setupInventory.getArenaKey() + "! (" + location + ")").prefix().send(player);
           new MessageBuilder("You can now remove the " + checkMaterials.toString() + "!").prefix().send(player);
