@@ -197,7 +197,7 @@ public final class VersionUtils {
 
   public static void sendParticles(String particleName, Player player, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle particle = Particle.valueOf(particleName);
+      Particle particle = XParticle.getParticle(particleName);
       location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
       Particle particle = XParticle.getParticle(particleName);
@@ -218,7 +218,7 @@ public final class VersionUtils {
 
   public static void sendParticles(String particleName, Set<Player> players, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle particle = Particle.valueOf(particleName);
+      Particle particle = XParticle.getParticle(particleName);
       location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
       Particle particle = XParticle.getParticle(particleName);
