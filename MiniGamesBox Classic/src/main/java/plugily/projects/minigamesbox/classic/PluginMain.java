@@ -68,6 +68,7 @@ import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.user.UserManager;
+import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBarManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
@@ -121,6 +122,7 @@ public class PluginMain extends JavaPlugin {
   private ExceptionLogHandler exceptionLogHandler;
   private PermissionsManager permissionsManager;
   private BungeeManager bungeeManager;
+  private ActionBarManager actionBarManager;
   private FileConfiguration languageConfig;
   private FileConfiguration internalData;
   private PluginArenaRegistry arenaRegistry;
@@ -216,6 +218,7 @@ public class PluginMain extends JavaPlugin {
     MessageBuilder.init(this);
     TitleBuilder.init(this);
     languageConfig = ConfigUtils.getConfig(this, "language");
+    actionBarManager = new ActionBarManager(this);
     bukkitHelper = new BukkitHelper(this);
     partyHandler = new PartySupportInitializer().initialize(this);
     kitRegistry = new KitRegistry(this);
@@ -541,6 +544,10 @@ public class PluginMain extends JavaPlugin {
 
   public PluginSetupCategoryManager getSetupCategoryManager(SetupInventory setupInventory) {
     return new PluginSetupCategoryManager(setupInventory);
+  }
+
+  public ActionBarManager getActionBarManager() {
+    return actionBarManager;
   }
 
   public Random getRandom() {

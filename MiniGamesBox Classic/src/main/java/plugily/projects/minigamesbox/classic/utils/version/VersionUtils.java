@@ -493,6 +493,7 @@ public final class VersionUtils {
     equipment.setItemInMainHandDropChance(chance);
   }
 
+  @Deprecated //for outside use, recommend to use ActionBarManager!
   public static void sendActionBar(Player player, String message) {
     if(player == null)
       return;

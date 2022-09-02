@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.utils.helper;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,13 +28,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
-import plugily.projects.commonsbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBar;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.ArrayList;
@@ -59,37 +56,10 @@ public class BukkitHelper {
     this.plugin = plugin;
   }
 
+  @Deprecated
   public void applyActionBarCooldown(Player player, int seconds) {
-    new BukkitRunnable() {
-      int ticks = 0;
-
-      @Override
-      public void run() {
-        if(!plugin.getArenaRegistry().isInArena(player)
-            || plugin.getArenaRegistry().getArena(player).getArenaState() != ArenaState.IN_GAME) {
-          this.cancel();
-        }
-        if(ticks >= seconds * 20) {
-          this.cancel();
-        }
-        String progress =
-            StringFormatUtils.getProgressBar(
-                ticks,
-                seconds * 20,
-                10,
-                "■",
-                ChatColor.COLOR_CHAR + "a",
-                ChatColor.COLOR_CHAR + "c");
-        VersionUtils.sendActionBar(
-            player,
-            new MessageBuilder("IN_GAME_MESSAGES_ARENA_COOLDOWN")
-                .asKey()
-                .value(progress)
-                .integer((((seconds * 20) - ticks) / 20))
-                .build());
-        ticks += 10;
-      }
-    }.runTaskTimer(plugin, 0, 10);
+    plugin.getActionBarManager().addActionBar(player, new ActionBar(new MessageBuilder("IN_GAME_MESSAGES_ARENA_COOLDOWN").asKey(),
+        ActionBar.ActionBarType.PROGRESS, seconds));
   }
 
   public void takeOneItem(Player player, ItemStack stack) {
