@@ -124,6 +124,7 @@ public class SwitchItem implements CategoryItemHandler {
       default:
         break;
     }
+    clickConsumer.accept(event);
   }
 
   @Override

@@ -32,7 +32,6 @@ import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
 import java.util.function.Consumer;
@@ -53,22 +52,13 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
 
   private final int minimumValue;
   private final Consumer<InventoryClickEvent> clickConsumer;
-  private final Consumer<PlugilyPlayerInteractEvent> interactConsumer;
-  private final boolean rightClick;
-  private final boolean leftClick;
-  private final boolean physical;
 
   public MultiLocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, int minimumValue) {
     this(setupInventory, item, name, description, keyName, minimumValue, emptyConsumer -> {
-    }, emptyConsumer -> {
     });
   }
 
-  public MultiLocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
-    this(setupInventory, item, name, description, keyName, minimumValue, clickConsumer, interactConsumer, true, true, true);
-  }
-
-  public MultiLocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
+  public MultiLocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, int minimumValue, Consumer<InventoryClickEvent> clickConsumer) {
     this.setupInventory = setupInventory;
     this.name = name;
     this.description = description;
@@ -88,10 +78,6 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
         .colorizeItem();
     this.item = item.build();
     this.clickConsumer = clickConsumer;
-    this.interactConsumer = interactConsumer;
-    this.leftClick = leftClick;
-    this.rightClick = rightClick;
-    this.physical = physical;
   }
 
 

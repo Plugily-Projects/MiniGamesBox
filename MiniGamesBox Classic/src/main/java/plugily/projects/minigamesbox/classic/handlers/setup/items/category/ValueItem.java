@@ -105,6 +105,7 @@ public class ValueItem implements CategoryItemHandler {
       default:
         break;
     }
+    clickConsumer.accept(event);
     setupInventory.closeInventory(event.getWhoClicked());
   }
 

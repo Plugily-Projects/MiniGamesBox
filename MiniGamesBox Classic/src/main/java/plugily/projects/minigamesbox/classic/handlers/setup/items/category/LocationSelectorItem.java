@@ -32,7 +32,6 @@ import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 
 import java.util.function.Consumer;
@@ -51,15 +50,13 @@ public class LocationSelectorItem implements CategoryItemHandler {
   private final String description;
   private final String keyName;
   private final Consumer<InventoryClickEvent> clickConsumer;
-  private final Consumer<PlugilyPlayerInteractEvent> interactConsumer;
 
   public LocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName) {
     this(setupInventory, item, name, description, keyName, emptyConsumer -> {
-    }, emptyConsumer -> {
     });
   }
 
-  public LocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
+  public LocationSelectorItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Consumer<InventoryClickEvent> clickConsumer) {
     this.setupInventory = setupInventory;
     this.name = name;
     this.description = description;
@@ -78,7 +75,6 @@ public class LocationSelectorItem implements CategoryItemHandler {
         .colorizeItem();
     this.item = item.build();
     this.clickConsumer = clickConsumer;
-    this.interactConsumer = interactConsumer;
   }
 
 
