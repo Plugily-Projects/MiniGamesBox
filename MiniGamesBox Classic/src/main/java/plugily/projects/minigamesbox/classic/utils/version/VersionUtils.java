@@ -195,43 +195,43 @@ public final class VersionUtils {
     }
   }
 
-  public static void sendParticles(String particle, Player player, Location location, int count) {
+  public static void sendParticles(String particleName, Player player, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle pa = Particle.valueOf(particle);
-      location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0, getParticleDataType(pa, location));
+      Particle particle = Particle.valueOf(particleName);
+      location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
-      Particle p = XParticle.getParticle(particle);
-      Object dataType = getParticleDataType(p, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).spawn();
+        particle.builder().location(location).count(count).extra(0).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).spawn();
+        particle.builder().location(location).data(dataType).count(count).extra(0).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayer(player, location, 0, 0, 0, 0, count);
+        XParticleLegacy.valueOf(particleName).sendToPlayer(player, location, 0, 0, 0, 0, count);
       } catch(Exception ignored) {
       }
     }
   }
 
-  public static void sendParticles(String particle, Set<Player> players, Location location, int count) {
+  public static void sendParticles(String particleName, Set<Player> players, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle pa = Particle.valueOf(particle);
-      location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0, getParticleDataType(pa, location));
+      Particle particle = Particle.valueOf(particleName);
+      location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
-      Particle p = XParticle.getParticle(particle);
-      Object dataType = getParticleDataType(p, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).spawn();
+        particle.builder().location(location).count(count).extra(0).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).spawn();
+        particle.builder().location(location).data(dataType).count(count).extra(0).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, 0, 0, 0, 0, count, true);
+        XParticleLegacy.valueOf(particleName).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, 0, 0, 0, 0, count, true);
       } catch(Exception ignored) {
       }
     }
@@ -241,28 +241,28 @@ public final class VersionUtils {
     sendParticles(particle, players, location, count, offsetX, offsetY, offsetZ, 0);
   }
 
-  public static void sendParticles(String particle, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+  public static void sendParticles(String particleName, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle pa = Particle.valueOf(particle);
-      Object dataType = getParticleDataType(pa, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType != null) {
-        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, extra, dataType);
+        location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, extra, dataType);
       } else {
-        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, extra);
+        location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, extra);
       }
     } else if(isParticleBuilderSupported) {
-      Particle p = XParticle.getParticle(particle);
-      Object dataType = getParticleDataType(p, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
+        particle.builder().location(location).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
+        particle.builder().location(location).data(dataType).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, true);
+        XParticleLegacy.valueOf(particleName).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, true);
       } catch(Exception ignored) {
       }
     }
