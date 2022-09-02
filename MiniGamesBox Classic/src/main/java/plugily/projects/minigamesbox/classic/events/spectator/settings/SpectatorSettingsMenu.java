@@ -38,12 +38,18 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
 import plugily.projects.minigamesbox.classic.user.User;
+import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBar;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -204,7 +210,7 @@ public class SpectatorSettingsMenu implements Listener {
     if(user.getArena() != null) {
       firstPersonMode.forEach(spectator -> {
         if(spectator.getSpectatorTarget() instanceof Player) {
-          VersionUtils.sendActionBar(spectator, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR").asKey().arena(user.getArena()).player((Player) spectator.getSpectatorTarget()).build());
+          plugin.getActionBarManager().addActionBar(spectator, new ActionBar(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_FIRST_PERSON_MODE_ACTION_BAR").asKey().arena(user.getArena()).player((Player) spectator.getSpectatorTarget()), ActionBar.ActionBarType.DISPLAY));
         }
       });
     }
@@ -216,7 +222,7 @@ public class SpectatorSettingsMenu implements Listener {
     }
     Player target = targetPlayer.get(player);
     double distance = player.getLocation().distance(target.getLocation());
-    VersionUtils.sendActionBar(player, new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR").asKey().arena(user.getArena()).integer((int) distance).player(target).build());
+    plugin.getActionBarManager().addActionBar(player, new ActionBar(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR").asKey().arena(user.getArena()).integer((int) distance).player(target), ActionBar.ActionBarType.DISPLAY));
     if(distance <= 15) {
       return;
     }
