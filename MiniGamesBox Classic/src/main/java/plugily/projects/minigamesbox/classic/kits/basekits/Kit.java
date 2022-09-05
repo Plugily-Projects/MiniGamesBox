@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -78,8 +79,12 @@ public abstract class Kit {
     return name;
   }
 
+  public String getKeyName() {
+    return ChatColor.stripColor(name).replace(" ", "");
+  }
+
   public void setName(String name) {
-    if (name != null) {
+    if(name != null) {
       this.name = name;
     }
   }
@@ -89,13 +94,13 @@ public abstract class Kit {
   }
 
   public void setDescription(String[] description) {
-    if (description != null) {
+    if(description != null) {
       this.description = description.clone();
     }
   }
 
   public void setDescription(List<String> description) {
-    if (description != null) {
+    if(description != null) {
       this.description = description.toArray(new String[0]);
     }
   }
