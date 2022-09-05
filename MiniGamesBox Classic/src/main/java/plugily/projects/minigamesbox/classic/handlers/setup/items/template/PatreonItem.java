@@ -19,9 +19,9 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.items.template;
 
+import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -53,7 +53,7 @@ public class PatreonItem implements ClickableItem {
         .lore(ChatColor.GRAY + "support us by donating on other platforms such as paypal!")
         .lore("&aControls")
         .lore("&eCLICK \n&7-> Link for donation options")
-        .enchantment(Enchantment.LOYALTY)
+        .enchantment(XEnchantment.LOYALTY.getEnchant())
         .colorizeItem();
     return item.build();
   }
