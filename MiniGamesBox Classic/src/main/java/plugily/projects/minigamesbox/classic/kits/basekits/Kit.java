@@ -79,6 +79,8 @@ public abstract class Kit {
     return name;
   }
 
+  //todo/notice if name on language.yml gets changed key name will also change
+  // and kits.yml will be maybe not working for changed kits
   public String getKeyName() {
     return ChatColor.stripColor(name).replace(" ", "");
   }
