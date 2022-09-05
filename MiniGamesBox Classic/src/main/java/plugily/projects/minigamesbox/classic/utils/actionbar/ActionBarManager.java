@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import plugily.projects.commonsbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.ArrayList;
@@ -39,11 +40,15 @@ import java.util.Map;
  * Created at 02.09.2022
  */
 public class ActionBarManager extends BukkitRunnable {
+
+  private final PluginMain plugin;
   private final int period = 10;
   private Map<Player, List<ActionBar>> actionBars = new HashMap<>();
+  private Map<String, Integer> flashing = new HashMap<>();
 
 
   public ActionBarManager(PluginMain plugin) {
+    this.plugin = plugin;
     runTaskTimer(plugin, 0L, period);
   }
 
@@ -61,6 +66,20 @@ public class ActionBarManager extends BukkitRunnable {
       }
       new ArrayList<>(actionBarList.getValue()).stream().max(Comparator.comparingInt(ActionBar::getPriority)).ifPresent(actionBar -> {
         switch(actionBar.getActionBarType()) {
+          case FLASHING:
+            if(flashing.containsKey(actionBar.getKey())) {
+              List<String> messages = plugin.getLanguageManager().getLanguageListFromKey(actionBar.getKey());
+              int size = flashing.get(actionBar.getKey());
+              if(size >= messages.size()) {
+                flashing.put(actionBar.getKey(), 0);
+              } else {
+                flashing.put(actionBar.getKey(), size + 1);
+              }
+              VersionUtils.sendActionBar(player, new MessageBuilder(messages.get(size)).integer(actionBar.getTicks() - actionBar.getExecutedTicks() / 20).build());
+              break;
+            }
+            flashing.put(actionBar.getKey(), -1);
+            break;
           case COOLDOWN:
             bars.remove(actionBar);
             VersionUtils.sendActionBar(player, actionBar.getMessage().integer(actionBar.getTicks() - actionBar.getExecutedTicks() / 20).build());
@@ -95,6 +114,10 @@ public class ActionBarManager extends BukkitRunnable {
 
   private void removeFinishedActionBar(Player player, ActionBar actionBar) {
     if(actionBar.getExecutedTicks() >= actionBar.getTicks()) {
+      if(actionBar.getActionBarType() == ActionBar.ActionBarType.FLASHING) {
+        VersionUtils.sendActionBar(player, "");
+        flashing.remove(actionBar.getKey());
+      }
       actionBars.get(player).remove(actionBar);
     }
   }

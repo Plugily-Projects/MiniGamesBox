@@ -30,6 +30,8 @@ public class ActionBar {
 
   private final MessageBuilder message;
 
+  private String key;
+
   private final ActionBarType actionBarType;
   private final int priority;
   private final int ticks;
@@ -64,8 +66,20 @@ public class ActionBar {
     this.ticks = 20;
   }
 
+  public ActionBar(String key, double seconds) {
+    this.message = new MessageBuilder("");
+    this.key = key;
+    this.actionBarType = ActionBarType.FLASHING;
+    this.priority = 100;
+    this.ticks = (int) (seconds * 20);
+  }
+
   public MessageBuilder getMessage() {
     return message;
+  }
+
+  public String getKey() {
+    return key;
   }
 
   public ActionBarType getActionBarType() {
@@ -93,7 +107,7 @@ public class ActionBar {
   }
 
   public enum ActionBarType {
-    DISPLAY, COOLDOWN, PROGRESS
+    DISPLAY, COOLDOWN, PROGRESS, FLASHING
   }
 
 }
