@@ -1,6 +1,11 @@
 package plugily.projects.minigamesbox.inventory.normal;
 
+import java.util.function.Consumer;
+
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
+
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
@@ -43,6 +48,30 @@ public class NormalFastInv extends RefreshableFastInv {
    */
   public void setItem(int slot, ClickableItem item) {
     itemMap.setItem(slot, item);
+  }
+
+  @Override
+  public void addItem(ItemStack item) {
+    addItem(ClickableItem.of(item));
+    super.addItem(item, null);
+  }
+
+  @Override
+  public void addItem(ItemStack item, Consumer<InventoryClickEvent> handler) {
+    addItem(ClickableItem.of(item));
+    super.addItem(item, handler);
+  }
+
+  @Override
+  public void setItem(int slot, ItemStack item) {
+    setItem(slot, ClickableItem.of(item));
+    super.setItem(slot, item);
+  }
+
+  @Override
+  public void setItem(int slot, ItemStack item, Consumer<InventoryClickEvent> handler) {
+    setItem(slot, ClickableItem.of(item));
+    super.setItem(slot, item, handler);
   }
 
   /**
