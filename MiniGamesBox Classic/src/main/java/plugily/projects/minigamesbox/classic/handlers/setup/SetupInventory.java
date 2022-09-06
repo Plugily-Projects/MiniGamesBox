@@ -115,6 +115,11 @@ public class SetupInventory {
     return arenaKey;
   }
 
+
+  public Player getPlayer() {
+    return player;
+  }
+
   public PluginMain getPlugin() {
     return plugin;
   }
