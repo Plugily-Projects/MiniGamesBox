@@ -54,37 +54,37 @@ public class Cuboid {
   }
 
   public List<Block> blockList() {
-    final List<Block> bL = new ArrayList<>(getTotalBlockSize());
+    final List<Block> blocks = new ArrayList<>(getTotalBlockSize());
     for(int x = xMin; x <= xMax; ++x) {
       for(int y = yMin; y <= yMax; ++y) {
         for(int z = zMin; z <= zMax; ++z) {
-          bL.add(world.getBlockAt(x, y, z));
+          blocks.add(world.getBlockAt(x, y, z));
         }
       }
     }
-    return bL;
+    return blocks;
   }
 
   public List<Block> blockListWithoutFloor() {
-    final List<Block> bL = new ArrayList<>(getTotalBlockSize() - (getXWidth() * getZWidth()));
+    final List<Block> blocks = new ArrayList<>(getTotalBlockSize() - (getXWidth() * getZWidth()));
     for(int x = xMin; x <= xMax; ++x) {
       for(int y = yMin + 1; y <= yMax; ++y) {
         for(int z = zMin; z <= zMax; ++z) {
-          bL.add(world.getBlockAt(x, y, z));
+          blocks.add(world.getBlockAt(x, y, z));
         }
       }
     }
-    return bL;
+    return blocks;
   }
 
   public List<Block> floorBlockList() {
-    final List<Block> bL = new ArrayList<>(getXWidth() * getZWidth());
+    final List<Block> blocks = new ArrayList<>(getXWidth() * getZWidth());
     for(int x = xMin; x <= xMax; ++x) {
       for(int z = zMin; z <= zMax; ++z) {
-        bL.add(world.getBlockAt(x, yMin, z));
+        blocks.add(world.getBlockAt(x, yMin, z));
       }
     }
-    return bL;
+    return blocks;
   }
 
   public List<Chunk> chunkList() {
