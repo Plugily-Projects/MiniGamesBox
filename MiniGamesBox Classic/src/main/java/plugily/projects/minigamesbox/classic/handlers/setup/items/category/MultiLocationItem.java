@@ -20,7 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.items.category;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
@@ -188,13 +189,19 @@ public class MultiLocationItem implements CategoryItemHandler {
   }
 
   private void addLocation(HumanEntity player, Location location) {
-    ConfigurationSection configurationSection = getRawLocations();
-    int value = (configurationSection != null ? configurationSection.getKeys(false).size() : 0) + 1;
-    LocationSerializer.saveLoc(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas", "instances." + setupInventory.getArenaKey() + "." + keyName + "." + value, location);
-    String progress = value >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
-    new MessageBuilder(progress + "&a" + name.toUpperCase() + " spawn added! &8(&7" + value + "/" + minimumValue + "&8)").prefix().send(player);
-    if(value == minimumValue) {
-      new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + " " + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
+    FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
+    List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
+    String spawnLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
+    if(!locs.contains(spawnLoc)) {
+      locs.add(spawnLoc);
+      config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
+      ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
+    }
+
+    String progress = locs.size() >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
+    new MessageBuilder(progress + "&a" + name.toUpperCase() + " spawn added! &8(&7" + locs.size() + "/" + minimumValue + "&8)").prefix().send(player);
+    if(locs.size() == minimumValue) {
+      new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + "" + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
   }
 
@@ -203,7 +210,16 @@ public class MultiLocationItem implements CategoryItemHandler {
       for(Location location : getLocationsList()) {
         double distance = player.getLocation().distanceSquared(location);
         if(deleteAll || distance <= 2) {
-          setupInventory.setConfig(keyName, null);
+          FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
+          List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
+          if(deleteAll) {
+            locs.clear();
+          } else {
+            String signLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
+            locs.remove(signLoc);
+          }
+          config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
+          ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
           //considerable to add arena method to remove location
           new MessageBuilder("&e✔ Removed | &a" + name.toUpperCase() + " location for arena " + setupInventory.getArenaKey() + "! (" + location + ")").prefix().send(player);
           return;
@@ -214,20 +230,21 @@ public class MultiLocationItem implements CategoryItemHandler {
   }
 
   @Nullable
-  private ConfigurationSection getRawLocations() {
-    return setupInventory.getConfig().getConfigurationSection("instances." + setupInventory.getArenaKey() + "." + keyName);
+  private List<String> getRawLocations() {
+    return setupInventory.getConfig().getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
   }
 
   private List<Location> getLocationsList() {
     List<Location> locations = new ArrayList<>();
-    ConfigurationSection configurationSection = getRawLocations();
-    if(configurationSection != null) {
-      for(String key : configurationSection.getKeys(false)) {
-        locations.add(LocationSerializer.getLocation(configurationSection.getString(key)));
+    List<String> configurationSection = getRawLocations();
+    if(!configurationSection.isEmpty()) {
+      for(String key : configurationSection) {
+        locations.add(LocationSerializer.getLocation(key));
       }
     }
     return locations;
   }
+
 
   @Override
   public String getSetupInfo() {
