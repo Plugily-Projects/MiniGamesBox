@@ -31,12 +31,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion.Version;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.Optional;
 import java.util.Random;
@@ -73,20 +73,9 @@ public class MiscUtils {
     return s;
   }
 
-  // https://www.spigotmc.org/threads/comprehensive-particle-spawning-guide-1-13.343001/
   @Deprecated
   public static void spawnParticle(Particle particle, Location loc, int count, double offsetX, double offsetY, double offsetZ, double extra) {
-    if(Version.isCurrentEqualOrHigher(Version.v1_13_R2) && particle == Particle.REDSTONE) {
-      Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 2);
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, dustOptions);
-    } else if(particle == Particle.ITEM_CRACK) {
-      ItemStack itemCrackData = new ItemStack(loc.getBlock().getType());
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, itemCrackData);
-    } else if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)) {
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, loc.getBlock().getType().createBlockData());
-    } else {
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra);
-    }
+    VersionUtils.sendParticles(particle.name(), null, loc, count, offsetX, offsetY, offsetZ, extra);
   }
 
   public static Optional<AttributeInstance> getEntityAttribute(LivingEntity entity, Attribute attribute) {
