@@ -282,7 +282,9 @@ public final class VersionUtils {
       return new ItemStack(location.getBlock().getType());
     }
 
-    if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)) {
+    if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST
+        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)
+        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_18_R1) && particle == Particle.BLOCK_MARKER)) {
       return location.getBlock().getType().createBlockData();
     }
 
@@ -297,21 +299,21 @@ public final class VersionUtils {
       }
     }
 
-    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_19_R1) && (particle == Particle.SCULK_CHARGE || particle == Particle.SHRIEK)) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_19_R1) && (particle == Particle.SCULK_CHARGE || particle == Particle.SHRIEK)) {
       return 0;
     }
 
-    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17_R1)) {
-      if (particle == Particle.DUST_COLOR_TRANSITION) {
-        if (dustTransition == null) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17_R1)) {
+      if(particle == Particle.DUST_COLOR_TRANSITION) {
+        if(dustTransition == null) {
           dustTransition = new org.bukkit.Particle.DustTransition(Color.fromRGB(255, 0, 0), Color.fromRGB(255, 255, 255), 1.0F);
         }
 
         return dustTransition;
       }
 
-      if (particle == Particle.VIBRATION) {
-        if (isPaper) {
+      if(particle == Particle.VIBRATION) {
+        if(isPaper) {
           return new org.bukkit.Vibration(new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
         }
 
