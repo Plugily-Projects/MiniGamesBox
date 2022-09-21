@@ -1,14 +1,13 @@
 package plugily.projects.minigamesbox.inventory.normal;
 
-import java.util.function.Consumer;
-
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
 import plugily.projects.minigamesbox.inventory.common.item.ClickableItem;
 import plugily.projects.minigamesbox.inventory.common.item.ItemMap;
+
+import java.util.function.Consumer;
 
 /**
  * A normal, single-paged inventory.
@@ -40,38 +39,48 @@ public class NormalFastInv extends RefreshableFastInv {
     return itemMap;
   }
 
+  @Override
+  public void addItem(ItemStack item) {
+    addItemToMap(ClickableItem.of(item));
+    super.addItem(item, null);
+  }
+
+  public void addItem(ClickableItem clickableItem) {
+    addItemToMap(clickableItem);
+    super.addItem(clickableItem.getItem(), clickableItem.getClickConsumer());
+  }
+
+  @Override
+  public void addItem(ItemStack item, Consumer<InventoryClickEvent> handler) {
+    addItemToMap(ClickableItem.of(item));
+    super.addItem(item, handler);
+  }
+
+  @Override
+  public void setItem(int slot, ItemStack item) {
+    setItemToMap(slot, ClickableItem.of(item));
+    super.setItem(slot, item);
+  }
+
+  public void setItem(int slot, ClickableItem clickableItem) {
+    setItemToMap(slot, clickableItem);
+    super.setItem(slot, clickableItem.getItem(), clickableItem.getClickConsumer());
+  }
+
+  @Override
+  public void setItem(int slot, ItemStack item, Consumer<InventoryClickEvent> handler) {
+    setItemToMap(slot, ClickableItem.of(item));
+    super.setItem(slot, item, handler);
+  }
+
   /**
    * Sets the item in the specified slot.
    *
    * @param slot the slot to set the item in
    * @param item the item to set
    */
-  public void setItem(int slot, ClickableItem item) {
+  private void setItemToMap(int slot, ClickableItem item) {
     itemMap.setItem(slot, item);
-  }
-
-  @Override
-  public void addItem(ItemStack item) {
-    addItem(ClickableItem.of(item));
-    super.addItem(item, null);
-  }
-
-  @Override
-  public void addItem(ItemStack item, Consumer<InventoryClickEvent> handler) {
-    addItem(ClickableItem.of(item));
-    super.addItem(item, handler);
-  }
-
-  @Override
-  public void setItem(int slot, ItemStack item) {
-    setItem(slot, ClickableItem.of(item));
-    super.setItem(slot, item);
-  }
-
-  @Override
-  public void setItem(int slot, ItemStack item, Consumer<InventoryClickEvent> handler) {
-    setItem(slot, ClickableItem.of(item));
-    super.setItem(slot, item, handler);
   }
 
   /**
@@ -79,7 +88,7 @@ public class NormalFastInv extends RefreshableFastInv {
    *
    * @param item the item to set
    */
-  public void addItem(ClickableItem item) {
+  private void addItemToMap(ClickableItem item) {
     itemMap.addItem(item);
   }
 
