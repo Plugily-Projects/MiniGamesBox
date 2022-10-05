@@ -84,6 +84,10 @@ public class PluginScoreboardManager {
     boardMap.put(player.getUniqueId(), scoreboard);
   }
 
+  public void updateScoreboards() {
+    boardMap.values().forEach(Scoreboard::update);
+  }
+
   /**
    * Removes scoreboard of user
    *

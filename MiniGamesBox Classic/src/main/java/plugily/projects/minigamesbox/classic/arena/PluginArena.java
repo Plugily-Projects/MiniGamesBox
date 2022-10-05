@@ -209,6 +209,7 @@ public class PluginArena extends BukkitRunnable {
     forceArenaState = false;
     forceArenaTimer = false;
     bossbarManager.bossBarUpdate();
+    scoreboardManager.updateScoreboards();
     ArenaStateHandler arenaStateHandler;
     if(arenaState == ArenaState.FULL_GAME) {
       arenaStateHandler = gameStateHandlers.get(ArenaState.STARTING);
@@ -454,8 +455,8 @@ public class PluginArena extends BukkitRunnable {
   public List<Player> getPlayersLeft() {
     List<Player> playersLeft = new ArrayList<>();
 
-    for (User user : plugin.getUserManager().getUsers(this)) {
-      if (!user.isSpectator()) {
+    for(User user : plugin.getUserManager().getUsers(this)) {
+      if(!user.isSpectator()) {
         playersLeft.add(user.getPlayer());
       }
     }

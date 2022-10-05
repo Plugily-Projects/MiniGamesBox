@@ -265,7 +265,7 @@ public class PluginArenaManager {
         spawnFireworks(arena, player);
 
         for(String msg : plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary")) {
-          MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).arena(arena).player(player).build());
+          MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).player(player).arena(arena).build());
         }
       }
     }
