@@ -204,31 +204,41 @@ public class PluginArena extends BukkitRunnable {
     if(arenaState == ArenaState.WAITING_FOR_PLAYERS && players.isEmpty()) {
       return;
     }
+
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Running game task", id);
+
     long start = System.currentTimeMillis();
+
     forceArenaState = false;
     forceArenaTimer = false;
+
     bossbarManager.bossBarUpdate();
-    ArenaStateHandler arenaStateHandler;
-    if(arenaState == ArenaState.FULL_GAME) {
-      arenaStateHandler = gameStateHandlers.get(ArenaState.STARTING);
-    } else {
-      arenaStateHandler = gameStateHandlers.get(arenaState);
+
+    for(Player player : players) {
+      scoreboardManager.updateScoreboard(player.getUniqueId());
     }
+
+    ArenaStateHandler arenaStateHandler = gameStateHandlers.get(arenaState == ArenaState.FULL_GAME ? ArenaState.STARTING : arenaState);
     arenaStateHandler.handleCall(this);
+
     plugin.getDebugger().debug("Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), arenaState);
+
     if(!forceArenaTimer && arenaStateHandler.getArenaTimer() != -999) {
       plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
       setTimer(arenaStateHandler.getArenaTimer());
     }
+
     plugin.getDebugger().debug("Arena {0} Force State {1}", getId(), forceArenaState);
+
     if(!forceArenaState && arenaState != arenaStateHandler.getArenaStateChange()) {
       plugin.getDebugger().debug("Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
+
       if(!(arenaState == ArenaState.FULL_GAME && arenaStateHandler.getArenaStateChange() == ArenaState.STARTING)) {
         plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
         setArenaState(arenaStateHandler.getArenaStateChange(), false);
       }
     }
+
     setTimer(getTimer() - 1);
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Game task finished took {1}ms", id, System.currentTimeMillis() - start);
   }

@@ -96,6 +96,19 @@ public class PluginScoreboardManager {
   }
 
   /**
+   * Updates the scoreboard of a user
+   * 
+   * @param playerId {@link UUID} that represents game player
+   */
+  public void updateScoreboard(UUID playerId) {
+    Scoreboard scoreboard = boardMap.get(playerId);
+
+    if (scoreboard != null) {
+      scoreboard.update();
+    }
+  }
+
+  /**
    * Forces all scoreboards to deactivate.
    */
   public void stopAllScoreboards() {
