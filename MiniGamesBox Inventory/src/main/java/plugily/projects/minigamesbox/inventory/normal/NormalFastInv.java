@@ -52,7 +52,7 @@ public class NormalFastInv extends RefreshableFastInv {
 
   @Override
   public void addItem(ItemStack item, Consumer<InventoryClickEvent> handler) {
-    addItemToMap(ClickableItem.of(item));
+    addItemToMap(ClickableItem.of(item, handler));
     super.addItem(item, handler);
   }
 
@@ -69,7 +69,7 @@ public class NormalFastInv extends RefreshableFastInv {
 
   @Override
   public void setItem(int slot, ItemStack item, Consumer<InventoryClickEvent> handler) {
-    setItemToMap(slot, ClickableItem.of(item));
+    setItemToMap(slot, ClickableItem.of(item, handler));
     super.setItem(slot, item, handler);
   }
 

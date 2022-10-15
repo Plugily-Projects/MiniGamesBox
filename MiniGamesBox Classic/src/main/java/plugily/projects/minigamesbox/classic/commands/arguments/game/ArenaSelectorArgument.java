@@ -78,7 +78,6 @@ public class ArenaSelectorArgument {
             player.closeInventory();
           }));
         }
-        arenaSelector.refresh();
         arenaSelector.open(player);
       }
     });

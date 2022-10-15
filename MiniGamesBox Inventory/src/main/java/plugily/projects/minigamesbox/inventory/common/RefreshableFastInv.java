@@ -74,7 +74,6 @@ public abstract class RefreshableFastInv extends FastInv {
     ItemMap itemMap = getItemMap();
     Map<Integer, ClickableItem> clickableItemSlotMap = itemMap.getItems();
     ClickableItem defaultItem = itemMap.getDefaultItem();
-
     int inventorySize = getInventory().getSize();
     for(int i = 0; i < inventorySize; i++) {
       ClickableItem clickableItem = clickableItemSlotMap.get(i);
@@ -101,14 +100,22 @@ public abstract class RefreshableFastInv extends FastInv {
     }
   }
 
+  @Override
+  public void open(Player player) {
+    refresh();
+    player.openInventory(getInventory());
+  }
+
   /**
    * Open the Inventory for HumanEntity
    *
    * @param humanEntity the player where inventory gets opened
    */
   public void open(HumanEntity humanEntity) {
+    refresh();
     humanEntity.openInventory(getInventory());
   }
+
 
   /**
    * Should the plugin force viewers to refresh their inventory?
