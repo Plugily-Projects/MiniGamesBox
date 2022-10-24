@@ -158,10 +158,10 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
                 .build();
         HandlerItem handlerItem = new HandlerItem(itemStack);
         handlerItem.addDropHandler(dropEvent -> {
-          handlerItem.remove();
-          dropEvent.getPlayer().getInventory().remove(dropEvent.getItemDrop().getItemStack());
+          dropEvent.setCancelled(false);
           dropEvent.getItemDrop().remove();
           dropEvent.getPlayer().updateInventory();
+          handlerItem.remove();
           new MessageBuilder("&aRemoved/&aDeactivated the " + name.toUpperCase() + " Location item!").prefix().send(dropEvent.getPlayer());
         });
         handlerItem.addConsumeHandler(consumeEvent -> consumeEvent.setCancelled(true));
