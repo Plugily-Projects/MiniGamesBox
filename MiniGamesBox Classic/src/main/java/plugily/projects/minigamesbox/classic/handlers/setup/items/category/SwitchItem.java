@@ -23,12 +23,14 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
+import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventoryUtils;
 import plugily.projects.minigamesbox.classic.utils.conversation.SimpleConversationBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.RefreshableFastInv;
@@ -108,7 +110,6 @@ public class SwitchItem implements CategoryItemHandler {
             return Prompt.END_OF_CONVERSATION;
           }
         }).buildFor((Player) event.getWhoClicked());
-        setupInventory.closeInventory(event.getWhoClicked());
         break;
       case RIGHT:
         String option = setupInventory.getConfig().getString("instances." + setupInventory.getArenaKey() + "." + keyName, switches.get(0));
@@ -125,6 +126,11 @@ public class SwitchItem implements CategoryItemHandler {
         break;
     }
     clickConsumer.accept(event);
+    if(event.getClick() == ClickType.LEFT) {
+      setupInventory.closeInventory(event.getWhoClicked());
+    } else {
+      setupInventory.open(SetupInventoryUtils.SetupInventoryStage.ARENA_EDITOR);
+    }
   }
 
   @Override
