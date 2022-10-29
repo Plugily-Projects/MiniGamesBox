@@ -56,16 +56,20 @@ public class BossbarManager {
     this.interval = arena.getArenaOption("BOSSBAR_INTERVAL");
     this.currentLine = 0;
 
+    String bossBarTitle = new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).build();
+
     for(ArenaState arenaState : ArenaState.values()) {
       if(arenaState == ArenaState.FULL_GAME) {
         continue;
       }
-      bossbar.put(arenaState, plugin.getLanguageManager().getLanguageList("Bossbar.Content." + arenaState.getFormattedName()));
+      List<String> titlesList = plugin.getLanguageManager().getLanguageList("Bossbar.Content." + arenaState.getFormattedName());
+      titlesList.add(bossBarTitle);
+      bossbar.put(arenaState, titlesList);
     }
     plugin.getDebugger().debug("Arena {0} loaded Bossbar content: {1}", arena.getId(), bossbar.toString());
 
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1) && plugin.getConfigPreferences().getOption("BOSSBAR")) {
-      gameBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).build(), BarColor.BLUE, BarStyle.SOLID);
+      gameBar = Bukkit.createBossBar(bossBarTitle, BarColor.BLUE, BarStyle.SOLID);
     }
   }
 

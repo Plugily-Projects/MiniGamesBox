@@ -90,7 +90,7 @@ public class Message {
     // scoreboard (scoreboard.content gets by arena state)
     messages.put("SCOREBOARD_TITLE", new Message("Scoreboard.Title", "", true));
     // bossbar (bossbar.content gets by arena state)
-    messages.put("BOSSBAR_TITLE", new Message("Bossbar.", "", true));
+    messages.put("BOSSBAR_TITLE", new Message("Bossbar.Title", "", true));
     // In-Game messages
     messages.put("IN_GAME_PLUGIN_PREFIX", new Message("In-Game.Plugin-Prefix", "", true));
     messages.put("IN_GAME_GAME_CHAT_FORMAT", new Message("In-Game.Game-Chat-Format", "", true));
