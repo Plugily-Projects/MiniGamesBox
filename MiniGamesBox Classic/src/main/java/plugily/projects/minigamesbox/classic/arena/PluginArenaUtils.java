@@ -70,50 +70,55 @@ public class PluginArenaUtils {
     }
   }
 
-  public static void preparePlayerForGame(
-      PluginArena arena, Player player, Location location, boolean spectator) {
-    User user = plugin.getUserManager().getUser(player);
-    if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
-      InventorySerializer.saveInventoryToFile(plugin, player);
-    }
-    VersionUtils.teleport(player, location);
-    player.getInventory().clear();
-    player
-        .getActivePotionEffects()
-        .forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-    VersionUtils.setMaxHealth(player, VersionUtils.getMaxHealth(player));
-    player.setHealth(VersionUtils.getMaxHealth(player));
-    player.setFoodLevel(20);
-    player.setGameMode(GameMode.SURVIVAL);
-    player
-        .getInventory()
-        .setArmorContents(
-            new ItemStack[]{
-                new ItemStack(Material.AIR),
-                new ItemStack(Material.AIR),
-                new ItemStack(Material.AIR),
-                new ItemStack(Material.AIR)
-            });
-    player.setExp(1);
-    player.setLevel(0);
-    player.setWalkSpeed(0.2f);
-    player.setFlySpeed(0.1f);
+  public static void preparePlayerForGame(PluginArena arena, Player player, Location location, boolean spectator) {
+    VersionUtils.teleport(player, location).thenAccept(bol -> {
+      if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
+        InventorySerializer.saveInventoryToFile(plugin, player);
+      }
+      
+      player.getInventory().clear();
+      player
+          .getActivePotionEffects()
+          .forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
 
-    if(spectator) {
-      player.setAllowFlight(true);
-      player.setFlying(true);
-      user.setSpectator(true);
-      player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
-      plugin
-          .getSpecialItemManager()
-          .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
-    } else {
-      player.setAllowFlight(false);
-      player.setFlying(false);
-      user.setSpectator(false);
-    }
-    player.updateInventory();
-    arena.getScoreboardManager().createScoreboard(user);
+      double maxHealth = VersionUtils.getMaxHealth(player);
+      VersionUtils.setMaxHealth(player, maxHealth);
+      player.setHealth(maxHealth);
+
+      player.setFoodLevel(20);
+      player.setGameMode(GameMode.SURVIVAL);
+      player
+          .getInventory()
+          .setArmorContents(
+              new ItemStack[]{
+                  new ItemStack(Material.AIR),
+                  new ItemStack(Material.AIR),
+                  new ItemStack(Material.AIR),
+                  new ItemStack(Material.AIR)
+              });
+      player.setExp(1);
+      player.setLevel(0);
+      player.setWalkSpeed(0.2f);
+      player.setFlySpeed(0.1f);
+
+      User user = plugin.getUserManager().getUser(player);
+
+      if(spectator) {
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        user.setSpectator(true);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
+        plugin
+            .getSpecialItemManager()
+            .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
+      } else {
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        user.setSpectator(false);
+      }
+      player.updateInventory();
+      arena.getScoreboardManager().createScoreboard(user);
+    });
   }
 
   public static void resetPlayerAfterGame(Player player) {

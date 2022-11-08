@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -171,20 +172,19 @@ public final class VersionUtils {
 
   private static JavaPlugin plugin;
 
-  public static void teleport(Entity entity, Location location) {
+  public static CompletableFuture<Boolean> teleport(Entity entity, Location location) {
     if(isPaper) {
       // Avoid Future.get() method to be called from the main thread
 
       if(Bukkit.isPrimaryThread()) { // Checks if the current thread is not async
-        PaperLib.teleportAsync(entity, location);
-        return;
+        return PaperLib.teleportAsync(entity, location);
       }
 
       if(plugin == null)
         plugin = JavaPlugin.getPlugin(PluginMain.class);
 
       try {
-        Bukkit.getScheduler().callSyncMethod(plugin, () -> PaperLib.teleportAsync(entity, location)).get();
+        return Bukkit.getScheduler().callSyncMethod(plugin, () -> PaperLib.teleportAsync(entity, location)).get();
       } catch(InterruptedException | ExecutionException e) {
         e.printStackTrace();
       } catch(CancellationException e) {
@@ -193,6 +193,8 @@ public final class VersionUtils {
     } else {
       entity.teleport(location);
     }
+
+    return new CompletableFuture<>();
   }
 
   public static void sendParticles(String particleName, Player player, Location location, int count) {
