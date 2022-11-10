@@ -238,8 +238,8 @@ public class PluginArenaManager {
       stopGame(true, arena);
       //new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
     }
-    PluginArenaUtils.resetPlayerAfterGame(player);
     arena.teleportToEndLocation(player);
+    PluginArenaUtils.resetPlayerAfterGame(player);
     if(!user.isSpectator()) {
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
