@@ -19,6 +19,8 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -70,16 +72,14 @@ public class PluginArenaUtils {
     }
   }
 
-  public static void preparePlayerForGame(PluginArena arena, Player player, Location location, boolean spectator) {
-    VersionUtils.teleport(player, location).thenAccept(bol -> {
+  public static CompletableFuture<Void> preparePlayerForGame(PluginArena arena, Player player, Location location, boolean spectator) {
+    return VersionUtils.teleport(player, location).thenAccept(bol -> {
       if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
         InventorySerializer.saveInventoryToFile(plugin, player);
       }
-      
+
       player.getInventory().clear();
-      player
-          .getActivePotionEffects()
-          .forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+      player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
 
       double maxHealth = VersionUtils.getMaxHealth(player);
       VersionUtils.setMaxHealth(player, maxHealth);
@@ -87,9 +87,7 @@ public class PluginArenaUtils {
 
       player.setFoodLevel(20);
       player.setGameMode(GameMode.SURVIVAL);
-      player
-          .getInventory()
-          .setArmorContents(
+      player.getInventory().setArmorContents(
               new ItemStack[]{
                   new ItemStack(Material.AIR),
                   new ItemStack(Material.AIR),
@@ -108,9 +106,7 @@ public class PluginArenaUtils {
         player.setFlying(true);
         user.setSpectator(true);
         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
-        plugin
-            .getSpecialItemManager()
-            .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
       } else {
         player.setAllowFlight(false);
         player.setFlying(false);
