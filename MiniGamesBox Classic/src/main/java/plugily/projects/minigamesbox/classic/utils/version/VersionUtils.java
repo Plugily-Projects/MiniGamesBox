@@ -312,13 +312,14 @@ public final class VersionUtils {
         return dustTransition;
       }
 
+      /* NoClassDefFoundError: org/bukkit/Vibration$Destination on lower versions
       if(particle == Particle.VIBRATION) {
         if(isPaper) {
           return new org.bukkit.Vibration(new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
         }
 
         return new org.bukkit.Vibration(location, new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
-      }
+      }*/
     }
 
     return null;
