@@ -272,7 +272,6 @@ public final class VersionUtils {
 
   // Some particle in new versions needs their own data type
   // See https://www.spigotmc.org/threads/343001/
-  @SuppressWarnings("removal")
   private static Object getParticleDataType(Particle particle, Location location) {
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13_R2) && particle == Particle.REDSTONE) {
       return new Particle.DustOptions(Color.RED, 2);
@@ -312,14 +311,16 @@ public final class VersionUtils {
         return dustTransition;
       }
 
-      /* NoClassDefFoundError: org/bukkit/Vibration$Destination on lower versions
-      if(particle == Particle.VIBRATION) {
-        if(isPaper) {
-          return new org.bukkit.Vibration(new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
-        }
+      try {
+        if(particle == Particle.VIBRATION) {
+          if(isPaper) {
+            return new org.bukkit.Vibration(new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
+          }
 
-        return new org.bukkit.Vibration(location, new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
-      }*/
+          return new org.bukkit.Vibration(location, new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
+        }
+      } catch (NoClassDefFoundError e) {
+      }
     }
 
     return null;
