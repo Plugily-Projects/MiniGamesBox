@@ -19,6 +19,8 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
+import java.util.Locale;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -45,33 +47,46 @@ public class HologramArgument {
 
   public HologramArgument(PluginArgumentsRegistry registry) {
     this.registry = registry;
+
+    final String commandAdminPrefix = registry.getPlugin().getCommandAdminPrefix();
+
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("leaderboard", registry.getPlugin().getPluginNamePrefixLong() + ".admin.leaderboard.manage", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard &6<action>", "/" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <action>", "&7Command handles 3 arguments:\n&7• /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard add <statistic type> <amount> - creates new hologram"
-            + "of target statistic\n&7with top X amount of players (max 20)\n&7• /" + registry.getPlugin().getCommandAdminPrefix() + " hologram remove <id> - removes hologram of target ID\n"
-            + "&7• /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard list - prints list of all leaderboard holograms")) {
+        new LabelData("/" + commandAdminPrefix + " leaderboard &6<action>", "/" + commandAdminPrefix + " leaderboard <action>", "&7Command handles 3 arguments:\n&7• /" + commandAdminPrefix + " leaderboard add <statistic type> <amount> - creates new hologram"
+            + "of target statistic\n&7with top X amount of players (max 20)\n&7• /" + commandAdminPrefix + " hologram remove <id> - removes hologram of target ID\n"
+            + "&7• /" + commandAdminPrefix + " leaderboard list - prints list of all leaderboard holograms")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
         if(args.length < 2) {
-          new MessageBuilder("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <add/remove/list>").prefix().send(sender);
+          new MessageBuilder("&cToo few arguments! Please type /" + commandAdminPrefix + " leaderboard <add/remove/list>").prefix().send(sender);
           return;
         }
-        if(args[1].equalsIgnoreCase("add")) {
+
+        switch (args[1].toLowerCase(Locale.ENGLISH)) {
+        case "add":
           handleAddArgument((Player) sender, args);
-        } else if(args[1].equalsIgnoreCase("list")) {
+          break;
+        case "list":
           handleListArgument(sender);
-        } else if(args[1].equalsIgnoreCase("remove")) {
+          break;
+        case "remove":
           handleDeleteArgument(sender, args);
-        } else {
-          new MessageBuilder("&cBad arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard <add/remove/list>").prefix().send(sender);
+          break;
+        default:
+          new MessageBuilder("&cBad arguments! Please type /" + commandAdminPrefix + " leaderboard <add/remove/list>").prefix().send(sender);
         }
       }
     });
   }
 
   private void handleAddArgument(Player player, String[] args) {
+    if(args.length != 4) {
+      new MessageBuilder("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard add <statistic type> <amount>").prefix().player(player).sendPlayer();
+      return;
+    }
+
     StatisticType statistic;
     try {
-      statistic = registry.getPlugin().getStatsStorage().getStatisticType(args[2].toUpperCase());
+      statistic = registry.getPlugin().getStatsStorage().getStatisticType(args[2].toUpperCase(Locale.ENGLISH));
     } catch(IllegalStateException ex) {
       sendInvalidStatisticMessage(player);
       return;
@@ -82,10 +97,6 @@ public class HologramArgument {
       return;
     }
 
-    if(args.length != 4) {
-      new MessageBuilder("&cToo few arguments! Please type /" + registry.getPlugin().getCommandAdminPrefix() + " leaderboard add <statistic type> <amount>").prefix().player(player).sendPlayer();
-      return;
-    }
     java.util.Optional<Integer> opt = NumberUtils.parseInt(args[3]);
     if(!opt.isPresent()) {
       new MessageBuilder("&cLeaderboard amount entries must be a number!").prefix().player(player).sendPlayer();
@@ -123,13 +134,13 @@ public class HologramArgument {
     for(String key : config.getConfigurationSection("holograms").getKeys(false)) {
       new MessageBuilder("&aID " + key).prefix().send(sender);
       new MessageBuilder("&eTop: " + config.getInt("holograms." + key + ".top-amount")
-          + " Stat: " + config.getString("holograms." + key + ".statistics")).prefix().send(sender);
-      new MessageBuilder("&eLocation: " + getFriendlyLocation(LocationSerializer.getLocation(config.getString("holograms." + key + ".location")))).prefix().send(sender);
+          + " Stat: " + config.getString("holograms." + key + ".statistics", "")).prefix().send(sender);
+      new MessageBuilder("&eLocation: " + getFriendlyLocation(LocationSerializer.getLocation(config.getString("holograms." + key + ".location", null)))).prefix().send(sender);
     }
   }
 
   private String getFriendlyLocation(Location location) {
-    return "World: " + location.getWorld().getName() + ", X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ();
+    return location == null ? "null" : "World: " + location.getWorld().getName() + ", X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ();
   }
 
   private void handleDeleteArgument(CommandSender sender, String[] args) {
@@ -137,20 +148,21 @@ public class HologramArgument {
       new MessageBuilder("&cPlease type leaderboard ID to remove it!").prefix().send(sender);
       return;
     }
-    java.util.Optional<Integer> opt = NumberUtils.parseInt(args[2]);
+    String id = args[2];
+    java.util.Optional<Integer> opt = NumberUtils.parseInt(id);
     if(!opt.isPresent()) {
       new MessageBuilder("&cLeaderboard ID must be a number!").prefix().send(sender);
       return;
     }
     FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "internal/leaderboards_data");
-    if(!config.isSet("holograms." + args[2])) {
+    if(!config.isSet("holograms." + id)) {
       new MessageBuilder("&cLeaderboard with that ID doesn't exist!").prefix().send(sender);
       return;
     }
-    config.set("holograms." + args[2], null);
+    config.set("holograms." + id, null);
     ConfigUtils.saveConfig(registry.getPlugin(), config, "internal/leaderboards_data");
     registry.getPlugin().getLeaderboardRegistry().disableHologram(opt.get());
-    new MessageBuilder("&aLeaderboard with ID " + args[2] + " sucessfully deleted!").prefix().send(sender);
+    new MessageBuilder("&aLeaderboard with ID " + id + " sucessfully deleted!").prefix().send(sender);
   }
 
 }
