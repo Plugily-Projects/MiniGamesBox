@@ -316,10 +316,9 @@ public final class VersionUtils {
           if(isPaper) {
             return new org.bukkit.Vibration(new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
           }
-
           return new org.bukkit.Vibration(location, new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
         }
-      } catch (NoClassDefFoundError e) {
+      } catch(NoClassDefFoundError ignored) {
       }
     }
 

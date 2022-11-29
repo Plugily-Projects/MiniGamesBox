@@ -191,13 +191,17 @@ public class PluginArenaManager {
       new MessageBuilder("IN_GAME_JOIN_CANCEL_API").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
-    if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
-      String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
-      if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
-        ComplementAccessor.getComplement().kickPlayer(player, new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId())).build());
-        return false;
+    String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
+    if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
+      MessageBuilder denyMessage = new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId()));
+      if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
+        ComplementAccessor.getComplement().kickPlayer(player, denyMessage.build());
+      } else {
+        denyMessage.sendPlayer();
       }
+      return false;
     }
+
     if(plugin.getArenaRegistry().isInArena(player)) {
       new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().arena(arena).player(player).sendPlayer();
       return false;
