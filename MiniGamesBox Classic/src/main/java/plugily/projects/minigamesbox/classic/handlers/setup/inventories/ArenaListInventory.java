@@ -62,7 +62,7 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
 
   @Override
   public void injectItems() {
-    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("&cGo to Setup Menu").build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("&cGo to Setup Menu").colorizeItem().build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
 
