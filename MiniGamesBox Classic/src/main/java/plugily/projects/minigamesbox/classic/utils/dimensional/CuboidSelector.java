@@ -22,13 +22,12 @@ package plugily.projects.minigamesbox.classic.utils.dimensional;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.items.HandlerItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,18 +43,94 @@ public class CuboidSelector implements Listener {
 
   public CuboidSelector(PluginMain plugin) {
     this.plugin = plugin;
-    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   public void giveSelectorWand(Player p) {
+
     ItemStack stack =
         new ItemBuilder(Material.BLAZE_ROD)
-            .name(new MessageBuilder("&6&lLocation wand").build())
-            .lore(new MessageBuilder("Use this tool to set up location cuboids").build())
-            .lore(new MessageBuilder("Set the first corner with left click").build())
-            .lore(new MessageBuilder("and the second with right click").build())
-            .build();
-    p.getInventory().addItem(stack);
+            .name("&6&lLocation wand")
+            .lore("Use this tool to set up location cuboids")
+            .lore("Set the first corner with left click")
+            .lore("and the second with right click")
+            .colorizeItem().build();
+
+    HandlerItem selectorItem = new HandlerItem(stack);
+    selectorItem.setLeftClick(true);
+    selectorItem.setRightClick(true);
+    selectorItem.addDropHandler(dropEvent -> {
+      dropEvent.setCancelled(false);
+      dropEvent.getItemDrop().remove();
+      dropEvent.getPlayer().updateInventory();
+      selectorItem.remove();
+    });
+    selectorItem.addInteractHandler(event -> {
+      event.setCancelled(true);
+      switch(event.getAction()) {
+        case LEFT_CLICK_BLOCK:
+          selections.put(event.getPlayer(), new Selection(event.getClickedBlock().getLocation(), null));
+          event.getPlayer()
+              .sendMessage(
+                  new MessageBuilder("&eNow select top corner using right click!").prefix().build());
+          break;
+        case RIGHT_CLICK_BLOCK:
+          if(!selections.containsKey(event.getPlayer())) {
+            event.getPlayer()
+                .sendMessage(
+                    new MessageBuilder("&cPlease select bottom corner using left click first!")
+                        .prefix()
+                        .build());
+            break;
+          }
+          selections.put(
+              event.getPlayer(),
+              new Selection(
+                  selections.get(event.getPlayer()).getFirstPos(), event.getClickedBlock().getLocation()));
+          event.getPlayer()
+              .sendMessage(
+                  new MessageBuilder("&eNow you can add Location via menu!").prefix().build());
+          break;
+        case LEFT_CLICK_AIR:
+          selections.put(event.getPlayer(), new Selection(event.getPlayer().getLocation(), null));
+          event.getPlayer()
+              .sendMessage(
+                  new MessageBuilder("&eNow select top corner using right click!").prefix().build());
+          event.getPlayer()
+              .sendMessage(
+                  new MessageBuilder(
+                      "&cPlease keep in mind to use blocks instead of player location for precise coordinates!")
+                      .prefix()
+                      .build());
+          break;
+        case RIGHT_CLICK_AIR:
+          if(!selections.containsKey(event.getPlayer())) {
+            event.getPlayer()
+                .sendMessage(
+                    new MessageBuilder("&cPlease select bottom corner using left click first!")
+                        .prefix()
+                        .build());
+            break;
+          }
+          selections.put(
+              event.getPlayer(),
+              new Selection(
+                  selections.get(event.getPlayer()).getFirstPos(), event.getPlayer().getLocation()));
+          event.getPlayer()
+              .sendMessage(
+                  new MessageBuilder("&eNow you can add Location via menu!").prefix().build());
+          event.getPlayer()
+              .sendMessage(
+                  new MessageBuilder(
+                      "&cPlease keep in mind to use blocks instead of player location for precise coordinates!")
+                      .prefix()
+                      .build());
+          break;
+        default:
+          break;
+      }
+    });
+
+    p.getInventory().addItem(selectorItem.getItemStack());
 
     p.sendMessage(new MessageBuilder("&eYou received Location wand!").prefix().build());
     p.sendMessage(new MessageBuilder("&eSelect bottom corner using left click!").prefix().build());
@@ -67,80 +142,6 @@ public class CuboidSelector implements Listener {
 
   public void removeSelection(Player p) {
     selections.remove(p);
-  }
-
-  @EventHandler
-  public void onWandUse(PlugilyPlayerInteractEvent e) {
-    if(!plugin.getBukkitHelper().isNamed(e.getItem())
-        || !e.getItem()
-        .getItemMeta()
-        .getDisplayName()
-        .equals(new MessageBuilder("&6&lLocation wand").build())) {
-      return;
-    }
-    e.setCancelled(true);
-    switch(e.getAction()) {
-      case LEFT_CLICK_BLOCK:
-        selections.put(e.getPlayer(), new Selection(e.getClickedBlock().getLocation(), null));
-        e.getPlayer()
-            .sendMessage(
-                new MessageBuilder("&eNow select top corner using right click!").prefix().build());
-        break;
-      case RIGHT_CLICK_BLOCK:
-        if(!selections.containsKey(e.getPlayer())) {
-          e.getPlayer()
-              .sendMessage(
-                  new MessageBuilder("&cPlease select bottom corner using left click first!")
-                      .prefix()
-                      .build());
-          break;
-        }
-        selections.put(
-            e.getPlayer(),
-            new Selection(
-                selections.get(e.getPlayer()).getFirstPos(), e.getClickedBlock().getLocation()));
-        e.getPlayer()
-            .sendMessage(
-                new MessageBuilder("&eNow you can add Location via menu!").prefix().build());
-        break;
-      case LEFT_CLICK_AIR:
-        selections.put(e.getPlayer(), new Selection(e.getPlayer().getLocation(), null));
-        e.getPlayer()
-            .sendMessage(
-                new MessageBuilder("&eNow select top corner using right click!").prefix().build());
-        e.getPlayer()
-            .sendMessage(
-                new MessageBuilder(
-                    "&cPlease keep in mind to use blocks instead of player location for precise coordinates!")
-                    .prefix()
-                    .build());
-        break;
-      case RIGHT_CLICK_AIR:
-        if(!selections.containsKey(e.getPlayer())) {
-          e.getPlayer()
-              .sendMessage(
-                  new MessageBuilder("&cPlease select bottom corner using left click first!")
-                      .prefix()
-                      .build());
-          break;
-        }
-        selections.put(
-            e.getPlayer(),
-            new Selection(
-                selections.get(e.getPlayer()).getFirstPos(), e.getPlayer().getLocation()));
-        e.getPlayer()
-            .sendMessage(
-                new MessageBuilder("&eNow you can add Location via menu!").prefix().build());
-        e.getPlayer()
-            .sendMessage(
-                new MessageBuilder(
-                    "&cPlease keep in mind to use blocks instead of player location for precise coordinates!")
-                    .prefix()
-                    .build());
-        break;
-      default:
-        break;
-    }
   }
 
   public static class Selection {

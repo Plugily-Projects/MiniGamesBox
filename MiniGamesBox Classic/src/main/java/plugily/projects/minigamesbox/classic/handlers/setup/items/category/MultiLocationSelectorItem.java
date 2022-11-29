@@ -126,7 +126,7 @@ public class MultiLocationSelectorItem implements CategoryItemHandler {
     String progress = value >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
     new MessageBuilder(progress + "&a" + name.toUpperCase() + " spawn added! &8(&7" + value + "/" + minimumValue + "&8)").prefix().send(player);
     if(value == minimumValue) {
-      new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
+      new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + " " + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
   }
 

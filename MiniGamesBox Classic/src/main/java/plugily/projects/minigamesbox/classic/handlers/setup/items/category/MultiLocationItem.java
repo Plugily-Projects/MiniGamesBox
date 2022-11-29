@@ -201,7 +201,7 @@ public class MultiLocationItem implements CategoryItemHandler {
     String progress = locs.size() >= minimumValue ? "&e✔ Completed | " : "&c✘ Not completed | ";
     new MessageBuilder(progress + "&a" + name.toUpperCase() + " spawn added! &8(&7" + locs.size() + "/" + minimumValue + "&8)").prefix().send(player);
     if(locs.size() == minimumValue) {
-      new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + "" + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
+      new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + " " + name.toUpperCase() + " spawns! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
   }
 
