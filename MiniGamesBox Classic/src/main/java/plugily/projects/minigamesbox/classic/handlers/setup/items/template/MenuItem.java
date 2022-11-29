@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.items.template;
 
 import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -58,6 +59,6 @@ public class MenuItem implements ClickableItem {
     setupInventory.setArenaKey(null);
     SetupInventoryUtils.removeSetupInventory(event.getWhoClicked());
     ConfigUtils.saveConfig(setupInventory.getPlugin(), setupInventory.getConfig(), "arenas");
-    setupInventory.getPlugin().getSetupInventory((Player) event.getWhoClicked()).open(SetupInventoryUtils.SetupInventoryStage.HOME);
+    Bukkit.getScheduler().runTask(setupInventory.getPlugin(), () -> setupInventory.getPlugin().getSetupInventory((Player) event.getWhoClicked()).open(SetupInventoryUtils.SetupInventoryStage.HOME));
   }
 }
