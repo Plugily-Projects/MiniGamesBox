@@ -96,7 +96,7 @@ public class ValueItem implements CategoryItemHandler {
           @Override
           public Prompt acceptInput(ConversationContext context, String input) {
             String name = new MessageBuilder(input, false).build();
-            context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of " + setupInventory.getArenaKey() + " set to " + name).build());
+            context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aName of &7" + setupInventory.getArenaKey() + " &aset to &r" + name).build());
             setupInventory.setConfig(keyName, name);
             return Prompt.END_OF_CONVERSATION;
           }
