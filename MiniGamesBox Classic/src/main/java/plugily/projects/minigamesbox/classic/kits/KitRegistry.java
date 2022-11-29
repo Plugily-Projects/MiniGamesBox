@@ -75,7 +75,7 @@ public class KitRegistry {
     if(defaultKit == null) {
       setDefaultKit(new EmptyKit());
     }
-    plugin.getDebugger().debug("getDefaultKit is {0}", defaultKit);
+    plugin.getDebugger().debug("getDefaultKit is {0}", defaultKit.getName());
     return defaultKit;
   }
 
@@ -85,7 +85,7 @@ public class KitRegistry {
    * @param defaultKit default kit to set, must be FreeKit
    */
   public void setDefaultKit(Kit defaultKit) {
-    plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit);
+    plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit.getName());
     this.defaultKit = defaultKit;
   }
 
