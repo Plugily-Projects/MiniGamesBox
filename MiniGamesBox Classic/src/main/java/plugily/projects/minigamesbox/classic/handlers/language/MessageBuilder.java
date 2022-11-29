@@ -93,8 +93,8 @@ public class MessageBuilder {
   }
 
   private void colorChatIssue() {
-    if(message.indexOf("%color_chat_issue%") != -1) {
-      messageColor = plugin.getLanguageManager().getLanguageMessage(plugin.getMessageManager().getPath("COLOR_CHAT_ISSUE"));
+    if(message.contains("%color_chat_issue%")) {
+      messageColor = messageIssueColor;
     }
 
     message = replace(message, "%color_chat_issue%", () -> messageIssueColor);
@@ -181,7 +181,7 @@ public class MessageBuilder {
   }
 
   private void formatExternalArena() {
-   for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
+    for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredInternalPlaceholders()) {
       if(placeholder.getPlaceholderType() != Placeholder.PlaceholderType.GLOBAL) {
         message = replace(message, "%" + placeholder.getId() + "%", () -> placeholderColorOther + placeholder.getValue(arena) + messageColor);
       }
@@ -222,7 +222,7 @@ public class MessageBuilder {
   private String replace(String text, String search, java.util.function.Supplier<String> replacement) {
     int index = text.indexOf(search);
 
-    if (index == -1) {
+    if(index == -1) {
       return text;
     }
 
@@ -230,7 +230,7 @@ public class MessageBuilder {
     int searchLength = search.length();
     int replacementLength = replacement.get().length();
 
-    while ((index = builder.replace(index, index + searchLength, replacement.get()).indexOf(search, index += replacementLength)) != -1) {
+    while((index = builder.replace(index, index + searchLength, replacement.get()).indexOf(search, index += replacementLength)) != -1) {
     }
 
     return builder.toString();
