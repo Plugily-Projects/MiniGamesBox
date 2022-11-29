@@ -118,7 +118,6 @@ public class PluginArenaRegistry {
   public void registerArena(PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Instance registered", arena.getId());
     arenas.add(arena);
-    arena.setReady(true);
     World startWorld = arena.getStartLocation().getWorld();
     World endWorld = arena.getEndLocation().getWorld();
     World lobbyWorld = arena.getLobbyLocation().getWorld();
@@ -202,11 +201,11 @@ public class PluginArenaRegistry {
     PluginArena arena = getNewArena(key);
 
     if(!validatorChecks(section, arena, key) || !additionalValidatorChecks(section, arena, key)) {
-      arena.setReady(false);
       section.set(key + ".isdone", false);
       ConfigUtils.saveConfig(plugin, config, "arenas");
       registerArena(arena);
     } else {
+      arena.setReady(true);
       registerArena(arena);
       arena.start();
       plugin.getDebugger().sendConsoleMsg(new MessageBuilder("VALIDATOR_INSTANCE_STARTED").asKey().arena(arena).build());

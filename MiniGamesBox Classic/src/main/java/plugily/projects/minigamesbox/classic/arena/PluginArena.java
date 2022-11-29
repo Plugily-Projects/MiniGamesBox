@@ -79,7 +79,7 @@ public class PluginArena extends BukkitRunnable {
   private boolean forceStart = false;
   private boolean forceArenaState = false;
   private boolean forceArenaTimer = false;
-  private boolean ready = true;
+  private boolean ready = false;
 
   @TestOnly
   protected PluginArena(String id, String mapName) {
