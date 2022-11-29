@@ -98,6 +98,10 @@ public class RegisterItem implements ClickableItem {
     switch(registerStatus) {
       case ARENA_READY:
       case ARENA_REGISTER:
+        PluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
+        if(arena != null) {
+          arena.setReady(true);
+        }
         setupInventory.closeInventory(event.getWhoClicked());
         break;
       case ARENA_SETUP:
