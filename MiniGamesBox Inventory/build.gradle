@@ -18,7 +18,6 @@ build {
 shadowJar {
     archiveClassifier.set('')
     relocate 'fr.mrmicky.fastinv', 'plugily.projects.minigamesbox.inventory.utils.fastinv'
-    minimize()
 }
 
 description = 'MiniGamesBox-Inventory'
