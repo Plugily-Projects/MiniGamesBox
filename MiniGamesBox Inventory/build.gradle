@@ -4,9 +4,14 @@ plugins {
     id 'java'
 }
 
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
     implementation 'fr.mrmicky:FastInv:3.0.3'
 }
+
 
 shadowJar {
     archiveClassifier.set('')
