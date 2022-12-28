@@ -1,4 +1,4 @@
-package plugily.projects.commonsbox.sorter;
+package plugily.projects.minigamesbox.sorter;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package plugily.projects.commonsbox.number;
+package plugily.projects.minigamesbox.number;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

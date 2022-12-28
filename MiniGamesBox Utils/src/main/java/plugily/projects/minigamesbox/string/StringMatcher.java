@@ -1,4 +1,4 @@
-package plugily.projects.commonsbox.string;
+package plugily.projects.minigamesbox.string;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package plugily.projects.commonsbox.string;
+package plugily.projects.minigamesbox.string;
 
 /**
  * @author Plajer

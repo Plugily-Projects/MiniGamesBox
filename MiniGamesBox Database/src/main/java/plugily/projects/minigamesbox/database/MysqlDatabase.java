@@ -1,4 +1,4 @@
-package plugily.projects.commonsbox.database;
+package plugily.projects.minigamesbox.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 

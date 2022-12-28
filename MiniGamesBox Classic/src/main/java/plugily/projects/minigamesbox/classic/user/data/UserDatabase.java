@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.user.data;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import plugily.projects.commonsbox.database.MysqlDatabase;
+import plugily.projects.minigamesbox.database.MysqlDatabase;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
 

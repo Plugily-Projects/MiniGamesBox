@@ -27,7 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.commonsbox.number.NumberUtils;
+import plugily.projects.minigamesbox.number.NumberUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerPowerupPickupEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;

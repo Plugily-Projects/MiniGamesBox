@@ -22,7 +22,7 @@ package plugily.projects.minigamesbox.classic.utils.actionbar;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import plugily.projects.commonsbox.string.StringFormatUtils;
+import plugily.projects.minigamesbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
