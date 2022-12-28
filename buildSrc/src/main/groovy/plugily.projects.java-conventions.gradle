@@ -4,6 +4,7 @@
 
 plugins {
     id 'java-library'
+    id 'signing'
     id 'maven-publish'
 }
 
@@ -63,9 +64,27 @@ javadoc {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "Releases"
+            url = "https://maven.plugily.xyz/releases"
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+        maven {
+            name = "Snapshots"
+            url = uri("https://maven.plugily.xyz/snapshots")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
     publications {
         maven(MavenPublication) {
-            from(components.java)
+            from components.java
         }
     }
 }

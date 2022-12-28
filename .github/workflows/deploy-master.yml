@@ -16,10 +16,9 @@ jobs:
         run: chmod +x gradlew
       - name: Bump Version
         id: bump
-        uses: Plugily-Projects/version-bump-action@development
+        uses: Plugily-Projects/version-bump-action@v8
         with:
           github-token: ${{ secrets.github_token }}
-          repo-build: GRADLE
           auto-version-bump: false
           auto-version-bump-release: true
       - name: Print Version
@@ -41,7 +40,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Publish with Gradle
-        run: ./gradlew build publishMavenPublicationToReleasesRepository
+        run: ./gradlew shadowJar javadocJar publishMavenPublicationToReleasesRepository
         env:
           MAVEN_USERNAME: ${{ secrets.RELEASESUSERNAME }}
           MAVEN_PASSWORD: ${{ secrets.RELEASESPASSWORD }}
