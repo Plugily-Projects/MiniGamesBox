@@ -2,7 +2,6 @@ plugins {
     id 'plugily.projects.java-conventions'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java'
-    id "org.sonarqube" version "3.5.0.2730"
 }
 
 dependencies {
