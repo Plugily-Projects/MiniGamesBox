@@ -10,6 +10,8 @@ build {
     dependsOn(shadowJar)
 }
 shadowJar {
+    exclude 'META-INF/**'
+    exclude 'module-info.class'
     archiveClassifier.set('')
 }
 

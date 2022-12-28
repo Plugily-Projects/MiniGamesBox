@@ -16,6 +16,8 @@ build {
     dependsOn(shadowJar)
 }
 shadowJar {
+    exclude 'META-INF/**'
+    exclude 'module-info.class'
     archiveClassifier.set('')
     relocate 'fr.mrmicky.fastinv', 'plugily.projects.minigamesbox.inventory.utils.fastinv'
 }
