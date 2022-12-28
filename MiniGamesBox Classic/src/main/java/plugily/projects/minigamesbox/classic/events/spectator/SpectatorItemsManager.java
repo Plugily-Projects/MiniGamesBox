@@ -19,7 +19,6 @@
 package plugily.projects.minigamesbox.classic.events.spectator;
 
 import com.cryptomorin.xseries.XMaterial;
-import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -32,6 +31,7 @@ import plugily.projects.minigamesbox.classic.events.spectator.settings.Spectator
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
+import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
 import java.util.Collections;
 
@@ -52,7 +52,7 @@ public class SpectatorItemsManager implements Listener {
   }
 
   public void openSpectatorMenu(Player player, PluginArena arena) {
-    FastInv gui = new FastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME").asKey().build());
+    NormalFastInv gui = new NormalFastInv(plugin.getBukkitHelper().serializeInt(arena.getPlayers().size()), new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_NAME").asKey().build());
 
     ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
 

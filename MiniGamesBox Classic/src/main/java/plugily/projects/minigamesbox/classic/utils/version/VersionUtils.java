@@ -307,10 +307,9 @@ public final class VersionUtils {
         if(dustTransition == null) {
           dustTransition = new org.bukkit.Particle.DustTransition(Color.fromRGB(255, 0, 0), Color.fromRGB(255, 255, 255), 1.0F);
         }
-
         return dustTransition;
       }
-
+      /*
       try {
         if(particle == Particle.VIBRATION) {
           if(isPaper) {
@@ -319,9 +318,8 @@ public final class VersionUtils {
           return new org.bukkit.Vibration(location, new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
         }
       } catch(NoClassDefFoundError ignored) {
-      }
+      }*/
     }
-
     return null;
   }
 

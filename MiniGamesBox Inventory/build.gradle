@@ -1,0 +1,17 @@
+plugins {
+    id 'plugily.projects.java-conventions'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+dependencies {
+    implementation 'fr.mrmicky:FastInv:3.0.3'
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    relocate 'fr.mrmicky.fastinv', 'plugily.projects.minigamesbox.inventory.utils.fastinv'
+    minimize()
+}
+
+description = 'MiniGamesBox-Inventory'

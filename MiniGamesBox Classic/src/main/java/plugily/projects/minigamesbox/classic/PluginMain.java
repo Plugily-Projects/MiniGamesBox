@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic;
 
-import fr.mrmicky.fastinv.FastInvManager;
 import me.tigerhix.lib.scoreboard.ScoreboardLib;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -83,6 +82,7 @@ import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionL
 import plugily.projects.minigamesbox.classic.utils.services.metrics.Metrics;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.EventsInitializer;
+import plugily.projects.minigamesbox.inventory.boot.InventoryManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -193,7 +193,7 @@ public class PluginMain extends JavaPlugin {
     pluginNamePrefixLong = internalData.getString("Plugin.Name.Long", getName()).toLowerCase();
 
     //setup InvManager
-    FastInvManager.register(this);
+    new InventoryManager(this);
 
     //setup ItemManager
     ItemManager.register(this);
