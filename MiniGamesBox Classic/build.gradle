@@ -21,6 +21,16 @@ dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.2'
 }
 
+build {
+    dependsOn(shadowJar)
+}
+
+processResources {
+    filesMatching("**/plugin.yml") {
+        expand( project.properties )
+    }
+}
+
 shadowJar {
     archiveClassifier.set('')
     relocate 'com.cryptomorin.xseries.particles', 'plugily.projects.minigamesbox.classic.utils.version.xseries'

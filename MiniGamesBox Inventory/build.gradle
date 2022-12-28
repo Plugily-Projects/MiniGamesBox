@@ -12,7 +12,9 @@ dependencies {
     implementation 'fr.mrmicky:FastInv:3.0.3'
 }
 
-
+build {
+    dependsOn(shadowJar)
+}
 shadowJar {
     archiveClassifier.set('')
     relocate 'fr.mrmicky.fastinv', 'plugily.projects.minigamesbox.inventory.utils.fastinv'

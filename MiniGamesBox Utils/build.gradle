@@ -6,7 +6,9 @@ plugins {
 
 dependencies {
 }
-
+build {
+    dependsOn(shadowJar)
+}
 shadowJar {
     archiveClassifier.set('')
     minimize()
