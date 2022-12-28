@@ -25,6 +25,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.ChatPaginator;
+import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 
 import java.util.Arrays;
@@ -64,7 +66,11 @@ public class ItemBuilder {
   }
 
   public ItemBuilder data(byte data) {
-    Objects.requireNonNull(this.itemStack.getData()).setData(data);
+    org.bukkit.material.MaterialData materialData = this.itemStack.getData();
+
+    if(materialData != null) {
+      materialData.setData(data);
+    }
     return this;
   }
 
@@ -84,12 +90,11 @@ public class ItemBuilder {
   }
 
   public ItemBuilder enchantment(Enchantment enchantment) {
-    this.itemStack.addUnsafeEnchantment(enchantment, 1);
-    return this;
+    return enchantment(enchantment, 1);
   }
 
   public ItemBuilder enchantment(Enchantment enchantment, int level) {
-    this.itemStack.addUnsafeEnchantment(enchantment, level);
+    this.itemMeta.addEnchant(enchantment, level, true);
     return this;
   }
 
@@ -103,6 +108,13 @@ public class ItemBuilder {
     return this;
   }
 
+  public ItemBuilder removeLore() {
+    List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
+    lore.clear();
+    ComplementAccessor.getComplement().setLore(itemMeta, lore);
+    return this;
+  }
+
   public ItemBuilder lore(String lore) {
     return lore(Collections.singletonList(lore));
   }
@@ -112,9 +124,24 @@ public class ItemBuilder {
   }
 
   public ItemBuilder lore(final List<String> name) {
+    lore(name, true);
+    return this;
+  }
+
+  public ItemBuilder lore(final List<String> name, boolean wordWrap) {
     List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
     if(name != null) {
-      lore.addAll(name);
+      if(wordWrap) {
+        for(String line : name) {
+          String lastColor = "";
+          for(String splitLine : ChatPaginator.wordWrap(line, 40)) {
+            lore.add(lastColor + splitLine);
+            lastColor = ChatColor.getLastColors(splitLine);
+          }
+        }
+      } else {
+        lore.addAll(name);
+      }
     }
     ComplementAccessor.getComplement().setLore(itemMeta, lore);
     return this;
@@ -123,15 +150,12 @@ public class ItemBuilder {
   public ItemBuilder colorizeItem() {
     if(itemMeta.hasDisplayName()) {
       ComplementAccessor.getComplement().setDisplayName(itemMeta,
-          ChatColor.translateAlternateColorCodes('&', ComplementAccessor.getComplement().getDisplayName(itemMeta)));
+          new MessageBuilder(ComplementAccessor.getComplement().getDisplayName(itemMeta)).build());
     }
     if(itemMeta.hasLore()) {
       List<String> lore = ComplementAccessor.getComplement().getLore(itemMeta);
-      int size = lore.size();
 
-      for(int a = 0; a < size; a++) {
-        lore.set(a, ChatColor.translateAlternateColorCodes('&', lore.get(a)));
-      }
+      lore.replaceAll(textToTranslate -> new MessageBuilder(textToTranslate).build());
 
       ComplementAccessor.getComplement().setLore(itemMeta, lore);
     }

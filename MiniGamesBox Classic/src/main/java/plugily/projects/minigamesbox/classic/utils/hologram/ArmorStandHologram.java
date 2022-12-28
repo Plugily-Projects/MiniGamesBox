@@ -20,16 +20,20 @@
 package plugily.projects.minigamesbox.classic.utils.hologram;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,6 +47,8 @@ public class ArmorStandHologram {
   private ItemStack item;
   private List<String> lines = new ArrayList<>();
   private Location location;
+  private PickupHandler pickupHandler = null;
+  private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
   private final List<ArmorStand> armorStands = new ArrayList<>();
 
@@ -51,19 +57,20 @@ public class ArmorStandHologram {
 
   public ArmorStandHologram(Location location) {
     this.location = location;
+    plugin.getHologramManager().getHolograms().add(this);
   }
 
   public ArmorStandHologram(Location location, @NotNull String... lines) {
     this.location = location;
     this.lines = Arrays.asList(lines);
-
+    plugin.getHologramManager().getHolograms().add(this);
     append();
   }
 
   public ArmorStandHologram(Location location, @NotNull List<String> lines) {
     this.location = location;
     this.lines = lines;
-
+    plugin.getHologramManager().getHolograms().add(this);
     append();
   }
 
@@ -93,14 +100,32 @@ public class ArmorStandHologram {
     return armorStands;
   }
 
-  public ArmorStandHologram appendLines(@NotNull String... lines) {
+  public ArmorStandHologram overwriteLines(@NotNull String... lines) {
     this.lines = Arrays.asList(lines);
     append();
     return this;
   }
 
-  public ArmorStandHologram appendLines(@NotNull List<String> lines) {
+  public ArmorStandHologram overwriteLines(@NotNull List<String> lines) {
     this.lines = lines;
+    append();
+    return this;
+  }
+
+  public ArmorStandHologram overwriteLine(@NotNull String line) {
+    this.lines = Collections.singletonList(line);
+    append();
+    return this;
+  }
+
+  public ArmorStandHologram appendLines(@NotNull String... lines) {
+    this.lines.addAll(Arrays.asList(lines));
+    append();
+    return this;
+  }
+
+  public ArmorStandHologram appendLines(@NotNull List<String> lines) {
+    this.lines.addAll(lines);
     append();
     return this;
   }
@@ -121,11 +146,12 @@ public class ArmorStandHologram {
     for(ArmorStand armor : armorStands) {
       armor.setCustomNameVisible(false);
       armor.remove();
-      HologramManager.getArmorStands().remove(armor);
+      plugin.getHologramManager().getArmorStands().remove(armor);
     }
     if(entityItem != null) {
       entityItem.remove();
     }
+    plugin.getHologramManager().getHolograms().remove(this);
     armorStands.clear();
   }
 
@@ -136,7 +162,7 @@ public class ArmorStandHologram {
   private void append() {
     delete();
 
-    org.bukkit.World world = location.getWorld();
+    World world = location.getWorld();
     if(world == null) {
       return;
     }
@@ -144,12 +170,13 @@ public class ArmorStandHologram {
     double distanceAbove = -0.27;
     double y = location.getY();
 
-    for(int i = 0; i <= lines.size() - 1; i++) {
+    for(String line : lines) {
       y += distanceAbove;
-      ArmorStand eas = getEntityArmorStand(location, y);
-      eas.setCustomName(lines.get(i));
-      armorStands.add(eas);
-      HologramManager.getArmorStands().add(eas);
+      ArmorStand armorStand = getEntityArmorStand(y);
+      armorStand.setCustomName(line);
+      plugin.getDebugger().debug("Creating armorstand with name {0}", line);
+      armorStands.add(armorStand);
+      plugin.getHologramManager().getArmorStands().add(armorStand);
     }
 
     if(item != null && item.getType() != org.bukkit.Material.AIR) {
@@ -166,7 +193,7 @@ public class ArmorStandHologram {
       if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R3)) {
         entityItem.setInvulnerable(true);
       }
-      entityItem.teleport(location);
+      VersionUtils.teleport(entityItem, location);
     }
   }
 
@@ -174,22 +201,45 @@ public class ArmorStandHologram {
    * @param y the y axis of the hologram
    * @return {@link ArmorStand}
    */
-  private ArmorStand getEntityArmorStand(Location loc, double y) {
+  private ArmorStand getEntityArmorStand(double y) {
+    Location loc = location.clone();
     loc.setY(y);
-    if(location != null) {
-      location.getWorld().getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
-        if(entity instanceof ArmorStand && !armorStands.contains(entity) && !HologramManager.getArmorStands().contains(entity)) {
+
+    World world = loc.getWorld();
+    if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R1)) {
+      world.getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
+        if(entity instanceof ArmorStand && !armorStands.contains(entity) && !plugin.getHologramManager().getArmorStands().contains(entity)) {
           entity.remove();
           entity.setCustomNameVisible(false);
-          HologramManager.getArmorStands().remove(entity);
+          plugin.getHologramManager().getArmorStands().remove(entity);
         }
       });
     }
-    ArmorStand stand = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+    ArmorStand stand = (ArmorStand) world.spawnEntity(loc, EntityType.ARMOR_STAND);
     stand.setVisible(false);
     stand.setGravity(false);
     stand.setCustomNameVisible(true);
     return stand;
+  }
+
+  /**
+   * Set a handler which triggers on player pickup item event
+   *
+   * @param handler which should be executed on pickup
+   */
+  public ArmorStandHologram setPickupHandler(PickupHandler handler) {
+    plugin.getHologramManager().getHolograms().remove(this);
+    this.pickupHandler = handler;
+    plugin.getHologramManager().getHolograms().add(this);
+    return this;
+  }
+
+  public PickupHandler getPickupHandler() {
+    return pickupHandler;
+  }
+
+  public boolean hasPickupHandler() {
+    return pickupHandler != null;
   }
 
 }

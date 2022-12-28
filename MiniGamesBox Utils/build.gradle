@@ -1,0 +1,17 @@
+plugins {
+    id 'plugily.projects.java-conventions'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+dependencies {
+}
+build {
+    dependsOn(shadowJar)
+}
+shadowJar {
+    archiveClassifier.set('')
+    minimize()
+}
+
+description = 'MiniGamesBox-Utils'

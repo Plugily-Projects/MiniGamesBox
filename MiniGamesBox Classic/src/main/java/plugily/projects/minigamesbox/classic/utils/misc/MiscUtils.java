@@ -24,18 +24,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion.Version;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 import java.util.Optional;
 import java.util.Random;
@@ -43,9 +44,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 09.03.2019
+ * Created at 01.11.2021
  */
 public class MiscUtils {
 
@@ -63,7 +64,7 @@ public class MiscUtils {
     Matcher matcher = PATTERN.matcher(s);
     while(matcher.find()) {
       try {
-        s = s.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)) + "");
+        s = s.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)).toString());
       } catch(Exception e) {
         System.err.println("Invalid hex color: " + e.getLocalizedMessage());
       }
@@ -72,20 +73,9 @@ public class MiscUtils {
     return s;
   }
 
-  // https://www.spigotmc.org/threads/comprehensive-particle-spawning-guide-1-13.343001/
   @Deprecated
-  public static void spawnParticle(org.bukkit.Particle particle, Location loc, int count, double offsetX, double offsetY, double offsetZ, double extra) {
-    if(Version.isCurrentEqualOrHigher(Version.v1_13_R2) && particle == org.bukkit.Particle.REDSTONE) {
-      org.bukkit.Particle.DustOptions dustOptions = new org.bukkit.Particle.DustOptions(Color.RED, 2);
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, dustOptions);
-    } else if(particle == org.bukkit.Particle.ITEM_CRACK) {
-      ItemStack itemCrackData = new ItemStack(loc.getBlock().getType());
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, itemCrackData);
-    } else if(particle == org.bukkit.Particle.BLOCK_CRACK || particle == org.bukkit.Particle.BLOCK_DUST || particle == org.bukkit.Particle.FALLING_DUST) {
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra, loc.getBlock().getType().createBlockData());
-    } else {
-      loc.getWorld().spawnParticle(particle, loc, count, offsetX, offsetY, offsetZ, extra);
-    }
+  public static void spawnParticle(Particle particle, Location loc, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+    VersionUtils.sendParticles(particle.name(), null, loc, count, offsetX, offsetY, offsetZ, extra);
   }
 
   public static Optional<AttributeInstance> getEntityAttribute(LivingEntity entity, Attribute attribute) {
@@ -160,7 +150,7 @@ public class MiscUtils {
     boolean isBold = false;
 
     for(char c : message.toCharArray()) {
-      if(c == '§') {
+      if(c == "§".charAt(0)) {
         previousCode = true;
       } else if(previousCode) {
         previousCode = false;
@@ -178,7 +168,7 @@ public class MiscUtils {
       sb.append(' ');
       compensated += spaceLength;
     }
-    player.sendMessage(sb.toString() + message);
+    player.sendMessage(sb + message);
   }
 
 

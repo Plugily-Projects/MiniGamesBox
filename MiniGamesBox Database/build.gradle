@@ -1,0 +1,18 @@
+plugins {
+    id 'plugily.projects.java-conventions'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+dependencies {
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+}
+build {
+    dependsOn(shadowJar)
+}
+shadowJar {
+    archiveClassifier.set('')
+    minimize()
+}
+
+description = 'MiniGamesBox-Database'

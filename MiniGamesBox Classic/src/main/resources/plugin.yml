@@ -1,0 +1,35 @@
+name: ${description}
+main: plugily.projects.PlugilyProjects.Main
+authors: [ PlugilyProjects, Tigerpanzer_02 ]
+version: ${version}
+softdepend: [ PlaceholderAPI, Parties, Spigot-Party-API-PAF, PartyAndFriends, ViaVersion, ProtocolSupport ]
+api-version: 1.13
+
+commands:
+  PlugilyProjects:
+    description: PlugilyProjects Commands
+    usage: "\u00A76Correct usage: /PlugilyProjects [option]"
+    aliases: [ PlugilyProjects, PlugilyProjects ]
+  PlugilyProjectsAdmin:
+    description:
+    usage: "\u00A76Correct usage: /PlugilyProjectsa [option]"
+    aliases: [ PlugilyProjectsa, PlugilyProjectsadmin ]
+
+permissions:
+  PlugilyProjects.admin.*:
+    default: op
+    children:
+      PlugilyProjects.updatenotify: true
+      PlugilyProjects.admin: true
+      PlugilyProjects.admin.setup: true
+      PlugilyProjects.admin.delete: true
+      PlugilyProjects.admin.list: true
+      PlugilyProjects.admin.spychat: true
+      PlugilyProjects.admin.stopgame: true
+      PlugilyProjects.admin.forcestart: true
+      PlugilyProjects.admin.addsign: true
+      PlugilyProjects.admin.clear: true
+      PlugilyProjects.admin.sign.create: true
+      PlugilyProjects.admin.sign.break: true
+      PlugilyProjects.admin.reload: true
+      PlugilyProjects.command.override: true

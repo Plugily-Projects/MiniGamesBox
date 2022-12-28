@@ -20,9 +20,9 @@
 package plugily.projects.minigamesbox.classic.utils.misc;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 09.03.2019
+ * Created at 21.09.2021
  */
 enum DefaultFontInfo {
 
@@ -133,21 +133,20 @@ enum DefaultFontInfo {
 
   public static DefaultFontInfo getDefaultFontInfo(char c) {
     for(DefaultFontInfo dFI : DefaultFontInfo.values()) {
-      if(dFI.getCharacter() == c) return dFI;
+      if(dFI.character == c) return dFI;
     }
     return DefaultFontInfo.DEFAULT;
   }
 
   public char getCharacter() {
-    return this.character;
+    return character;
   }
 
   public int getLength() {
-    return this.length;
+    return length;
   }
 
   public int getBoldLength() {
-    if(this == DefaultFontInfo.SPACE) return this.getLength();
-    return this.length + 1;
+    return this == DefaultFontInfo.SPACE ? length : length + 1;
   }
 }

@@ -19,29 +19,42 @@
 
 package plugily.projects.minigamesbox.classic.utils.version;
 
+import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
+import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.xseries.XParticleLegacy;
 
@@ -49,16 +62,19 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("deprecation")
 public final class VersionUtils {
 
-  private static boolean isPaper = false, isParticleBuilderSupported = false;
+  private static boolean isPaper, isParticleBuilderSupported;
   private static Class<?> iChatBaseComponent, chatMessageTypeClass;
   private static Constructor<?> packetPlayOutChatConstructor, chatComponentTextConstructor, titleConstructor;
   private static Object chatMessageType, titleField, subTitleField;
+  public static final List<String> PARTICLE_VALUES;
 
   static {
     try {
@@ -68,48 +84,54 @@ public final class VersionUtils {
       isPaper = false;
     }
 
-    iChatBaseComponent = PacketUtils.classByName("net.minecraft.network.chat", "IChatBaseComponent");
-    chatMessageTypeClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatMessageType");
-
-    if(chatMessageTypeClass != null) {
-      for(Object obj : chatMessageTypeClass.getEnumConstants()) {
-        if(obj.toString().equalsIgnoreCase("GAME_INFO") || obj.toString().equalsIgnoreCase("ACTION_BAR")) {
-          chatMessageType = obj;
-          break;
-        }
-      }
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
+      PARTICLE_VALUES = Stream.of(Particle.values()).map(Enum::toString).collect(Collectors.toList());
+    } else {
+      PARTICLE_VALUES = Stream.of(XParticleLegacy.values()).map(Enum::toString).collect(Collectors.toList());
     }
 
     try {
       Particle.class.getMethod("builder");
       isParticleBuilderSupported = true;
-    } catch(NoSuchMethodException ignored) {
+    } catch(NoSuchMethodException | NoClassDefFoundError ignored) {
     }
 
-    try {
-      Class<?> chatcomponentTextClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatComponentText");
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
+      iChatBaseComponent = PacketUtils.classByName("net.minecraft.network.chat", "IChatBaseComponent");
+      chatMessageTypeClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatMessageType");
 
-      if(chatcomponentTextClass != null) {
-        chatComponentTextConstructor = chatcomponentTextClass.getConstructor(String.class);
-      }
-
-      Class<?> packetPlayOutChatClass = PacketUtils.classByName("net.minecraft.network.protocol.game", "PacketPlayOutChat");
-
-      if(packetPlayOutChatClass != null) {
-        if(chatMessageTypeClass == null) {
-          packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent, byte.class);
-        } else if(chatMessageType != null) {
-          try {
-            packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
-                chatMessageTypeClass);
-          } catch(NoSuchMethodException e) {
-            packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
-                chatMessageTypeClass, UUID.class);
+      if(chatMessageTypeClass != null) {
+        for(Object obj : chatMessageTypeClass.getEnumConstants()) {
+          if(obj.toString().equalsIgnoreCase("GAME_INFO") || obj.toString().equalsIgnoreCase("ACTION_BAR")) {
+            chatMessageType = obj;
+            break;
           }
         }
       }
+      try {
+        Class<?> chatcomponentTextClass = PacketUtils.classByName("net.minecraft.network.chat", "ChatComponentText");
 
-      if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
+        if(chatcomponentTextClass != null) {
+          chatComponentTextConstructor = chatcomponentTextClass.getConstructor(String.class);
+        }
+
+        Class<?> packetPlayOutChatClass = PacketUtils.classByName("net.minecraft.network.protocol.game", "PacketPlayOutChat");
+
+        if(packetPlayOutChatClass != null) {
+          if(chatMessageTypeClass == null) {
+            packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent, byte.class);
+          } else if(chatMessageType != null) {
+            try {
+              packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
+                  chatMessageTypeClass);
+            } catch(NoSuchMethodException e) {
+              packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponent,
+                  chatMessageTypeClass, UUID.class);
+            }
+          }
+        }
+
+
         Class<?> playOutTitle = PacketUtils.classByName("net.minecraft.network.protocol.game", "PacketPlayOutTitle");
         Class<?>[] titleDeclaredClasses = playOutTitle.getDeclaredClasses();
 
@@ -118,9 +140,8 @@ public final class VersionUtils {
           titleField = titleDeclaredClasses[0].getField("TITLE").get(null);
           subTitleField = titleDeclaredClasses[0].getField("SUBTITLE").get(null);
         }
+      } catch(NoSuchMethodException | NoClassDefFoundError | NoSuchFieldException | IllegalAccessException ignored) {
       }
-    } catch(Exception e) {
-      e.printStackTrace();
     }
   }
 
@@ -148,76 +169,109 @@ public final class VersionUtils {
     return meta;
   }
 
-  public static void sendParticles(String particle, Player player, Location location, int count) {
+  private static JavaPlugin plugin;
+
+  public static void teleport(Entity entity, Location location) {
+    if(isPaper) {
+      // Avoid Future.get() method to be called from the main thread
+
+      if(Bukkit.isPrimaryThread()) { // Checks if the current thread is not async
+        PaperLib.teleportAsync(entity, location);
+        return;
+      }
+
+      if(plugin == null)
+        plugin = JavaPlugin.getPlugin(PluginMain.class);
+
+      try {
+        Bukkit.getScheduler().callSyncMethod(plugin, () -> PaperLib.teleportAsync(entity, location)).get();
+      } catch(InterruptedException | ExecutionException e) {
+        e.printStackTrace();
+      } catch(CancellationException e) {
+        // ignored
+      }
+    } else {
+      entity.teleport(location);
+    }
+  }
+
+  public static void sendParticles(String particleName, Player player, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle pa = Particle.valueOf(particle);
-      location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0, getParticleDataType(pa, location));
+      Particle particle = XParticle.getParticle(particleName);
+      location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
-      Particle p = XParticle.getParticle(particle);
-      Object dataType = getParticleDataType(p, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).spawn();
+        particle.builder().location(location).count(count).extra(0).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).spawn();
+        particle.builder().location(location).data(dataType).count(count).extra(0).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayer(player, location, 0, 0, 0, 0, count);
+        XParticleLegacy.valueOf(particleName).sendToPlayer(player, location, 0, 0, 0, 0, count);
       } catch(Exception ignored) {
       }
     }
   }
 
-  public static void sendParticles(String particle, Set<Player> players, Location location, int count) {
+  public static void sendParticles(String particleName, Set<Player> players, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle pa = Particle.valueOf(particle);
-      location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0, getParticleDataType(pa, location));
+      Particle particle = XParticle.getParticle(particleName);
+      location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
-      Particle p = XParticle.getParticle(particle);
-      Object dataType = getParticleDataType(p, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).spawn();
+        particle.builder().location(location).count(count).extra(0).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).spawn();
+        particle.builder().location(location).data(dataType).count(count).extra(0).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, 0, 0, 0, 0, count, true);
+        XParticleLegacy.valueOf(particleName).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, 0, 0, 0, 0, count, true);
       } catch(Exception ignored) {
       }
     }
   }
 
   public static void sendParticles(String particle, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ) {
+    sendParticles(particle, players, location, count, offsetX, offsetY, offsetZ, 0);
+  }
+
+  public static void sendParticles(String particleName, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle pa = Particle.valueOf(particle);
-      Object dataType = getParticleDataType(pa, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType != null) {
-        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0, dataType);
+        location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, extra, dataType);
       } else {
-        location.getWorld().spawnParticle(pa, location, count, 0, 0, 0, 0);
+        location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, extra);
       }
     } else if(isParticleBuilderSupported) {
-      Particle p = XParticle.getParticle(particle);
-      Object dataType = getParticleDataType(p, location);
+      Particle particle = XParticle.getParticle(particleName);
+      Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
-        p.builder().location(location).count(count).offset(offsetX, offsetY, offsetZ).spawn();
+        particle.builder().location(location).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
       } else {
-        p.builder().location(location).data(dataType).count(count).offset(offsetX, offsetY, offsetZ).spawn();
+        particle.builder().location(location).data(dataType).count(count).offset(offsetX, offsetY, offsetZ).extra(extra).spawn();
       }
     } else {
       try {
-        XParticleLegacy.valueOf(particle).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, (float) offsetX, (float) offsetY, (float) offsetZ, 0, count, true);
+        XParticleLegacy.valueOf(particleName).sendToPlayers(players == null ? Bukkit.getOnlinePlayers() : players, location, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, true);
       } catch(Exception ignored) {
       }
     }
   }
 
-  // Some of the particle in new versions needs their own data type
+  private static org.bukkit.Particle.DustTransition dustTransition;
+
+  // Some particle in new versions needs their own data type
+  // See https://www.spigotmc.org/threads/343001/
   private static Object getParticleDataType(Particle particle, Location location) {
     if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13_R2) && particle == Particle.REDSTONE) {
       return new Particle.DustOptions(Color.RED, 2);
@@ -227,7 +281,9 @@ public final class VersionUtils {
       return new ItemStack(location.getBlock().getType());
     }
 
-    if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)) {
+    if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST
+        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)
+        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_18_R1) && particle == Particle.BLOCK_MARKER)) {
       return location.getBlock().getType().createBlockData();
     }
 
@@ -242,15 +298,34 @@ public final class VersionUtils {
       }
     }
 
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_19_R1) && (particle == Particle.SCULK_CHARGE || particle == Particle.SHRIEK)) {
+      return 0;
+    }
+
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17_R1)) {
+      if(particle == Particle.DUST_COLOR_TRANSITION) {
+        if(dustTransition == null) {
+          dustTransition = new org.bukkit.Particle.DustTransition(Color.fromRGB(255, 0, 0), Color.fromRGB(255, 255, 255), 1.0F);
+        }
+        return dustTransition;
+      }
+      /*
+      try {
+        if(particle == Particle.VIBRATION) {
+          if(isPaper) {
+            return new org.bukkit.Vibration(new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
+          }
+          return new org.bukkit.Vibration(location, new org.bukkit.Vibration.Destination.BlockDestination(location), 40);
+        }
+      } catch(NoClassDefFoundError ignored) {
+      }*/
+    }
     return null;
   }
 
+  @Deprecated
   public static List<String> getParticleValues() {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      return Stream.of(Particle.values()).map(Enum::toString).collect(Collectors.toList());
-    }
-
-    return Stream.of(XParticleLegacy.values()).map(Enum::toString).collect(Collectors.toList());
+    return PARTICLE_VALUES;
   }
 
   public static void updateNameTagsVisibility(Player player, Player other, String tag, boolean remove) {
@@ -377,11 +452,7 @@ public final class VersionUtils {
     }
 
     java.util.Optional<org.bukkit.attribute.AttributeInstance> at = MiscUtils.getEntityAttribute(entity, Attribute.GENERIC_MAX_HEALTH);
-    if(at.isPresent()) {
-      return at.get().getValue();
-    }
-
-    return 20D;
+    return at.map(AttributeInstance::getValue).orElse(20D);
   }
 
   public static void setMaxHealth(Player player, double health) {
@@ -407,6 +478,14 @@ public final class VersionUtils {
     return player.getInventory().getItemInMainHand();
   }
 
+  public static void setMaterialCooldown(HumanEntity entity, Material material, int ticks) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
+      ///no method on 1.8!
+      return;
+    }
+    entity.setCooldown(material, ticks);
+  }
+
   public static void setItemInHand(Player player, ItemStack stack) {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
       player.setItemInHand(stack);
@@ -416,28 +495,35 @@ public final class VersionUtils {
   }
 
   public static void setItemInHand(LivingEntity entity, ItemStack stack) {
-    if(entity.getEquipment() == null) {
+    org.bukkit.inventory.EntityEquipment equipment = entity.getEquipment();
+
+    if(equipment == null) {
       return;
     }
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
-      entity.getEquipment().setItemInHand(stack);
+      equipment.setItemInHand(stack);
       return;
     }
-    entity.getEquipment().setItemInMainHand(stack);
+    equipment.setItemInMainHand(stack);
   }
 
   public static void setItemInHandDropChance(LivingEntity entity, float chance) {
-    if(entity.getEquipment() == null) {
+    org.bukkit.inventory.EntityEquipment equipment = entity.getEquipment();
+
+    if(equipment == null) {
       return;
     }
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
-      entity.getEquipment().setItemInHandDropChance(chance);
+      equipment.setItemInHandDropChance(chance);
       return;
     }
-    entity.getEquipment().setItemInMainHandDropChance(chance);
+    equipment.setItemInMainHandDropChance(chance);
   }
 
+  @Deprecated //for outside use, recommend to use ActionBarManager!
   public static void sendActionBar(Player player, String message) {
+    if(player == null)
+      return;
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R1)) {
       try {
         if(chatMessageTypeClass == null) {
@@ -461,6 +547,8 @@ public final class VersionUtils {
 
   public static void sendTitles(Player player, String title, String subtitle, int fadeInTime, int showTime,
                                 int fadeOutTime) {
+    if(player == null)
+      return;
     if(title == null && subtitle == null) {
       return;
     }
@@ -477,6 +565,8 @@ public final class VersionUtils {
   }
 
   public static void sendTitle(Player player, String text, int fadeInTime, int showTime, int fadeOutTime) {
+    if(player == null)
+      return;
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
       try {
         Object chatTitle = null;
@@ -497,6 +587,8 @@ public final class VersionUtils {
   }
 
   public static void sendSubTitle(Player player, String text, int fadeInTime, int showTime, int fadeOutTime) {
+    if(player == null)
+      return;
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
       try {
         Object chatTitle = null;
@@ -514,6 +606,41 @@ public final class VersionUtils {
     } else {
       player.sendTitle(null, text, fadeInTime, showTime, fadeOutTime);
     }
+  }
+
+  public static ItemStack getPotion(PotionType type, int tier, boolean splash) {
+    ItemStack potion;
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
+      potion = new Potion(type, tier, splash).toItemStack(1);
+    } else {
+      potion = new ItemStack(!splash ? Material.POTION : Material.SPLASH_POTION, 1);
+      PotionMeta meta = (PotionMeta) potion.getItemMeta();
+      meta.setBasePotionData(new PotionData(type, false, tier >= 2 && !splash));
+      potion.setItemMeta(meta);
+    }
+    return potion;
+  }
+
+  public static void playSound(Location loc, String sound) {
+    XSound.matchXSound(sound).orElse(XSound.BLOCK_ANVIL_HIT).play(loc, 1, 1);
+  }
+
+  public static int getWorldMaxHeight(World world) {
+    return world.getMaxHeight();
+  }
+
+  public static int getWorldMinHeight(World world) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R3)) {
+      return world.getMinHeight();
+    }
+    return 0;
+  }
+
+  public static Entity spawnEntity(Location location, EntityType entityType) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_15_R2)) {
+      return location.getWorld().spawnEntity(location, entityType);
+    }
+    return location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM);
   }
 
 }

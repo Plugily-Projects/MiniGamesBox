@@ -29,9 +29,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author Plajer
+ * @author Tigerpanzer_02
  * <p>
- * Created at 09.03.2019
+ * Created at 21.09.2021
  */
 public class ConfigUtils {
 
@@ -43,10 +43,27 @@ public class ConfigUtils {
    * @return FileConfiguration to edit file
    */
   public static FileConfiguration getConfig(JavaPlugin plugin, String filename) {
+    return getConfig(plugin, filename, true);
+  }
+
+  /**
+   * Gets fileconfiguration from data folder of plugin, creates new if not exists
+   *
+   * @param plugin     javaplugin to get datafolder
+   * @param filename   file name (without .yml)
+   * @param createFile should it create file if not found
+   * @return FileConfiguration to edit file
+   */
+  public static FileConfiguration getConfig(JavaPlugin plugin, String filename, boolean createFile) {
     File file = new File(plugin.getDataFolder() + File.separator + filename + ".yml");
     if(!file.exists()) {
-      plugin.getLogger().info("Creating " + filename + ".yml because it does not exist!");
-      plugin.saveResource(filename + ".yml", true);
+      if(createFile) {
+        plugin.getLogger().info("Creating " + filename + ".yml because it does not exist!");
+        plugin.saveResource(filename + ".yml", true);
+      } else {
+        plugin.getLogger().info("File " + filename + ".yml does not exist!");
+        return null;
+      }
     }
     file = new File(plugin.getDataFolder(), filename + ".yml");
     YamlConfiguration config = new YamlConfiguration();

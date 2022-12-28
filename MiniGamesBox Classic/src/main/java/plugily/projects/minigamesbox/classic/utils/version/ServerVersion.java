@@ -50,7 +50,9 @@ public class ServerVersion {
     v1_17_R1,
     v1_17_R2,
     v1_18_R1,
-    v1_18_R2;
+    v1_18_R2,
+    v1_19_R1,
+    v1_19_R2;
 
     private final int value;
 
@@ -58,7 +60,7 @@ public class ServerVersion {
     private static Version current;
 
     Version() {
-      value = Integer.valueOf(name().replaceAll("[^\\d.]", ""));
+      value = Integer.parseInt(name().replaceAll("[^\\d.]", ""));
     }
 
     public int getValue() {

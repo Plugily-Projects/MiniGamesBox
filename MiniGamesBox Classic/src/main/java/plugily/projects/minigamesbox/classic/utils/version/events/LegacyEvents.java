@@ -23,17 +23,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBEntityPickupItemEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBInventoryClickEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEntityEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerInteractEvent;
-import plugily.projects.minigamesbox.classic.utils.version.events.api.CBPlayerPickupArrow;
+import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
+import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerPickupArrow;
 
 /**
  * @author Tigerpanzer_02
@@ -48,7 +47,7 @@ public class LegacyEvents implements Listener {
 
   @EventHandler
   public void onEntityPickupItem(PlayerPickupItemEvent event) {
-    CBEntityPickupItemEvent cbEvent = new CBEntityPickupItemEvent(event.getPlayer(), event.getItem(), event.getRemaining());
+    PlugilyEntityPickupItemEvent cbEvent = new PlugilyEntityPickupItemEvent(event.getPlayer(), event.getItem(), event.getRemaining());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
@@ -60,7 +59,7 @@ public class LegacyEvents implements Listener {
     if(!(event.getItem() instanceof Projectile)) {
       return;
     }
-    CBPlayerPickupArrow cbEvent = new CBPlayerPickupArrow(event.getPlayer(), event.getItem(), (Projectile) event.getItem(), event.getRemaining(), event.getFlyAtPlayer());
+    PlugilyPlayerPickupArrow cbEvent = new PlugilyPlayerPickupArrow(event.getPlayer(), event.getItem(), (Projectile) event.getItem(), event.getRemaining(), VersionUtils.isPaper() && event.getFlyAtPlayer());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
@@ -69,7 +68,7 @@ public class LegacyEvents implements Listener {
 
   @EventHandler
   public void onPlayerInteractEvent(PlayerInteractEvent event) {
-    CBPlayerInteractEvent cbEvent = new CBPlayerInteractEvent(event.getPlayer(), event.getItem(), EquipmentSlot.HAND, event.getAction(), event.getBlockFace(), event.getClickedBlock(), event.getMaterial(),  event.hasItem(), event.hasBlock());
+    PlugilyPlayerInteractEvent cbEvent = new PlugilyPlayerInteractEvent(event.getPlayer(), event.getItem(), EquipmentSlot.HAND, event.getAction(), event.getBlockFace(), event.getClickedBlock(), event.getMaterial(),  event.hasItem(), event.hasBlock());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
@@ -78,16 +77,7 @@ public class LegacyEvents implements Listener {
 
   @EventHandler
   public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
-    CBPlayerInteractEntityEvent cbEvent = new CBPlayerInteractEntityEvent(event.getPlayer(), EquipmentSlot.HAND, event.getRightClicked());
-    Bukkit.getPluginManager().callEvent(cbEvent);
-    if(cbEvent.isCancelled()) {
-      event.setCancelled(true);
-    }
-  }
-
-  @EventHandler
-  public void onInventoryClickEvent(InventoryClickEvent event) {
-    CBInventoryClickEvent cbEvent = new CBInventoryClickEvent(event.getClick(), event.getCurrentItem(), event.getClickedInventory(), event.getCursor(), event.getHotbarButton(), event.getAction(), event.getRawSlot(), event.getSlot(), event.getSlotType(), event.isLeftClick(), event.isRightClick(), event.isShiftClick(), event.getView());
+    PlugilyPlayerInteractEntityEvent cbEvent = new PlugilyPlayerInteractEntityEvent(event.getPlayer(), EquipmentSlot.HAND, event.getRightClicked());
     Bukkit.getPluginManager().callEvent(cbEvent);
     if(cbEvent.isCancelled()) {
       event.setCancelled(true);
