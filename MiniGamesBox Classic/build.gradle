@@ -31,6 +31,7 @@ processResources {
 }
 
 shadowJar {
+    exclude 'META-INF/**'
     archiveClassifier.set('')
     relocate 'com.cryptomorin.xseries.particles', 'plugily.projects.minigamesbox.classic.utils.version.xseries'
     relocate 'com.cryptomorin.xseries', 'plugily.projects.minigamesbox.classic.utils.version.xseries'
