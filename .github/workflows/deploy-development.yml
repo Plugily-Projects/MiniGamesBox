@@ -37,7 +37,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Publish with Gradle
-        run: ./gradlew publishMavenPublicationToSnapshotsRepository
+        run: ./gradlew publishMavenPublicationToSnapshotsRepository --info
         env:
           MAVEN_USERNAME: ${{ secrets.SNAPSHOTSUSERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SNAPSHOTSPASSWORD }}
