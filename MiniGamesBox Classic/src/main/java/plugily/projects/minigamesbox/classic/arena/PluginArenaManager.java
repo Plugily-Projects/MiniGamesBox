@@ -77,41 +77,42 @@ public class PluginArenaManager {
         new MessageBuilder("IN_GAME_SPECTATOR_BLOCKED").asKey().player(player).arena(arena).sendPlayer();
         return;
       }
-      PluginArenaUtils.preparePlayerForGame(arena, player, arena.getSpectatorLocation(), true);
-      new MessageBuilder("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR").asKey().player(player).arena(arena).sendPlayer();
-      PluginArenaUtils.hidePlayer(player, arena);
-      for(Player spectator : arena.getPlayers()) {
-        if(plugin.getUserManager().getUser(spectator).isSpectator()) {
-          VersionUtils.hidePlayer(plugin, player, spectator);
-        } else {
-          VersionUtils.showPlayer(plugin, player, spectator);
+      PluginArenaUtils.preparePlayerForGame(arena, player, arena.getSpectatorLocation(), true).thenAccept(act -> {
+        new MessageBuilder("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR").asKey().player(player).arena(arena).sendPlayer();
+        PluginArenaUtils.hidePlayer(player, arena);
+        for (Player spectator : arena.getPlayers()) {
+          if (plugin.getUserManager().getUser(spectator).isSpectator()) {
+            VersionUtils.hidePlayer(plugin, player, spectator);
+          } else {
+            VersionUtils.showPlayer(plugin, player, spectator);
+          }
         }
-      }
-      additionalSpectatorSettings(player, arena);
-      plugin.getDebugger().debug("[{0}] Final join attempt as spectator for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
+        additionalSpectatorSettings(player, arena);
+        plugin.getDebugger().debug("[{0}] Final join attempt as spectator for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
+      });
       return;
     }
 
-    PluginArenaUtils.preparePlayerForGame(arena, player, arena.getLobbyLocation(), false);
+    PluginArenaUtils.preparePlayerForGame(arena, player, arena.getLobbyLocation(), false).thenAccept(act -> {
+      arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
 
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
+      new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
 
-    new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
+      plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
+      if (arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+      } else if (arena.getArenaState().isStartingStage(arena)) {
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+      }
 
-    plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
-    plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
-    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
-      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
-    } else if(arena.getArenaState().isStartingStage(arena)) {
-      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
-    }
-
-    for(Player arenaPlayer : arena.getPlayers()) {
-      PluginArenaUtils.showPlayer(arenaPlayer, arena);
-    }
-    new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
-    plugin.getSignManager().updateSigns();
-    plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
+      for (Player arenaPlayer : arena.getPlayers()) {
+        PluginArenaUtils.showPlayer(arenaPlayer, arena);
+      }
+      new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
+      plugin.getSignManager().updateSigns();
+      plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
+    });
   }
 
   private boolean joinAsParty(@NotNull Player player, @NotNull PluginArena arena) {

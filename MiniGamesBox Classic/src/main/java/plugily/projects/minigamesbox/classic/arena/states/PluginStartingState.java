@@ -96,20 +96,21 @@ public class PluginStartingState implements ArenaStateHandler {
       arena.getBossbarManager().setProgress(1.0);
       org.bukkit.Location arenaLoc = arena.getStartLocation();
       for(Player player : arena.getPlayers()) {
-        VersionUtils.teleport(player, arenaLoc);
-        PluginArenaUtils.hidePlayersOutsideTheGame(player, arena);
-        player.setExp(0);
-        player.setLevel(0);
-        player.getInventory().clear();
-        player.setGameMode(GameMode.SURVIVAL);
-        User user = plugin.getUserManager().getUser(player);
-        user.getKit().giveKitItems(player);
-        player.updateInventory();
-        plugin.getUserManager().addExperience(player, 10);
-        new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).player(player).sendPlayer();
-        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
-        plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("START_GAME"));
-        plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
+        VersionUtils.teleport(player, arenaLoc).thenAccept(bol -> {
+          PluginArenaUtils.hidePlayersOutsideTheGame(player, arena);
+          player.setExp(0);
+          player.setLevel(0);
+          player.getInventory().clear();
+          player.setGameMode(GameMode.SURVIVAL);
+          User user = plugin.getUserManager().getUser(player);
+          user.getKit().giveKitItems(player);
+          player.updateInventory();
+          plugin.getUserManager().addExperience(player, 10);
+          new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).player(player).sendPlayer();
+          plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
+          plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("START_GAME"));
+          plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
+        });
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
     }
