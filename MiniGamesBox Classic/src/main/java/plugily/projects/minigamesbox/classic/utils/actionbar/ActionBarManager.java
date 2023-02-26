@@ -33,6 +33,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -129,6 +130,10 @@ public class ActionBarManager extends BukkitRunnable {
   public void addActionBar(Player player, ActionBar actionBar) {
     if(actionBars.containsKey(player)) {
       List<ActionBar> bars = actionBars.get(player);
+      if(bars.stream().anyMatch(bar -> bar.getActionBarType() == ActionBar.ActionBarType.DISPLAY) && bars.stream().anyMatch(bar -> bar.getPriority() == actionBar.getPriority())) {
+        List<ActionBar> displayBars = bars.stream().filter(bar -> bar.getActionBarType() == ActionBar.ActionBarType.DISPLAY).filter(bar -> bar.getPriority() == actionBar.getPriority()).collect(Collectors.toList());
+        bars.removeAll(displayBars);
+      }
       bars.add(actionBar);
       actionBars.put(player, bars);
       return;
