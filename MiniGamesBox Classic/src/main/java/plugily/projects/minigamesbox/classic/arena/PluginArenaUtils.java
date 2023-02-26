@@ -113,6 +113,7 @@ public class PluginArenaUtils {
       user.setSpectator(false);
     }
     player.updateInventory();
+    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
     arena.getScoreboardManager().createScoreboard(user);
   }
 

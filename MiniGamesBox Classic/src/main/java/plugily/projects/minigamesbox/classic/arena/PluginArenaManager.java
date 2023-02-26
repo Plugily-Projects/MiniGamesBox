@@ -94,9 +94,8 @@ public class PluginArenaManager {
 
     PluginArenaUtils.preparePlayerForGame(arena, player, arena.getLobbyLocation(), false);
 
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
-
     new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
+    new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
 
     plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
@@ -109,7 +108,7 @@ public class PluginArenaManager {
     for(Player arenaPlayer : arena.getPlayers()) {
       PluginArenaUtils.showPlayer(arenaPlayer, arena);
     }
-    new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
+
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
