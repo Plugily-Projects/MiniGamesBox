@@ -56,27 +56,21 @@ public class ReloadArgument {
         }
         confirmations.remove(sender);
 
-        registry.getPlugin().reloadConfig();
-        registry.getPlugin().getLanguageManager().reloadLanguage();
 
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          for(Player player : arena.getPlayers()) {
-            arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-            arena.teleportToEndLocation(player);
-            if(registry.getPlugin().getConfigPreferences().getOption("INVENTORY_MANAGER")) {
-              InventorySerializer.loadInventory(registry.getPlugin(), player);
-            } else {
-              player.getInventory().clear();
-              player.getInventory().setArmorContents(null);
-              for(PotionEffect pe : player.getActivePotionEffects()) {
-                player.removePotionEffect(pe.getType());
-              }
-            }
-          }
           registry.getPlugin().getArenaManager().stopGame(true, arena);
         }
-        registry.getPlugin().getArenaRegistry().registerArenas();
-        new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().send(sender);
+
+        int time = registry.getPlugin().getConfig().getInt("Time-Manager.Restarting", 5) + 5;
+
+        new MessageBuilder("&cStopping arenas... Waiting for completion of restarting stage! (ETA: " + time + " s)").prefix().send(sender);
+
+        Bukkit.getScheduler().runTaskLater(registry.getPlugin(), () -> {
+          registry.getPlugin().reloadConfig();
+          registry.getPlugin().getLanguageManager().reloadLanguage();
+          registry.getPlugin().getArenaRegistry().registerArenas();
+          new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().send(sender);
+        }, time);
       }
     });
   }
