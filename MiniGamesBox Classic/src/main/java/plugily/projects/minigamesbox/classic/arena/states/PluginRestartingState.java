@@ -54,13 +54,7 @@ public class PluginRestartingState implements ArenaStateHandler {
     if(arena.getTimer() <= 0) {
       arena.getScoreboardManager().stopAllScoreboards();
       for(Player player : arena.getPlayers()) {
-        arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-        User user = plugin.getUserManager().getUser(player);
-        user.setSpectator(false);
-        user.setPermanentSpectator(false);
-        arena.getScoreboardManager().removeScoreboard(user);
-        arena.teleportToEndLocation(player);
-        PluginArenaUtils.resetPlayerAfterGame(player);
+        PluginArenaUtils.resetPlayerAfterGame(arena, player);
         new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).arena(arena).sendPlayer();
       }
       arena.getMapRestorerManager().fullyRestoreArena();

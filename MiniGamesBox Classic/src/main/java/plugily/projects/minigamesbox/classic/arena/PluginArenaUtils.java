@@ -116,14 +116,18 @@ public class PluginArenaUtils {
     arena.getScoreboardManager().createScoreboard(user);
   }
 
-  public static void resetPlayerAfterGame(Player player) {
+  public static void resetPlayerAfterGame(PluginArena arena, Player player) {
     for(Player players : plugin.getServer().getOnlinePlayers()) {
       VersionUtils.showPlayer(plugin, player, players);
       if(!plugin.getArenaRegistry().isInArena(players)) {
         VersionUtils.showPlayer(plugin, players, player);
       }
     }
-    VersionUtils.setGlowing(player, false);
+    User user = plugin.getUserManager().getUser(player);
+    user.setSpectator(false);
+    user.setPermanentSpectator(false);
+
+    player.closeInventory();
     player.setGameMode(GameMode.SURVIVAL);
     player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
     player.setFlying(false);
@@ -134,12 +138,21 @@ public class PluginArenaUtils {
     player.setHealth(VersionUtils.getMaxHealth(player));
     player.setFireTicks(0);
     player.setFoodLevel(20);
-    // the default fly speed
     player.setFlySpeed(0.1f);
     player.setWalkSpeed(0.2f);
     player.setExp(0);
     player.setLevel(0);
+
     VersionUtils.setCollidable(player, true);
+    VersionUtils.setGlowing(player, false);
+
+    arena.getScoreboardManager().removeScoreboard(user);
+    arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
+    arena.teleportToEndLocation(player);
+    arena.getPlayers().remove(player);
+
+    plugin.getActionBarManager().clearActionBarsFromPlayer(player);
+
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.loadInventory(plugin, player);
     }

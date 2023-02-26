@@ -232,22 +232,16 @@ public class PluginArenaManager {
     Bukkit.getPluginManager().callEvent(new PlugilyGameLeaveAttemptEvent(player, arena));
 
     User user = plugin.getUserManager().getUser(player);
-    arena.getScoreboardManager().removeScoreboard(user);
-    arena.getPlayers().remove(player);
-    user.setSpectator(false);
-    user.setPermanentSpectator(false);
 
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && (arena.getPlayers().isEmpty() || arena.getPlayers().size() < arena.getMinimumPlayers())) {
       stopGame(true, arena);
       //new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
     }
-    arena.teleportToEndLocation(player);
-    PluginArenaUtils.resetPlayerAfterGame(player);
     if(!user.isSpectator()) {
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
     plugin.getUserManager().saveAllStatistic(user);
+    PluginArenaUtils.resetPlayerAfterGame(arena, player);
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
@@ -267,13 +261,12 @@ public class PluginArenaManager {
     for(Player player : arena.getPlayers()) {
       if(!quickStop) {
         spawnFireworks(arena, player);
-
         for(String msg : plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary")) {
           MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).player(player).arena(arena).build());
         }
       }
     }
-    arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
+    arena.setTimer(quickStop ? 0 : plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
     arena.setArenaState(ArenaState.ENDING, true);
     for(Player players : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
