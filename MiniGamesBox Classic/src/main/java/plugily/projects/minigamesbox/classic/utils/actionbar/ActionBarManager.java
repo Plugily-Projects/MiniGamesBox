@@ -135,4 +135,8 @@ public class ActionBarManager extends BukkitRunnable {
     }
     actionBars.put(player, new ArrayList<>(Collections.singleton(actionBar)));
   }
+
+  public void clearActionBarsFromPlayer(Player player) {
+    actionBars.remove(player);
+  }
 }
