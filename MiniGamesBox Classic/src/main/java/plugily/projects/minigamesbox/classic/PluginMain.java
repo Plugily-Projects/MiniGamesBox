@@ -153,7 +153,7 @@ public class PluginMain extends JavaPlugin {
     saveDefaultConfig();
 
     //check debug mode
-    debugger = new Debugger(this, getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
+    debugger = new Debugger(this, getDescription().getVersion().contains("-debug") || getConfig().getBoolean("Debug"));
     exceptionLogHandler = new ExceptionLogHandler(this);
     messageUtils = new MessageUtils(this);
 
