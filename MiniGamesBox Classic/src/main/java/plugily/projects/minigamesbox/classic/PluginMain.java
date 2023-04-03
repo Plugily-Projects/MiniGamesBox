@@ -273,17 +273,22 @@ public class PluginMain extends JavaPlugin {
     try {
       Class.forName("org.spigotmc.SpigotConfig");
     } catch(Exception e) {
+      MiscUtils.sendLineBreaker(getName());
       messageUtils.thisVersionIsNotSupported();
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cYour server software is not supported by " + getDescription().getName() + "!");
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cWe support Spigot and Spigot forks only! Shutting off...");
+      MiscUtils.sendLineBreaker(getName());
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
     }
     if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_8_R3)) {
+      MiscUtils.sendLineBreaker(getName());
       messageUtils.thisVersionIsNotSupported();
+      MiscUtils.sendVersionInformation(this, getName(), getDescription());
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cYour server version is not supported by " + getDescription().getName() + "!");
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we must shut off. Maybe you consider changing your server version?");
+      MiscUtils.sendLineBreaker(getName());
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;

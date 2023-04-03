@@ -173,11 +173,8 @@ public class MiscUtils {
 
 
   public static void sendStartUpMessage(Plugin plugin, String pluginname, PluginDescriptionFile descriptionFile, boolean disclaimer, boolean support) {
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] -_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_-");
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Versions: ");
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Plugin: §6" + descriptionFile.getVersion() + " §r| Server: §6" + plugin.getServer().getVersion() + " §r| Detected: §6" + ServerVersion.Version.getCurrent() + " §r| Software: §6" + plugin.getServer().getName() + " §r| Java: §6" + System.getProperty("java.version"));
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
+    sendLineBreaker(pluginname);
+    sendVersionInformation(plugin, pluginname, descriptionFile);
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] This plugin was created by §6Plugily Projects §ras part of an §6open source project§r ( https://donate.plugily.xyz )");
     if(!plugin.getServer().getName().equalsIgnoreCase("craftbukkit") && !plugin.getServer().getName().equalsIgnoreCase("paper")) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
@@ -223,7 +220,18 @@ public class MiscUtils {
     }
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "]                               §6The plugin got fully enabled! Enjoy the plugin ;)");
+    sendLineBreaker(pluginname);
+  }
+
+  public static void sendLineBreaker(String pluginname) {
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] -_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_-");
+  }
+
+  public static void sendVersionInformation(Plugin plugin, String pluginname, PluginDescriptionFile descriptionFile) {
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Versions: ");
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Plugin: §6" + descriptionFile.getVersion() + " §r| Server: §6" + plugin.getServer().getVersion() + " §r| Detected: §6" + Version.getCurrent() + " §r| Software: §6" + plugin.getServer().getName() + " §r| Java: §6" + System.getProperty("java.version"));
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
   }
 
   public static void sendStartUpMessage(Plugin plugin) {
