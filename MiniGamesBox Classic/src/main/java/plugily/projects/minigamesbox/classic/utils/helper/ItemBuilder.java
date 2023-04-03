@@ -45,9 +45,9 @@ public class ItemBuilder {
   private final ItemStack itemStack;
   private final ItemMeta itemMeta;
 
-  public ItemBuilder(final ItemStack itemStack) {
-    this.itemStack = itemStack == null ? new ItemStack(Material.STONE) : itemStack;
-    this.itemMeta = Objects.requireNonNull(itemStack).getItemMeta();
+  public ItemBuilder(final ItemStack copyStack) {
+    this.itemStack = copyStack == null ? new ItemStack(Material.STONE) : copyStack;
+    this.itemMeta = itemStack.getItemMeta();
   }
 
   public ItemBuilder(final Material material) {
@@ -65,6 +65,7 @@ public class ItemBuilder {
     return this;
   }
 
+  @SuppressWarnings("deprecation")
   public ItemBuilder data(byte data) {
     org.bukkit.material.MaterialData materialData = this.itemStack.getData();
 
