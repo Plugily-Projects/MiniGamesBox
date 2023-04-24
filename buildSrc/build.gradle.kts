@@ -1,6 +1,6 @@
 plugins {
     // Support convention plugins written in Groovy. Convention plugins are build scripts in 'src/main' that automatically become available as plugins in the main build.
-    id 'groovy-gradle-plugin'
+    id("groovy-gradle-plugin")
 }
 
 repositories {
