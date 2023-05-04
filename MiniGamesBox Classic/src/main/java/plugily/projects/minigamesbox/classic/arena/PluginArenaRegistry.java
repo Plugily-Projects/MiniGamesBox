@@ -32,6 +32,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -134,6 +135,11 @@ public class PluginArenaRegistry {
   }
 
   public void unregisterArena(PluginArena arena) {
+    plugin.getArenaManager().stopGame(true, arena);
+    for(Player player : new HashSet<>(arena.getPlayers())) {
+      plugin.getArenaManager().leaveAttempt(player, arena);
+      new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).arena(arena).sendPlayer();
+    }
     plugin.getDebugger().debug("[{0}] Instance unregistered", arena.getId());
     arenas.remove(arena);
 

@@ -99,7 +99,6 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
                   context.getForWhom().sendRawMessage(new MessageBuilder("&cDelete operation canceled").prefix().build());
                   return Prompt.END_OF_CONVERSATION;
                 }
-                setupInventory.getPlugin().getArenaManager().stopGame(false, arena);
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
 
                 FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
