@@ -41,29 +41,26 @@ import java.util.logging.Level;
  * <p>
  * Created at 01.11.2021
  */
-public class FileStats implements UserDatabase, Runnable {
+public class FileStats implements UserDatabase {
 
   private final PluginMain plugin;
   private final FileConfiguration config;
-  private final BukkitTask updateTask;
   private final AtomicBoolean updateRequired = new AtomicBoolean(false);
 
   public FileStats(PluginMain plugin) {
     this.plugin = plugin;
     this.config = ConfigUtils.getConfig(plugin, "stats");
-    this.updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, 40, 40);
   }
 
   @Override
   public void saveStatistic(User user, StatisticType stat) {
     config.set(user.getUniqueId().toString() + "." + stat.getName(), user.getStatistic(stat));
-    updateRequired.set(true);
+    ConfigUtils.saveConfig(plugin, config, "stats");
   }
 
   @Override
   public void saveAllStatistic(User user) {
     updateStats(user);
-    updateRequired.set(true);
   }
 
   @Override
@@ -104,12 +101,7 @@ public class FileStats implements UserDatabase, Runnable {
     for(Player player : plugin.getServer().getOnlinePlayers()) {
       updateStats(plugin.getUserManager().getUser(player));
     }
-    updateTask.cancel();
-    // Save the last time before disabling
-    if(updateRequired.get()) {
-      updateRequired.set(false);
       ConfigUtils.saveConfig(plugin, config, "stats");
-    }
   }
 
   @Override
@@ -134,14 +126,6 @@ public class FileStats implements UserDatabase, Runnable {
         }
       }
     });
-  }
-
-  // Save the config to the file
-  @Override
-  public void run() {
-    if(updateRequired.get()) {
-      updateRequired.set(false);
-      Bukkit.getScheduler().runTask(plugin, () -> ConfigUtils.saveConfig(plugin, config, "stats"));
-    }
+    ConfigUtils.saveConfig(plugin, config, "stats");
   }
 }
