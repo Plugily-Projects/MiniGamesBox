@@ -45,7 +45,7 @@ public class PluginEndingState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     setArenaState(ArenaState.ENDING);
     setArenaTimer(-999);
-    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
 
     if(arena.getTimer() <= 0) {
       for(Player player : arena.getPlayers()) {
@@ -54,7 +54,7 @@ public class PluginEndingState implements ArenaStateHandler {
       arenaTimer = plugin.getConfig().getInt("Time-Manager.Restarting", 5);
       arenaState = ArenaState.RESTARTING;
     }
-    plugin.getDebugger().debug("END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
   }
 
   @Override

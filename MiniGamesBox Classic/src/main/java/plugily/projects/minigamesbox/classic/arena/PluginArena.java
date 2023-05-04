@@ -217,16 +217,16 @@ public class PluginArena extends BukkitRunnable {
       arenaStateHandler = gameStateHandlers.get(arenaState);
     }
     arenaStateHandler.handleCall(this);
-    plugin.getDebugger().debug("Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), arenaState);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), arenaState);
     if(!forceArenaTimer && arenaStateHandler.getArenaTimer() != -999) {
-      plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
+      plugin.getDebugger().performance("ArenaUpdate","Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
       setTimer(arenaStateHandler.getArenaTimer());
     }
-    plugin.getDebugger().debug("Arena {0} Force State {1}", getId(), forceArenaState);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Force State {1}", getId(), forceArenaState);
     if(!forceArenaState && arenaState != arenaStateHandler.getArenaStateChange()) {
-      plugin.getDebugger().debug("Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
+      plugin.getDebugger().performance("ArenaUpdate","Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
       if(!(arenaState == ArenaState.FULL_GAME && arenaStateHandler.getArenaStateChange() == ArenaState.STARTING)) {
-        plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
+        plugin.getDebugger().performance("ArenaUpdate","Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
         setArenaState(arenaStateHandler.getArenaStateChange(), false);
       }
     }
@@ -305,7 +305,7 @@ public class PluginArena extends BukkitRunnable {
    * @param timer timer of lobby / time to next wave
    */
   public void setTimer(int timer) {
-    plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1}", getId(), timer);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Changed ArenaTimer to {1}", getId(), timer);
     setArenaOption("TIMER", timer);
   }
 
@@ -318,7 +318,7 @@ public class PluginArena extends BukkitRunnable {
    */
   public void setTimer(int timer, boolean forceArenaTimer) {
     this.forceArenaTimer = forceArenaTimer;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} {2}", getId(), timer, forceArenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Changed ArenaTimer to {1} {2}", getId(), timer, forceArenaTimer);
     setArenaOption("TIMER", timer);
   }
 
@@ -351,7 +351,7 @@ public class PluginArena extends BukkitRunnable {
   public void setArenaState(@NotNull ArenaState arenaState, boolean forceArenaState) {
     this.arenaState = arenaState;
     this.forceArenaState = forceArenaState;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
     Bukkit.getPluginManager().callEvent(new PlugilyGameStateChangeEvent(this, arenaState));
     plugin.getSignManager().updateSigns();
   }
@@ -367,7 +367,7 @@ public class PluginArena extends BukkitRunnable {
   public void setArenaState(@NotNull ArenaState arenaState) {
     this.arenaState = arenaState;
     this.forceArenaState = true;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
     Bukkit.getPluginManager().callEvent(new PlugilyGameStateChangeEvent(this, arenaState));
     plugin.getSignManager().updateSigns();
   }

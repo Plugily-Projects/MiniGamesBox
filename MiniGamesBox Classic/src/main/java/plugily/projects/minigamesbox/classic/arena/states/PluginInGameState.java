@@ -43,7 +43,7 @@ public class PluginInGameState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     setArenaState(ArenaState.IN_GAME);
     setArenaTimer(-999);
-    plugin.getDebugger().debug("Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.IN_GAME, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.IN_GAME, arenaState, arenaTimer);
   }
 
   @Override

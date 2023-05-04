@@ -47,7 +47,7 @@ public class PluginWaitingState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     setArenaState(ArenaState.WAITING_FOR_PLAYERS);
     setArenaTimer(-999);
-    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
     int minPlayers = arena.getMinimumPlayers();
 
@@ -56,7 +56,7 @@ public class PluginWaitingState implements ArenaStateHandler {
         arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().integer(minPlayers).arena(arena).sendArena();
       }
-      plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+      plugin.getDebugger().performance("ArenaUpdate","END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
       return;
     }
@@ -67,7 +67,7 @@ public class PluginWaitingState implements ArenaStateHandler {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
-    plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
   }
 

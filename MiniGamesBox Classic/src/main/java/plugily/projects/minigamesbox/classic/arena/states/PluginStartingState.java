@@ -52,7 +52,7 @@ public class PluginStartingState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     setArenaState(ArenaState.STARTING);
     setArenaTimer(-999);
-    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
     int timer = arena.getTimer();
 
@@ -86,7 +86,7 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setExp(1);
         player.setLevel(0);
       }
-      plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+      plugin.getDebugger().performance("ArenaUpdate","END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
       return;
     }
@@ -127,7 +127,7 @@ public class PluginStartingState implements ArenaStateHandler {
       }
     }
 
-    plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
   }
 
