@@ -53,7 +53,7 @@ public class PatreonItem implements ClickableItem {
         .lore(ChatColor.GRAY + "support us by donating on other platforms such as paypal!")
         .lore("&aControls")
         .lore("&eCLICK \n&7-> Link for donation options")
-        .enchantment(XEnchantment.LOYALTY.getEnchant())
+        .enchantment(XEnchantment.DURABILITY.getEnchant())
         .colorizeItem();
     return item.build();
   }

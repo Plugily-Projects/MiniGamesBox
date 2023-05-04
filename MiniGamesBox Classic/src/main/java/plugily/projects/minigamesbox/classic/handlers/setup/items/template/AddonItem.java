@@ -52,7 +52,7 @@ public class AddonItem implements ClickableItem {
         .lore(ChatColor.GOLD + "Custom Kits, Custom Achievements, Custom ranks, Replay Ability and more!")
         .lore("&aControls")
         .lore("&eCLICK \n&7-> Link for patreon program")
-        .enchantment(XEnchantment.LOYALTY.getEnchant())
+        .enchantment(XEnchantment.DURABILITY.getEnchant())
         .colorizeItem();
     return item.build();
   }
