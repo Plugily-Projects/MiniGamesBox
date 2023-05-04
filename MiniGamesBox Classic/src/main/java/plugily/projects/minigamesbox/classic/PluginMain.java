@@ -163,7 +163,7 @@ public class PluginMain extends JavaPlugin {
     }
 
     debugger.debug("[System] [Core] Initialization start");
-    if(getDescription().getVersion().contains("debug") || getConfig().getBoolean("Developer-Mode")) {
+    if(getDescription().getVersion().contains("-debug") || getConfig().getBoolean("Developer-Mode")) {
       debugger.deepDebug(true);
       debugger.debug(Level.FINE, "Deep debug enabled");
       getConfig().getStringList("Performance-Listenable").forEach(debugger::monitorPerformance);

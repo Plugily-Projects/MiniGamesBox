@@ -29,6 +29,8 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.HashSet;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -53,7 +55,7 @@ public class PluginRestartingState implements ArenaStateHandler {
 
     if(arena.getTimer() <= 0) {
       arena.getScoreboardManager().stopAllScoreboards();
-      for(Player player : arena.getPlayers()) {
+      for(Player player : new HashSet<>(arena.getPlayers())) {
         PluginArenaUtils.resetPlayerAfterGame(arena, player);
         new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).arena(arena).sendPlayer();
       }
