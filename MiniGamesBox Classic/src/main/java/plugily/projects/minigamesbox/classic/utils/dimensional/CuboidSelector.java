@@ -55,9 +55,7 @@ public class CuboidSelector implements Listener {
             .lore("and the second with right click")
             .colorizeItem().build();
 
-    HandlerItem selectorItem = new HandlerItem(stack);
-    selectorItem.setLeftClick(true);
-    selectorItem.setRightClick(true);
+    HandlerItem selectorItem = new HandlerItem(stack).setLeftClick(true).setRightClick(true);
     selectorItem.addDropHandler(dropEvent -> {
       dropEvent.setCancelled(false);
       dropEvent.getItemDrop().remove();

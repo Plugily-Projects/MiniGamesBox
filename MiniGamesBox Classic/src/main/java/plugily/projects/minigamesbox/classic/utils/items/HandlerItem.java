@@ -20,6 +20,7 @@
 package plugily.projects.minigamesbox.classic.utils.items;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
@@ -40,126 +41,141 @@ import java.util.function.Consumer;
  */
 public class HandlerItem {
 
-  private final List<Consumer<PlayerDropItemEvent>> dropHandlers;
-  private final List<Consumer<PlayerItemConsumeEvent>> consumeHandlers;
-  private final List<Consumer<PlugilyPlayerInteractEvent>> interactHandlers;
-  private final List<Consumer<InventoryClickEvent>> inventoryClickHandlers;
-  private final ItemStack itemStack;
-  private boolean rightClick = false;
-  private boolean leftClick = false;
-  private boolean physical = false;
-  private boolean movementCancel = false;
+    private final List<Consumer<PlayerDropItemEvent>> dropHandlers = new ArrayList<>();
+    private final List<Consumer<PlayerItemConsumeEvent>> consumeHandlers = new ArrayList<>();
+    private final List<Consumer<PlugilyPlayerInteractEvent>> interactHandlers = new ArrayList<>();
+    private final List<Consumer<InventoryClickEvent>> inventoryClickHandlers = new ArrayList<>();
+    private final ItemStack itemStack;
+    private boolean rightClick = false;
+    private boolean leftClick = false;
+    private boolean physical = false;
+    private boolean movementCancel = false;
 
-  public HandlerItem(ItemStack itemStack) {
-    this.dropHandlers = new ArrayList<>();
-    this.consumeHandlers = new ArrayList<>();
-    this.interactHandlers = new ArrayList<>();
-    this.inventoryClickHandlers = new ArrayList<>();
-    this.itemStack = itemStack;
-    ItemManager.addItem(this);
-  }
+    private boolean active = false;
 
-  public ItemStack getItemStack() {
-    return itemStack;
-  }
-
-  public void addDropHandler(Consumer<PlayerDropItemEvent> dropHandler) {
-    dropHandlers.add(dropHandler);
-  }
-
-  public void addConsumeHandler(Consumer<PlayerItemConsumeEvent> consumeHandler) {
-    consumeHandlers.add(consumeHandler);
-  }
-
-  public void addInteractHandler(Consumer<PlugilyPlayerInteractEvent> interactHandler) {
-    interactHandlers.add(interactHandler);
-  }
-
-  public void addInventoryClickHandler(Consumer<InventoryClickEvent> inventoryClickHandler) {
-    inventoryClickHandlers.add(inventoryClickHandler);
-  }
-
-  public void setMovementCancel(boolean movementCancel) {
-    this.movementCancel = movementCancel;
-  }
-
-  void handleDrop(PlayerDropItemEvent event) {
-    this.dropHandlers.forEach((consumer) -> consumer.accept(event));
-  }
-
-  void handleConsume(PlayerItemConsumeEvent event) {
-    this.consumeHandlers.forEach((consumer) -> consumer.accept(event));
-  }
-
-  void handleInteract(PlugilyPlayerInteractEvent event) {
-    boolean interactPermit = false;
-    if(physical) {
-      if(isPhysical(event)) {
-        interactPermit = true;
-      }
+    public HandlerItem(ItemStack handlerItemStack) {
+        itemStack = handlerItemStack;
     }
-    if(leftClick) {
-      if(isLeftClick(event)) {
-        interactPermit = true;
-      }
+
+    public ItemStack getItemStack() {
+        build();
+        return itemStack;
     }
-    if(rightClick) {
-      if(isRightClick(event)) {
-        interactPermit = true;
-      }
+
+    public HandlerItem addDropHandler(Consumer<PlayerDropItemEvent> dropHandler) {
+        dropHandlers.add(dropHandler);
+        return this;
     }
-    if(!interactPermit) {
-      return;
+
+    public HandlerItem addConsumeHandler(Consumer<PlayerItemConsumeEvent> consumeHandler) {
+        consumeHandlers.add(consumeHandler);
+        return this;
     }
-    this.interactHandlers.forEach((consumer) -> consumer.accept(event));
-  }
 
-  void handleInventoryClickEvent(InventoryClickEvent event) {
-    if(movementCancel) {
-      if(event.getWhoClicked().getGameMode() != GameMode.SURVIVAL) {
-        event.setCancelled(false);
-        return;
-      }
-      event.setResult(Event.Result.DENY);
-      event.setCancelled(true);
-      return;
+    public HandlerItem addInteractHandler(Consumer<PlugilyPlayerInteractEvent> interactHandler) {
+        interactHandlers.add(interactHandler);
+        return this;
     }
-    this.inventoryClickHandlers.forEach(consumer -> consumer.accept(event));
-  }
 
-
-  public void setRightClick(boolean rightClick) {
-    this.rightClick = rightClick;
-  }
-
-  public void setLeftClick(boolean leftClick) {
-    this.leftClick = leftClick;
-  }
-
-  public void setPhysical(boolean physical) {
-    this.physical = physical;
-  }
-
-  private boolean isRightClick(PlugilyPlayerInteractEvent event) {
-    if(event.getAction() == Action.RIGHT_CLICK_AIR) {
-      return true;
+    public HandlerItem addInventoryClickHandler(Consumer<InventoryClickEvent> inventoryClickHandler) {
+        inventoryClickHandlers.add(inventoryClickHandler);
+        return this;
     }
-    return event.getAction() == Action.RIGHT_CLICK_BLOCK;
-  }
 
-  private boolean isLeftClick(PlugilyPlayerInteractEvent event) {
-    if(event.getAction() == Action.LEFT_CLICK_AIR) {
-      return true;
+    public HandlerItem setMovementCancel(boolean cancelMovement) {
+        movementCancel = cancelMovement;
+        return this;
     }
-    return event.getAction() == Action.LEFT_CLICK_BLOCK;
-  }
 
-  private boolean isPhysical(PlugilyPlayerInteractEvent event) {
-    return event.getAction() == Action.PHYSICAL;
-  }
+    void handleDrop(PlayerDropItemEvent event) {
+        dropHandlers.forEach((consumer) -> consumer.accept(event));
+    }
 
-  public void remove() {
-    ItemManager.removeItem(this);
-  }
+    void handleConsume(PlayerItemConsumeEvent event) {
+        consumeHandlers.forEach((consumer) -> consumer.accept(event));
+    }
+
+    void handleInteract(PlugilyPlayerInteractEvent event) {
+        boolean interactPermit = false;
+        if (physical) {
+            if (isPhysical(event)) {
+                interactPermit = true;
+            }
+        }
+        if (leftClick) {
+            if (isLeftClick(event)) {
+                interactPermit = true;
+            }
+        }
+        if (rightClick) {
+            if (isRightClick(event)) {
+                interactPermit = true;
+            }
+        }
+        if (!interactPermit) {
+            return;
+        }
+        interactHandlers.forEach((consumer) -> consumer.accept(event));
+    }
+
+    void handleInventoryClickEvent(InventoryClickEvent event) {
+        if (movementCancel) {
+            if (event.getWhoClicked().getGameMode() != GameMode.SURVIVAL) {
+                event.setCancelled(false);
+                return;
+            }
+            event.setResult(Event.Result.DENY);
+            event.setCancelled(true);
+            return;
+        }
+        inventoryClickHandlers.forEach(consumer -> consumer.accept(event));
+    }
+
+
+    public HandlerItem setRightClick(boolean clickRight) {
+        rightClick = clickRight;
+        return this;
+    }
+
+    public HandlerItem setLeftClick(boolean clickLeft) {
+        leftClick = clickLeft;
+        return this;
+    }
+
+    public HandlerItem setPhysical(boolean actionPhysical) {
+        physical = actionPhysical;
+        return this;
+    }
+
+    private boolean isRightClick(PlugilyPlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+            return true;
+        }
+        return event.getAction() == Action.RIGHT_CLICK_BLOCK;
+    }
+
+    private boolean isLeftClick(PlugilyPlayerInteractEvent event) {
+        if (event.getAction() == Action.LEFT_CLICK_AIR) {
+            return true;
+        }
+        return event.getAction() == Action.LEFT_CLICK_BLOCK;
+    }
+
+    private boolean isPhysical(PlugilyPlayerInteractEvent event) {
+        return event.getAction() == Action.PHYSICAL;
+    }
+
+    public HandlerItem build() {
+        if (!active) {
+            ItemManager.addItem(this);
+            active = true;
+        }
+        return this;
+    }
+
+    public void remove() {
+        ItemManager.removeItem(this);
+        active = false;
+    }
 
 }
