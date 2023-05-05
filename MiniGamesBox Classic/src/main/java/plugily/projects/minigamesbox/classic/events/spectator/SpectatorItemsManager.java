@@ -63,7 +63,7 @@ public class SpectatorItemsManager implements Listener {
       ItemStack cloneSkull = skull.clone();
       SkullMeta meta = VersionUtils.setPlayerHead(arenaPlayer, (SkullMeta) cloneSkull.getItemMeta());
       ComplementAccessor.getComplement().setDisplayName(meta, arenaPlayer.getName());
-      ComplementAccessor.getComplement().setLore(meta, Collections.singletonList(new MessageBuilder("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH").asKey().integer((int) NumberUtils.round(arenaPlayer.getHealth(), 2)).build()));
+      ComplementAccessor.getComplement().setLore(meta, Collections.singletonList(new MessageBuilder("IN_GAME_SPECTATOR_TARGET_PLAYER_HEALTH").asKey().integer((int) NumberUtils.round(arenaPlayer.getHealth(), 2)).player(arenaPlayer).arena(arena).build()));
       cloneSkull.setItemMeta(meta);
       gui.addItem(cloneSkull, event -> {
         new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_TELEPORT").asKey().arena(arena).player(arenaPlayer).send(event.getWhoClicked());
