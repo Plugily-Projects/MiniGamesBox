@@ -57,7 +57,7 @@ public class BukkitHelper {
   }
 
   @Deprecated
-  public void applyActionBarCooldown(Player player, int seconds) {
+  public void applyActionBarCooldown(Player player, double seconds) {
     plugin.getActionBarManager().addActionBar(player, new ActionBar(new MessageBuilder("IN_GAME_MESSAGES_ARENA_COOLDOWN").asKey(),
         ActionBar.ActionBarType.PROGRESS, seconds));
   }

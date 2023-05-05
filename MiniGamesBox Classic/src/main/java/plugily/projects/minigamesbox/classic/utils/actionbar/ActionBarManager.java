@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.actionbar;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -76,28 +77,24 @@ public class ActionBarManager extends BukkitRunnable {
               } else {
                 flashing.put(actionBar.getKey(), size + 1);
               }
-              VersionUtils.sendActionBar(player, new MessageBuilder(messages.get(size)).integer(actionBar.getTicks() - actionBar.getExecutedTicks() / 20).build());
+              VersionUtils.sendActionBar(player, new MessageBuilder(messages.get(size)).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
               break;
             }
             flashing.put(actionBar.getKey(), -1);
             break;
           case COOLDOWN:
             bars.remove(actionBar);
-            VersionUtils.sendActionBar(player, actionBar.getMessage().integer(actionBar.getTicks() - actionBar.getExecutedTicks() / 20).build());
+            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
             break;
           case DISPLAY:
-            VersionUtils.sendActionBar(player, actionBar.getMessage().integer(actionBar.getTicks() - actionBar.getExecutedTicks() / 20).build());
+            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
             break;
           case PROGRESS:
-            String progress =
-                StringFormatUtils.getProgressBar(
-                    actionBar.getExecutedTicks(),
-                    actionBar.getTicks(),
-                    10,
-                    "■",
-                    ChatColor.COLOR_CHAR + "a",
-                    ChatColor.COLOR_CHAR + "c");
-            VersionUtils.sendActionBar(player, actionBar.getMessage().value(progress).integer(actionBar.getTicks() - actionBar.getExecutedTicks() / 20).build());
+            String progress = StringFormatUtils.getProgressBar(actionBar.getExecutedTicks() + 10, actionBar.getTicks(),
+                10, "█", ChatColor.COLOR_CHAR + "a", ChatColor.COLOR_CHAR + "c");
+            VersionUtils.sendActionBar(player, actionBar.getMessage().value(progress).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
+            player.sendMessage("Sending " + actionBar.getMessage().value(progress).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
+            player.sendMessage("Sending p " + progress);
             break;
           default:
             break;

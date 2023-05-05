@@ -59,6 +59,13 @@ public class ActionBar {
     this.ticks = 20;
   }
 
+  public ActionBar(MessageBuilder message, ActionBarType actionBarType, double seconds) {
+    this.message = message;
+    this.actionBarType = actionBarType;
+    this.priority = 0;
+    this.ticks = (int) (seconds * 20);
+  }
+
   public ActionBar(MessageBuilder message, ActionBarType actionBarType) {
     this.message = message;
     this.actionBarType = actionBarType;
@@ -75,7 +82,7 @@ public class ActionBar {
   }
 
   public MessageBuilder getMessage() {
-    return message;
+    return new MessageBuilder(message.getRaw());
   }
 
   public String getKey() {

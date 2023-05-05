@@ -51,5 +51,4 @@ public class StringFormatUtils {
     }
     return sb.toString();
   }
-
 }

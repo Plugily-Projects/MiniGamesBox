@@ -255,6 +255,10 @@ public class MessageBuilder {
     return message;
   }
 
+  public String getRaw() {
+    return message;
+  }
+
   public void sendPlayer() {
     if(player != null) {
       send(player);
