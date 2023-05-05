@@ -37,13 +37,14 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 import plugily.projects.minigamesbox.classic.utils.version.TextComponentBuilder;
 
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
- * <p>
- * Created at 21.06.2022
+ * <p>Created at 21.06.2022
  */
 public class SetupInventory {
-  //ToDo Recommend player setup settings, survival and fly active
+  // ToDo Recommend player setup settings, survival and fly active
   private SetupInventoryUtils.SetupInventoryStage inventoryStage;
   private String arenaKey = null;
   private final Player player;
@@ -115,7 +116,6 @@ public class SetupInventory {
     return arenaKey;
   }
 
-
   public Player getPlayer() {
     return player;
   }
@@ -133,7 +133,6 @@ public class SetupInventory {
     arenasFile.set("instances." + getArenaKey() + "." + keyName, value);
     ConfigUtils.saveConfig(getPlugin(), arenasFile, "arenas");
   }
-
 
   public String isOptionDone(String path) {
     Object option = getConfig().get("instances." + getArenaKey() + "." + path);
@@ -160,6 +159,24 @@ public class SetupInventory {
       return "&a&l✔ Completed &7(value: &8" + keysSize + "&7)";
     }
 
+    return "&c&l✘ Not Completed | Reason: No data";
+  }
+
+  public String isLocationSectionOptionDone(String path, int minimum) {
+    List<String> option = getConfig().getStringList("instances." + getArenaKey() + "." + path);
+    if(minimum == 0) {
+      return "&e&l✔ Optional";
+    }
+    if(!option.isEmpty()) {
+      Location location = LocationSerializer.getLocation(option.get(0));
+      if(location != null) {
+        int keysSize = option.size();
+        if(keysSize < minimum) {
+          return "&c&l✘ Not Completed | &cPlease add more locations";
+        }
+        return "&a&l✔ Completed &7(value: &8" + keysSize + "&7)";
+      }
+    }
     return "&c&l✘ Not Completed | Reason: No data";
   }
 
@@ -221,7 +238,6 @@ public class SetupInventory {
     ConfigUtils.saveConfig(plugin, config, "arenas");
 
     plugin.getArenaRegistry().registerArena(id);
-
 
     player.sendRawMessage(ChatColor.BOLD + "------------------------------------------");
     player.sendRawMessage(new MessageBuilder("      &eInstance &6" + id + " &ecreated!").build());

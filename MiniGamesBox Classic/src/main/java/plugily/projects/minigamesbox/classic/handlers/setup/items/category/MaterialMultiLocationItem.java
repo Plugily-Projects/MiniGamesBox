@@ -297,7 +297,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
 
   @Override
   public String getSetupInfo() {
-    return setupInventory.isSectionOptionDone(keyName, minimumValue);
+    return setupInventory.isLocationSectionOptionDone(keyName, minimumValue);
   }
 
   @Override

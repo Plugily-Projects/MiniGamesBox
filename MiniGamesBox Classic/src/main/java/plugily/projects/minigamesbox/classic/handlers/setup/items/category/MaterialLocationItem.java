@@ -54,31 +54,28 @@ public class MaterialLocationItem implements CategoryItemHandler {
   private final String description;
   private final String keyName;
   private final Material checkMaterial;
-
-  private final int minimumValue;
   private final Consumer<InventoryClickEvent> clickConsumer;
   private final Consumer<PlugilyPlayerInteractEvent> interactConsumer;
   private final boolean rightClick;
   private final boolean leftClick;
   private final boolean physical;
 
-  public MaterialLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, int minimumValue) {
-    this(setupInventory, item, name, description, keyName, checkMaterial, minimumValue, emptyConsumer -> {
+  public MaterialLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial) {
+    this(setupInventory, item, name, description, keyName, checkMaterial, emptyConsumer -> {
     }, emptyConsumer -> {
     });
   }
 
-  public MaterialLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
-    this(setupInventory, item, name, description, keyName, checkMaterial, minimumValue, clickConsumer, interactConsumer, true, true, false);
+  public MaterialLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer) {
+    this(setupInventory, item, name, description, keyName, checkMaterial, clickConsumer, interactConsumer, true, true, false);
   }
 
-  public MaterialLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, int minimumValue, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
+  public MaterialLocationItem(SetupInventory setupInventory, ItemBuilder item, String name, String description, String keyName, Material checkMaterial, Consumer<InventoryClickEvent> clickConsumer, Consumer<PlugilyPlayerInteractEvent> interactConsumer, boolean leftClick, boolean rightClick, boolean physical) {
     this.setupInventory = setupInventory;
     this.name = name;
     this.description = description;
     this.keyName = keyName;
     this.checkMaterial = checkMaterial;
-    this.minimumValue = minimumValue;
     item
         .name("&7Add &a" + name.toUpperCase() + " &7location")
         .lore("&aInfo")
@@ -246,7 +243,7 @@ public class MaterialLocationItem implements CategoryItemHandler {
 
   @Override
   public String getSetupInfo() {
-    return setupInventory.isSectionOptionDone(keyName, minimumValue);
+    return setupInventory.isLocationOptionDone(keyName);
   }
 
   @Override

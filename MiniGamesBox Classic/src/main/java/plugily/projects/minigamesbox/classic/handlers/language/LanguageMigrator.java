@@ -177,12 +177,12 @@ public class LanguageMigrator {
   }
 
   private void updateCoreFileVersion(File file, FileConfiguration fileConfiguration, int oldVersion, int newVersion) {
-    int fileVersion = fileConfiguration.getInt("Do-Not-Edit.File-Version", 0);
+    int fileVersion = fileConfiguration.getInt("Do-Not-Edit.Core-Version", 0);
     updateFileVersion(file, newVersion, oldVersion, fileVersion, fileVersion);
   }
 
   public void updatePluginFileVersion(File file, FileConfiguration fileConfiguration, int oldVersion, int newVersion) {
-    int coreVersion = fileConfiguration.getInt("Do-Not-Edit.Core-Version", 0);
+    int coreVersion = fileConfiguration.getInt("Do-Not-Edit.File-Version", 0);
     updateFileVersion(file, coreVersion, coreVersion, newVersion, oldVersion);
   }
 
