@@ -141,6 +141,14 @@ public class User {
     changeUserStatistic(statisticType, getStatistic(statisticType) + value);
   }
 
+  public void resetNonePersistentStatistics() {
+    for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
+      if(statisticType.isPersistent()) {
+        setStatistic(statisticType, 0);
+      }
+    }
+  }
+
   public boolean checkCanCastCooldownAndMessage(String cooldown) {
     double time = getCooldown(cooldown);
 
