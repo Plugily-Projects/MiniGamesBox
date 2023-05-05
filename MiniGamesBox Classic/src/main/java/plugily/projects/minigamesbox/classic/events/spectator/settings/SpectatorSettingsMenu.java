@@ -226,7 +226,9 @@ public class SpectatorSettingsMenu implements Listener {
     if(distance <= 15) {
       return;
     }
-    VersionUtils.teleport(player, target.getLocation());
+    if(autoTeleport.contains(player)) {
+      VersionUtils.teleport(player, target.getLocation());
+    }
   }
 
   @EventHandler
