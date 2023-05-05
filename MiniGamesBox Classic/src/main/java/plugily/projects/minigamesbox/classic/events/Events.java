@@ -89,14 +89,6 @@ public class Events implements Listener {
     }
   }
 
-
-  @EventHandler
-  public void onDrop(PlayerDropItemEvent event) {
-    if(plugin.getArenaRegistry().getArena(event.getPlayer()) != null && (plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
-      event.setCancelled(true);
-    }
-  }
-
   @EventHandler
   public void onExplosionCancel(EntityExplodeEvent event) {
     for(PluginArena arena : plugin.getArenaRegistry().getArenas()) {

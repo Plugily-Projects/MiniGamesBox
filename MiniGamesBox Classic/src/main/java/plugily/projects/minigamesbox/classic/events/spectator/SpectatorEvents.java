@@ -98,13 +98,6 @@ public class SpectatorEvents implements Listener {
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  public void onDropItem(PlayerDropItemEvent event) {
-    if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
-      event.setCancelled(true);
-    }
-  }
-
-  @EventHandler(priority = EventPriority.HIGH)
   public void onBucketEmpty(PlayerBucketEmptyEvent event) {
     if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
       event.setCancelled(true);
@@ -207,8 +200,8 @@ public class SpectatorEvents implements Listener {
     }
   }
 
-  @EventHandler
-  public void onSpectate(PlayerDropItemEvent event) {
+  @EventHandler(priority = EventPriority.HIGH)
+  public void onDropItem(PlayerDropItemEvent event) {
     PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena != null && (arena.getArenaState() != ArenaState.IN_GAME || plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
       event.setCancelled(true);

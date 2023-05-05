@@ -93,8 +93,6 @@ public class ActionBarManager extends BukkitRunnable {
             String progress = StringFormatUtils.getProgressBar(actionBar.getExecutedTicks() + 10, actionBar.getTicks(),
                 10, "█", ChatColor.COLOR_CHAR + "a", ChatColor.COLOR_CHAR + "c");
             VersionUtils.sendActionBar(player, actionBar.getMessage().value(progress).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
-            player.sendMessage("Sending " + actionBar.getMessage().value(progress).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
-            player.sendMessage("Sending p " + progress);
             break;
           default:
             break;
