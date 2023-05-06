@@ -76,6 +76,7 @@ import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
+import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionLogHandler;
@@ -370,10 +371,10 @@ public class PluginMain extends JavaPlugin {
     long start = System.currentTimeMillis();
 
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
-    if(arenaRegistry != null) {
-      for(PluginArena arena : arenaRegistry.getArenas()) {
+    if(getArenaRegistry() != null) {
+      for(PluginArena arena : getArenaRegistry().getArenas()) {
         for(Player player : new ArrayList<>(arena.getPlayers())) {
-          arenaManager.leaveAttempt(player, arena);
+          getArenaManager().leaveAttempt(player, arena);
         }
         arena.getMapRestorerManager().fullyRestoreArena();
       }
