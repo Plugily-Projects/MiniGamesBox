@@ -143,7 +143,7 @@ public class User {
 
   public void resetNonePersistentStatistics() {
     for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
-      if(statisticType.isPersistent()) {
+      if(!statisticType.isPersistent()) {
         setStatistic(statisticType, 0);
       }
     }
