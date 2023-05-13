@@ -101,7 +101,7 @@ public class SwitchItem implements CategoryItemHandler {
 
           @Override
           public Prompt acceptInput(ConversationContext context, String input) {
-            if(!switches.contains(input)) {
+            if(switches.stream().noneMatch(input::equalsIgnoreCase)) {
               context.getForWhom().sendRawMessage(new MessageBuilder("&e✖ Only a value of the list is allowed, try again by clicking the item again").build());
               return Prompt.END_OF_CONVERSATION;
             }
