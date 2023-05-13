@@ -156,7 +156,7 @@ public class LocationSelectorItem implements CategoryItemHandler {
 
   @Override
   public String getSetupInfo() {
-    return setupInventory.isLocationOptionDone(keyName);
+    return setupInventory.isLocationOptionDone(keyName + ".1");
   }
 
   @Override
