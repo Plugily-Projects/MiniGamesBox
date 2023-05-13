@@ -179,7 +179,10 @@ public class PluginMain extends JavaPlugin {
     configPreferences = new ConfigPreferences(this);
 
 
-    if(!new File(getDataFolder(), "internal/data.yml").exists()) {
+    File file = new File(getDataFolder(), "internal/data.yml");
+    if(file.delete()) {
+      saveDefaultFile("internal/data");
+    } else {
       new File(getDataFolder().getName() + "/internal").mkdir();
     }
     internalData = ConfigUtils.getConfig(this, "/internal/data");
@@ -315,9 +318,13 @@ public class PluginMain extends JavaPlugin {
 
   public void setupFiles() {
     for(String fileName : fileNames) {
-      if(!new File(getDataFolder(), fileName + ".yml").exists()) {
-        saveResource(fileName + ".yml", false);
-      }
+      saveDefaultFile(fileName);
+    }
+  }
+
+  private void saveDefaultFile(String fileName) {
+    if(!new File(getDataFolder(), fileName + ".yml").exists()) {
+      saveResource(fileName + ".yml", false);
     }
   }
 
