@@ -1,4 +1,4 @@
-rootProject.name = "minigamesbox"
+rootProject.name = "MiniGamesBox"
 include(":MiniGamesBox-Inventory")
 include(":MiniGamesBox-Classic")
 include(":MiniGamesBox-Database")
