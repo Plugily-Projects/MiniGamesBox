@@ -41,6 +41,8 @@ public abstract class Kit {
   private final FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
 
   private String name = "";
+
+  private String key = "";
   private boolean unlockedOnDefault = false;
   private String[] description = new String[0];
 
@@ -49,6 +51,12 @@ public abstract class Kit {
 
   public Kit(String name) {
     setName(name);
+    setKey(name);
+  }
+
+  public Kit(String name, String key) {
+    setName(name);
+    setKey(key);
   }
 
   public abstract boolean isUnlockedByPlayer(Player p);
@@ -79,16 +87,19 @@ public abstract class Kit {
     return name;
   }
 
-  //todo/notice if name on language.yml gets changed key name will also change
-  // and kits.yml will be maybe not working for changed kits
-  public String getKeyName() {
-    return ChatColor.stripColor(name).replace(" ", "");
-  }
-
   public void setName(String name) {
     if(name != null) {
       this.name = name;
     }
+  }
+
+  public void setKey(String key) {
+    this.key = key;
+  }
+
+
+  public String getKey() {
+    return key;
   }
 
   public String[] getDescription() {

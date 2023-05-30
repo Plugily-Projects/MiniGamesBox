@@ -19,6 +19,7 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -230,6 +231,7 @@ public class PluginArenaRegistry {
   private boolean validatorChecks(ConfigurationSection section, PluginArena arena, String id) {
 
     arena.setMinimumPlayers(section.getInt(id + ".minimumplayers", 3));
+    Bukkit.getConsoleSender().sendMessage("arena" + arena.getId() + "1 min" + section.getInt(id + ".minimumplayers") + " is" + arena.getMinimumPlayers());
     arena.setMaximumPlayers(section.getInt(id + ".maximumplayers", 16));
     arena.setMapName(section.getString(id + ".mapname", id));
 

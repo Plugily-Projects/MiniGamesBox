@@ -35,6 +35,7 @@ public class EmptyKit extends FreeKit {
 
   public EmptyKit() {
     setName("");
+    setKey("");
     List<String> description = getPlugin().getBukkitHelper().splitString("", 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);

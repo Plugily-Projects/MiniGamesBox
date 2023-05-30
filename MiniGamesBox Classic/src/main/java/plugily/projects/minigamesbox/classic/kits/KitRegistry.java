@@ -50,19 +50,19 @@ public class KitRegistry {
    */
   public void registerKit(Kit kit) {
     if(!plugin.getConfigPreferences().getOption("KITS")) {
-      plugin.getDebugger().debug("Kit " + kit.getKeyName() + " can't be added as kits are disabled");
+      plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
     }
     if(kits.contains(kit)) {
-      plugin.getDebugger().debug("Kit " + kit.getKeyName() + " can't be added as its already registered");
+      plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as its already registered");
       return;
     }
     FileConfiguration config = ConfigUtils.getConfig(plugin, "kits");
-    if(!config.getBoolean("Enabled-Game-Kits." + kit.getKeyName(), false)) {
-      plugin.getDebugger().debug("Kit " + kit.getKeyName() + " is disabled by kits.yml");
+    if(!config.getBoolean("Enabled-Game-Kits." + kit.getKey(), false)) {
+      plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kits.yml");
       return;
     }
-    plugin.getDebugger().debug("Registered {0} kit", kit.getKeyName());
+    plugin.getDebugger().debug("Registered {0} kit", kit.getKey());
     kits.add(kit);
   }
 

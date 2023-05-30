@@ -39,6 +39,7 @@ public class CloneKit extends FreeKit {
 
   public CloneKit() {
     setName(new MessageBuilder("KITS_EXAMPLE_NAME").asKey().build());
+    setKey("Clone");
     List<String> description = getPlugin().getBukkitHelper().splitString(new MessageBuilder("KITS_EXAMPLE_DESCRIPTION").asKey().build(), 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);
