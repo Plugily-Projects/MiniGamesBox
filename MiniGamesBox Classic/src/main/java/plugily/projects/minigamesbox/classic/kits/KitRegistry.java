@@ -58,7 +58,7 @@ public class KitRegistry {
       return;
     }
     FileConfiguration config = ConfigUtils.getConfig(plugin, "kits");
-    if(config.getBoolean("Enabled-Game-Kits." + kit.getKeyName(), false)) {
+    if(!config.getBoolean("Enabled-Game-Kits." + kit.getKeyName(), false)) {
       plugin.getDebugger().debug("Kit " + kit.getKeyName() + " is disabled by kits.yml");
       return;
     }
