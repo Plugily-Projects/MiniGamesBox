@@ -98,9 +98,9 @@ public class PluginArena extends BukkitRunnable {
 
   public void loadArenaOptions() {
     arenaOptions.clear();
-    arenaOptions = new HashMap<>(plugin.getArenaOptionManager().getArenaOptions());
+    arenaOptions = plugin.getArenaOptionManager().getDefaultArenaOptions();
     FileConfiguration arenas = ConfigUtils.getConfig(plugin, "arenas");
-    for(Map.Entry<String, ArenaOption> options : plugin.getArenaOptionManager().getArenaOptions().entrySet()) {
+    for(Map.Entry<String, ArenaOption> options : arenaOptions.entrySet()) {
       if("null".equals(options.getValue().getPath())) {
         continue;
       }
@@ -130,7 +130,6 @@ public class PluginArena extends BukkitRunnable {
     if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-
     arenaOption.setValue(value);
   }
 
@@ -264,12 +263,10 @@ public class PluginArena extends BukkitRunnable {
   }
 
   public int getMinimumPlayers() {
-    Bukkit.getConsoleSender().sendMessage("min players are of" + getId() + getArenaOption("MINIMUM_PLAYERS"));
     return getArenaOption("MINIMUM_PLAYERS");
   }
 
   public void setMinimumPlayers(int minimumPlayers) {
-    Bukkit.getConsoleSender().sendMessage("min players set of" + getId() + minimumPlayers);
     setArenaOption("MINIMUM_PLAYERS", minimumPlayers);
   }
 

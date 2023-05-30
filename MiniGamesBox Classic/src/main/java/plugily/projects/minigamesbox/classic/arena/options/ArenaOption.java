@@ -30,29 +30,6 @@ import java.util.Map;
  * Created at 23.10.2021
  */
 public class ArenaOption {
-  private static final Map<String, ArenaOption> options = new HashMap<>();
-
-
-  //found in arena.yml
-  static {
-    /**
-     * Current arena timer, ex. 30 seconds before game starts.
-     */
-    options.put("TIMER", new ArenaOption("null", 0, true));
-    /**
-     * Minimum players in arena needed to start.
-     */
-    options.put("MINIMUM_PLAYERS", new ArenaOption("minimumplayers", 1, true));
-    /**
-     * Maximum players arena can hold, users with full games permission can bypass this!
-     */
-    options.put("MAXIMUM_PLAYERS", new ArenaOption("maximumplayers", 16, true));
-    /**
-     * Value for toggling boss bar message status.
-     */
-    options.put("BAR_TOGGLE_VALUE", new ArenaOption("null", 0, true));
-    options.put("BOSSBAR_INTERVAL", new ArenaOption("null", 10, true));
-  }
 
   private final String path;
   private Integer value;
@@ -93,7 +70,4 @@ public class ArenaOption {
     return protectedOption;
   }
 
-  public static Map<String, ArenaOption> getOptions() {
-    return Collections.unmodifiableMap(options);
-  }
 }

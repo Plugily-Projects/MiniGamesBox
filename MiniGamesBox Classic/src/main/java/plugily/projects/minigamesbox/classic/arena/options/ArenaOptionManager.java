@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -38,15 +39,31 @@ public class ArenaOptionManager {
   private final PluginMain plugin;
   private final Map<String, ArenaOption> arenaOptions = new HashMap<>();
 
-
   public ArenaOptionManager(PluginMain plugin) {
     this.plugin = plugin;
     loadArenaOptions();
   }
 
   private void loadArenaOptions() {
-    ArenaOption.getOptions().forEach((s, option) -> {
-      arenaOptions.put(s, new ArenaOption(option.getPath(), option.getValue(), option.isProtected()));
+    //found in arenas.yml
+    /**
+     * Current arena timer, ex. 30 seconds before game starts.
+     */
+    arenaOptions.put("TIMER", new ArenaOption("null", 0, true));
+    /**
+     * Minimum players in arena needed to start.
+     */
+    arenaOptions.put("MINIMUM_PLAYERS", new ArenaOption("minimumplayers", 1, true));
+    /**
+     * Maximum players arena can hold, users with full games permission can bypass this!
+     */
+    arenaOptions.put("MAXIMUM_PLAYERS", new ArenaOption("maximumplayers", 16, true));
+    /**
+     * Value for toggling boss bar message status.
+     */
+    arenaOptions.put("BAR_TOGGLE_VALUE", new ArenaOption("null", 0, true));
+    arenaOptions.put("BOSSBAR_INTERVAL", new ArenaOption("null", 10, true));
+    arenaOptions.forEach((s, option) -> {
       loadExternals(s);
     });
   }
@@ -96,8 +113,10 @@ public class ArenaOptionManager {
     arenaOptions.remove(name);
   }
 
-  public Map<String, ArenaOption> getArenaOptions() {
-    return Collections.unmodifiableMap(arenaOptions);
+  public Map<String, ArenaOption> getDefaultArenaOptions() {
+    return Collections.unmodifiableMap(arenaOptions.entrySet()
+        .stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, a -> new ArenaOption(a.getValue().getPath(), a.getValue().getValue()))));
   }
 
 }
