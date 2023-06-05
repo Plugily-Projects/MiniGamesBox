@@ -113,9 +113,9 @@ public class ArenaOptionManager {
   }
 
   public Map<String, ArenaOption> getDefaultArenaOptions() {
-    return Collections.unmodifiableMap(arenaOptions.entrySet()
+    return arenaOptions.entrySet()
         .stream()
-        .collect(Collectors.toMap(Map.Entry::getKey, a -> new ArenaOption(a.getValue().getPath(), a.getValue().getValue()))));
+        .collect(Collectors.toMap(Map.Entry::getKey, a -> new ArenaOption(a.getValue().getPath(), a.getValue().getValue())));
   }
 
 }
