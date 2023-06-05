@@ -145,7 +145,7 @@ public class SetupInventory {
 
   public String isSectionOptionDone(String path, int minimum) {
     ConfigurationSection section = getConfig().getConfigurationSection("instances." + getArenaKey() + "." + path);
-    if(minimum == 0) {
+    if(minimum == 0 && section == null) {
       return "&e&l✔ Optional";
     }
     if(section != null) {
@@ -163,7 +163,7 @@ public class SetupInventory {
 
   public String isLocationSectionOptionDone(String path, int minimum) {
     List<String> option = getConfig().getStringList("instances." + getArenaKey() + "." + path);
-    if(minimum == 0) {
+    if(minimum == 0 && option.isEmpty()) {
       return "&e&l✔ Optional";
     }
     if(!option.isEmpty()) {
