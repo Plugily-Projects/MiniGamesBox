@@ -184,7 +184,7 @@ public class LanguageManager {
     if(prop == null) {
       return getString(path);
     }
-    if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "not found"))) {
+    if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "_NOT_FOUND"))) {
       return prop;
     }
     return getString(path);
@@ -201,27 +201,37 @@ public class LanguageManager {
 
   private List<String> getLanguageListContent(String path) {
     if(isDefaultLanguageUsed()) {
-      return getStrings(path);
+      return getStringsColoured(path);
     }
     List<String> prop = localeFile.getStringList(path);
     if(prop.isEmpty()) {
-      return getStrings(path);
+      return getStringsColoured(path);
     }
-    if(prop.equals(defaultLanguageConfig.getStringList(path))) {
+    if(getStrings(path).equals(defaultLanguageConfig.getStringList(path))) {
       return prop.stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
     }
-    return getStrings(path);
+    return getStringsColoured(path);
   }
 
 
+  private List<String> getStringsColoured(String path) {
+    if(checkLanguageList(path)) return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
+    return languageConfig.getStringList(path).stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
+  }
+
   private List<String> getStrings(String path) {
+    if(checkLanguageList(path)) return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
+    return languageConfig.getStringList(path);
+  }
+
+  private boolean checkLanguageList(String path) {
     if(!languageConfig.isSet(path)) {
       plugin.getDebugger().debug(Level.WARNING, "&cGame message not found in your locale!");
       plugin.getDebugger().debug(Level.WARNING, "&cPlease regenerate your language.yml file! If error still occurs report it to the developer on discord!");
       plugin.getDebugger().debug(Level.WARNING, "&cPath: " + path);
-      return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
+      return true;
     }
-    return languageConfig.getStringList(path).stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
+    return false;
   }
 
 
