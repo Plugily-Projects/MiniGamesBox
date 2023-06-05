@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
+import plugily.projects.minigamesbox.number.NumberUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -127,9 +128,9 @@ public class TitleBuilder {
   private void split() {
     String[] split = message.split(";", 3);
     String[] times = split.length >= 1 ? split[0].split(",", 3) : new String[]{""};
-    fadeIn = times.length > 1 ? Integer.parseInt(times[0]) : 20;
-    stay = times.length > 2 ? Integer.parseInt(times[1]) : 30;
-    fadeOut = times.length > 3 ? Integer.parseInt(times[2]) : 20;
+    fadeIn = times.length > 1 ? NumberUtils.parseInt(times[0].replace(" ", "")).orElse(20) : 20;
+    stay = times.length > 2 ? NumberUtils.parseInt(times[1].replace(" ", "")).orElse(30) : 30;
+    fadeOut = times.length > 3 ? NumberUtils.parseInt(times[2].replace(" ", "")).orElse(20) : 20;
     title = split.length >= 2 ? buildMessage(split[1]) : "";
     subTitle = split.length >= 3 ? buildMessage(split[2]) : "";
   }
