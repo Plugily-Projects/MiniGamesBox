@@ -191,32 +191,26 @@ public class LanguageManager {
   }
 
   public List<String> getLanguageList(String path) {
-    if(isDefaultLanguageUsed()) {
-      return getStrings(path);
-    }
-    String prop = localeFile.getString(path);
-    if(prop == null) {
-      return getStrings(path);
-    }
-    if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "not found"))) {
-      return Arrays.asList(new MessageBuilder(prop).build().split(";"));
-    }
-    return getStrings(path);
+    return getLanguageListContent(path);
   }
 
   public List<String> getLanguageListFromKey(String key) {
-    key = plugin.getMessageManager().getPath(key);
+    String path = plugin.getMessageManager().getPath(key);
+    return getLanguageListContent(path);
+  }
+
+  private List<String> getLanguageListContent(String path) {
     if(isDefaultLanguageUsed()) {
-      return getStrings(key);
+      return getStrings(path);
     }
-    String prop = localeFile.getString(key);
-    if(prop == null) {
-      return getStrings(key);
+    List<String> prop = localeFile.getStringList(path);
+    if(prop.isEmpty()) {
+      return getStrings(path);
     }
-    if(getString(key).equalsIgnoreCase(defaultLanguageConfig.getString(key, "not found"))) {
-      return Arrays.asList(new MessageBuilder(prop).build().split(";"));
+    if(prop.equals(defaultLanguageConfig.getStringList(path))) {
+      return prop.stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
     }
-    return getStrings(key);
+    return getStrings(path);
   }
 
 
