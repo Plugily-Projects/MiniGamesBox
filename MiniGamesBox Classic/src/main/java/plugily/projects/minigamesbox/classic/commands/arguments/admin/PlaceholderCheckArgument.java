@@ -50,8 +50,8 @@ public class PlaceholderCheckArgument {
           for(Placeholder placeholder : registry.getPlugin().getPlaceholderManager().getRegisteredInternalPlaceholders()) {
             String listMessage = new MessageBuilder("&aID #" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + placeholder.getId() + "%").player((Player) sender).arena(registry.getPlugin().getArenaRegistry().getArenas().get(0)).build();
             new TextComponentBuilder(listMessage).player((Player) sender)
-                .setClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "%" + placeholder.getId() + "%")
-                .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "%" + placeholder.getId() + "%")
+                .setClickEvent(TextComponentBuilder.ClickAction.COPY_TO_CLIPBOARD, "%" + placeholder.getId() + "%")
+                .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "%" + placeholder.getId() + "%")
                 .sendPlayer();
 
           }
@@ -61,8 +61,8 @@ public class PlaceholderCheckArgument {
           for(Placeholder placeholder : registry.getPlugin().getPlaceholderManager().getRegisteredPAPIPlaceholders()) {
             String listMessage = new MessageBuilder("&aID #" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%").player((Player) sender).arena(registry.getPlugin().getArenaRegistry().getArenas().get(0)).build();
             new TextComponentBuilder(listMessage).player((Player) sender)
-                .setClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
-                .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
+                .setClickEvent(TextComponentBuilder.ClickAction.COPY_TO_CLIPBOARD, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
+                .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
                 .sendPlayer();
 
           }

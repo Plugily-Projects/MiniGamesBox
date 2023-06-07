@@ -242,13 +242,13 @@ public class SetupInventory {
     player.sendRawMessage(new MessageBuilder("      &eInstance &6" + id + " &ecreated!").build());
     player.sendRawMessage("");
     new TextComponentBuilder("&aEdit this arena via &7/" + plugin.getCommandAdminPrefix() + " setup edit " + id).player(player)
-        .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
-        .setClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .setClickEvent(TextComponentBuilder.ClickAction.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
         .sendPlayer();
     player.sendRawMessage("");
     new TextComponentBuilder("&aEnter Setup Inventory via &7/" + plugin.getCommandAdminPrefix() + " setup").player(player)
-        .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup")
-        .setClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup")
+        .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup")
+        .setClickEvent(TextComponentBuilder.ClickAction.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup")
         .sendPlayer();
     player.sendRawMessage("");
     player.sendRawMessage(ChatColor.GOLD + "Don't know where to start? Check out the tutorial video at");

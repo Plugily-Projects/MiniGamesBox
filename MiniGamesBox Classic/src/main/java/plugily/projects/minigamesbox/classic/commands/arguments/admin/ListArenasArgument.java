@@ -59,8 +59,8 @@ public class ListArenasArgument {
             return;
           }
           new TextComponentBuilder(listMessage).player((Player) sender)
-              .setClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId())
-              .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId())
+              .setClickEvent(TextComponentBuilder.ClickAction.SUGGEST_COMMAND, "/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId())
+              .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "/" + registry.getPlugin().getPluginNamePrefixLong() + " join " + arena.getId())
               .sendPlayer();
         }
       }

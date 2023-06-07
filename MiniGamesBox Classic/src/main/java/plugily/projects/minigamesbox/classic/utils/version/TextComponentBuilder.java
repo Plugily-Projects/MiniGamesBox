@@ -35,9 +35,9 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 public class TextComponentBuilder {
 
   private String message;
-  private ClickEvent.Action clickEventAction = null;
+  private ClickAction clickEventAction = null;
   private String clickEventValue = null;
-  private HoverEvent.Action hoverEventAction = null;
+  private HoverAction hoverEventAction = null;
   private String hoverEventValue = null;
 
   private boolean asKey = false;
@@ -52,13 +52,29 @@ public class TextComponentBuilder {
     this.message = message;
   }
 
-  public TextComponentBuilder setClickEvent(ClickEvent.Action action, String value) {
+  public TextComponentBuilder setClickEvent(ClickAction action, String value) {
     clickEventAction = action;
     clickEventValue = value;
     return this;
   }
 
-  public TextComponentBuilder setHoverEvent(HoverEvent.Action action, String value) {
+  public enum ClickAction {
+    OPEN_URL,
+    OPEN_FILE,
+    RUN_COMMAND,
+    SUGGEST_COMMAND,
+    CHANGE_PAGE,
+    COPY_TO_CLIPBOARD
+  }
+
+  public enum HoverAction {
+    SHOW_TEXT,
+    SHOW_ITEM,
+    SHOW_ENTITY,
+    SHOW_ACHIEVEMENT,
+  }
+
+  public TextComponentBuilder setHoverEvent(HoverAction action, String value) {
     hoverEventAction = action;
     hoverEventValue = value;
     return this;
@@ -117,19 +133,19 @@ public class TextComponentBuilder {
   }
 
   private void send(Player onlinePlayer) {
-    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_12_R1)) {
       onlinePlayer.sendMessage(message);
       return;
     }
     TextComponent component = new TextComponent(message);
     if(clickEventAction != null && clickEventValue != null) {
-      component.setClickEvent(new ClickEvent(clickEventAction, clickEventValue));
+      component.setClickEvent(new ClickEvent(ClickEvent.Action.valueOf(String.valueOf(clickEventAction)), clickEventValue));
     }
     if(hoverEventAction != null && hoverEventValue != null) {
       if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1)) {
-        component.setHoverEvent(new HoverEvent(hoverEventAction, new Text(hoverEventValue)));
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.valueOf(String.valueOf(hoverEventAction)), new Text(hoverEventValue)));
       } else {
-        component.setHoverEvent(new HoverEvent(hoverEventAction, TextComponent.fromLegacyText(hoverEventValue)));
+        component.setHoverEvent(new HoverEvent(HoverEvent.Action.valueOf(String.valueOf(hoverEventAction)), TextComponent.fromLegacyText(hoverEventValue)));
       }
     }
     onlinePlayer.spigot().sendMessage(component);

@@ -18,8 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -216,8 +214,8 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     for(LabelData labelData : data) {
       if(senderIsPlayer) {
         new TextComponentBuilder(labelData.getText()).player((Player) sender)
-            .setClickEvent(ClickEvent.Action.SUGGEST_COMMAND, labelData.getCommand())
-            .setHoverEvent(HoverEvent.Action.SHOW_TEXT, labelData.getDescription())
+            .setClickEvent(TextComponentBuilder.ClickAction.SUGGEST_COMMAND, labelData.getCommand())
+            .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, labelData.getDescription())
             .sendPlayer();
 
       } else {
