@@ -161,9 +161,9 @@ public class LanguageManager {
       plugin.getDebugger().debug(Level.WARNING, "&cPlugin locale is invalid! Using default one...");
       pluginLocale = LocaleRegistry.getByName("English");
     }
-    /* is beta release */
-    if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("pre")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
-      plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in beta versions because they're lacking latest translations! Enabling English one...");
+    /* is snapshot release */
+    if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("-SNAPSHOT")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
+      plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in this versions because they're lacking latest translations! Enabling English one...");
       pluginLocale = LocaleRegistry.getByName("English");
       return;
     }

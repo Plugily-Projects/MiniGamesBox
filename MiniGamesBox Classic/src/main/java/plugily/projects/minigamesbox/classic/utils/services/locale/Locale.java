@@ -29,6 +29,8 @@ public class Locale {
 
   /* LANGUAGES ALREADY IN USE
 
+todo Locale outsource to server side getting of locales to avoid need of updates to plugin if new language got translated!
+
     //BB + Basque, Belarusian, Estonian, Greek, Japanese, Slovenian, Ukrainian
     //BB - Thai
     //MM + Afrikaans, Danish, Japanese, Slovak, Ukrainian
