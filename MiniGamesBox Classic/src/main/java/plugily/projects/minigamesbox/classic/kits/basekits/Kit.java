@@ -98,6 +98,9 @@ public abstract class Kit {
 
 
   public String getKey() {
+    if (key.equalsIgnoreCase("")) {
+      return name;
+    }
     return key;
   }
 
