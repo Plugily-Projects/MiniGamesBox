@@ -28,16 +28,7 @@ import java.util.List;
 public class Locale {
 
   /* LANGUAGES ALREADY IN USE
-
 todo Locale outsource to server side getting of locales to avoid need of updates to plugin if new language got translated!
-
-    //BB + Basque, Belarusian, Estonian, Greek, Japanese, Slovenian, Ukrainian
-    //BB - Thai
-    //MM + Afrikaans, Danish, Japanese, Slovak, Ukrainian
-    //MM -
-    //TB +
-    //TB - Chinese (Traditional), Chinese (Simplified), Indonesian, Korean, Lithuanian, Thai, Turkish, Vietnamese
-
 
         new Locale("Chinese (Traditional)", "简体中文", "zh_HK", "POEditor contributors", Arrays.asList("中文(傳統)", "中國傳統", "chinese_traditional", "zh"));
         new Locale("Chinese (Simplified)", "简体中文", "zh_CN", "POEditor contributors", Arrays.asList("简体中文", "中文", "chinese", "chinese_simplified", "cn"));
