@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.commands.arguments.game;
+package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -51,6 +51,7 @@ public class SetupArgument {
 
         if(args.length == 2) {
           new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().send(sender);
+          new MessageBuilder("COMMANDS_WRONG_USAGE").asKey().value("/" + registry.getPlugin().getCommandAdminPrefix() + " setup &c[create/edit] &c[arena]").send(sender);
           return;
         }
         switch(args[1].toLowerCase()) {

@@ -47,7 +47,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.JoinArgumen
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaderboardArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaveArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.SetupArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.SetupArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
