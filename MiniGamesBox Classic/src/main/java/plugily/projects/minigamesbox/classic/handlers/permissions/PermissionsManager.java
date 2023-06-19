@@ -190,7 +190,7 @@ public class PermissionsManager {
     }
     int value = 0;
     for(Map.Entry<String, Integer> perm : getPermissionCategoryMap(key).entrySet()) {
-      if(player.hasPermission(perm.getKey())) {
+      if(player.hasPermission(perm.getKey()) && !player.isOp() && !player.hasPermission("*")) {
         value += perm.getValue();
       }
     }
