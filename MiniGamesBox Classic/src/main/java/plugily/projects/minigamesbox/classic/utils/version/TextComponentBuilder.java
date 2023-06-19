@@ -134,7 +134,7 @@ public class TextComponentBuilder {
 
   private void send(Player onlinePlayer) {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_12_R1)) {
-      onlinePlayer.sendMessage(message);
+      onlinePlayer.sendRawMessage(message);
       return;
     }
     TextComponent component = new TextComponent(message);
