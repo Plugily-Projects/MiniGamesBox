@@ -99,13 +99,14 @@ public class BossbarManager {
    * @param player player
    */
   public void doBarAction(PluginArena.BarAction action, Player player) {
+    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
+      return;
+    }
     switch(action) {
       case ADD:
-        if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1) && plugin.getConfigPreferences().getOption("BOSSBAR")) {
-          BossBar bossBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
-          bossBar.addPlayer(player);
-          gameBars.add(bossBar);
-        }
+          BossBar newBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
+          newBar.addPlayer(player);
+          gameBars.add(newBar);
         break;
       case REMOVE:
         List<BossBar> bars = gameBars.stream().filter(bossBar -> bossBar.getPlayers().contains(player)).collect(Collectors.toList());
@@ -120,6 +121,9 @@ public class BossbarManager {
   }
 
   public void setProgress(double progress) {
+    if(gameBars.isEmpty()) {
+      return;
+    }
     gameBars.forEach(bossbar -> bossbar.setProgress(progress));
   }
 
