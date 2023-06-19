@@ -25,6 +25,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -61,13 +62,13 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
 
   @Override
   public void injectItems() {
-    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("&cGo to Setup Menu").colorizeItem().build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseItem()).name("&cGo to Setup Menu").colorizeItem().build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
 
-      Material material = XMaterial.GREEN_WOOL.parseMaterial();
+      ItemStack material = XMaterial.GREEN_WOOL.parseItem();
       if(!arena.isReady()) {
-        material = XMaterial.RED_WOOL.parseMaterial();
+        material = XMaterial.RED_WOOL.parseItem();
       }
 
       addItem(ClickableItem.of(new ItemBuilder(material)

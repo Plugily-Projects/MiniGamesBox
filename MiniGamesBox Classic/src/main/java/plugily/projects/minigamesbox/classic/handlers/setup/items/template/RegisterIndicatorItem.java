@@ -48,7 +48,7 @@ public class RegisterIndicatorItem implements ClickableItem {
   public ItemStack getItem() {
     ItemBuilder item;
     if(setupCategoryHandler.isDone()) {
-      item = new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseMaterial())
+      item = new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE.parseItem())
           .name("&aDONE")
           .lore("&aCategory")
           .lore("&6" + setupCategory.name().toUpperCase())
@@ -57,7 +57,7 @@ public class RegisterIndicatorItem implements ClickableItem {
 
           .colorizeItem();
     } else {
-      item = new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial())
+      item = new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseItem())
           .name("&cNEEDS SETUP")
           .lore("&aCategory")
           .lore("&6" + setupCategory.name().toUpperCase())
