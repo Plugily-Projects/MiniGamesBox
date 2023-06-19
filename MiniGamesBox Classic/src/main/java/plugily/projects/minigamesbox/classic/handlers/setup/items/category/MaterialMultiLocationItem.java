@@ -22,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.Action;
@@ -131,7 +132,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     switch(event.getClick()) {
       case LEFT:
         Block targetBlock = event.getWhoClicked().getTargetBlock(null, 7);
-        if(!checkMaterials.contains(targetBlock.getType())) {
+        if(!checkMaterial(targetBlock)) {
           new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
           return;
         }
@@ -178,7 +179,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
               new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
               break;
             case LEFT_CLICK_BLOCK:
-              if(!checkMaterials.contains(block.getType())) {
+              if(!checkMaterial(block)) {
                 new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
@@ -186,7 +187,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
               removeLocation(interactEvent.getPlayer(), false);
               break;
             case RIGHT_CLICK_BLOCK:
-              if(!checkMaterials.contains(block.getType())) {
+              if(!checkMaterial(block)) {
                 new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
@@ -238,9 +239,9 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private void addLocation(HumanEntity player, Location location) {
     FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
     List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
-    String signLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
-    if(!locs.contains(signLoc)) {
-      locs.add(signLoc);
+    String materialLocation = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
+    if(!locs.contains(materialLocation)) {
+      locs.add(materialLocation);
       config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
       ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
     }
@@ -250,7 +251,9 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     if(locs.size() == minimumValue) {
       new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + " " + name.toUpperCase() + " location! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
-    setupInventory.getPlugin().getSignManager().loadSigns();
+    if (keyName.contains("sign")) {
+      setupInventory.getPlugin().getSignManager().loadSigns();
+    }
   }
 
   private void removeLocation(HumanEntity player, boolean deleteAll) {
@@ -302,5 +305,12 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   @Override
   public boolean getSetupStatus() {
     return getSetupInfo().contains("✔");
+  }
+
+  private boolean checkMaterial(Block targetBlock) {
+    if (keyName.contains("sign")) {
+      return targetBlock.getState() instanceof Sign;
+    }
+    return checkMaterials.contains(targetBlock.getType());
   }
 }

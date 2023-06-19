@@ -18,6 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.helper;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 
 import java.util.HashSet;
@@ -43,6 +44,7 @@ public class MaterialUtils {
   public static final Set<Material> BASIC_SIGNS = new HashSet<Material>() {
     {
       add(getMat("SIGN"));
+      add(getMat("STANDING_SIGN"));
       add(getMat("ACACIA_SIGN"));
       add(getMat("BIRCH_SIGN"));
       add(getMat("DARK_OAK_SIGN"));
@@ -85,6 +87,10 @@ public class MaterialUtils {
   }
 
   private static Material getMat(String name) {
+    Material material = Material.getMaterial(name.toUpperCase());
+    if (material== null){
+      material = XMaterial.OAK_SIGN.parseMaterial();
+    }
     return Material.getMaterial(name.toUpperCase());
   }
 }
