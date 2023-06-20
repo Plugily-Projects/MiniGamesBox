@@ -55,7 +55,7 @@ public class StatsStorage {
     if(statisticType.isPersistent()) {
       plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
     }
-    plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("user_statistic_" + statisticType.getName(), Placeholder.PlaceholderExecutor.ALL) {
+    plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("user_statistic_" + statisticType.getName(), Placeholder.PlaceholderExecutor.ALL, true) {
       @Override
       public String getValue(Player player) {
         return Integer.toString(getUserStats(player, statisticType));

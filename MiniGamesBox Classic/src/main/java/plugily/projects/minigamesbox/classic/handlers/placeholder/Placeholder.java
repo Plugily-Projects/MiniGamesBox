@@ -32,15 +32,18 @@ public class Placeholder {
   private final String id;
   private final PlaceholderType placeholderType;
   private final PlaceholderExecutor placeholderExecutor;
+  private final Boolean requiresPlayer;
 
-  public Placeholder(String id, PlaceholderExecutor placeholderExecutor) {
+  public Placeholder(String id, PlaceholderExecutor placeholderExecutor, Boolean requiresPlayer) {
     this.id = id;
+    this.requiresPlayer = requiresPlayer;
     this.placeholderType = PlaceholderType.GLOBAL;
     this.placeholderExecutor = placeholderExecutor;
   }
 
-  public Placeholder(String id, PlaceholderType placeholderType, PlaceholderExecutor placeholderExecutor) {
+  public Placeholder(String id, PlaceholderType placeholderType, PlaceholderExecutor placeholderExecutor, Boolean requiresPlayer) {
     this.id = id;
+    this.requiresPlayer = requiresPlayer;
     this.placeholderType = placeholderType;
     this.placeholderExecutor = placeholderExecutor;
   }
@@ -77,6 +80,10 @@ public class Placeholder {
   public String getValue(PluginArena arena) {
     // EMPTY
     return null;
+  }
+
+  public Boolean requiresPlayer() {
+    return requiresPlayer;
   }
 
 

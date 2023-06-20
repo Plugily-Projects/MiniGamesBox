@@ -49,7 +49,7 @@ public class PlaceholderManager {
   }
 
   private void insertDefaultPlaceholders() {
-    registerPlaceholder(new Placeholder("arena_players_online", Placeholder.PlaceholderExecutor.ALL) {
+    registerPlaceholder(new Placeholder("arena_players_online", Placeholder.PlaceholderExecutor.ALL, false) {
       @Override
       public String getValue(Player player) {
         return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
@@ -65,7 +65,7 @@ public class PlaceholderManager {
         return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
       }
     });
-    registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API, false) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getPlayers().size());
@@ -77,7 +77,7 @@ public class PlaceholderManager {
       }
     });
     //dup of arena_option_max_players
-    registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API, false) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getMaximumPlayers());
@@ -88,7 +88,7 @@ public class PlaceholderManager {
         return Integer.toString(arena.getMaximumPlayers());
       }
     });
-    registerPlaceholder(new Placeholder("state", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("state", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API, false) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getArenaState().toString().toLowerCase();
@@ -99,7 +99,7 @@ public class PlaceholderManager {
         return arena.getArenaState().toString().toLowerCase();
       }
     });
-    registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API, false) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getArenaState().getPlaceholder();
@@ -110,7 +110,7 @@ public class PlaceholderManager {
         return arena.getArenaState().getPlaceholder();
       }
     });
-    registerPlaceholder(new Placeholder("name", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("name", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API, false) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return arena.getMapName();
@@ -121,7 +121,7 @@ public class PlaceholderManager {
         return arena.getMapName();
       }
     });
-    registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+    registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API, false) {
       @Override
       public String getValue(Player player, PluginArena arena) {
         return Integer.toString(arena.getTimer());
@@ -132,7 +132,7 @@ public class PlaceholderManager {
         return Integer.toString(arena.getTimer());
       }
     });
-    registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
+    registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL, true) {
       @Override
       public String getValue(Player player) {
         return plugin.getUserManager().getUser(player).getKit().getName();
