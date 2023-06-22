@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
@@ -39,5 +40,10 @@ public abstract class PremiumKit extends Kit {
         .lore(getDescription())
         .lore(new MessageBuilder("KIT_KIT_MENU_LORE_UNLOCK_STORE").asKey().build())
         .build();
+  }
+
+  @Override
+  public boolean isUnlockedByPlayer(Player player) {
+    return player.hasPermission( getPlugin().getPluginNamePrefixLong() + ".kits.locked") || player.hasPermission(getPlugin().getPluginNamePrefixLong() + ".kit." + getKey().toLowerCase());
   }
 }
