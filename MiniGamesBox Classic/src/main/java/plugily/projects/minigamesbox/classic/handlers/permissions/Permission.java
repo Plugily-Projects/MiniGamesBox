@@ -33,10 +33,14 @@ public class Permission {
 
 
   static {
+    /* Removed: why should user change permissions only these 3 there are way more... user experience easier if for all the same
+    stays here for some time, if no one claims a issue it can be removed soon!
     permissions.put("JOIN_FULL_GAME", new Permission("Basic.Full-Games", "plugilyprojects.fullgames", true));
     permissions.put("JOIN", new Permission("Basic.Join", "plugilyprojects.join.<arena>", true));
     permissions.put("FORCESTART_GAME", new Permission("Basic.Forcestart", "plugilyprojects.admin.forcestart", true));
+*/
   }
+
 
   private final String path;
   private final String permission;

@@ -162,7 +162,7 @@ public class PluginArenaUtils {
     if(!plugin
         .getBukkitHelper()
         .hasPermission(
-            player, plugin.getPermissionsManager().getPermissionString("FORCESTART_GAME"))) {
+            player, plugin.getPluginNamePrefixLong() + ".admin.forcestart")) {
       new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().player(player).sendPlayer();
       return;
     }
