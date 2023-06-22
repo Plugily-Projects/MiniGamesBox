@@ -158,12 +158,12 @@ public class PluginArenaManager {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
-    if(!player.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
+    if(!player.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
       new MessageBuilder("IN_GAME_JOIN_FULL_GAME").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
     for(Player arenaPlayer : arena.getPlayers()) {
-      if(arenaPlayer.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
+      if(arenaPlayer.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
         continue;
       }
       if(arena.getArenaState().isLobbyStage(arena)) {
@@ -189,7 +189,7 @@ public class PluginArenaManager {
       new MessageBuilder("IN_GAME_JOIN_CANCEL_API").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
-    String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
+    String perm = plugin.getPluginNamePrefixLong() + ".join.<arena>";
     if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
       MessageBuilder denyMessage = new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId()));
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {

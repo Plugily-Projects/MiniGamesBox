@@ -44,7 +44,7 @@ public class ArenaSelectorArgument {
 
   public ArenaSelectorArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getPluginNamePrefixLong(), new LabeledCommandArgument("arenas", registry.getPlugin().getPluginNamePrefixLong() + ".arenas", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " arenas", "/" + registry.getPlugin().getPluginNamePrefix() + " arenas", "&7Select an arena\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".arenas")) {
+        new LabelData("/" + registry.getPlugin().getPluginNamePrefix() + " arenas", "/" + registry.getPlugin().getPluginNamePrefix() + " arenas", "&7Overview over all arenas in one GUI. Select one to join\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".arenas")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;

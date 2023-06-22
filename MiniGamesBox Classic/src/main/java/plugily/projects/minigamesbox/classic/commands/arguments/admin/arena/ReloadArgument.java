@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.commands.arguments.admin;
+package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

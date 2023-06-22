@@ -31,7 +31,7 @@ import plugily.projects.minigamesbox.classic.commands.arguments.admin.HologramAr
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.ListArenasArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.LocationWandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.PlaceholderCheckArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.ReloadArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ReloadArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.SpyChatArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.TeleportArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.DeleteArgument;
@@ -42,7 +42,6 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgu
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.ArenaSelectorArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.CreateArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.JoinArguments;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaderboardArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaveArgument;
