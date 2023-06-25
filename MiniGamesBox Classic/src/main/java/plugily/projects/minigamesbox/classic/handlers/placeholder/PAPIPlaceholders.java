@@ -71,11 +71,11 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
         return placeholder.getValue(player);
       }
     }
-    String[] data = id.split(":", 2);
-    if(data.length < 2) {
+    String[] data = id.split("_", 3);
+    if(data.length < 3) {
       return null;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArena(data[0]);
+    PluginArena arena = plugin.getArenaRegistry().getArena(data[1]);
     if(arena == null) {
       return null;
     }
@@ -84,7 +84,7 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
         continue;
       }
 
-      if(data[1].toLowerCase().equalsIgnoreCase(placeholder.getId())) {
+      if(("arena_" + data[2]).toLowerCase().equalsIgnoreCase(placeholder.getId())) {
         return placeholder.getValue(player, arena);
       }
     }
