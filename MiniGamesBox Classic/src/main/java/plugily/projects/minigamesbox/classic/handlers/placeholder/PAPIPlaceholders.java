@@ -60,17 +60,15 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
 
   @Override
   public String onPlaceholderRequest(Player player, @NotNull String id) {
-    if(player == null) {
-      return null;
-    }
     for(Placeholder placeholder : plugin.getPlaceholderManager().getRegisteredPAPIPlaceholders()) {
       if(placeholder.getPlaceholderType() == Placeholder.PlaceholderType.ARENA) {
         continue;
       }
       if(id.toLowerCase().equalsIgnoreCase(placeholder.getId())) {
-        return placeholder.getValue(player);
+        return player == null ? placeholder.getValue() : placeholder.getValue(player);
       }
     }
+
     String[] data = id.split("_", 3);
     if(data.length < 3) {
       return null;
@@ -85,7 +83,7 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
       }
 
       if(("arena_" + data[2]).toLowerCase().equalsIgnoreCase(placeholder.getId())) {
-        return placeholder.getValue(player, arena);
+        return player == null ? placeholder.getValue(arena) : placeholder.getValue(player, arena);
       }
     }
     return null;

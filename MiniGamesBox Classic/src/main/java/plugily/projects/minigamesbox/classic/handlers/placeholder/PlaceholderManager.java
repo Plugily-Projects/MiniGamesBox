@@ -50,19 +50,25 @@ public class PlaceholderManager {
 
   private void insertDefaultPlaceholders() {
     registerPlaceholder(new Placeholder("arena_players_online", Placeholder.PlaceholderExecutor.ALL) {
+
+      @Override
+      public String getValue() {
+        return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
+      }
+
       @Override
       public String getValue(Player player) {
-        return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
+        return getValue();
       }
 
       @Override
       public String getValue(PluginArena arena) {
-        return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
+        return getValue();
       }
 
       @Override
       public String getValue(Player player, PluginArena arena) {
-        return Integer.toString(plugin.getArenaRegistry().getArenaPlayersOnline());
+        return getValue();
       }
     });
     registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {

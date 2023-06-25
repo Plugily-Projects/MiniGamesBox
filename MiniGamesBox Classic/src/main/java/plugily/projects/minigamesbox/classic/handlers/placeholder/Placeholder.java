@@ -64,12 +64,12 @@ public class Placeholder {
     return placeholderExecutor;
   }
 
-  public String getValue(Player player) {
+  public String getValue() {
     // EMPTY
     return null;
   }
 
-  public String getValue(Player player, PluginArena arena) {
+  public String getValue(Player player) {
     // EMPTY
     return null;
   }
@@ -79,6 +79,10 @@ public class Placeholder {
     return null;
   }
 
+  public String getValue(Player player, PluginArena arena) {
+    // EMPTY
+    return null;
+  }
 
   public enum PlaceholderType {
     GLOBAL, ARENA
