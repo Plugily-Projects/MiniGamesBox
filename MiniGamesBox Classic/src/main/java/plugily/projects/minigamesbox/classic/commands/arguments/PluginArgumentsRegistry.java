@@ -24,16 +24,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.*;
 import plugily.projects.minigamesbox.string.StringMatcher;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.HologramArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.ListArenasArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.LocationWandArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.PlaceholderCheckArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ReloadArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.SpyChatArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.TeleportArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.DeleteArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ForceStartArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.StopArgument;
@@ -46,7 +41,6 @@ import plugily.projects.minigamesbox.classic.commands.arguments.game.JoinArgumen
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaderboardArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaveArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.SetupArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -108,6 +102,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new ListArenasArgument(this);
     new LocationWandArgument(this);
     new PlaceholderCheckArgument(this);
+    new LocalesArgument(this);
     spyChat = new SpyChatArgument(this);
     new TeleportArgument(this);
     if(plugin.getConfigPreferences().getOption("LEADERBOARDS")) {
