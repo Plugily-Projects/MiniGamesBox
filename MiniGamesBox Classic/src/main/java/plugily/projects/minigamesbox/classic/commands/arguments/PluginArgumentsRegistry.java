@@ -80,7 +80,6 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
     //register basic arguments
     new SetupArgument(this);
-    new CreateArgument(this);
     new JoinArguments(this);
     new ArenaSelectorArgument(this);
     new LeaderboardArgument(this);
