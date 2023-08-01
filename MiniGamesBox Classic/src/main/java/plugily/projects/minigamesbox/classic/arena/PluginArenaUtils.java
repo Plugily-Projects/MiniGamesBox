@@ -159,10 +159,7 @@ public class PluginArenaUtils {
   }
 
   public static void arenaForceStart(Player player, int timer) {
-    if(!plugin
-        .getBukkitHelper()
-        .hasPermission(
-            player, plugin.getPluginNamePrefixLong() + ".admin.forcestart")) {
+    if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPluginNamePrefixLong() + ".admin.forcestart")) {
       new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().player(player).sendPlayer();
       return;
     }
@@ -176,30 +173,19 @@ public class PluginArenaUtils {
       return;
     }
 
-    plugin
-        .getDebugger()
-        .debug(
-            "Arena {0} got force started by {1} with timer {2}",
-            arena.getId(), player.getName(), timer);
-    arena.setArenaState(ArenaState.STARTING, true);
+    plugin.getDebugger().debug("Arena {0} got force started by {1} with timer {2}", arena.getId(), player.getName(), timer);
+    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+      arena.setArenaState(ArenaState.STARTING, true);
+    }
     if(timer <= 0) {
       arena.setForceStart(true);
-      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART")
-          .asKey()
-          .player(player)
-          .arena(arena)
-          .sendArena();
+      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART").asKey().player(player).arena(arena).sendArena();
     } else {
       if(arena.getTimer() <= timer) {
         return;
       }
       arena.setTimer(timer, true);
-      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME")
-          .asKey()
-          .integer(timer)
-          .player(player)
-          .arena(arena)
-          .sendArena();
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME").asKey().integer(timer).player(player).arena(arena).sendArena();
     }
   }
 
