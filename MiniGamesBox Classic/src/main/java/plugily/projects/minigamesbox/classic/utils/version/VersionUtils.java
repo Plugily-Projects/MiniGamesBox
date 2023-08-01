@@ -426,7 +426,7 @@ public final class VersionUtils {
 
   public static void setCollidable(Player player, boolean value) {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3)) {
-      player.spigot().setCollidesWithEntities(value);
+      //player.spigot().setCollidesWithEntities(value);
     } else {
       player.setCollidable(value);
     }
