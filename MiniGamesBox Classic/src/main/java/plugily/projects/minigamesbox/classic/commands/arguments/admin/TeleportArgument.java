@@ -37,7 +37,7 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 public class TeleportArgument {
   public TeleportArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("tp", registry.getPlugin().getPluginNamePrefixLong() + ".admin.teleport", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " tp &6<arena/worldName> [location type]", "/" + registry.getPlugin().getCommandAdminPrefix() + " tp <arena> <location>",
+        new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " tp &6<arena/worldName> [location type]", "/" + registry.getPlugin().getCommandAdminPrefix() + " tp <arena/worldName> [location type]",
             "&7Teleport you to provided arena location\n&7Valid locations:\n&7• LOBBY - lobby location\n&7• START - starting location\n"
                 + "&7• END - ending location\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.teleport")) {
       @Override
