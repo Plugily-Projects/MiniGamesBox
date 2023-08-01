@@ -18,8 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
@@ -36,10 +35,9 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
  * Created at 01.11.2021
  */
 public class TeleportArgument {
-  //ToDo world teleports
   public TeleportArgument(PluginArgumentsRegistry registry) {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("tp", registry.getPlugin().getPluginNamePrefixLong() + ".admin.teleport", CommandArgument.ExecutorType.PLAYER,
-        new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " tp &6<arena> <location type>", "/" + registry.getPlugin().getCommandAdminPrefix() + " tp <arena> <location>",
+        new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " tp &6<arena/worldName> [location type]", "/" + registry.getPlugin().getCommandAdminPrefix() + " tp <arena> <location>",
             "&7Teleport you to provided arena location\n&7Valid locations:\n&7• LOBBY - lobby location\n&7• START - starting location\n"
                 + "&7• END - ending location\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.teleport")) {
       @Override
@@ -49,7 +47,17 @@ public class TeleportArgument {
           return;
         }
         if(args.length == 2) {
-          new MessageBuilder(ChatColor.RED + "Please type location type: END, START, LOBBY").prefix().send(sender);
+          try {
+            String worldName = args[1];
+            World world = Bukkit.getServer().getWorld(worldName);
+            if(world == null && !Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core")) {
+              world = Bukkit.createWorld(new WorldCreator(worldName));
+            }
+            ((Player) sender).teleport(world.getSpawnLocation());
+          } catch(Exception ignored) {
+            new MessageBuilder(ChatColor.RED + "World not found or use correct command").prefix().send(sender);
+            new MessageBuilder(ChatColor.RED + "Please type location type: END, START, LOBBY").prefix().send(sender);
+          }
           return;
         }
         PluginArena.GameLocation type;
