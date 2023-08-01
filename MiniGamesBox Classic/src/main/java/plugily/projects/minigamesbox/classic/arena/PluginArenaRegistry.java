@@ -156,6 +156,7 @@ public class PluginArenaRegistry {
     if(lobbyWorld != null) {
       arenaWorlds.remove(lobbyWorld);
     }
+    plugin.getSignManager().loadSigns();
   }
 
   public PluginArena getNewArena(String id) {

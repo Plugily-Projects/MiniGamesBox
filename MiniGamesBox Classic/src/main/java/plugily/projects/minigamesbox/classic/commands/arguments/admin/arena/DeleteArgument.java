@@ -64,11 +64,10 @@ public class DeleteArgument {
           return;
         }
         confirmations.remove(sender);
-        registry.getPlugin().getArenaManager().stopGame(false, arena);
+        registry.getPlugin().getArenaRegistry().unregisterArena(arena);
         FileConfiguration config = ConfigUtils.getConfig(registry.getPlugin(), "arenas");
         config.set("instances." + args[1], null);
         ConfigUtils.saveConfig(registry.getPlugin(), config, "arenas");
-        registry.getPlugin().getArenaRegistry().unregisterArena(arena);
         new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().send(sender);
       }
     });
