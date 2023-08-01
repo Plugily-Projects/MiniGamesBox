@@ -102,7 +102,7 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
 
                 FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
-                setupInventory.getConfig().set("instances." + arena.getId(), null);
+                config.set("instances." + arena.getId(), null);
                 ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
 
                 context.getForWhom().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().build());
