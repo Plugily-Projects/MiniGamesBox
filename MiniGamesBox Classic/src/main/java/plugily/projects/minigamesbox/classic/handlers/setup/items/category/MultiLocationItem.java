@@ -179,7 +179,7 @@ public class MultiLocationItem implements CategoryItemHandler {
 
   private void teleport(HumanEntity player) {
     if(!getLocationsList().isEmpty()) {
-      Location location = getLocationsList().get(setupInventory.getPlugin().getRandom().nextInt(getLocationsList().size() - 1));
+      Location location = getLocationsList().get(setupInventory.getPlugin().getRandom().nextInt(getLocationsList().size()));
       VersionUtils.teleport(player, location);
       new MessageBuilder("&aTeleported to " + name.toUpperCase() + " Location of arena " + setupInventory.getArenaKey() + " (" + location + ")").prefix().send(player);
       return;
