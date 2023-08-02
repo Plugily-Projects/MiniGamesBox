@@ -132,6 +132,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     switch(event.getClick()) {
       case LEFT:
         Block targetBlock = event.getWhoClicked().getTargetBlock(null, 7);
+        setupInventory.getPlugin().getDebugger().debug("[TARGET BLOCK] " + targetBlock.getLocation() + targetBlock.getType() + checkMaterials.contains(targetBlock.getType()));
         if(!checkMaterial(targetBlock)) {
           new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
           return;
