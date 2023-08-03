@@ -18,6 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.services.locale;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -33,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -66,9 +68,18 @@ public class LocaleService {
       Files.write(file.toPath(), data.getBytes());
       localeData = ConfigUtils.getConfig(plugin, "/locales/locale_data");
       plugin.getDebugger().debug(Level.WARNING, "Fetched latest localization file from repository.");
+      loadPluginLocales();
     } catch(IOException ignored) {
       //ignore exceptions
       plugin.getDebugger().debug(Level.WARNING, "Couldn't access locale fetcher service or there is other problem! You should notify author!");
+    }
+  }
+
+  private void loadPluginLocales() {
+    for(String key : localeData.getConfigurationSection("locales.register").getKeys(false)) {
+      String name = localeData.getString("locales.register." + key + ".name", key);
+      String originalName = localeData.getString("locales.register." + key + ".original_name", key);
+      LocaleRegistry.registerLocale(new Locale(name, originalName, key, "PoEditor Contributors https://translate.plugily.xyz", Arrays.asList(key.toLowerCase(), name, originalName, key.split("_")[1])));
     }
   }
 
