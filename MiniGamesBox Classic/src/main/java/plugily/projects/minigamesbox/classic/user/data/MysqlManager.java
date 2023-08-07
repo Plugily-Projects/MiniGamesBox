@@ -51,10 +51,7 @@ public class MysqlManager implements UserDatabase {
 
   public MysqlManager(PluginMain plugin) {
     this.plugin = plugin;
-    this.createTableStatement = "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (\n"
-        + "  `UUID` char(36) NOT NULL PRIMARY KEY,\n"
-        + "  `name` varchar(32) NOT NULL\n"
-        + ");";
+    this.createTableStatement = "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (`UUID` char(36) NOT NULL PRIMARY KEY, `name` varchar(32) NOT NULL);";
     FileConfiguration config = ConfigUtils.getConfig(plugin, "mysql");
     database = new MysqlDatabase(config.getString("user"), config.getString("password"), config.getString("address"), config.getLong("maxLifeTime", 1800000));
     plugin.getDebugger().debug("MySQL Database enabled");
@@ -81,10 +78,8 @@ public class MysqlManager implements UserDatabase {
   private void updateTable(@NotNull Statement statement, String sql) {
     try {
       statement.executeUpdate(sql);
-    } catch(SQLException exception) {
-      if(!exception.getMessage().contains("Duplicate column name")) {
-        throwException(exception);
-      }
+    } catch(SQLException ignored) {
+      //already created
     }
   }
 
@@ -98,8 +93,8 @@ public class MysqlManager implements UserDatabase {
       try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
         updateTable(statement, "ALTER TABLE " + getTableName() + " ADD COLUMN " + columnName + " " + columnProperties + ";");
         plugin.getDebugger().debug("MySQL Table | Added column {0} {1}", columnName, columnProperties);
-      } catch(SQLException exception) {
-        throwException(exception);
+      } catch(SQLException ignored) {
+        //already created column
       }
     });
   }
@@ -136,7 +131,7 @@ public class MysqlManager implements UserDatabase {
     Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
       String uuid = user.getUniqueId().toString();
       try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
-        String playerName = user.getPlayer().getName();
+        String playerName = user.getPlayer() == null ? Bukkit.getOfflinePlayer(uuid).getName() : user.getPlayer().getName();
 
         database.executeUpdate("UPDATE " + getTableName() + " SET name='" + playerName + "' WHERE UUID='" + uuid + "';");
         ResultSet resultSet = statement.executeQuery("SELECT * from " + getTableName() + " WHERE UUID='" + uuid + "'");
@@ -160,8 +155,10 @@ public class MysqlManager implements UserDatabase {
    */
   private void loadUserStats(User user, ResultSet resultSet) throws SQLException {
     //player already exists - get the stats
-    for(Map.Entry<String, StatisticType> entry : plugin.getStatsStorage().getStatistics().entrySet()) {
-      StatisticType statisticType = entry.getValue();
+    for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
+      if(!statisticType.isPersistent()) {
+        continue;
+      }
       setUserStat(user, statisticType, resultSet.getInt(statisticType.getName()));
     }
     plugin.getDebugger().debug("Loaded User Stats for {0}", user.getPlayer().getName());
@@ -217,6 +214,7 @@ public class MysqlManager implements UserDatabase {
     plugin.getDebugger().debug(Level.WARNING, "SQLException occurred! Cause: {0} ({1})", exception.getSQLState(), exception.getErrorCode());
     plugin.getMessageUtils().errorOccurred();
     Bukkit.getConsoleSender().sendMessage("Check configuration of mysql.yml file or try to disable mysql option in config.yml");
+    exception.printStackTrace();
   }
 
   /**
