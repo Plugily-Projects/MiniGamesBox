@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.handlers.permissions;
@@ -34,10 +33,14 @@ public class Permission {
 
 
   static {
+    /* Removed: why should user change permissions only these 3 there are way more... user experience easier if for all the same
+    stays here for some time, if no one claims a issue it can be removed soon!
     permissions.put("JOIN_FULL_GAME", new Permission("Basic.Full-Games", "plugilyprojects.fullgames", true));
     permissions.put("JOIN", new Permission("Basic.Join", "plugilyprojects.join.<arena>", true));
     permissions.put("FORCESTART_GAME", new Permission("Basic.Forcestart", "plugilyprojects.admin.forcestart", true));
+*/
   }
+
 
   private final String path;
   private final String permission;

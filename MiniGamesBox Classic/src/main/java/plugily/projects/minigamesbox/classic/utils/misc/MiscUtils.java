@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.utils.misc;
@@ -173,32 +172,30 @@ public class MiscUtils {
 
 
   public static void sendStartUpMessage(Plugin plugin, String pluginname, PluginDescriptionFile descriptionFile, boolean disclaimer, boolean support) {
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] -_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_-");
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Versions: ");
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Plugin: §6" + descriptionFile.getVersion() + " §r| Server: §6" + plugin.getServer().getVersion() + " §r| Detected: §6" + ServerVersion.Version.getCurrent() + " §r| Software: §6" + plugin.getServer().getName() + " §r| Java: §6" + System.getProperty("java.version"));
-    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
+    sendLineBreaker(pluginname);
+    sendVersionInformation(plugin, pluginname, descriptionFile);
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] This plugin was created by §6Plugily Projects §ras part of an §6open source project§r ( https://donate.plugily.xyz )");
     if(!plugin.getServer().getName().equalsIgnoreCase("craftbukkit") && !plugin.getServer().getName().equalsIgnoreCase("paper")) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
-      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SOFTWARE] §cYou are using some fork that was not tested by us. The plugin may work on it, too.");
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SOFTWARE] §cYou are using some fork that was not tested by us. The plugin may work on it, too. (no guarantee)");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SOFTWARE] §cIf you have any bugs, please try to replicate the issue on paper software first!");
     }
-    if(plugin.getDescription().getVersion().contains("-debug") || plugin.getConfig().getBoolean("Debug")) {
+    String version = plugin.getDescription().getVersion();
+    if(version.contains("-debug") || plugin.getConfig().getBoolean("Debug")) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DEBUG] §eThe debug mode of this plugin is enabled");
     }
-    if(plugin.getDescription().getVersion().contains("-b")) {
+    if(version.contains("-b")) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][BETA] §eWe recognize that this is a beta build");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][BETA] §eAs beta already says this version is not meant for production servers!");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][BETA] §eWe are trying our best to provide you with nearly stable builds");
     }
-    if(plugin.getDescription().getVersion().contains("-dev")) {
+    if(version.contains("-SNAPSHOT")) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
-      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DEV] §eWe recognize that this is a dev build");
-      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DEV] §c!!!DO NOT USE THIS ON PRODUCTION!!!");
-      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DEV] §eDev builds are just for test purposes and we do not provide any support to them!");
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SNAPSHOT] §eWe recognize that this is a SNAPSHOT build");
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SNAPSHOT] §c!!!DO NOT USE THIS ON PRODUCTION!!!");
+      Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SNAPSHOT] §eSNAPSHOT builds are just for test purposes and we do not provide any support to them!");
     }
     if(disclaimer) {
       if(ServerVersion.Version.isCurrentEqual(Version.v0_0_R0) || ServerVersion.Version.isCurrentLower(Version.v1_12_R1)) {
@@ -206,23 +203,34 @@ public class MiscUtils {
         if(ServerVersion.Version.isCurrentEqual(Version.v0_0_R0)) {
           Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cIt seems like our system does not know your Server version, you should contact our support!");
         }
-        if(ServerVersion.Version.isCurrentLower(Version.v1_12_R1)) {
+        if(ServerVersion.Version.isCurrentLower(Version.v1_17_R1)) {
           Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cWe noticed that you are using an older version of Minecraft.");
           Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cPlease keep in mind that newer versions will help improving the security and performance of your server.");
-          if(ServerVersion.Version.isCurrentLower(Version.v1_11_R1)) {
-            Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cWe do not give official support for old Minecraft versions as they are to outdated and slow down dev progress!");
+          if(ServerVersion.Version.isCurrentLower(Version.v1_12_R1)) {
+            Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cWe do not give official support for old Minecraft versions as they are to outdated, have security risks and slow down dev progress!");
           }
         }
       }
     }
-    if(support && ServerVersion.Version.isCurrentEqualOrHigher(Version.v1_11_R1)) {
+    if(support && ServerVersion.Version.isCurrentEqualOrHigher(Version.v1_12_R1)) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SUPPORT] If you have any problems, you can always contact us on our Discord server! ( https://discord.plugily.xyz )");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SUPPORT] You can also check out our wiki at https://wiki.plugily.xyz");
     }
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "]                               §6The plugin got fully enabled! Enjoy the plugin ;)");
+    sendLineBreaker(pluginname);
+  }
+
+  public static void sendLineBreaker(String pluginname) {
     Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] -_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_--_-_-_-");
+  }
+
+  public static void sendVersionInformation(Plugin plugin, String pluginname, PluginDescriptionFile descriptionFile) {
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Versions: ");
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] Plugin: §6" + descriptionFile.getVersion() + " §r| Server: §6" + plugin.getServer().getVersion() + " §r| Detected: §6" + Version.getCurrent() + " §r| Software: §6" + plugin.getServer().getName() + " §r| Java: §6" + System.getProperty("java.version"));
+    Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
   }
 
   public static void sendStartUpMessage(Plugin plugin) {

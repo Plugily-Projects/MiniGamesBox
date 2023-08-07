@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena.states;
@@ -30,6 +29,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
+import plugily.projects.minigamesbox.classic.utils.helper.SoundHelper;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
@@ -52,7 +52,7 @@ public class PluginStartingState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     setArenaState(ArenaState.STARTING);
     setArenaTimer(-999);
-    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
     int timer = arena.getTimer();
 
@@ -86,7 +86,7 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setExp(1);
         player.setLevel(0);
       }
-      plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+      plugin.getDebugger().performance("ArenaUpdate", "END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
       return;
     }
@@ -113,11 +113,12 @@ public class PluginStartingState implements ArenaStateHandler {
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
     }
+    SoundHelper.playArenaCountdown(arena);
     if(arena.isForceStart()) {
       arena.setForceStart(false);
     }
 
-    if (arena.getMaximumPlayers() == arena.getPlayers().size()) {
+    if(arena.getMaximumPlayers() == arena.getPlayers().size()) {
       int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
 
       if(arena.getTimer() > shorter) {
@@ -127,7 +128,7 @@ public class PluginStartingState implements ArenaStateHandler {
       }
     }
 
-    plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
   }
 

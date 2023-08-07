@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.handlers.setup;
@@ -37,13 +36,14 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
 import plugily.projects.minigamesbox.classic.utils.version.TextComponentBuilder;
 
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
- * <p>
- * Created at 21.06.2022
+ * <p>Created at 21.06.2022
  */
 public class SetupInventory {
-  //ToDo Recommend player setup settings, survival and fly active
+  // ToDo Recommend player setup settings, survival and fly active
   private SetupInventoryUtils.SetupInventoryStage inventoryStage;
   private String arenaKey = null;
   private final Player player;
@@ -115,7 +115,6 @@ public class SetupInventory {
     return arenaKey;
   }
 
-
   public Player getPlayer() {
     return player;
   }
@@ -134,7 +133,6 @@ public class SetupInventory {
     ConfigUtils.saveConfig(getPlugin(), arenasFile, "arenas");
   }
 
-
   public String isOptionDone(String path) {
     Object option = getConfig().get("instances." + getArenaKey() + "." + path);
 
@@ -147,7 +145,7 @@ public class SetupInventory {
 
   public String isSectionOptionDone(String path, int minimum) {
     ConfigurationSection section = getConfig().getConfigurationSection("instances." + getArenaKey() + "." + path);
-    if(minimum == 0) {
+    if(minimum == 0 && section == null) {
       return "&e&l✔ Optional";
     }
     if(section != null) {
@@ -160,6 +158,24 @@ public class SetupInventory {
       return "&a&l✔ Completed &7(value: &8" + keysSize + "&7)";
     }
 
+    return "&c&l✘ Not Completed | Reason: No data";
+  }
+
+  public String isLocationSectionOptionDone(String path, int minimum) {
+    List<String> option = getConfig().getStringList("instances." + getArenaKey() + "." + path);
+    if(minimum == 0 && option.isEmpty()) {
+      return "&e&l✔ Optional";
+    }
+    if(!option.isEmpty()) {
+      Location location = LocationSerializer.getLocation(option.get(0));
+      if(location != null) {
+        int keysSize = option.size();
+        if(keysSize < minimum) {
+          return "&c&l✘ Not Completed | &cPlease add more locations";
+        }
+        return "&a&l✔ Completed &7(value: &8" + keysSize + "&7)";
+      }
+    }
     return "&c&l✘ Not Completed | Reason: No data";
   }
 
@@ -222,18 +238,17 @@ public class SetupInventory {
 
     plugin.getArenaRegistry().registerArena(id);
 
-
     player.sendRawMessage(ChatColor.BOLD + "------------------------------------------");
     player.sendRawMessage(new MessageBuilder("      &eInstance &6" + id + " &ecreated!").build());
     player.sendRawMessage("");
     new TextComponentBuilder("&aEdit this arena via &7/" + plugin.getCommandAdminPrefix() + " setup edit " + id).player(player)
-        .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
-        .setClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
+        .setClickEvent(TextComponentBuilder.ClickAction.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup edit " + id)
         .sendPlayer();
     player.sendRawMessage("");
     new TextComponentBuilder("&aEnter Setup Inventory via &7/" + plugin.getCommandAdminPrefix() + " setup").player(player)
-        .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup")
-        .setClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup")
+        .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "/" + plugin.getCommandAdminPrefix() + " setup")
+        .setClickEvent(TextComponentBuilder.ClickAction.RUN_COMMAND, "/" + plugin.getCommandAdminPrefix() + " setup")
         .sendPlayer();
     player.sendRawMessage("");
     player.sendRawMessage(ChatColor.GOLD + "Don't know where to start? Check out the tutorial video at");

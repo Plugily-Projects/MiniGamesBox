@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena.states;
@@ -47,7 +46,7 @@ public class PluginWaitingState implements ArenaStateHandler {
   public void handleCall(PluginArena arena) {
     setArenaState(ArenaState.WAITING_FOR_PLAYERS);
     setArenaTimer(-999);
-    plugin.getDebugger().debug("START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
     int minPlayers = arena.getMinimumPlayers();
 
@@ -56,7 +55,7 @@ public class PluginWaitingState implements ArenaStateHandler {
         arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().integer(minPlayers).arena(arena).sendArena();
       }
-      plugin.getDebugger().debug("END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+      plugin.getDebugger().performance("ArenaUpdate","END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
       return;
     }
@@ -67,7 +66,7 @@ public class PluginWaitingState implements ArenaStateHandler {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
-    plugin.getDebugger().debug("END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
   }
 

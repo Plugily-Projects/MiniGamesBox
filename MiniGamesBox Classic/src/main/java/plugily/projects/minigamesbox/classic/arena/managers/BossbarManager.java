@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena.managers;
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -46,8 +46,8 @@ public class BossbarManager {
   private final PluginArena arena;
   private final int interval;
   private int currentLine;
-  private final Map<ArenaState, List<String>> bossbar = new EnumMap<>(ArenaState.class);
-  private BossBar gameBar;
+  private final Map<ArenaState, List<String>> bossbarLines = new EnumMap<>(ArenaState.class);
+  private List<BossBar> gameBars = new ArrayList<>();
 
   public BossbarManager(PluginArena arena) {
     this.arena = arena;
@@ -64,27 +64,24 @@ public class BossbarManager {
       }
       List<String> titlesList = plugin.getLanguageManager().getLanguageList("Bossbar.Content." + arenaState.getFormattedName());
       titlesList.add(bossBarTitle);
-      bossbar.put(arenaState, titlesList);
+      bossbarLines.put(arenaState, titlesList);
     }
-    plugin.getDebugger().debug("Arena {0} loaded Bossbar content: {1}", arena.getId(), bossbar.toString());
-
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1) && plugin.getConfigPreferences().getOption("BOSSBAR")) {
-      gameBar = Bukkit.createBossBar(bossBarTitle, BarColor.BLUE, BarStyle.SOLID);
-    }
+    plugin.getDebugger().debug("Arena {0} loaded Bossbar content: {1}", arena.getId(), bossbarLines.toString());
   }
 
   public void bossBarUpdate() {
-    if(gameBar == null) {
+    if(gameBars.isEmpty()) {
       return;
     }
-
-    List<String> values = new ArrayList<>(bossbar.get(arena.getArenaState() == ArenaState.FULL_GAME ? ArenaState.STARTING : arena.getArenaState()));
+    List<String> values = new ArrayList<>(bossbarLines.get(arena.getArenaState() == ArenaState.FULL_GAME ? ArenaState.STARTING : arena.getArenaState()));
 
     if(currentLine > values.size() - 1) {
       currentLine = 0;
     }
-
-    String bossbarMessage = new MessageBuilder(values.get(currentLine)).arena(arena).build();
+    for(BossBar bar : gameBars) {
+      String bossbarMessage = new MessageBuilder(values.get(currentLine)).arena(arena).player(bar.getPlayers().get(0)).build();
+      bar.setTitle(bossbarMessage);
+    }
 
     if(arena.getArenaOption("BAR_TOGGLE_VALUE") > interval) {
       currentLine++;
@@ -92,7 +89,6 @@ public class BossbarManager {
       arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
     }
 
-    gameBar.setTitle(bossbarMessage);
     arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
   }
 
@@ -103,37 +99,32 @@ public class BossbarManager {
    * @param player player
    */
   public void doBarAction(PluginArena.BarAction action, Player player) {
-    if(gameBar == null) {
+    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
       return;
     }
     switch(action) {
       case ADD:
-        gameBar.addPlayer(player);
+          BossBar newBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
+          newBar.addPlayer(player);
+          gameBars.add(newBar);
         break;
       case REMOVE:
-        gameBar.removePlayer(player);
+        List<BossBar> bars = gameBars.stream().filter(bossBar -> bossBar.getPlayers().contains(player)).collect(Collectors.toList());
+        for(BossBar bar : bars) {
+          bar.removePlayer(player);
+          gameBars.remove(bar);
+        }
         break;
       default:
         break;
     }
   }
 
-  /**
-   * Returns boss bar of the game.
-   * Please use doBarAction if possible
-   *
-   * @return game boss bar
-   * @see #doBarAction(PluginArena.BarAction, Player)
-   */
-  public BossBar getGameBar() {
-    return gameBar;
-  }
-
   public void setProgress(double progress) {
-    if(gameBar == null) {
+    if(gameBars.isEmpty()) {
       return;
     }
-    gameBar.setProgress(progress);
+    gameBars.forEach(bossbar -> bossbar.setProgress(progress));
   }
 
 }

@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena;
@@ -113,17 +112,22 @@ public class PluginArenaUtils {
       user.setSpectator(false);
     }
     player.updateInventory();
+    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
     arena.getScoreboardManager().createScoreboard(user);
   }
 
-  public static void resetPlayerAfterGame(Player player) {
+  public static void resetPlayerAfterGame(PluginArena arena, Player player) {
     for(Player players : plugin.getServer().getOnlinePlayers()) {
       VersionUtils.showPlayer(plugin, player, players);
       if(!plugin.getArenaRegistry().isInArena(players)) {
         VersionUtils.showPlayer(plugin, players, player);
       }
     }
-    VersionUtils.setGlowing(player, false);
+    User user = plugin.getUserManager().getUser(player);
+    user.setSpectator(false);
+    user.setPermanentSpectator(false);
+
+    player.closeInventory();
     player.setGameMode(GameMode.SURVIVAL);
     player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
     player.setFlying(false);
@@ -134,22 +138,28 @@ public class PluginArenaUtils {
     player.setHealth(VersionUtils.getMaxHealth(player));
     player.setFireTicks(0);
     player.setFoodLevel(20);
-    // the default fly speed
     player.setFlySpeed(0.1f);
     player.setWalkSpeed(0.2f);
     player.setExp(0);
     player.setLevel(0);
+
     VersionUtils.setCollidable(player, true);
+    VersionUtils.setGlowing(player, false);
+
+    arena.getScoreboardManager().removeScoreboard(user);
+    arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
+    arena.teleportToEndLocation(player);
+    arena.getPlayers().remove(player);
+
+    plugin.getActionBarManager().clearActionBarsFromPlayer(player);
+
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.loadInventory(plugin, player);
     }
   }
 
   public static void arenaForceStart(Player player, int timer) {
-    if(!plugin
-        .getBukkitHelper()
-        .hasPermission(
-            player, plugin.getPermissionsManager().getPermissionString("FORCESTART_GAME"))) {
+    if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPluginNamePrefixLong() + ".admin.forcestart")) {
       new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().player(player).sendPlayer();
       return;
     }
@@ -163,30 +173,19 @@ public class PluginArenaUtils {
       return;
     }
 
-    plugin
-        .getDebugger()
-        .debug(
-            "Arena {0} got force started by {1} with timer {2}",
-            arena.getId(), player.getName(), timer);
-    arena.setArenaState(ArenaState.STARTING, true);
+    plugin.getDebugger().debug("Arena {0} got force started by {1} with timer {2}", arena.getId(), player.getName(), timer);
+    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+      arena.setArenaState(ArenaState.STARTING, true);
+    }
     if(timer <= 0) {
       arena.setForceStart(true);
-      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART")
-          .asKey()
-          .player(player)
-          .arena(arena)
-          .sendArena();
+      new MessageBuilder("IN_GAME_MESSAGES_ADMIN_FORCESTART").asKey().player(player).arena(arena).sendArena();
     } else {
       if(arena.getTimer() <= timer) {
         return;
       }
       arena.setTimer(timer, true);
-      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME")
-          .asKey()
-          .integer(timer)
-          .player(player)
-          .arena(arena)
-          .sendArena();
+      new MessageBuilder("IN_GAME_MESSAGES_LOBBY_REDUCED_TIME").asKey().integer(timer).player(player).arena(arena).sendArena();
     }
   }
 

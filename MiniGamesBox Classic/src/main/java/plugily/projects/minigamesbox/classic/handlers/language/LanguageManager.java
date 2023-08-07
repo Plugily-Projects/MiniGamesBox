@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
@@ -162,9 +161,9 @@ public class LanguageManager {
       plugin.getDebugger().debug(Level.WARNING, "&cPlugin locale is invalid! Using default one...");
       pluginLocale = LocaleRegistry.getByName("English");
     }
-    /* is beta release */
-    if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("pre")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
-      plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in beta versions because they're lacking latest translations! Enabling English one...");
+    /* is snapshot release */
+    if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("-SNAPSHOT")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
+      plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in this versions because they're lacking latest translations! Enabling English one...");
       pluginLocale = LocaleRegistry.getByName("English");
       return;
     }
@@ -185,50 +184,54 @@ public class LanguageManager {
     if(prop == null) {
       return getString(path);
     }
-    if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "not found"))) {
+    if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "_NOT_FOUND"))) {
       return prop;
     }
     return getString(path);
   }
 
   public List<String> getLanguageList(String path) {
-    if(isDefaultLanguageUsed()) {
-      return getStrings(path);
-    }
-    String prop = localeFile.getString(path);
-    if(prop == null) {
-      return getStrings(path);
-    }
-    if(getString(path).equalsIgnoreCase(defaultLanguageConfig.getString(path, "not found"))) {
-      return Arrays.asList(new MessageBuilder(prop).build().split(";"));
-    }
-    return getStrings(path);
+    return getLanguageListContent(path);
   }
 
   public List<String> getLanguageListFromKey(String key) {
-    key = plugin.getMessageManager().getPath(key);
+    String path = plugin.getMessageManager().getPath(key);
+    return getLanguageListContent(path);
+  }
+
+  private List<String> getLanguageListContent(String path) {
     if(isDefaultLanguageUsed()) {
-      return getStrings(key);
+      return getStringsColoured(path);
     }
-    String prop = localeFile.getString(key);
-    if(prop == null) {
-      return getStrings(key);
+    List<String> prop = localeFile.getStringList(path);
+    if(prop.isEmpty()) {
+      return getStringsColoured(path);
     }
-    if(getString(key).equalsIgnoreCase(defaultLanguageConfig.getString(key, "not found"))) {
-      return Arrays.asList(new MessageBuilder(prop).build().split(";"));
+    if(getStrings(path).equals(defaultLanguageConfig.getStringList(path))) {
+      return prop.stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
     }
-    return getStrings(key);
+    return getStringsColoured(path);
   }
 
 
+  private List<String> getStringsColoured(String path) {
+    if(checkLanguageList(path)) return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
+    return languageConfig.getStringList(path).stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
+  }
+
   private List<String> getStrings(String path) {
+    if(checkLanguageList(path)) return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
+    return languageConfig.getStringList(path);
+  }
+
+  private boolean checkLanguageList(String path) {
     if(!languageConfig.isSet(path)) {
       plugin.getDebugger().debug(Level.WARNING, "&cGame message not found in your locale!");
       plugin.getDebugger().debug(Level.WARNING, "&cPlease regenerate your language.yml file! If error still occurs report it to the developer on discord!");
       plugin.getDebugger().debug(Level.WARNING, "&cPath: " + path);
-      return Collections.singletonList("ERR_MESSAGE_" + path + "_NOT_FOUND");
+      return true;
     }
-    return languageConfig.getStringList(path).stream().map(string -> new MessageBuilder(string).build()).collect(Collectors.toList());
+    return false;
   }
 
 

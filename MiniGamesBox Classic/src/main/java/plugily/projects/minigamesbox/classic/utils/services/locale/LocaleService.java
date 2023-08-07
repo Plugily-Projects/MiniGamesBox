@@ -1,24 +1,24 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.utils.services.locale;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -34,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -67,9 +68,18 @@ public class LocaleService {
       Files.write(file.toPath(), data.getBytes());
       localeData = ConfigUtils.getConfig(plugin, "/locales/locale_data");
       plugin.getDebugger().debug(Level.WARNING, "Fetched latest localization file from repository.");
+      loadPluginLocales();
     } catch(IOException ignored) {
       //ignore exceptions
       plugin.getDebugger().debug(Level.WARNING, "Couldn't access locale fetcher service or there is other problem! You should notify author!");
+    }
+  }
+
+  private void loadPluginLocales() {
+    for(String key : localeData.getConfigurationSection("locales.register").getKeys(false)) {
+      String name = localeData.getString("locales.register." + key + ".name", key);
+      String originalName = localeData.getString("locales.register." + key + ".original_name", key);
+      LocaleRegistry.registerLocale(new Locale(name, originalName, key, "PoEditor Contributors https://translate.plugily.xyz", Arrays.asList(key.toLowerCase(), name, originalName, key.split("_")[1])));
     }
   }
 

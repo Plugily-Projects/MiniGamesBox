@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.user.data;
@@ -23,7 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.commonsbox.database.MysqlDatabase;
+import plugily.projects.minigamesbox.database.MysqlDatabase;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -52,10 +51,7 @@ public class MysqlManager implements UserDatabase {
 
   public MysqlManager(PluginMain plugin) {
     this.plugin = plugin;
-    this.createTableStatement = "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (\n"
-        + "  `UUID` char(36) NOT NULL PRIMARY KEY,\n"
-        + "  `name` varchar(32) NOT NULL\n"
-        + ");";
+    this.createTableStatement = "CREATE TABLE IF NOT EXISTS `" + getTableName() + "` (`UUID` char(36) NOT NULL PRIMARY KEY, `name` varchar(32) NOT NULL);";
     FileConfiguration config = ConfigUtils.getConfig(plugin, "mysql");
     database = new MysqlDatabase(config.getString("user"), config.getString("password"), config.getString("address"), config.getLong("maxLifeTime", 1800000));
     plugin.getDebugger().debug("MySQL Database enabled");
@@ -82,10 +78,8 @@ public class MysqlManager implements UserDatabase {
   private void updateTable(@NotNull Statement statement, String sql) {
     try {
       statement.executeUpdate(sql);
-    } catch(SQLException exception) {
-      if(!exception.getMessage().contains("Duplicate column name")) {
-        throwException(exception);
-      }
+    } catch(SQLException ignored) {
+      //already created
     }
   }
 
@@ -99,8 +93,8 @@ public class MysqlManager implements UserDatabase {
       try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
         updateTable(statement, "ALTER TABLE " + getTableName() + " ADD COLUMN " + columnName + " " + columnProperties + ";");
         plugin.getDebugger().debug("MySQL Table | Added column {0} {1}", columnName, columnProperties);
-      } catch(SQLException exception) {
-        throwException(exception);
+      } catch(SQLException ignored) {
+        //already created column
       }
     });
   }
@@ -137,7 +131,7 @@ public class MysqlManager implements UserDatabase {
     Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
       String uuid = user.getUniqueId().toString();
       try(Connection connection = database.getConnection(); Statement statement = connection.createStatement()) {
-        String playerName = user.getPlayer().getName();
+        String playerName = user.getPlayer() == null ? Bukkit.getOfflinePlayer(uuid).getName() : user.getPlayer().getName();
 
         database.executeUpdate("UPDATE " + getTableName() + " SET name='" + playerName + "' WHERE UUID='" + uuid + "';");
         ResultSet resultSet = statement.executeQuery("SELECT * from " + getTableName() + " WHERE UUID='" + uuid + "'");
@@ -161,8 +155,10 @@ public class MysqlManager implements UserDatabase {
    */
   private void loadUserStats(User user, ResultSet resultSet) throws SQLException {
     //player already exists - get the stats
-    for(Map.Entry<String, StatisticType> entry : plugin.getStatsStorage().getStatistics().entrySet()) {
-      StatisticType statisticType = entry.getValue();
+    for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
+      if(!statisticType.isPersistent()) {
+        continue;
+      }
       setUserStat(user, statisticType, resultSet.getInt(statisticType.getName()));
     }
     plugin.getDebugger().debug("Loaded User Stats for {0}", user.getPlayer().getName());
@@ -218,6 +214,7 @@ public class MysqlManager implements UserDatabase {
     plugin.getDebugger().debug(Level.WARNING, "SQLException occurred! Cause: {0} ({1})", exception.getSQLState(), exception.getErrorCode());
     plugin.getMessageUtils().errorOccurred();
     Bukkit.getConsoleSender().sendMessage("Check configuration of mysql.yml file or try to disable mysql option in config.yml");
+    exception.printStackTrace();
   }
 
   /**

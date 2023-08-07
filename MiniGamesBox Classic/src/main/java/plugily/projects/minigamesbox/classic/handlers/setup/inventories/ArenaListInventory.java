@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
@@ -26,6 +25,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -62,13 +62,13 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
 
   @Override
   public void injectItems() {
-    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()).name("&cGo to Setup Menu").colorizeItem().build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
+    setItem(45, ClickableItem.of(new ItemBuilder(XMaterial.RED_STAINED_GLASS_PANE.parseItem()).name("&cGo to Setup Menu").colorizeItem().build(), event -> setupInventory.open(SetupInventoryUtils.SetupInventoryStage.HOME)));
 
     for(PluginArena arena : setupInventory.getPlugin().getArenaRegistry().getArenas()) {
 
-      Material material = XMaterial.GREEN_WOOL.parseMaterial();
+      ItemStack material = XMaterial.GREEN_WOOL.parseItem();
       if(!arena.isReady()) {
-        material = XMaterial.RED_WOOL.parseMaterial();
+        material = XMaterial.RED_WOOL.parseItem();
       }
 
       addItem(ClickableItem.of(new ItemBuilder(material)
@@ -99,11 +99,10 @@ public class ArenaListInventory extends NormalFastInv implements InventoryHandle
                   context.getForWhom().sendRawMessage(new MessageBuilder("&cDelete operation canceled").prefix().build());
                   return Prompt.END_OF_CONVERSATION;
                 }
-                setupInventory.getPlugin().getArenaManager().stopGame(false, arena);
                 setupInventory.getPlugin().getArenaRegistry().unregisterArena(arena);
 
                 FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
-                setupInventory.getConfig().set("instances." + arena.getId(), null);
+                config.set("instances." + arena.getId(), null);
                 ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
 
                 context.getForWhom().sendRawMessage(new MessageBuilder("COMMANDS_REMOVED_GAME_INSTANCE").asKey().build());

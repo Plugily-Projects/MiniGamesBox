@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.handlers.language;
@@ -24,6 +23,7 @@ import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
+import plugily.projects.minigamesbox.number.NumberUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -128,9 +128,9 @@ public class TitleBuilder {
   private void split() {
     String[] split = message.split(";", 3);
     String[] times = split.length >= 1 ? split[0].split(",", 3) : new String[]{""};
-    fadeIn = times.length > 1 ? Integer.parseInt(times[0]) : 20;
-    stay = times.length > 2 ? Integer.parseInt(times[1]) : 30;
-    fadeOut = times.length > 3 ? Integer.parseInt(times[2]) : 20;
+    fadeIn = times.length > 1 ? NumberUtils.parseInt(times[0].replace(" ", "")).orElse(20) : 20;
+    stay = times.length > 2 ? NumberUtils.parseInt(times[1].replace(" ", "")).orElse(30) : 30;
+    fadeOut = times.length > 3 ? NumberUtils.parseInt(times[2].replace(" ", "")).orElse(20) : 20;
     title = split.length >= 2 ? buildMessage(split[1]) : "";
     subTitle = split.length >= 3 ? buildMessage(split[2]) : "";
   }

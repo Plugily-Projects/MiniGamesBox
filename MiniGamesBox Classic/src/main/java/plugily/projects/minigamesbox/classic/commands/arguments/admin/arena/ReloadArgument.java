@@ -1,23 +1,22 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.commands.arguments.admin;
+package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -56,27 +55,21 @@ public class ReloadArgument {
         }
         confirmations.remove(sender);
 
-        registry.getPlugin().reloadConfig();
-        registry.getPlugin().getLanguageManager().reloadLanguage();
 
         for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
-          for(Player player : arena.getPlayers()) {
-            arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
-            arena.teleportToEndLocation(player);
-            if(registry.getPlugin().getConfigPreferences().getOption("INVENTORY_MANAGER")) {
-              InventorySerializer.loadInventory(registry.getPlugin(), player);
-            } else {
-              player.getInventory().clear();
-              player.getInventory().setArmorContents(null);
-              for(PotionEffect pe : player.getActivePotionEffects()) {
-                player.removePotionEffect(pe.getType());
-              }
-            }
-          }
           registry.getPlugin().getArenaManager().stopGame(true, arena);
         }
-        registry.getPlugin().getArenaRegistry().registerArenas();
-        new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().send(sender);
+
+        int time = registry.getPlugin().getConfig().getInt("Time-Manager.Restarting", 5) + 5;
+
+        new MessageBuilder("&cStopping arenas... Waiting for completion of restarting stage! (ETA: " + time + " s)").prefix().send(sender);
+
+        Bukkit.getScheduler().runTaskLater(registry.getPlugin(), () -> {
+          registry.getPlugin().reloadConfig();
+          registry.getPlugin().getLanguageManager().reloadLanguage();
+          registry.getPlugin().getArenaRegistry().registerArenas();
+          new MessageBuilder("COMMANDS_ADMIN_RELOAD_SUCCESS").asKey().send(sender);
+        }, time);
       }
     });
   }

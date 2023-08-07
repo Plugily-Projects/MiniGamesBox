@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic;
@@ -76,6 +75,7 @@ import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
+import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionLogHandler;
@@ -153,7 +153,7 @@ public class PluginMain extends JavaPlugin {
     saveDefaultConfig();
 
     //check debug mode
-    debugger = new Debugger(this, getDescription().getVersion().contains("debug") || getConfig().getBoolean("Debug"));
+    debugger = new Debugger(this, getDescription().getVersion().contains("-debug") || getConfig().getBoolean("Debug"));
     exceptionLogHandler = new ExceptionLogHandler(this);
     messageUtils = new MessageUtils(this);
 
@@ -163,7 +163,7 @@ public class PluginMain extends JavaPlugin {
     }
 
     debugger.debug("[System] [Core] Initialization start");
-    if(getDescription().getVersion().contains("debug") || getConfig().getBoolean("Developer-Mode")) {
+    if(getDescription().getVersion().contains("-debug") || getConfig().getBoolean("Developer-Mode")) {
       debugger.deepDebug(true);
       debugger.debug(Level.FINE, "Deep debug enabled");
       getConfig().getStringList("Performance-Listenable").forEach(debugger::monitorPerformance);
@@ -178,7 +178,10 @@ public class PluginMain extends JavaPlugin {
     configPreferences = new ConfigPreferences(this);
 
 
-    if(!new File(getDataFolder(), "internal/data.yml").exists()) {
+    File file = new File(getDataFolder(), "internal/data.yml");
+    if(file.delete()) {
+      saveDefaultFile("internal/data");
+    } else {
       new File(getDataFolder().getName() + "/internal").mkdir();
     }
     internalData = ConfigUtils.getConfig(this, "/internal/data");
@@ -273,17 +276,22 @@ public class PluginMain extends JavaPlugin {
     try {
       Class.forName("org.spigotmc.SpigotConfig");
     } catch(Exception e) {
+      MiscUtils.sendLineBreaker(getName());
       messageUtils.thisVersionIsNotSupported();
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cYour server software is not supported by " + getDescription().getName() + "!");
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cWe support Spigot and Spigot forks only! Shutting off...");
+      MiscUtils.sendLineBreaker(getName());
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
     }
     if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_8_R3)) {
+      MiscUtils.sendLineBreaker(getName());
       messageUtils.thisVersionIsNotSupported();
+      MiscUtils.sendVersionInformation(this, getName(), getDescription());
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cYour server version is not supported by " + getDescription().getName() + "!");
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we must shut off. Maybe you consider changing your server version?");
+      MiscUtils.sendLineBreaker(getName());
       forceDisable = true;
       getServer().getPluginManager().disablePlugin(this);
       return false;
@@ -309,9 +317,13 @@ public class PluginMain extends JavaPlugin {
 
   public void setupFiles() {
     for(String fileName : fileNames) {
-      if(!new File(getDataFolder(), fileName + ".yml").exists()) {
-        saveResource(fileName + ".yml", false);
-      }
+      saveDefaultFile(fileName);
+    }
+  }
+
+  private void saveDefaultFile(String fileName) {
+    if(!new File(getDataFolder(), fileName + ".yml").exists()) {
+      saveResource(fileName + ".yml", false);
     }
   }
 
@@ -365,10 +377,10 @@ public class PluginMain extends JavaPlugin {
     long start = System.currentTimeMillis();
 
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
-    if(arenaRegistry != null) {
-      for(PluginArena arena : arenaRegistry.getArenas()) {
+    if(getArenaRegistry() != null) {
+      for(PluginArena arena : getArenaRegistry().getArenas()) {
         for(Player player : new ArrayList<>(arena.getPlayers())) {
-          arenaManager.leaveAttempt(player, arena);
+          getArenaManager().leaveAttempt(player, arena);
         }
         arena.getMapRestorerManager().fullyRestoreArena();
       }

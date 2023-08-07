@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package plugily.projects.minigamesbox.classic.user.data;
 
@@ -23,8 +22,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.commonsbox.database.MysqlDatabase;
-import plugily.projects.commonsbox.sorter.SortUtils;
+import plugily.projects.minigamesbox.database.MysqlDatabase;
+import plugily.projects.minigamesbox.sorter.SortUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -41,29 +40,26 @@ import java.util.logging.Level;
  * <p>
  * Created at 01.11.2021
  */
-public class FileStats implements UserDatabase, Runnable {
+public class FileStats implements UserDatabase {
 
   private final PluginMain plugin;
   private final FileConfiguration config;
-  private final BukkitTask updateTask;
   private final AtomicBoolean updateRequired = new AtomicBoolean(false);
 
   public FileStats(PluginMain plugin) {
     this.plugin = plugin;
     this.config = ConfigUtils.getConfig(plugin, "stats");
-    this.updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, 40, 40);
   }
 
   @Override
   public void saveStatistic(User user, StatisticType stat) {
     config.set(user.getUniqueId().toString() + "." + stat.getName(), user.getStatistic(stat));
-    updateRequired.set(true);
+    ConfigUtils.saveConfig(plugin, config, "stats");
   }
 
   @Override
   public void saveAllStatistic(User user) {
     updateStats(user);
-    updateRequired.set(true);
   }
 
   @Override
@@ -104,12 +100,7 @@ public class FileStats implements UserDatabase, Runnable {
     for(Player player : plugin.getServer().getOnlinePlayers()) {
       updateStats(plugin.getUserManager().getUser(player));
     }
-    updateTask.cancel();
-    // Save the last time before disabling
-    if(updateRequired.get()) {
-      updateRequired.set(false);
       ConfigUtils.saveConfig(plugin, config, "stats");
-    }
   }
 
   @Override
@@ -134,14 +125,6 @@ public class FileStats implements UserDatabase, Runnable {
         }
       }
     });
-  }
-
-  // Save the config to the file
-  @Override
-  public void run() {
-    if(updateRequired.get()) {
-      updateRequired.set(false);
-      Bukkit.getScheduler().runTask(plugin, () -> ConfigUtils.saveConfig(plugin, config, "stats"));
-    }
+    ConfigUtils.saveConfig(plugin, config, "stats");
   }
 }

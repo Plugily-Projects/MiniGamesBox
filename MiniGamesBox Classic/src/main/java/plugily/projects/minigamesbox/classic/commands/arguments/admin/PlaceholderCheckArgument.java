@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
@@ -23,6 +22,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -46,13 +46,22 @@ public class PlaceholderCheckArgument {
           return;
         }
         new MessageBuilder("---- PLACEHOLDERS OF " + registry.getPlugin().getPluginNamePrefixLong().toUpperCase() + " ----").send(sender);
+        PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(((Player) sender));
+        if (arena == null) {
+          if (registry.getPlugin().getArenaRegistry().getArenas().isEmpty()) {
+            new MessageBuilder("!You need to have at least one arena!").send(sender);
+            return;
+          } else {
+            arena = registry.getPlugin().getArenaRegistry().getArenas().get(0);
+          }
+        }
         if(args.length == 2) {
           new MessageBuilder("---- INTERNAL PLACEHOLDERS ----").send(sender);
           for(Placeholder placeholder : registry.getPlugin().getPlaceholderManager().getRegisteredInternalPlaceholders()) {
-            String listMessage = new MessageBuilder("&aID #" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + placeholder.getId() + "%").player((Player) sender).arena(registry.getPlugin().getArenaRegistry().getArenas().get(0)).build();
+            String listMessage = new MessageBuilder("&aID #" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + placeholder.getId() + "%").player((Player) sender).arena(arena).build();
             new TextComponentBuilder(listMessage).player((Player) sender)
-                .setClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "%" + placeholder.getId() + "%")
-                .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "%" + placeholder.getId() + "%")
+                .setClickEvent(TextComponentBuilder.ClickAction.COPY_TO_CLIPBOARD, "%" + placeholder.getId() + "%")
+                .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "%" + placeholder.getId() + "%")
                 .sendPlayer();
 
           }
@@ -60,10 +69,10 @@ public class PlaceholderCheckArgument {
           new MessageBuilder("---- EXTERNAL (PAPI) PLACEHOLDERS ----").send(sender);
           new MessageBuilder("NOTE: Parsing for specific arenas works with _arenaname:arena").send(sender);
           for(Placeholder placeholder : registry.getPlugin().getPlaceholderManager().getRegisteredPAPIPlaceholders()) {
-            String listMessage = new MessageBuilder("&aID #" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%").player((Player) sender).arena(registry.getPlugin().getArenaRegistry().getArenas().get(0)).build();
+            String listMessage = new MessageBuilder("&aID #" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "# &bTYPE " + placeholder.getPlaceholderType() + " &cEXECUTOR " + placeholder.getPlaceholderExecutor() + "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%").player((Player) sender).arena(arena).build();
             new TextComponentBuilder(listMessage).player((Player) sender)
-                .setClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
-                .setHoverEvent(HoverEvent.Action.SHOW_TEXT, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
+                .setClickEvent(TextComponentBuilder.ClickAction.COPY_TO_CLIPBOARD, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
+                .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, "%" + registry.getPlugin().getPluginNamePrefixLong() + "_" + placeholder.getId() + "%")
                 .sendPlayer();
 
           }

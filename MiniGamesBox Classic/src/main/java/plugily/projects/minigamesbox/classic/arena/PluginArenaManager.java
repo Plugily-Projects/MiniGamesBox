@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena;
@@ -94,9 +93,8 @@ public class PluginArenaManager {
 
     PluginArenaUtils.preparePlayerForGame(arena, player, arena.getLobbyLocation(), false);
 
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
-
     new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
+    new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
 
     plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
@@ -109,7 +107,7 @@ public class PluginArenaManager {
     for(Player arenaPlayer : arena.getPlayers()) {
       PluginArenaUtils.showPlayer(arenaPlayer, arena);
     }
-    new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
+
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
@@ -160,12 +158,12 @@ public class PluginArenaManager {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
-    if(!player.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
+    if(!player.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
       new MessageBuilder("IN_GAME_JOIN_FULL_GAME").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
     for(Player arenaPlayer : arena.getPlayers()) {
-      if(arenaPlayer.hasPermission(plugin.getPermissionsManager().getPermissionString("JOIN_FULL_GAME"))) {
+      if(arenaPlayer.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
         continue;
       }
       if(arena.getArenaState().isLobbyStage(arena)) {
@@ -191,7 +189,7 @@ public class PluginArenaManager {
       new MessageBuilder("IN_GAME_JOIN_CANCEL_API").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
-    String perm = plugin.getPermissionsManager().getPermissionString("JOIN");
+    String perm = plugin.getPluginNamePrefixLong() + ".join.<arena>";
     if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
       MessageBuilder denyMessage = new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId()));
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
@@ -232,22 +230,15 @@ public class PluginArenaManager {
     Bukkit.getPluginManager().callEvent(new PlugilyGameLeaveAttemptEvent(player, arena));
 
     User user = plugin.getUserManager().getUser(player);
-    arena.getScoreboardManager().removeScoreboard(user);
-    arena.getPlayers().remove(player);
-    user.setSpectator(false);
-    user.setPermanentSpectator(false);
 
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
     if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && (arena.getPlayers().isEmpty() || arena.getPlayers().size() < arena.getMinimumPlayers())) {
       stopGame(true, arena);
-      //new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
     }
-    arena.teleportToEndLocation(player);
-    PluginArenaUtils.resetPlayerAfterGame(player);
     if(!user.isSpectator()) {
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
     plugin.getUserManager().saveAllStatistic(user);
+    PluginArenaUtils.resetPlayerAfterGame(arena, player);
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
@@ -265,15 +256,16 @@ public class PluginArenaManager {
 
     Bukkit.getPluginManager().callEvent(new PlugilyGameStopEvent(arena));
     for(Player player : arena.getPlayers()) {
-      if(!quickStop) {
+      if (quickStop) {
+        new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
+      } else {
         spawnFireworks(arena, player);
-
         for(String msg : plugin.getLanguageManager().getLanguageList("In-Game.Messages.Game-End.Summary")) {
           MiscUtils.sendCenteredMessage(player, new MessageBuilder(msg).player(player).arena(arena).build());
         }
       }
     }
-    arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
+    arena.setTimer(quickStop ? 0 : plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
     arena.setArenaState(ArenaState.ENDING, true);
     for(Player players : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);

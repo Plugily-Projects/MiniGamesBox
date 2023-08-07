@@ -1,42 +1,34 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.commands.arguments;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.commonsbox.string.StringMatcher;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.*;
+import plugily.projects.minigamesbox.string.StringMatcher;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.HologramArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.ListArenasArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.LocationWandArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.PlaceholderCheckArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.ReloadArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.SpyChatArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.TeleportArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ReloadArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.DeleteArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ForceStartArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.StopArgument;
@@ -45,12 +37,10 @@ import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgu
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.ArenaSelectorArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.CreateArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.JoinArguments;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaderboardArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaveArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.SetupArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -90,7 +80,6 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
     //register basic arguments
     new SetupArgument(this);
-    new CreateArgument(this);
     new JoinArguments(this);
     new ArenaSelectorArgument(this);
     new LeaderboardArgument(this);
@@ -112,6 +101,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new ListArenasArgument(this);
     new LocationWandArgument(this);
     new PlaceholderCheckArgument(this);
+    new LocalesArgument(this);
     spyChat = new SpyChatArgument(this);
     new TeleportArgument(this);
     if(plugin.getConfigPreferences().getOption("LEADERBOARDS")) {
@@ -217,8 +207,8 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     for(LabelData labelData : data) {
       if(senderIsPlayer) {
         new TextComponentBuilder(labelData.getText()).player((Player) sender)
-            .setClickEvent(ClickEvent.Action.SUGGEST_COMMAND, labelData.getCommand())
-            .setHoverEvent(HoverEvent.Action.SHOW_TEXT, labelData.getDescription())
+            .setClickEvent(TextComponentBuilder.ClickAction.SUGGEST_COMMAND, labelData.getCommand())
+            .setHoverEvent(TextComponentBuilder.HoverAction.SHOW_TEXT, labelData.getDescription())
             .sendPlayer();
 
       } else {

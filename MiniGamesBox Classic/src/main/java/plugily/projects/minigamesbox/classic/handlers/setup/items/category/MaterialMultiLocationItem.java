@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.handlers.setup.items.category;
@@ -23,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.Action;
@@ -132,7 +132,8 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     switch(event.getClick()) {
       case LEFT:
         Block targetBlock = event.getWhoClicked().getTargetBlock(null, 7);
-        if(!checkMaterials.contains(targetBlock.getType())) {
+        setupInventory.getPlugin().getDebugger().debug("[TARGET BLOCK] " + targetBlock.getLocation() + targetBlock.getType() + checkMaterials.contains(targetBlock.getType()));
+        if(!checkMaterial(targetBlock)) {
           new MessageBuilder("&c&l✘ &cPlease only look at a location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(event.getWhoClicked());
           return;
         }
@@ -179,7 +180,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
               new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
               break;
             case LEFT_CLICK_BLOCK:
-              if(!checkMaterials.contains(block.getType())) {
+              if(!checkMaterial(block)) {
                 new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
@@ -187,7 +188,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
               removeLocation(interactEvent.getPlayer(), false);
               break;
             case RIGHT_CLICK_BLOCK:
-              if(!checkMaterials.contains(block.getType())) {
+              if(!checkMaterial(block)) {
                 new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
@@ -228,7 +229,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
 
   private void teleport(HumanEntity player) {
     if(!getLocationsList().isEmpty()) {
-      Location location = getLocationsList().get(setupInventory.getPlugin().getRandom().nextInt(getLocationsList().size() - 1));
+      Location location = getLocationsList().get(setupInventory.getPlugin().getRandom().nextInt(getLocationsList().size()));
       VersionUtils.teleport(player, location);
       new MessageBuilder("&aTeleported to " + name.toUpperCase() + " Location of arena " + setupInventory.getArenaKey() + " (" + location + ")").prefix().send(player);
       return;
@@ -239,9 +240,9 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
   private void addLocation(HumanEntity player, Location location) {
     FileConfiguration config = ConfigUtils.getConfig(setupInventory.getPlugin(), "arenas");
     List<String> locs = config.getStringList("instances." + setupInventory.getArenaKey() + "." + keyName);
-    String signLoc = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
-    if(!locs.contains(signLoc)) {
-      locs.add(signLoc);
+    String materialLocation = location.getBlock().getWorld().getName() + "," + location.getBlock().getX() + "," + location.getBlock().getY() + "," + location.getBlock().getZ() + ",0.0,0.0";
+    if(!locs.contains(materialLocation)) {
+      locs.add(materialLocation);
       config.set("instances." + setupInventory.getArenaKey() + "." + keyName, locs);
       ConfigUtils.saveConfig(setupInventory.getPlugin(), config, "arenas");
     }
@@ -251,7 +252,9 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
     if(locs.size() == minimumValue) {
       new MessageBuilder("&eInfo | &aYou can add more than " + minimumValue + " " + name.toUpperCase() + " location! " + minimumValue + " is just a minimum!").prefix().send(player);
     }
-    setupInventory.getPlugin().getSignManager().loadSigns();
+    if (keyName.contains("sign")) {
+      setupInventory.getPlugin().getSignManager().loadSigns();
+    }
   }
 
   private void removeLocation(HumanEntity player, boolean deleteAll) {
@@ -297,11 +300,18 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
 
   @Override
   public String getSetupInfo() {
-    return setupInventory.isSectionOptionDone(keyName, minimumValue);
+    return setupInventory.isLocationSectionOptionDone(keyName, minimumValue);
   }
 
   @Override
   public boolean getSetupStatus() {
     return getSetupInfo().contains("✔");
+  }
+
+  private boolean checkMaterial(Block targetBlock) {
+    if (keyName.contains("sign")) {
+      return targetBlock.getState() instanceof Sign;
+    }
+    return checkMaterials.contains(targetBlock.getType());
   }
 }

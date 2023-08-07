@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena;
@@ -98,9 +97,9 @@ public class PluginArena extends BukkitRunnable {
 
   public void loadArenaOptions() {
     arenaOptions.clear();
-    arenaOptions = new HashMap<>(plugin.getArenaOptionManager().getArenaOptions());
+    arenaOptions = plugin.getArenaOptionManager().getDefaultArenaOptions();
     FileConfiguration arenas = ConfigUtils.getConfig(plugin, "arenas");
-    for(Map.Entry<String, ArenaOption> options : plugin.getArenaOptionManager().getArenaOptions().entrySet()) {
+    for(Map.Entry<String, ArenaOption> options : arenaOptions.entrySet()) {
       if("null".equals(options.getValue().getPath())) {
         continue;
       }
@@ -130,7 +129,6 @@ public class PluginArena extends BukkitRunnable {
     if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-
     arenaOption.setValue(value);
   }
 
@@ -217,16 +215,16 @@ public class PluginArena extends BukkitRunnable {
       arenaStateHandler = gameStateHandlers.get(arenaState);
     }
     arenaStateHandler.handleCall(this);
-    plugin.getDebugger().debug("Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), arenaState);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), arenaState);
     if(!forceArenaTimer && arenaStateHandler.getArenaTimer() != -999) {
-      plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
+      plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
       setTimer(arenaStateHandler.getArenaTimer());
     }
-    plugin.getDebugger().debug("Arena {0} Force State {1}", getId(), forceArenaState);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Force State {1}", getId(), forceArenaState);
     if(!forceArenaState && arenaState != arenaStateHandler.getArenaStateChange()) {
-      plugin.getDebugger().debug("Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
+      plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
       if(!(arenaState == ArenaState.FULL_GAME && arenaStateHandler.getArenaStateChange() == ArenaState.STARTING)) {
-        plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
+        plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
         setArenaState(arenaStateHandler.getArenaStateChange(), false);
       }
     }
@@ -305,7 +303,7 @@ public class PluginArena extends BukkitRunnable {
    * @param timer timer of lobby / time to next wave
    */
   public void setTimer(int timer) {
-    plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1}", getId(), timer);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaTimer to {1}", getId(), timer);
     setArenaOption("TIMER", timer);
   }
 
@@ -318,7 +316,7 @@ public class PluginArena extends BukkitRunnable {
    */
   public void setTimer(int timer, boolean forceArenaTimer) {
     this.forceArenaTimer = forceArenaTimer;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaTimer to {1} {2}", getId(), timer, forceArenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaTimer to {1} {2}", getId(), timer, forceArenaTimer);
     setArenaOption("TIMER", timer);
   }
 
@@ -351,7 +349,7 @@ public class PluginArena extends BukkitRunnable {
   public void setArenaState(@NotNull ArenaState arenaState, boolean forceArenaState) {
     this.arenaState = arenaState;
     this.forceArenaState = forceArenaState;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
     Bukkit.getPluginManager().callEvent(new PlugilyGameStateChangeEvent(this, arenaState));
     plugin.getSignManager().updateSigns();
   }
@@ -367,7 +365,7 @@ public class PluginArena extends BukkitRunnable {
   public void setArenaState(@NotNull ArenaState arenaState) {
     this.arenaState = arenaState;
     this.forceArenaState = true;
-    plugin.getDebugger().debug("Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaState to {1} {2}", getId(), arenaState, forceArenaState);
     Bukkit.getPluginManager().callEvent(new PlugilyGameStateChangeEvent(this, arenaState));
     plugin.getSignManager().updateSigns();
   }

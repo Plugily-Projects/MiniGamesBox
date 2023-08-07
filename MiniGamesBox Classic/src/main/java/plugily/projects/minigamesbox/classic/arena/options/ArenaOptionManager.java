@@ -1,20 +1,19 @@
 /*
- * MiniGamesBox - Library box with massive content that could be seen as minigames core.
- * Copyright (C)  2021  Plugily Projects - maintained by Tigerpanzer_02 and contributors
+ *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
+ *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package plugily.projects.minigamesbox.classic.arena.options;
@@ -27,6 +26,7 @@ import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -38,15 +38,31 @@ public class ArenaOptionManager {
   private final PluginMain plugin;
   private final Map<String, ArenaOption> arenaOptions = new HashMap<>();
 
-
   public ArenaOptionManager(PluginMain plugin) {
     this.plugin = plugin;
     loadArenaOptions();
   }
 
   private void loadArenaOptions() {
-    ArenaOption.getOptions().forEach((s, option) -> {
-      arenaOptions.put(s, new ArenaOption(option.getPath(), option.getValue(), option.isProtected()));
+    //found in arenas.yml
+    /**
+     * Current arena timer, ex. 30 seconds before game starts.
+     */
+    arenaOptions.put("TIMER", new ArenaOption("null", 0, true));
+    /**
+     * Minimum players in arena needed to start.
+     */
+    arenaOptions.put("MINIMUM_PLAYERS", new ArenaOption("minimumplayers", 1, true));
+    /**
+     * Maximum players arena can hold, users with full games permission can bypass this!
+     */
+    arenaOptions.put("MAXIMUM_PLAYERS", new ArenaOption("maximumplayers", 16, true));
+    /**
+     * Value for toggling boss bar message status.
+     */
+    arenaOptions.put("BAR_TOGGLE_VALUE", new ArenaOption("null", 0, true));
+    arenaOptions.put("BOSSBAR_INTERVAL", new ArenaOption("null", 10, true));
+    arenaOptions.forEach((s, option) -> {
       loadExternals(s);
     });
   }
@@ -96,8 +112,10 @@ public class ArenaOptionManager {
     arenaOptions.remove(name);
   }
 
-  public Map<String, ArenaOption> getArenaOptions() {
-    return Collections.unmodifiableMap(arenaOptions);
+  public Map<String, ArenaOption> getDefaultArenaOptions() {
+    return arenaOptions.entrySet()
+        .stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, a -> new ArenaOption(a.getValue().getPath(), a.getValue().getValue())));
   }
 
 }
