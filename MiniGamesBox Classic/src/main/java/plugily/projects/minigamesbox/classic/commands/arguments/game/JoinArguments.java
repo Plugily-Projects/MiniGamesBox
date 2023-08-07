@@ -69,7 +69,7 @@ public class JoinArguments {
           }
           arenas.entrySet()
               .stream()
-              .max(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+              .max(Map.Entry.comparingByValue())
               .map(Map.Entry::getKey)
               .ifPresent(arena -> registry.getPlugin().getArenaManager().joinAttempt((Player) sender, arena));
           return;
