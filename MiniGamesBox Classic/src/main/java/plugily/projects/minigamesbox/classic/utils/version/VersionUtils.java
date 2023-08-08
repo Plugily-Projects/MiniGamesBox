@@ -281,7 +281,7 @@ public final class VersionUtils {
     }
 
     if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST
-        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1) && particle == Particle.FALLING_DUST)
+        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13_R2) && particle == Particle.FALLING_DUST)
         || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_18_R1) && particle == Particle.BLOCK_MARKER)) {
       return location.getBlock().getType().createBlockData();
     }

@@ -193,7 +193,7 @@ public class SpecialItemManager {
   public void addSpecialItemsOfStage(Player player, SpecialItem.DisplayStage stage) {
     for(SpecialItem specialItem : getSpecialItemsOfStage(stage)) {
       if(specialItem.getPermission() != null && !specialItem.getPermission().isEmpty()) {
-        if(!plugin.getBukkitHelper().hasPermission(player, specialItem.getPermission())) {
+        if(!player.hasPermission(specialItem.getPermission())) {
           continue;
         }
       }
