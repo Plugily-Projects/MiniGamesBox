@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.user.data;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.IllegalPluginAccessException;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.database.MysqlDatabase;
 import plugily.projects.minigamesbox.classic.PluginMain;
@@ -123,7 +124,11 @@ public class MysqlManager implements UserDatabase {
 
   @Override
   public void saveAllStatistic(User user) {
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> database.executeUpdate(getUpdateQuery(user)));
+    try {
+      Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> database.executeUpdate(getUpdateQuery(user)));
+    } catch(IllegalPluginAccessException ignored) {
+      database.executeUpdate(getUpdateQuery(user));
+    }
   }
 
   @Override
