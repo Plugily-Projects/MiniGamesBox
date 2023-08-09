@@ -46,7 +46,7 @@ public class StatsStorage {
 
   private void loadStats() {
     StatisticType.getStatistics().forEach((s, statisticType) -> {
-      statistics.put(s, new StatisticType(statisticType.getName(), statisticType.isPersistent(), statisticType.getDatabaseParameters(), statisticType.isProtected()));
+      statistics.put(s, statisticType);
       loadExternals(statisticType);
     });
   }
