@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +37,7 @@ public abstract class Kit {
   private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
   private final FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
+  private final FileConfiguration kitsDataConfig = ConfigUtils.getConfig(plugin, "kits_data", true);
 
   private String name = "";
 
@@ -125,5 +125,16 @@ public abstract class Kit {
   public abstract void giveKitItems(Player player);
 
   public abstract void reStock(Player player);
+
+  public String getKitConfigPath() {
+    return"kit." + name + ".";
+  }
+
+  public void initializeKitConfiguration () {
+
+    if (kitsConfig.isSet(getKitConfigPath() + "")) {
+
+    }
+  }
 
 }
