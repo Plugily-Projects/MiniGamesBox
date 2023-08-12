@@ -96,7 +96,7 @@ public class ConfigUtils {
   /**
    * Sets the data into the config file if it is absent
    *
-   * @param config FileConfiguration to save
+   * @param config FileConfiguration to use
    * @param key    Key of the data value to set
    * @param data   The data to be set
    *
@@ -109,5 +109,4 @@ public class ConfigUtils {
     }
     return false;
   }
-
 }

@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,13 +38,14 @@ public abstract class Kit {
   private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
   private final FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
-  private final FileConfiguration kitsDataConfig = ConfigUtils.getConfig(plugin, "kits_data", true);
+  public final FileConfiguration kitsDataConfig = ConfigUtils.getConfig(plugin, "kits_data", true);
 
   private String name = "";
 
   private String key = "";
   private boolean unlockedOnDefault = false;
   private String[] description = new String[0];
+  private final HashMap<ItemStack, List<Integer>> kitItems = new HashMap<>();
 
   protected Kit() {
   }
@@ -66,6 +68,18 @@ public abstract class Kit {
 
   public void setUnlockedOnDefault(boolean unlockedOnDefault) {
     this.unlockedOnDefault = unlockedOnDefault;
+  }
+
+  public void addKitItem(ItemStack item, List<Integer> slots) {
+    kitItems.put(item, slots);
+  }
+
+  public void addKitItem(ItemStack item, Integer slot) {
+    kitItems.put(item, List.of(slot));
+  }
+
+  public HashMap<ItemStack, List<Integer>> getKitItems() {
+    return kitItems;
   }
 
   /**
@@ -96,6 +110,7 @@ public abstract class Kit {
     this.key = key;
   }
 
+  public abstract void setupKitItems();
 
   public String getKey() {
     if (key.equalsIgnoreCase("")) {
@@ -122,19 +137,26 @@ public abstract class Kit {
 
   public abstract ItemStack getItemStack();
 
-  public abstract void giveKitItems(Player player);
+  public void giveKitItems(Player player) {
+    kitItems.forEach((item, slots) -> {
+      slots.forEach((slot) -> {
+        player.getInventory().setItem(slot, item);
+      });
+    });
+  };
 
   public abstract void reStock(Player player);
 
   public String getKitConfigPath() {
-    return"kit." + name + ".";
+    return"kit." + key + ".";
   }
 
-  public void initializeKitConfiguration () {
-
-    if (kitsConfig.isSet(getKitConfigPath() + "")) {
-
-    }
+  public void initializeKitConfiguration() {
+    assert kitsDataConfig != null;
+    kitItems.forEach((k, v) -> {
+      ConfigUtils.setIfAbsent(kitsDataConfig, kitsDataConfig + "kit_items." + k.getItemMeta().displayName() + ".slots", v);
+      List<Integer> temp = kitsDataConfig.getIntegerList(kitsDataConfig + "kit_items." + k.getItemMeta().displayName() + ".slots");
+      kitItems.replace(k, v, temp);
+    });
   }
-
 }

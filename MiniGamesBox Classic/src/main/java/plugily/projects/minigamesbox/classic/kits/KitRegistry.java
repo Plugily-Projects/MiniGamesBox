@@ -61,6 +61,13 @@ public class KitRegistry {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kits.yml");
       return;
     }
+    try {
+      kit.initializeKitConfiguration();
+    }
+    catch (Exception exception) {
+      plugin.getDebugger().debug("Kit " + kit.getKey() + " config files were not setup correctly");
+      plugin.getDebugger().debug("Kit " + kit.getKey() + " may work incorrectly");
+    }
     plugin.getDebugger().debug("Registered {0} kit", kit.getKey());
     kits.add(kit);
   }

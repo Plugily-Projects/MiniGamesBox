@@ -50,8 +50,12 @@ public class CloneKit extends FreeKit {
   }
 
   @Override
+  public void setupKitItems() {
+    addKitItem(WeaponHelper.getUnBreakingSword(WeaponHelper.ResourceType.WOOD, 10), 0);
+  }
+
+  @Override
   public void giveKitItems(Player player) {
-    player.getInventory().addItem(WeaponHelper.getUnBreakingSword(WeaponHelper.ResourceType.WOOD, 10));
     ArmorHelper.setArmor(player, ArmorHelper.ArmorType.LEATHER);
     player.getInventory().addItem(new ItemStack(XMaterial.COOKED_PORKCHOP.parseMaterial(), 8));
 
