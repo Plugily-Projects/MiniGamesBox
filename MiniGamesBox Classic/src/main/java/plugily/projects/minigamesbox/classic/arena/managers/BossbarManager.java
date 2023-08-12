@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Tigerpanzer_02
@@ -99,24 +98,24 @@ public class BossbarManager {
    * @param player player
    */
   public void doBarAction(PluginArena.BarAction action, Player player) {
-    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
+    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR_DISPLAY")) {
       return;
     }
-    switch(action) {
-      case ADD:
-          BossBar newBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
-          newBar.addPlayer(player);
-          gameBars.add(newBar);
-        break;
-      case REMOVE:
-        List<BossBar> bars = gameBars.stream().filter(bossBar -> bossBar.getPlayers().contains(player)).collect(Collectors.toList());
-        for(BossBar bar : bars) {
+    switch (action) {
+      case ADD -> {
+        BossBar newBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
+        newBar.addPlayer(player);
+        gameBars.add(newBar);
+      }
+      case REMOVE -> {
+        List<BossBar> bars = gameBars.stream().filter(bossBar -> bossBar.getPlayers().contains(player)).toList();
+        for (BossBar bar : bars) {
           bar.removePlayer(player);
           gameBars.remove(bar);
         }
-        break;
-      default:
-        break;
+      }
+      default -> {
+      }
     }
   }
 
