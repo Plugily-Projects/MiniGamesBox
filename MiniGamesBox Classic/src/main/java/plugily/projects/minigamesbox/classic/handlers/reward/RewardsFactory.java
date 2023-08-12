@@ -50,7 +50,7 @@ public class RewardsFactory {
   private final PluginMain plugin;
 
   public RewardsFactory(PluginMain plugin) {
-    enabled = plugin.getConfig().getBoolean("Rewards-Enabled");
+    enabled = plugin.getConfigPreferences().getOption("REWARDS");
     config = ConfigUtils.getConfig(plugin, "rewards");
     this.plugin = plugin;
     loadRewardTypes();
