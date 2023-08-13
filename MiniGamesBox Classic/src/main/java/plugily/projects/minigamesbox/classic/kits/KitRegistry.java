@@ -18,13 +18,16 @@
 
 package plugily.projects.minigamesbox.classic.kits;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import com.cryptomorin.xseries.XItemStack;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
-import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Tigerpanzer_02
@@ -37,7 +40,6 @@ public class KitRegistry {
   private Kit defaultKit;
   private final PluginMain plugin;
 
-  //todo default kits - kit loading - possibility to edit kits with files - patreon will be ingame gui - kits.yml
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
   }
@@ -48,6 +50,7 @@ public class KitRegistry {
    * @param kit Kit to register
    */
   public void registerKit(Kit kit) {
+    ConfigurationSection configurationSection = kit.getKitsConfig().createSection(kit.getKey());
     if(!plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
@@ -56,20 +59,57 @@ public class KitRegistry {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as its already registered");
       return;
     }
-    FileConfiguration config = ConfigUtils.getConfig(plugin, "kits");
-    if(!config.getBoolean("Enabled-Game-Kits." + kit.getKey(), false)) {
+
+    initializeKitConfig(kit);
+    kit.saveKitsConfig();
+    plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been initialized");
+
+    if(!configurationSection.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kits.yml");
       return;
     }
-    try {
-      kit.initializeKitConfiguration();
-    }
-    catch (Exception exception) {
-      plugin.getDebugger().debug("Kit " + kit.getKey() + " config files were not setup correctly");
-      plugin.getDebugger().debug("Kit " + kit.getKey() + " may work incorrectly");
-    }
+
+    loadKitConfig(kit);
+    plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been loaded");
+
     plugin.getDebugger().debug("Registered {0} kit", kit.getKey());
     kits.add(kit);
+  }
+
+  public void initializeKitConfig(Kit kit) {
+    ConfigurationSection configurationSection = kit.getKitsConfig().getConfigurationSection(kit.getKey());
+    if (configurationSection == null) {
+      configurationSection = kit.getKitsConfig().createSection(kit.getKey());
+    }
+    configurationSection.set("name", kit.getName());
+    if (!configurationSection.contains("enabled")) {
+      configurationSection.set("enabled", true);
+    }
+    int currentItem = 0;
+    if (!configurationSection.contains("items")) {
+      ConfigurationSection finalConfigurationSection = configurationSection;
+      kit.getKitItems().forEach((item, indexes) -> {
+        ConfigurationSection itemConfigurationSection = finalConfigurationSection.createSection(String.valueOf(currentItem));
+        XItemStack.serialize(item, itemConfigurationSection.createSection("item"));
+        itemConfigurationSection.set("slots", indexes);
+      });
+    }
+  }
+
+  public void loadKitConfig(Kit kit) {
+    ConfigurationSection configurationSection = kit.getKitsConfig().getConfigurationSection(kit.getKey());
+    assert configurationSection != null;
+    kit.setName(configurationSection.getString("name"));
+
+    kit.getKitItems().clear();
+    HashMap<ItemStack, List<Integer>> kitItems = new HashMap<>();
+
+    Objects.requireNonNull(configurationSection.getConfigurationSection("items"), "Items for kit " + kit.getKey() + " is null").getKeys(false).forEach((k) -> {
+      ItemStack item = XItemStack.deserialize(Objects.requireNonNull(configurationSection.getConfigurationSection("items." + k + ".item"), "An itemstack in " + kit.getKey() + " is null"));
+      List<Integer> indexes = configurationSection.getIntegerList("items." + k + ".slots");
+      kitItems.put(item, indexes);
+    });
+    kit.setKitItems(kitItems);
   }
 
   /**
