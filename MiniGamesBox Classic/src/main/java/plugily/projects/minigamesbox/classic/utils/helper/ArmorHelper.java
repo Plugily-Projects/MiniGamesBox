@@ -36,33 +36,33 @@ public class ArmorHelper {
 
   public static void setArmor(Player player, ArmorType type) {
     PlayerInventory inv = player.getInventory();
-    switch (type) {
-      case LEATHER -> {
+    switch(type) {
+      case LEATHER:
         inv.setBoots(new ItemStack(Material.LEATHER_BOOTS));
         inv.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
         inv.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
         inv.setHelmet(new ItemStack(Material.LEATHER_HELMET));
-      }
-      case IRON -> {
+        break;
+      case IRON:
         inv.setBoots(new ItemStack(Material.IRON_BOOTS));
         inv.setLeggings(new ItemStack(Material.IRON_LEGGINGS));
         inv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
         inv.setHelmet(new ItemStack(Material.IRON_HELMET));
-      }
-      case GOLD -> {
+        break;
+      case GOLD:
         inv.setBoots(XMaterial.GOLDEN_BOOTS.parseItem());
         inv.setLeggings(XMaterial.GOLDEN_LEGGINGS.parseItem());
         inv.setChestplate(XMaterial.GOLDEN_CHESTPLATE.parseItem());
         inv.setHelmet(XMaterial.GOLDEN_HELMET.parseItem());
-      }
-      case DIAMOND -> {
+        break;
+      case DIAMOND:
         inv.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
         inv.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
         inv.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
         inv.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-      }
-      default -> {
-      } //o.o
+        break;
+      default:
+        break; //o.o
     }
   }
 
