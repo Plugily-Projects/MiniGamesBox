@@ -26,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,7 +83,9 @@ public abstract class Kit {
   }
 
   public void addKitItem(ItemStack item, Integer slot) {
-    kitItems.put(item, List.of(slot));
+    List<Integer> tempList = new ArrayList<>();
+    tempList.add(slot);
+    kitItems.put(item, tempList);
   }
 
   public HashMap<ItemStack, List<Integer>> getKitItems() {
@@ -158,24 +161,12 @@ public abstract class Kit {
     kitItems.forEach((item, slots) -> {
       for (Integer slot : slots) {
         switch (slot) {
-          case (-5) -> {
-            player.getInventory().setHelmet(item);
-          }
-          case (-4) -> {
-            player.getInventory().setChestplate(item);
-          }
-          case (-3) -> {
-            player.getInventory().setLeggings(item);
-          }
-          case (-2) -> {
-            player.getInventory().setBoots(item);
-          }
-          case (-1) -> {
-            player.getInventory().setItem(XItemStack.firstEmpty(player.getInventory(), 0), item);
-          }
-          default -> {
-            player.getInventory().setItem(slot, item);
-          }
+          case (-5): player.getInventory().setHelmet(item);
+          case (-4): player.getInventory().setChestplate(item);
+          case (-3): player.getInventory().setLeggings(item);
+          case (-2): player.getInventory().setBoots(item);
+          case (-1): player.getInventory().setItem(XItemStack.firstEmpty(player.getInventory(), 0), item);
+          default: player.getInventory().setItem(slot, item);
         }
       }
     });
