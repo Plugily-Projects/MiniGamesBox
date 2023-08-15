@@ -104,12 +104,21 @@ public class KitRegistry {
     kit.getKitItems().clear();
     HashMap<ItemStack, List<Integer>> kitItems = new HashMap<>();
 
-    Objects.requireNonNull(configurationSection.getConfigurationSection("items"), "Items for kit " + kit.getKey() + " is null").getKeys(false).forEach((k) -> {
-      ItemStack item = XItemStack.deserialize(Objects.requireNonNull(configurationSection.getConfigurationSection("items." + k + ".item"), "An itemstack in " + kit.getKey() + " is null"));
-      List<Integer> indexes = configurationSection.getIntegerList("items." + k + ".slots");
-      kitItems.put(item, indexes);
-    });
-    kit.setKitItems(kitItems);
+    if (configurationSection.getConfigurationSection("items") == null) {
+      plugin.getDebugger().debug("Items for kit " + kit.getKey() + " is null");
+      plugin.getDebugger().debug("The kit " + kit.getKey() + " will not give any items");
+    }
+    else {
+      configurationSection.getConfigurationSection("items").getKeys(false).forEach((k) -> {
+        ItemStack item = XItemStack.deserialize(Objects.requireNonNull(configurationSection.getConfigurationSection("items." + k + ".item"), "An itemstack in " + kit.getKey() + " is null"));
+        List<Integer> indexes = configurationSection.getIntegerList("items." + k + ".slots");
+        kitItems.put(item, indexes);
+      });
+      kit.setKitItems(kitItems);
+    }
+
+
+
   }
 
   /**
