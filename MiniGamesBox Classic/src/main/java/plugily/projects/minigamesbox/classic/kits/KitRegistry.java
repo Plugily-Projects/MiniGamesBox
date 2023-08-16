@@ -27,7 +27,7 @@ import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Tigerpanzer_02
@@ -78,19 +78,26 @@ public class KitRegistry {
 
   public void initializeKitConfig(Kit kit) {
     ConfigurationSection configurationSection = kit.getKitsConfig().getConfigurationSection(kit.getKey());
+
     if (configurationSection == null) {
       configurationSection = kit.getKitsConfig().createSection(kit.getKey());
     }
+
     if (!configurationSection.contains("enabled")) {
       configurationSection.set("enabled", true);
     }
-    int currentItem = 0;
-    if (!configurationSection.contains("items")) {
-      ConfigurationSection finalConfigurationSection = configurationSection;
-      kit.getKitItems().forEach((item, indexes) -> {
-        ConfigurationSection itemConfigurationSection = finalConfigurationSection.createSection(String.valueOf(currentItem));
-        XItemStack.serialize(item, itemConfigurationSection.createSection("item"));
-        itemConfigurationSection.set("slots", indexes);
+
+    AtomicInteger currentItem = new AtomicInteger();
+    ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
+    if (inventoryConfigurationSection != null) {
+      kit.getKitItems().forEach((item, slot) -> {
+        ConfigurationSection itemConfigurationSection = inventoryConfigurationSection.createSection(String.valueOf(currentItem.get()));
+
+        ConfigurationSection itemStackConfigurationSection = itemConfigurationSection.createSection("item");
+
+        XItemStack.serialize(item, itemStackConfigurationSection);
+        itemConfigurationSection.set("slot", slot);
+        currentItem.getAndIncrement();
       });
     }
   }
@@ -100,24 +107,24 @@ public class KitRegistry {
     assert configurationSection != null;
 
     kit.getKitItems().clear();
-    HashMap<ItemStack, List<Integer>> kitItems = new HashMap<>();
+    HashMap<ItemStack, Integer> kitItems = new HashMap<>();
 
-    ConfigurationSection itemConfigurationSection = configurationSection.getConfigurationSection("items");
-    if (itemConfigurationSection == null) {
-      plugin.getDebugger().debug("Items for kit " + kit.getKey() + " is null");
-      plugin.getDebugger().debug("The kit " + kit.getKey() + " will not give any items");
-    }
-    else {
-      itemConfigurationSection.getKeys(false).forEach((k) -> {
-        ItemStack item = XItemStack.deserialize(Objects.requireNonNull(configurationSection.getConfigurationSection("items." + k + ".item"), "An itemstack in " + kit.getKey() + " is null"));
-        List<Integer> indexes = configurationSection.getIntegerList("items." + k + ".slots");
-        kitItems.put(item, indexes);
+    ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
+    if (inventoryConfigurationSection != null) {
+      inventoryConfigurationSection.getKeys(false).forEach((k) -> {
+
+        ConfigurationSection itemConfigurationSection = inventoryConfigurationSection.getConfigurationSection(k);
+        assert itemConfigurationSection != null;
+
+        ConfigurationSection itemStackConfigurationSection = itemConfigurationSection.getConfigurationSection("item");
+        assert itemStackConfigurationSection != null;
+        ItemStack item = XItemStack.deserialize(itemStackConfigurationSection);
+        Integer slot = itemConfigurationSection.getInt("slot");
+
+        kitItems.put(item, slot);
       });
       kit.setKitItems(kitItems);
     }
-
-
-
   }
 
   /**

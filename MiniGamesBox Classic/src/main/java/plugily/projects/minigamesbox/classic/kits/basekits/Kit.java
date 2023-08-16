@@ -26,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,144 +36,145 @@ import java.util.List;
  */
 public abstract class Kit {
 
-  private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+    private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
-  private FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
+    private FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
 
-  private String name = "";
+    private String name = "";
 
-  private String key = "";
+    private String key = "";
 
-  private boolean unlockedOnDefault = false;
-  private String[] description = new String[0];
+    private boolean unlockedOnDefault = false;
+    private String[] description = new String[0];
 
-  // Item index -5: Helmet
-  // Item index -4: Chestplate
-  // Item index -3: Leggings
-  // Item index -2: Boots
-  // Item index -1: Next available slot
-  private HashMap<ItemStack, List<Integer>> kitItems = new HashMap<>();
+    // Item index -5: Helmet
+    // Item index -4: Chestplate
+    // Item index -3: Leggings
+    // Item index -2: Boots
+    // Item index -1: Next available slot
+    private HashMap<ItemStack, Integer> kitItems = new HashMap<>();
 
-  protected Kit() {
-  }
-
-  public Kit(String name) {
-    setName(name);
-    setKey(name);
-  }
-
-  public Kit(String name, String key) {
-    setName(name);
-    setKey(key);
-  }
-
-  public abstract boolean isUnlockedByPlayer(Player p);
-
-  public boolean isUnlockedOnDefault() {
-    return unlockedOnDefault;
-  }
-
-  public void setUnlockedOnDefault(boolean unlockedOnDefault) {
-    this.unlockedOnDefault = unlockedOnDefault;
-  }
-
-  public void addKitItem(ItemStack item, List<Integer> slots) {
-    kitItems.put(item, slots);
-  }
-
-  public void addKitItem(ItemStack item, Integer slot) {
-    List<Integer> tempList = new ArrayList<>();
-    tempList.add(slot);
-    kitItems.put(item, tempList);
-  }
-
-  public HashMap<ItemStack, List<Integer>> getKitItems() {
-    return kitItems;
-  }
-
-  public void setKitItems(HashMap<ItemStack, List<Integer>> kitItems) {
-    this.kitItems = kitItems;
-  }
-
-  /**
-   * @return main plugin
-   */
-  public PluginMain getPlugin() {
-    return plugin;
-  }
-
-  /**
-   * @return config file of kits
-   */
-  public FileConfiguration getKitsConfig() {
-    return kitsConfig;
-  }
-
-  public void saveKitsConfig() {
-    ConfigUtils.saveConfig(plugin, kitsConfig, "kits");
-    kitsConfig = ConfigUtils.getConfig(plugin, "kits");
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    if(name != null) {
-      this.name = name;
+    protected Kit() {
     }
-  }
 
-  public void setKey(String key) {
-    this.key = key;
-  }
-
-  public abstract void setupKitItems();
-
-  public String getKey() {
-    if (key.equalsIgnoreCase("")) {
-      return name;
+    public Kit(String name) {
+        setName(name);
+        setKey(name);
     }
-    return key;
-  }
 
-  public String[] getDescription() {
-    return description.clone();
-  }
-
-  public void setDescription(String[] description) {
-    if(description != null) {
-      this.description = description.clone();
+    public Kit(String name, String key) {
+        setName(name);
+        setKey(key);
     }
-  }
 
-  public void setDescription(List<String> description) {
-    if(description != null) {
-      this.description = description.toArray(new String[0]);
+    public abstract boolean isUnlockedByPlayer(Player p);
+
+    public boolean isUnlockedOnDefault() {
+        return unlockedOnDefault;
     }
-  }
 
-  public abstract ItemStack getItemStack();
+    public void setUnlockedOnDefault(boolean unlockedOnDefault) {
+        this.unlockedOnDefault = unlockedOnDefault;
+    }
 
-  public void giveKitItems(Player player) {
-    player.getInventory().clear();
-    kitItems.forEach((item, slots) -> {
-      for (Integer slot : slots) {
-        switch (slot) {
-          case (-5): player.getInventory().setHelmet(item);
-          case (-4): player.getInventory().setChestplate(item);
-          case (-3): player.getInventory().setLeggings(item);
-          case (-2): player.getInventory().setBoots(item);
-          case (-1): player.getInventory().setItem(XItemStack.firstEmpty(player.getInventory(), 0), item);
-          default: player.getInventory().setItem(slot, item);
+    public void addKitItem(ItemStack item, Integer slot) {
+        kitItems.put(item, slot);
+    }
+
+    public HashMap<ItemStack, Integer> getKitItems() {
+        return kitItems;
+    }
+
+    public void setKitItems(HashMap<ItemStack, Integer> kitItems) {
+        this.kitItems = kitItems;
+    }
+
+    /**
+     * @return main plugin
+     */
+    public PluginMain getPlugin() {
+        return plugin;
+    }
+
+    /**
+     * @return config file of kits
+     */
+    public FileConfiguration getKitsConfig() {
+        return kitsConfig;
+    }
+
+    public void saveKitsConfig() {
+        ConfigUtils.saveConfig(plugin, kitsConfig, "kits");
+        kitsConfig = ConfigUtils.getConfig(plugin, "kits");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name != null) {
+            this.name = name;
         }
-      }
-    });
-  };
+    }
 
-  public abstract void reStock(Player player);
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-  public String getKitConfigPath() {
-    return"kit." + key + ".";
-  }
+    public abstract void setupKitItems();
+
+    public String getKey() {
+        if (key.equalsIgnoreCase("")) {
+            return name;
+        }
+        return key;
+    }
+
+    public String[] getDescription() {
+        return description.clone();
+    }
+
+    public void setDescription(String[] description) {
+        if (description != null) {
+            this.description = description.clone();
+        }
+    }
+
+    public void setDescription(List<String> description) {
+        if (description != null) {
+            this.description = description.toArray(new String[0]);
+        }
+    }
+
+    public abstract ItemStack getItemStack();
+
+    public void giveKitItems(Player player) {
+        player.getInventory().clear();
+        kitItems.forEach((item, slot) -> {
+            switch (slot) {
+                case (-5):
+                    player.getInventory().setHelmet(item);
+                case (-4):
+                    player.getInventory().setChestplate(item);
+                case (-3):
+                    player.getInventory().setLeggings(item);
+                case (-2):
+                    player.getInventory().setBoots(item);
+                case (-1):
+                    player.getInventory().setItem(XItemStack.firstEmpty(player.getInventory(), 0), item);
+                default:
+                    player.getInventory().setItem(slot, item);
+            }
+
+        });
+    }
+
+    ;
+
+    public abstract void reStock(Player player);
+
+    public String getKitConfigPath() {
+        return "kit." + key + ".";
+    }
 }
