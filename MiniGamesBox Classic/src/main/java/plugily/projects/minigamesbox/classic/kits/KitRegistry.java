@@ -60,14 +60,14 @@ public class KitRegistry {
       return;
     }
 
-    initializeKitConfig(kit);
-    kit.saveKitsConfig();
-    plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been initialized");
-
     if(!configurationSection.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kits.yml");
       return;
     }
+
+    initializeKitConfig(kit);
+    kit.saveKitsConfig();
+    plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been initialized");
 
     loadKitConfig(kit);
     plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been loaded");
