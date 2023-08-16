@@ -81,7 +81,6 @@ public class KitRegistry {
     if (configurationSection == null) {
       configurationSection = kit.getKitsConfig().createSection(kit.getKey());
     }
-    configurationSection.set("name", kit.getName());
     if (!configurationSection.contains("enabled")) {
       configurationSection.set("enabled", true);
     }
@@ -99,7 +98,6 @@ public class KitRegistry {
   public void loadKitConfig(Kit kit) {
     ConfigurationSection configurationSection = kit.getKitsConfig().getConfigurationSection(kit.getKey());
     assert configurationSection != null;
-    kit.setName(configurationSection.getString("name"));
 
     kit.getKitItems().clear();
     HashMap<ItemStack, List<Integer>> kitItems = new HashMap<>();
