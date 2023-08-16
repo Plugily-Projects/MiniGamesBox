@@ -92,21 +92,4 @@ public class ConfigUtils {
       Bukkit.getConsoleSender().sendMessage("Create blank file " + name + ".yml or restart the server!");
     }
   }
-
-  /**
-   * Sets the data into the config file if it is absent
-   *
-   * @param config FileConfiguration to use
-   * @param key    Key of the data value to set
-   * @param data   The data to be set
-   *
-   * @return       Return value is true if the data value was not set and has now been set.
-   */
-  public static boolean setIfAbsent(FileConfiguration config, String key, Object data) {
-    if (!config.isSet(key) || !config.contains(key) || config.get(key) == null) {
-      config.set(key, data);
-      return true;
-    }
-    return false;
-  }
 }
