@@ -18,7 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
-import com.cryptomorin.xseries.XItemStack;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,12 +48,11 @@ public abstract class Kit {
     private boolean unlockedOnDefault = false;
     private String[] description = new String[0];
 
-    // Item index -5: Helmet
-    // Item index -4: Chestplate
-    // Item index -3: Leggings
-    // Item index -2: Boots
-    // Item index -1: Next available slot
     private HashMap<ItemStack, Integer> kitItems = new HashMap<>();
+    private ItemStack kitHelmet;
+    private ItemStack kitChestplate;
+    private ItemStack kitLeggings;
+    private ItemStack kitBoots;
 
     protected Kit() {
     }
@@ -151,30 +151,66 @@ public abstract class Kit {
 
     public void giveKitItems(Player player) {
         player.getInventory().clear();
-        kitItems.forEach((item, slot) -> {
-            switch (slot) {
-                case (-5):
-                    player.getInventory().setHelmet(item);
-                case (-4):
-                    player.getInventory().setChestplate(item);
-                case (-3):
-                    player.getInventory().setLeggings(item);
-                case (-2):
-                    player.getInventory().setBoots(item);
-                case (-1):
-                    player.getInventory().setItem(XItemStack.firstEmpty(player.getInventory(), 0), item);
-                default:
-                    player.getInventory().setItem(slot, item);
-            }
-
-        });
+        player.getInventory().setArmorContents(null);
+        kitItems.forEach((item, slot) -> player.getInventory().setItem(slot, item));
+        if (kitHelmet != null) player.getInventory().setHelmet(kitHelmet);
+        if (kitChestplate != null) player.getInventory().setHelmet(kitChestplate);
+        if (kitLeggings != null) player.getInventory().setHelmet(kitLeggings);
+        if (kitBoots != null) player.getInventory().setHelmet(kitBoots);
     }
 
     ;
 
     public abstract void reStock(Player player);
 
+    /**
+     * @return Returns the configuration path for the kit
+     */
     public String getKitConfigPath() {
-        return "kit." + key + ".";
+        return "kit." + key;
+    }
+
+    /**
+     * @return Returns the configuration section for the kit
+     */
+    public @Nonnull ConfigurationSection getKitConfigSection() {
+        ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(getKitConfigPath());
+        if (configurationSection == null) {
+            kitsConfig.createSection(getKitConfigPath());
+        }
+        assert configurationSection != null;
+        return configurationSection;
+    }
+
+    public ItemStack getKitHelmet() {
+        return kitHelmet;
+    }
+
+    public void setKitHelmet(ItemStack kitHelmet) {
+        this.kitHelmet = kitHelmet;
+    }
+
+    public ItemStack getKitChestplate() {
+        return kitChestplate;
+    }
+
+    public void setKitChestplate(ItemStack kitChestplate) {
+        this.kitChestplate = kitChestplate;
+    }
+
+    public ItemStack getKitLeggings() {
+        return kitLeggings;
+    }
+
+    public void setKitLeggings(ItemStack kitLeggings) {
+        this.kitLeggings = kitLeggings;
+    }
+
+    public ItemStack getKitBoots() {
+        return kitBoots;
+    }
+
+    public void setKitBoots(ItemStack kitBoots) {
+        this.kitBoots = kitBoots;
     }
 }

@@ -50,7 +50,6 @@ public class KitRegistry {
    * @param kit Kit to register
    */
   public void registerKit(Kit kit) {
-    ConfigurationSection configurationSection = kit.getKitsConfig().createSection(kit.getKey());
     if(!plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
@@ -60,6 +59,7 @@ public class KitRegistry {
       return;
     }
 
+    ConfigurationSection configurationSection = kit.getKitConfigSection();
     if(!configurationSection.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kits.yml");
       return;
@@ -77,11 +77,7 @@ public class KitRegistry {
   }
 
   public void initializeKitConfig(Kit kit) {
-    ConfigurationSection configurationSection = kit.getKitsConfig().getConfigurationSection(kit.getKey());
-
-    if (configurationSection == null) {
-      configurationSection = kit.getKitsConfig().createSection(kit.getKey());
-    }
+    ConfigurationSection configurationSection = kit.getKitConfigSection();
 
     if (!configurationSection.contains("enabled")) {
       configurationSection.set("enabled", true);
@@ -89,9 +85,12 @@ public class KitRegistry {
 
     AtomicInteger currentItem = new AtomicInteger();
     ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
-    if (inventoryConfigurationSection != null) {
+    if (inventoryConfigurationSection == null) {
+      inventoryConfigurationSection = configurationSection.createSection("Inventory");
+      final ConfigurationSection finalInventoryConfigurationSection = inventoryConfigurationSection;
+
       kit.getKitItems().forEach((item, slot) -> {
-        ConfigurationSection itemConfigurationSection = inventoryConfigurationSection.createSection(String.valueOf(currentItem.get()));
+        ConfigurationSection itemConfigurationSection = finalInventoryConfigurationSection.createSection(String.valueOf(currentItem.get()));
 
         ConfigurationSection itemStackConfigurationSection = itemConfigurationSection.createSection("item");
 
@@ -100,11 +99,28 @@ public class KitRegistry {
         currentItem.getAndIncrement();
       });
     }
+
+
+    ConfigurationSection armourConfigurationSection = configurationSection.getConfigurationSection("Armour");
+    if (armourConfigurationSection == null) {
+      armourConfigurationSection = configurationSection.createSection("Armour");
+
+      ConfigurationSection helmetConfigurationSection = armourConfigurationSection.createSection("Helmet");
+      XItemStack.serialize(kit.getKitHelmet(), helmetConfigurationSection);
+
+      ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.createSection("Chestplate");
+      XItemStack.serialize(kit.getKitChestplate(), chestplateConfigurationSection);
+
+      ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.createSection("Leggings");
+      XItemStack.serialize(kit.getKitLeggings(), leggingsConfigurationSection);
+
+      ConfigurationSection bootsConfigurationSection = armourConfigurationSection.createSection("Boots");
+      XItemStack.serialize(kit.getKitBoots(), bootsConfigurationSection);
+    }
   }
 
   public void loadKitConfig(Kit kit) {
-    ConfigurationSection configurationSection = kit.getKitsConfig().getConfigurationSection(kit.getKey());
-    assert configurationSection != null;
+    ConfigurationSection configurationSection = kit.getKitConfigSection();
 
     kit.getKitItems().clear();
     HashMap<ItemStack, Integer> kitItems = new HashMap<>();
@@ -124,6 +140,24 @@ public class KitRegistry {
         kitItems.put(item, slot);
       });
       kit.setKitItems(kitItems);
+    }
+
+    ConfigurationSection armourConfigurationSection = configurationSection.getConfigurationSection("Armour");
+    if (armourConfigurationSection != null) {
+
+      ConfigurationSection helmetConfigurationSection = armourConfigurationSection.getConfigurationSection("Helmet");
+      if (helmetConfigurationSection != null) kit.setKitHelmet(XItemStack.deserialize(helmetConfigurationSection));
+
+      ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.getConfigurationSection("Chestplate");
+      if (chestplateConfigurationSection != null)
+        kit.setKitChestplate(XItemStack.deserialize(chestplateConfigurationSection));
+
+      ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.getConfigurationSection("Leggings");
+      if (leggingsConfigurationSection != null)
+        kit.setKitLeggings(XItemStack.deserialize(leggingsConfigurationSection));
+
+      ConfigurationSection bootsConfigurationSection = armourConfigurationSection.getConfigurationSection("Boots");
+      if (bootsConfigurationSection != null) kit.setKitBoots(XItemStack.deserialize(bootsConfigurationSection));
     }
   }
 
