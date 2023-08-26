@@ -60,7 +60,7 @@ public class KitRegistry {
     }
 
     ConfigurationSection configurationSection = kit.getKitConfigSection();
-    if(!configurationSection.getBoolean("enabled", false)) {
+    if(configurationSection != null && !configurationSection.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kits.yml");
       return;
     }

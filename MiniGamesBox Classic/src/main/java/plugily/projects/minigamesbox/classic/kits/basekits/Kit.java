@@ -26,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 
@@ -178,12 +177,11 @@ public abstract class Kit {
     /**
      * @return Returns the configuration section for the kit
      */
-    public @Nonnull ConfigurationSection getKitConfigSection() {
+    public ConfigurationSection getKitConfigSection() {
         ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(getKitConfigPath());
         if (configurationSection == null) {
             kitsConfig.createSection(getKitConfigPath());
         }
-        assert configurationSection != null;
         return configurationSection;
     }
 
