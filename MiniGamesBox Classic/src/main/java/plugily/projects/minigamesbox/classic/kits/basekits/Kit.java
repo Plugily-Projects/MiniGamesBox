@@ -124,7 +124,7 @@ public abstract class Kit {
     public abstract void setupKitItems();
 
     public String getKey() {
-        if (key.equalsIgnoreCase("")) {
+        if (key.isEmpty()) {
             return name;
         }
         return key;
