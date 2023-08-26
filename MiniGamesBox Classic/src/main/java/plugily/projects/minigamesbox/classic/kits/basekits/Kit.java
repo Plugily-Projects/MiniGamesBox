@@ -168,8 +168,6 @@ public abstract class Kit {
      */
     public abstract ItemStack handleItem(Player player, ItemStack itemStack);
 
-    public abstract void reStock(Player player);
-
     /**
      * @return Returns the configuration path for the kit
      */
