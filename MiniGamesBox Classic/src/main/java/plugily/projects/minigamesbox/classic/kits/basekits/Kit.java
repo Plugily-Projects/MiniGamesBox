@@ -152,14 +152,21 @@ public abstract class Kit {
     public void giveKitItems(Player player) {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
-        kitItems.forEach((item, slot) -> player.getInventory().setItem(slot, item));
-        if (kitHelmet != null) player.getInventory().setHelmet(kitHelmet);
-        if (kitChestplate != null) player.getInventory().setHelmet(kitChestplate);
-        if (kitLeggings != null) player.getInventory().setHelmet(kitLeggings);
-        if (kitBoots != null) player.getInventory().setHelmet(kitBoots);
+        kitItems.forEach((item, slot) -> player.getInventory().setItem(slot, handleItem(player, item)));
+        if (kitHelmet != null) player.getInventory().setHelmet(handleItem(player, kitHelmet));
+        if (kitChestplate != null) player.getInventory().setHelmet(handleItem(player, kitChestplate));
+        if (kitLeggings != null) player.getInventory().setHelmet(handleItem(player, kitChestplate));
+        if (kitBoots != null) player.getInventory().setHelmet(handleItem(player, kitChestplate));
     }
 
-    ;
+    /**
+     * This method allows you to change kit items given to a player from their original form.
+     * If nothing is to be changed for any items, then return itemstack straight away.
+     * @param player Player to give the item to
+     * @param itemStack The item stack to be handled
+     * @return The item stack after being handled
+     */
+    public abstract ItemStack handleItem(Player player, ItemStack itemStack);
 
     public abstract void reStock(Player player);
 

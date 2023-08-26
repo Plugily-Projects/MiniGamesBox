@@ -53,10 +53,15 @@ public class CloneKit extends FreeKit {
     addKitItem(WeaponHelper.getUnBreakingSword(WeaponHelper.ResourceType.WOOD, 10), 0);
     addKitItem(new ItemStack(XMaterial.COOKED_PORKCHOP.parseMaterial()), 8);
 
-    addKitItem(new ItemStack(Material.LEATHER_BOOTS), -2);
-    addKitItem(new ItemStack(Material.LEATHER_LEGGINGS), -3);
-    addKitItem(new ItemStack(Material.LEATHER_CHESTPLATE), -4);
-    addKitItem(new ItemStack(Material.LEATHER_HELMET), -5);
+    setKitBoots(new ItemStack(Material.LEATHER_BOOTS));
+    setKitLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+    setKitChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+    setKitHelmet(new ItemStack(Material.LEATHER_HELMET));
+  }
+
+  @Override
+  public ItemStack handleItem(Player player, ItemStack itemStack) {
+    return itemStack;
   }
 
   @Override

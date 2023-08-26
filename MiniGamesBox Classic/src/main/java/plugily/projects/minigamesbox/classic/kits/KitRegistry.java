@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class KitRegistry {
 
-  private final List<Kit> kits = new java.util.ArrayList<>();
+  final List<Kit> kits = new java.util.ArrayList<>();
   private Kit defaultKit;
   private final PluginMain plugin;
 

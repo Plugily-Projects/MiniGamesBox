@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.kits.free;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 
 import java.util.List;
@@ -52,6 +53,11 @@ public class EmptyKit extends FreeKit {
 
   @Override
   public void giveKitItems(Player player) {
+  }
+
+  @Override
+  public ItemStack handleItem(Player player, ItemStack itemStack) {
+    return itemStack;
   }
 
   @Override
