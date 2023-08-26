@@ -65,6 +65,7 @@ public class KitRegistry {
       return;
     }
 
+    kit.setupKitItems();
     initializeKitConfig(kit);
     kit.saveKitsConfig();
     plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been initialized");
