@@ -64,9 +64,4 @@ public class EmptyKit extends FreeKit {
   public Material getMaterial() {
     return XMaterial.BEDROCK.parseMaterial();
   }
-
-  @Override
-  public void reStock(Player player) {
-    //no restock items for this kit
-  }
 }

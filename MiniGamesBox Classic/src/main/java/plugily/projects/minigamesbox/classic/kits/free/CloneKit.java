@@ -68,9 +68,4 @@ public class CloneKit extends FreeKit {
   public Material getMaterial() {
     return XMaterial.WOODEN_SWORD.parseMaterial();
   }
-
-  @Override
-  public void reStock(Player player) {
-    //no restock items for this kit
-  }
 }
