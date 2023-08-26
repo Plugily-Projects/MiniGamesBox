@@ -106,17 +106,25 @@ public class KitRegistry {
     if (armourConfigurationSection == null) {
       armourConfigurationSection = configurationSection.createSection("Armour");
 
-      ConfigurationSection helmetConfigurationSection = armourConfigurationSection.createSection("Helmet");
-      XItemStack.serialize(kit.getKitHelmet(), helmetConfigurationSection);
+      if (kit.getKitHelmet() != null) {
+        ConfigurationSection helmetConfigurationSection = armourConfigurationSection.createSection("Helmet");
+        XItemStack.serialize(kit.getKitHelmet(), helmetConfigurationSection);
+      }
 
-      ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.createSection("Chestplate");
-      XItemStack.serialize(kit.getKitChestplate(), chestplateConfigurationSection);
+      if (kit.getKitChestplate() != null) {
+        ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.createSection("Chestplate");
+        XItemStack.serialize(kit.getKitChestplate(), chestplateConfigurationSection);
+      }
 
-      ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.createSection("Leggings");
-      XItemStack.serialize(kit.getKitLeggings(), leggingsConfigurationSection);
+      if (kit.getKitLeggings() != null) {
+        ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.createSection("Leggings");
+        XItemStack.serialize(kit.getKitLeggings(), leggingsConfigurationSection);
+      }
 
-      ConfigurationSection bootsConfigurationSection = armourConfigurationSection.createSection("Boots");
-      XItemStack.serialize(kit.getKitBoots(), bootsConfigurationSection);
+      if (kit.getKitBoots() != null) {
+        ConfigurationSection bootsConfigurationSection = armourConfigurationSection.createSection("Boots");
+        XItemStack.serialize(kit.getKitBoots(), bootsConfigurationSection);
+      }
     }
   }
 
