@@ -1,5 +1,7 @@
 ### 1.3.3 Release (22.08.2023)
 * Added kits.yml mechanic
+* Added SEPARATE_ARENA_SPECTATORS to adjust the chat for spectators to be on there own
+* Changed config value Separate-Arena-Chat to Chat.Separate.Arena
 * Fixed rewards enabling
 * Fixed bossbar disable
 * Fixed locale registration if services are unavailable
