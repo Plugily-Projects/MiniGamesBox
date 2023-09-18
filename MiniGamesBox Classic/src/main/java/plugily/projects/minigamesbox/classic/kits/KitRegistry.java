@@ -23,6 +23,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
+import plugily.projects.minigamesbox.classic.kits.basekits.LevelKit;
 import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 
 import java.util.HashMap;
@@ -84,6 +85,12 @@ public class KitRegistry {
       configurationSection.set("enabled", true);
     }
 
+    if (kit instanceof LevelKit levelKit) {
+      if (!configurationSection.contains("required-level")) {
+        configurationSection.set("required-level", levelKit.getLevel());
+      }
+    }
+
     AtomicInteger currentItem = new AtomicInteger();
     ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
     if (inventoryConfigurationSection == null) {
@@ -133,6 +140,10 @@ public class KitRegistry {
 
     kit.getKitItems().clear();
     HashMap<ItemStack, Integer> kitItems = new HashMap<>();
+
+    if (kit instanceof LevelKit levelKit) {
+      levelKit.setLevel(configurationSection.getInt("required-level"));
+    }
 
     ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
     if (inventoryConfigurationSection != null) {
