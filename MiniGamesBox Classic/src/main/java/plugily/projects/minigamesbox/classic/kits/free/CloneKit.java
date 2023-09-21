@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
-import plugily.projects.minigamesbox.classic.utils.helper.WeaponHelper;
 
 import java.util.List;
 
@@ -46,17 +45,6 @@ public class CloneKit extends FreeKit {
   @Override
   public boolean isUnlockedByPlayer(Player player) {
     return true;
-  }
-
-  @Override
-  public void setupKitItems() {
-    addKitItem(WeaponHelper.getUnBreakingSword(WeaponHelper.ResourceType.WOOD, 10), 0);
-    addKitItem(new ItemStack(XMaterial.COOKED_PORKCHOP.parseMaterial()), 8);
-
-    setKitBoots(new ItemStack(Material.LEATHER_BOOTS));
-    setKitLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-    setKitChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-    setKitHelmet(new ItemStack(Material.LEATHER_HELMET));
   }
 
   @Override

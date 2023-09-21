@@ -29,9 +29,11 @@ import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
  * <p>
  * Created at 21.09.2021
  */
-public abstract class PremiumKit extends Kit {
+public class PremiumKit extends Kit {
 
-  public abstract Material getMaterial();
+  public Material getMaterial() {
+    return null;
+  }
 
   @Override
   public ItemStack getItemStack() {

@@ -34,7 +34,7 @@ import java.util.List;
  * <p>
  * Created at 21.09.2021
  */
-public abstract class Kit {
+public class Kit {
 
     private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
@@ -43,6 +43,8 @@ public abstract class Kit {
     private String name = "";
 
     private String key = "";
+
+    private String kitPermission = "";
 
     private boolean unlockedOnDefault = false;
     private String[] description = new String[0];
@@ -66,7 +68,9 @@ public abstract class Kit {
         setKey(key);
     }
 
-    public abstract boolean isUnlockedByPlayer(Player p);
+    public boolean isUnlockedByPlayer(Player p) {
+        return false;
+    }
 
     public boolean isUnlockedOnDefault() {
         return unlockedOnDefault;
@@ -121,8 +125,6 @@ public abstract class Kit {
         this.key = key;
     }
 
-    public abstract void setupKitItems();
-
     public String getKey() {
         if (key.isEmpty()) {
             return name;
@@ -146,7 +148,9 @@ public abstract class Kit {
         }
     }
 
-    public abstract ItemStack getItemStack();
+    public ItemStack getItemStack() {
+        return null;
+    }
 
     public void giveKitItems(Player player) {
         player.getInventory().clear();
@@ -161,11 +165,14 @@ public abstract class Kit {
     /**
      * This method allows you to change kit items given to a player from their original form.
      * If nothing is to be changed for any items, then return itemstack straight away.
-     * @param player Player to give the item to
+     *
+     * @param player    Player to give the item to
      * @param itemStack The item stack to be handled
      * @return The item stack after being handled
      */
-    public abstract ItemStack handleItem(Player player, ItemStack itemStack);
+    public ItemStack handleItem(Player player, ItemStack itemStack) {
+        return itemStack;
+    }
 
     /**
      * @return Returns the configuration path for the kit
@@ -215,5 +222,13 @@ public abstract class Kit {
 
     public void setKitBoots(ItemStack kitBoots) {
         this.kitBoots = kitBoots;
+    }
+
+    public void setKitPermission(String kitPermission) {
+        this.kitPermission = kitPermission;
+    }
+
+    public String getKitPermission() {
+        return kitPermission;
     }
 }

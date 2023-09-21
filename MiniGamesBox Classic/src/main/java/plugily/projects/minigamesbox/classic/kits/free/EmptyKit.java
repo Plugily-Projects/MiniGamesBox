@@ -47,11 +47,6 @@ public class EmptyKit extends FreeKit {
   }
 
   @Override
-  public void setupKitItems() {
-
-  }
-
-  @Override
   public void giveKitItems(Player player) {
   }
 
