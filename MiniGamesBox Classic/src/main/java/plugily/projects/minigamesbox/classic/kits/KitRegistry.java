@@ -19,6 +19,8 @@
 package plugily.projects.minigamesbox.classic.kits;
 
 import com.cryptomorin.xseries.XItemStack;
+import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +34,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
@@ -167,6 +170,21 @@ public class KitRegistry {
       return;
     }
 
+    String kit_name;
+    if (configurationSection.getString("name") == null) {
+      kit_name = kit_key;
+    }
+    else {
+      kit_name = configurationSection.getString("name");
+    }
+
+
+    if (configurationSection.getConfigurationSection("display_item") == null) {
+      configurationSection.set("display_item", XItemStack.serialize(new ItemStack(Material.BEDROCK)));
+    }
+
+    ItemStack itemStack = XItemStack.deserialize(Objects.requireNonNull(configurationSection.getConfigurationSection("display_item")));
+
     if(!configurationSection.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit_key + " is disabled by kits.yml");
       return;
@@ -184,16 +202,16 @@ public class KitRegistry {
 
     switch (kitType) {
       case "free": {
-        kit = new FreeKit();
+        kit = new FreeKit(kit_key, kit_name);
         break;
       }
       case "level": {
-        kit = new LevelKit();
+        kit = new LevelKit(kit_key, kit_name);
         ((LevelKit) kit).setLevel(configurationSection.getInt("required-level"));
         break;
       }
       case "premium": {
-        kit = new PremiumKit();
+        kit = new PremiumKit(kit_key, kit_name);
         break;
       }
       default: {
@@ -202,8 +220,6 @@ public class KitRegistry {
         return;
       }
     }
-
-    kit.setKey(kit_key);
 
     HashMap<ItemStack, Integer> kitItems = new HashMap<>();
 

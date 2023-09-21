@@ -19,9 +19,6 @@
 package plugily.projects.minigamesbox.classic.kits.free;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 
 import java.util.List;
@@ -32,31 +29,10 @@ import java.util.List;
  * Created at 02.12.2021
  */
 public class EmptyKit extends FreeKit {
-
-  public EmptyKit() {
-    setName("");
-    setKey("");
+  public EmptyKit(String key, String name) {
+    super(key, name, XMaterial.BEDROCK.parseItem());
     List<String> description = getPlugin().getBukkitHelper().splitString("", 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);
-  }
-
-  @Override
-  public boolean isUnlockedByPlayer(Player player) {
-    return true;
-  }
-
-  @Override
-  public void giveKitItems(Player player) {
-  }
-
-  @Override
-  public ItemStack handleItem(Player player, ItemStack itemStack) {
-    return itemStack;
-  }
-
-  @Override
-  public Material getMaterial() {
-    return XMaterial.BEDROCK.parseMaterial();
   }
 }

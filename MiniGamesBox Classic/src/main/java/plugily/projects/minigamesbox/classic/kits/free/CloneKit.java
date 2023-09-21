@@ -19,9 +19,6 @@
 package plugily.projects.minigamesbox.classic.kits.free;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 
@@ -34,26 +31,12 @@ import java.util.List;
  */
 public class CloneKit extends FreeKit {
 
-  public CloneKit() {
+  public CloneKit(String key, String name) {
+    super(key, name, XMaterial.WOODEN_SWORD.parseItem());
     setName(new MessageBuilder("KITS_EXAMPLE_NAME").asKey().build());
     setKey("Clone");
     List<String> description = getPlugin().getBukkitHelper().splitString(new MessageBuilder("KITS_EXAMPLE_DESCRIPTION").asKey().build(), 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);
-  }
-
-  @Override
-  public boolean isUnlockedByPlayer(Player player) {
-    return true;
-  }
-
-  @Override
-  public ItemStack handleItem(Player player, ItemStack itemStack) {
-    return itemStack;
-  }
-
-  @Override
-  public Material getMaterial() {
-    return XMaterial.WOODEN_SWORD.parseMaterial();
   }
 }

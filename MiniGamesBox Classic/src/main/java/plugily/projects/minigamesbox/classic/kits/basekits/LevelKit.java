@@ -18,11 +18,8 @@
 
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 
 /**
  * @author Tigerpanzer_02
@@ -33,6 +30,10 @@ public class LevelKit extends Kit {
 
   private int level;
 
+  public LevelKit(String key, String name, ItemStack itemStack) {
+    super(key, name, itemStack);
+  }
+
   public int getLevel() {
     return level;
   }
@@ -41,26 +42,8 @@ public class LevelKit extends Kit {
     this.level = level;
   }
 
-  public Material getMaterial() {
-    return null;
-  }
-
   @Override
   public boolean isUnlockedByPlayer(Player p) {
     return getPlugin().getUserManager().getUser(p).getStatistic("LEVEL") >= this.getLevel() || p.hasPermission(this.getKitPermission());
-  }
-
-  @Override
-  public ItemStack getItemStack() {
-    return new ItemBuilder(getMaterial())
-        .name(getName())
-        .lore(getDescription())
-        .lore(new MessageBuilder("KIT_KIT_MENU_LORE_UNLOCK_LEVEL").asKey().integer(level).build())
-        .build();
-  }
-
-  @Override
-  public ItemStack handleItem(Player player, ItemStack itemStack) {
-    return null;
   }
 }

@@ -40,9 +40,11 @@ public class Kit {
 
     private FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
 
-    private String name = "";
+    private String name;
 
-    private String key = "";
+    private String key;
+
+    private ItemStack itemStack;
 
     private String kitPermission = "";
 
@@ -55,17 +57,7 @@ public class Kit {
     private ItemStack kitLeggings;
     private ItemStack kitBoots;
 
-    protected Kit() {
-    }
-
-    public Kit(String name) {
-        setName(name);
-        setKey(name);
-    }
-
-    public Kit(String name, String key) {
-        setName(name);
-        setKey(key);
+    public Kit(String key, String name, ItemStack itemStack) {
     }
 
     public boolean isUnlockedByPlayer(Player p) {
@@ -132,6 +124,12 @@ public class Kit {
         return key;
     }
 
+    public ItemStack getItemStack() {
+        ItemStack itemStack1 = itemStack;
+        itemStack1.setAmount(1);
+        return itemStack1;
+    }
+
     public String[] getDescription() {
         return description.clone();
     }
@@ -148,9 +146,6 @@ public class Kit {
         }
     }
 
-    public ItemStack getItemStack() {
-        return null;
-    }
 
     public void giveKitItems(Player player) {
         player.getInventory().clear();
