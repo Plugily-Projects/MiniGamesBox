@@ -42,7 +42,7 @@ public class Kit {
 
     private String name;
 
-    private String key;
+    private final String key;
 
     private ItemStack itemStack;
 
@@ -58,6 +58,9 @@ public class Kit {
     private ItemStack kitBoots;
 
     public Kit(String key, String name, ItemStack itemStack) {
+        this.key = key;
+        this.name = name;
+        this.itemStack = itemStack;
     }
 
     public boolean isUnlockedByPlayer(Player p) {
@@ -111,10 +114,6 @@ public class Kit {
         if (name != null) {
             this.name = name;
         }
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getKey() {

@@ -19,7 +19,6 @@
 package plugily.projects.minigamesbox.classic.kits;
 
 import com.cryptomorin.xseries.XItemStack;
-import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -202,16 +201,16 @@ public class KitRegistry {
 
     switch (kitType) {
       case "free": {
-        kit = new FreeKit(kit_key, kit_name);
+        kit = new FreeKit(kit_key, kit_name, itemStack);
         break;
       }
       case "level": {
-        kit = new LevelKit(kit_key, kit_name);
+        kit = new LevelKit(kit_key, kit_name, itemStack);
         ((LevelKit) kit).setLevel(configurationSection.getInt("required-level"));
         break;
       }
       case "premium": {
-        kit = new PremiumKit(kit_key, kit_name);
+        kit = new PremiumKit(kit_key, kit_name, itemStack);
         break;
       }
       default: {
@@ -281,7 +280,7 @@ public class KitRegistry {
    */
   public Kit getDefaultKit() {
     if(defaultKit == null) {
-      setDefaultKit(new EmptyKit());
+      setDefaultKit(new EmptyKit("default", "default"));
     }
     plugin.getDebugger().debug("getDefaultKit is {0}", defaultKit.getName());
     return defaultKit;
