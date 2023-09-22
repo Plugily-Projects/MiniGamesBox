@@ -46,7 +46,8 @@ public class ConfigOption {
     options.put("DATABASE", new ConfigOption("Database", false, true));
     options.put("REWARDS", new ConfigOption("Rewards", true, true));
     options.put("PLUGIN_CHAT_FORMAT", new ConfigOption("Plugin-Chat-Format", true, true));
-    options.put("SEPARATE_ARENA_CHAT", new ConfigOption("Separate-Arena-Chat", true, true));
+    options.put("SEPARATE_ARENA_CHAT", new ConfigOption("Chat.Separate.Arena", true, true));
+    options.put("SEPARATE_ARENA_SPECTATORS", new ConfigOption("Chat.Separate.Spectators", true, true));
     options.put("FIREWORK", new ConfigOption("Firework", true, true));
     options.put("SIGN_BLOCK_STATES", new ConfigOption("Sign-Block-States", true, true));
     options.put("HOLIDAYS", new ConfigOption("Holidays", true, true));

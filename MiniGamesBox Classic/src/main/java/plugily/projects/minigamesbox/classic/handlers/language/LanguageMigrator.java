@@ -44,7 +44,7 @@ import java.util.logging.Level;
 public class LanguageMigrator {
 
   public enum CoreFileVersion {
-    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(1), KITS(1),
+    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(2), KITS(1),
     LANGUAGE(1), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
@@ -106,7 +106,7 @@ public class LanguageMigrator {
       }
       plugin.getDebugger().debug(Level.WARNING, "[System notify] The " + fileName + "  file is outdated! Updating...");
       for(int i = oldVersion; i < newVersion; i++) {
-        executeUpdate(coreFileVersion, i);
+        executeUpdate(file, coreFileVersion, i);
       }
 
       updateCoreFileVersion(file, configuration, oldVersion, newVersion);
@@ -116,10 +116,21 @@ public class LanguageMigrator {
     }
   }
 
-  private void executeUpdate(CoreFileVersion coreFileVersion, int version) {
+  private void executeUpdate(File file, CoreFileVersion coreFileVersion, int version) {
     switch(coreFileVersion) {
       case CONFIG:
         switch(version) {
+          case 1:
+            MigratorUtils.addNewLines(file, "\r\nChat:\n" +
+                "  Separate:\n" +
+                "    # Should we enable a separate arena chat for players inside a arena\n" +
+                "    # Useful on multi arena servers that don't want the same chat for all players on the server\n" +
+                "    Arena: true\n" +
+                "    # Should spectators only write with other spectators\n" +
+                "    Spectators: true\r\n");
+            MigratorUtils.removeLineFromFile(file, "Separate-Arena-Chat: true");
+            MigratorUtils.removeLineFromFile(file, "Separate-Arena-Chat: false");
+            break;
           default:
             break;
         }

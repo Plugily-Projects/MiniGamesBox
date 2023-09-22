@@ -24,7 +24,7 @@
 
     <groupId>plugily.projects</groupId>
     <artifactId>minigamesbox</artifactId>
-    <version>1.2.0-SNAPSHOT51</version>
+    <version>1.3.2-java8</version>
     <packaging>pom</packaging>
 
     <modules>
