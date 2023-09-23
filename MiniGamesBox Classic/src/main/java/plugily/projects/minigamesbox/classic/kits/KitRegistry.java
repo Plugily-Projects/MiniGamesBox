@@ -104,13 +104,7 @@ public class KitRegistry {
       return;
     }
 
-    String kit_name;
-    if (configurationSection.getString("name") == null) {
-      kit_name = kit_key;
-    }
-    else {
-      kit_name = configurationSection.getString("name");
-    }
+    String kit_name = configurationSection.getString("name", kit_key);
 
     if (configurationSection.getConfigurationSection("display_item") == null) {
       configurationSection.set("display_item", XItemStack.serialize(new ItemStack(Material.BEDROCK)));
