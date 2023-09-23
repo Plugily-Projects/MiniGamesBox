@@ -44,7 +44,7 @@ public class Kit {
 
     private final String key;
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     private String kitPermission = "";
 
@@ -106,10 +106,20 @@ public class Kit {
         kitsConfig = ConfigUtils.getConfig(plugin, "kits");
     }
 
+    /**
+     * Retrieves the name of the object.
+     *
+     * @return  the name of the object
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the object.
+     *
+     * @param name the new name to set
+     */
     public void setName(String name) {
         if (name != null) {
             this.name = name;
@@ -151,9 +161,9 @@ public class Kit {
         player.getInventory().setArmorContents(null);
         kitItems.forEach((item, slot) -> player.getInventory().setItem(slot, handleItem(player, item)));
         if (kitHelmet != null) player.getInventory().setHelmet(handleItem(player, kitHelmet));
-        if (kitChestplate != null) player.getInventory().setHelmet(handleItem(player, kitChestplate));
-        if (kitLeggings != null) player.getInventory().setHelmet(handleItem(player, kitChestplate));
-        if (kitBoots != null) player.getInventory().setHelmet(handleItem(player, kitChestplate));
+        if (kitChestplate != null) player.getInventory().setChestplate(handleItem(player, kitChestplate));
+        if (kitLeggings != null) player.getInventory().setLeggings(handleItem(player, kitLeggings));
+        if (kitBoots != null) player.getInventory().setBoots(handleItem(player, kitBoots));
     }
 
     /**
@@ -172,7 +182,7 @@ public class Kit {
      * @return Returns the configuration path for the kit
      */
     public String getKitConfigPath() {
-        return "kit." + key;
+        return key;
     }
 
     /**

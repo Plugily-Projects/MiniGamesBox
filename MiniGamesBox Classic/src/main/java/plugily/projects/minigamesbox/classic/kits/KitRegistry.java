@@ -34,7 +34,6 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 /**
@@ -44,10 +43,10 @@ import java.util.logging.Level;
  */
 public class KitRegistry {
 
-  final List<Kit> kits = new java.util.ArrayList<>();
+  public final List<Kit> kits = new java.util.ArrayList<>();
   private Kit defaultKit;
-  private final PluginMain plugin;
-  private final FileConfiguration kitsConfig;
+  public final PluginMain plugin;
+  public FileConfiguration kitsConfig;
 
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
@@ -55,7 +54,7 @@ public class KitRegistry {
   }
 
   /**
-   * Method for registering new kit
+   * Method for registering clone and empty kit
    *
    * @param kit Kit to register
    */
@@ -75,93 +74,29 @@ public class KitRegistry {
       return;
     }
 
-    // kit.setupKitItems();
-    // initializeKitConfig(kit);
-    // kit.saveKitsConfig();
-    // plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been initialized");
-
-    loadKitConfig(kit);
-    plugin.getDebugger().debug("Kit " + kit.getKey() + "'s config files have been loaded");
-
     plugin.getDebugger().debug("Registered {0} kit", kit.getKey());
     kits.add(kit);
   }
 
+  /**
+   * Registers the kits by loading their configurations.
+   */
   public void registerKits() {
-    if (kitsConfig.getConfigurationSection("kit") == null) {
-      plugin.getDebugger().debug(Level.SEVERE, "No kits configuration section was found, skipping loading kits");
-      return;
-    }
 
-    for (String key : kitsConfig.getConfigurationSection("kit").getKeys(false)) {
-      System.out.println("Key: " + key);
-      loadKitConfig(key);
-    }
-  }
-
-  public void initializeKitConfig(Kit kit) {
-    ConfigurationSection configurationSection = kit.getKitConfigSection();
-
-    if (!configurationSection.contains("enabled")) {
-      configurationSection.set("enabled", true);
-    }
-
-    if (kit instanceof LevelKit) {
-      if (!configurationSection.contains("required-level")) {
-        configurationSection.set("required-level", ((LevelKit) kit).getLevel());
-      }
-    }
-
-    AtomicInteger currentItem = new AtomicInteger();
-    ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
-    if (inventoryConfigurationSection == null) {
-      inventoryConfigurationSection = configurationSection.createSection("Inventory");
-      final ConfigurationSection finalInventoryConfigurationSection = inventoryConfigurationSection;
-
-      kit.getKitItems().forEach((item, slot) -> {
-        ConfigurationSection itemConfigurationSection = finalInventoryConfigurationSection.createSection(String.valueOf(currentItem.get()));
-
-        ConfigurationSection itemStackConfigurationSection = itemConfigurationSection.createSection("item");
-
-        XItemStack.serialize(item, itemStackConfigurationSection);
-        itemConfigurationSection.set("slot", slot);
-        currentItem.getAndIncrement();
-      });
-    }
-
-
-    ConfigurationSection armourConfigurationSection = configurationSection.getConfigurationSection("Armour");
-    if (armourConfigurationSection == null) {
-      armourConfigurationSection = configurationSection.createSection("Armour");
-
-      if (kit.getKitHelmet() != null) {
-        ConfigurationSection helmetConfigurationSection = armourConfigurationSection.createSection("Helmet");
-        XItemStack.serialize(kit.getKitHelmet(), helmetConfigurationSection);
-      }
-
-      if (kit.getKitChestplate() != null) {
-        ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.createSection("Chestplate");
-        XItemStack.serialize(kit.getKitChestplate(), chestplateConfigurationSection);
-      }
-
-      if (kit.getKitLeggings() != null) {
-        ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.createSection("Leggings");
-        XItemStack.serialize(kit.getKitLeggings(), leggingsConfigurationSection);
-      }
-
-      if (kit.getKitBoots() != null) {
-        ConfigurationSection bootsConfigurationSection = armourConfigurationSection.createSection("Boots");
-        XItemStack.serialize(kit.getKitBoots(), bootsConfigurationSection);
+    for (String key : kitsConfig.getKeys(false)) {
+      if (!Objects.equals(key, "Do-Not-Edit")) {
+        loadKitConfig(key);
       }
     }
   }
 
-  public void loadKitConfig(Kit kit) {
-    return;
-  }
-
-  private void loadKitConfig(String kit_key) {
-    ConfigurationSection configurationSection = kitsConfig.getConfigurationSection("kit." + kit_key);
+  /**
+   * Loads the configuration for a kit.
+   *
+   * @param  kit_key  the key of the kit to load the configuration for
+   */
+  public void loadKitConfig(String kit_key) {
+    ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(kit_key);
 
     if (configurationSection == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have any configuration.");
@@ -176,7 +111,6 @@ public class KitRegistry {
     else {
       kit_name = configurationSection.getString("name");
     }
-
 
     if (configurationSection.getConfigurationSection("display_item") == null) {
       configurationSection.set("display_item", XItemStack.serialize(new ItemStack(Material.BEDROCK)));
@@ -220,9 +154,16 @@ public class KitRegistry {
       }
     }
 
+    if (configurationSection.getString("unlockedOnDefault") == null) {
+      plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have an unlockedOnDefault configuration.");
+      plugin.getDebugger().debug(Level.SEVERE, "Kit" + kit_key + " will not be loaded.");
+      return;
+    }
+    kit.setUnlockedOnDefault(configurationSection.getBoolean("unlockedOnDefault"));
+
     HashMap<ItemStack, Integer> kitItems = new HashMap<>();
 
-    ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("Inventory");
+    ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("inventory");
     if (inventoryConfigurationSection != null) {
       inventoryConfigurationSection.getKeys(false).forEach((k) -> {
 
@@ -244,25 +185,25 @@ public class KitRegistry {
     }
 
 
-    ConfigurationSection armourConfigurationSection = configurationSection.getConfigurationSection("Armour");
+    ConfigurationSection armourConfigurationSection = configurationSection.getConfigurationSection("armour");
     if (armourConfigurationSection != null) {
 
-      ConfigurationSection helmetConfigurationSection = armourConfigurationSection.getConfigurationSection("Helmet");
+      ConfigurationSection helmetConfigurationSection = armourConfigurationSection.getConfigurationSection("helmet");
       if (helmetConfigurationSection != null) {
         kit.setKitHelmet(XItemStack.deserialize(helmetConfigurationSection));
       }
 
-      ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.getConfigurationSection("Chestplate");
+      ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.getConfigurationSection("chestplate");
       if (chestplateConfigurationSection != null) {
         kit.setKitChestplate(XItemStack.deserialize(chestplateConfigurationSection));
       }
 
-      ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.getConfigurationSection("Leggings");
+      ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.getConfigurationSection("leggings");
       if (leggingsConfigurationSection != null) {
         kit.setKitLeggings(XItemStack.deserialize(leggingsConfigurationSection));
       }
 
-      ConfigurationSection bootsConfigurationSection = armourConfigurationSection.getConfigurationSection("Boots");
+      ConfigurationSection bootsConfigurationSection = armourConfigurationSection.getConfigurationSection("boots");
       if (bootsConfigurationSection != null) {
         kit.setKitBoots(XItemStack.deserialize(bootsConfigurationSection));
       }
@@ -271,6 +212,13 @@ public class KitRegistry {
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " does not have an armour configuration section.");
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " will not give any armour items.");
     }
+
+    if (!Objects.equals(configurationSection.getString("default_kit"), null)) {
+      this.setDefaultKit(kit);
+    }
+
+    plugin.getDebugger().debug("Kit " + kit.getKey() + " loaded.");
+    kits.add(kit);
   }
 
   /**
