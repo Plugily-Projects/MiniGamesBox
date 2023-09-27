@@ -176,7 +176,7 @@ public class Kit {
      * @return The item stack after being handled
      */
     public ItemStack handleItem(Player player, ItemStack itemStack) {
-        return KitRegistry.getHandleItem().apply();
+        return KitRegistry.getHandleItem().apply(player, itemStack);
     }
 
     /**
