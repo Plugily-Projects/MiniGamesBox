@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.HashMap;
@@ -175,7 +176,7 @@ public class Kit {
      * @return The item stack after being handled
      */
     public ItemStack handleItem(Player player, ItemStack itemStack) {
-        return itemStack;
+        return KitRegistry.getHandleItem().apply();
     }
 
     /**

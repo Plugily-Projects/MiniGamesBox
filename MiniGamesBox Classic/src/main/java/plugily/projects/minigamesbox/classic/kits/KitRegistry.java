@@ -47,6 +47,7 @@ public class KitRegistry {
   private Kit defaultKit;
   public final PluginMain plugin;
   public FileConfiguration kitsConfig;
+  private static HandleItem handleItem;
 
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
@@ -245,6 +246,14 @@ public class KitRegistry {
    */
   public List<Kit> getKits() {
     return kits;
+  }
+
+  public static HandleItem getHandleItem() {
+    return handleItem;
+  }
+
+  public static void setHandleItem(HandleItem handleItem) {
+    KitRegistry.handleItem = handleItem;
   }
 
 }

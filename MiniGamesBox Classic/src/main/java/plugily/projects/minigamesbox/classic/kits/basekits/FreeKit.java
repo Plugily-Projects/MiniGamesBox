@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.kits.basekits;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 
 /**
  * @author Tigerpanzer_02
@@ -38,10 +39,5 @@ public class FreeKit extends Kit {
   @Override
   public boolean isUnlockedByPlayer(Player p) {
     return true;
-  }
-
-  @Override
-  public ItemStack handleItem(Player player, ItemStack itemStack) {
-    return null;
   }
 }
