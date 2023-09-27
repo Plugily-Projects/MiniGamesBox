@@ -52,6 +52,8 @@ public class Kit {
     private boolean unlockedOnDefault = false;
     private String[] description = new String[0];
 
+    private final HashMap<String, Object> optionalConfiguration = new HashMap<>();
+
     private HashMap<ItemStack, Integer> kitItems = new HashMap<>();
     private ItemStack kitHelmet;
     private ItemStack kitChestplate;
@@ -110,7 +112,7 @@ public class Kit {
     /**
      * Retrieves the name of the object.
      *
-     * @return  the name of the object
+     * @return the name of the object
      */
     public String getName() {
         return name;
@@ -235,5 +237,17 @@ public class Kit {
 
     public String getKitPermission() {
         return kitPermission;
+    }
+
+    public Object getOptionalConfiguration(String path, Object defaultValue) {
+        return optionalConfiguration.getOrDefault(path, defaultValue);
+    }
+
+    public Object getOptionalConfiguration(String path) {
+        return optionalConfiguration.get(path);
+    }
+
+    public void addOptionalConfiguration(String path, Object object) {
+        optionalConfiguration.put(path, object);
     }
 }

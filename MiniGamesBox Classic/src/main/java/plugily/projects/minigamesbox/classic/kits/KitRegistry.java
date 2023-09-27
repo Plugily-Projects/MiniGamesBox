@@ -34,6 +34,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 
 /**
@@ -82,11 +83,11 @@ public class KitRegistry {
   /**
    * Registers the kits by loading their configurations.
    */
-  public void registerKits() {
+  public void registerKits(List<String> optionalConfigurations) {
 
     for (String key : kitsConfig.getKeys(false)) {
       if (!Objects.equals(key, "Do-Not-Edit")) {
-        loadKitConfig(key);
+        loadKitConfig(key, optionalConfigurations);
       }
     }
   }
@@ -96,7 +97,7 @@ public class KitRegistry {
    *
    * @param  kit_key  the key of the kit to load the configuration for
    */
-  public void loadKitConfig(String kit_key) {
+  public void loadKitConfig(String kit_key, List<String> optionalConfigurations) {
     ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(kit_key);
 
     if (configurationSection == null) {
@@ -210,6 +211,16 @@ public class KitRegistry {
 
     if (!Objects.equals(configurationSection.getString("default_kit"), null)) {
       this.setDefaultKit(kit);
+      plugin.getDebugger().debug("Default kit set to " + kit.getKey());
+    }
+
+    if (optionalConfigurations != null) {
+      optionalConfigurations.forEach((k) -> {
+        if (configurationSection.contains(k)) {
+          kit.addOptionalConfiguration(k, configurationSection.get(k));
+          plugin.getDebugger().debug("Kit " + kit.getKey() + " has optional configuration " + k);
+        }
+      });
     }
 
     plugin.getDebugger().debug("Kit " + kit.getKey() + " loaded.");
