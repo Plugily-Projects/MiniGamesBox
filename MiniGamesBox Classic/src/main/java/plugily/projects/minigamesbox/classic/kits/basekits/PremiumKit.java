@@ -18,28 +18,18 @@
 
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
  */
-public abstract class PremiumKit extends Kit {
+public class PremiumKit extends Kit {
 
-  public abstract Material getMaterial();
-
-  @Override
-  public ItemStack getItemStack() {
-    return new ItemBuilder(getMaterial())
-        .name(getName())
-        .lore(getDescription())
-        .lore(new MessageBuilder("KIT_KIT_MENU_LORE_UNLOCK_STORE").asKey().build())
-        .build();
+  public PremiumKit(String key, String name, ItemStack itemStack) {
+    super(key, name, itemStack);
   }
 
   @Override

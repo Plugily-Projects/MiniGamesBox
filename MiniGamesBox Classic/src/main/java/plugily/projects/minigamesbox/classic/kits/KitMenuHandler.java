@@ -66,7 +66,7 @@ public class KitMenuHandler implements Listener {
 
       gui.addItem(new SimpleClickableItem(itemStack, event -> {
         event.setCancelled(true);
-        if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player) || !ItemUtils.isItemStackNamed(event.getCurrentItem())) {
+        if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player)) {
           return;
         }
         PluginArena arena = plugin.getArenaRegistry().getArena(player);

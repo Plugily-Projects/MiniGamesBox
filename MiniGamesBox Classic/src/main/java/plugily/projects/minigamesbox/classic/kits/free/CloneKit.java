@@ -19,13 +19,8 @@
 package plugily.projects.minigamesbox.classic.kits.free;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
-import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
-import plugily.projects.minigamesbox.classic.utils.helper.WeaponHelper;
 
 import java.util.List;
 
@@ -36,34 +31,11 @@ import java.util.List;
  */
 public class CloneKit extends FreeKit {
 
-  public CloneKit() {
+  public CloneKit(String name) {
+    super("Clone", name, XMaterial.WOODEN_SWORD.parseItem());
     setName(new MessageBuilder("KITS_EXAMPLE_NAME").asKey().build());
-    setKey("Clone");
     List<String> description = getPlugin().getBukkitHelper().splitString(new MessageBuilder("KITS_EXAMPLE_DESCRIPTION").asKey().build(), 40);
     setDescription(description.toArray(new String[0]));
     getPlugin().getKitRegistry().registerKit(this);
-  }
-
-  @Override
-  public boolean isUnlockedByPlayer(Player player) {
-    return true;
-  }
-
-  @Override
-  public void giveKitItems(Player player) {
-    player.getInventory().addItem(WeaponHelper.getUnBreakingSword(WeaponHelper.ResourceType.WOOD, 10));
-    ArmorHelper.setArmor(player, ArmorHelper.ArmorType.LEATHER);
-    player.getInventory().addItem(new ItemStack(XMaterial.COOKED_PORKCHOP.parseMaterial(), 8));
-
-  }
-
-  @Override
-  public Material getMaterial() {
-    return XMaterial.WOODEN_SWORD.parseMaterial();
-  }
-
-  @Override
-  public void reStock(Player player) {
-    //no restock items for this kit
   }
 }
