@@ -44,7 +44,7 @@ import java.util.logging.Level;
 public class LanguageMigrator {
 
   public enum CoreFileVersion {
-    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(2), KITS(1),
+    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(2), KITS(2),
     LANGUAGE(1), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
@@ -118,6 +118,15 @@ public class LanguageMigrator {
 
   private void executeUpdate(File file, CoreFileVersion coreFileVersion, int version) {
     switch(coreFileVersion) {
+      case KITS:
+        switch(version) {
+          case 1:
+            renameToFile(file, "old_");
+            plugin.saveResource("kits.yml", false);
+            break;
+          default:
+            break;
+        }
       case CONFIG:
         switch(version) {
           case 1:
