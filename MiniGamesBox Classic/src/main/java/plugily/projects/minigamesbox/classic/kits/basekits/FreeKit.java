@@ -18,24 +18,26 @@
 
 package plugily.projects.minigamesbox.classic.kits.basekits;
 
-import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
+import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
  */
-public abstract class FreeKit extends Kit {
+public class FreeKit extends Kit {
 
-  public abstract Material getMaterial();
+  public FreeKit(String key, String name, ItemStack itemStack) {
+    super(key, name, itemStack);
+  }
 
+  /**
+   * @return true
+   */
   @Override
-  public ItemStack getItemStack() {
-    return new ItemBuilder(getMaterial())
-        .name(getName())
-        .lore(getDescription())
-        .build();
+  public boolean isUnlockedByPlayer(Player p) {
+    return true;
   }
 }

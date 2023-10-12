@@ -92,5 +92,4 @@ public class ConfigUtils {
       Bukkit.getConsoleSender().sendMessage("Create blank file " + name + ".yml or restart the server!");
     }
   }
-
 }
