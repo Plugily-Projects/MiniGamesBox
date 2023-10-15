@@ -292,7 +292,7 @@ Kit:
   Not-Unlocked: "%color_chat_issue%%plugin_prefix% You haven't unlocked %value% yet!"
   Choose: "%plugin_prefix% You have chosen: %value%!"
   Cooldown: "%color_chat_issue%%plugin_prefix% Kit ability still on cooldown (%number%)!"
-  No-Armor: "&cYou can't wear armor with your kit!"
+  No-Armor: "%color_chat_issue%%plugin_prefix% You can't wear armor with your kit!"
   Menu:
     Title: "Kit Menu"
     Lore:

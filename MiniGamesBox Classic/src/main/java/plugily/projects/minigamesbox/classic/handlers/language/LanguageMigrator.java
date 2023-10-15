@@ -147,7 +147,7 @@ public class LanguageMigrator {
       case LANGUAGE:
         switch(version) {
           case 1:
-            MigratorUtils.insertAfterLine(file, "Kit:", "  No-Armor: \"&cYou can't wear armor with your kit!\"");
+            MigratorUtils.insertAfterLine(file, "Kit:", "  No-Armor: \"%color_chat_issue%%plugin_prefix% You can't wear armor with your kit!\"");
             break;
           default:
             break;

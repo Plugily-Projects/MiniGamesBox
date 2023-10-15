@@ -65,6 +65,7 @@ public class KitMenuHandler implements Listener {
           .lore(kit.getDescription())
           .lore("")
           .lore(kit.isUnlockedByPlayer(player) ? unlockedString : lockedString)
+          .colorizeItem()
           .build();
 
       gui.addItem(new SimpleClickableItem(itemStack, event -> {
