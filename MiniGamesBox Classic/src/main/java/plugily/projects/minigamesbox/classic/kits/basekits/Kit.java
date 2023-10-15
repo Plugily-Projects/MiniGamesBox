@@ -24,12 +24,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.kits.KitAction;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @author Tigerpanzer_02
@@ -38,205 +40,228 @@ import java.util.List;
  */
 public class Kit {
 
-    private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+  private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
-    private FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
+  private FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits");
 
-    private String name;
+  private String name;
 
-    private final String key;
+  private final String key;
 
-    private final ItemStack itemStack;
+  private final ItemStack itemStack;
 
-    private String kitPermission = "";
+  private String kitPermission = "";
 
-    private boolean unlockedOnDefault = false;
-    private List<String> description;
+  private boolean unlockedOnDefault = false;
+  private List<String> description;
 
-    private final HashMap<String, Object> optionalConfiguration = new HashMap<>();
+  private final HashMap<String, Object> optionalConfiguration = new HashMap<>();
 
-    private HashMap<ItemStack, Integer> kitItems = new HashMap<>();
-    private ItemStack kitHelmet;
-    private ItemStack kitChestplate;
-    private ItemStack kitLeggings;
-    private ItemStack kitBoots;
+  private HashMap<ItemStack, Integer> kitItems = new HashMap<>();
+  private ItemStack kitHelmet;
+  private ItemStack kitChestplate;
+  private ItemStack kitLeggings;
+  private ItemStack kitBoots;
+  private List<KitAction> kitActions = new ArrayList<>();
 
-    public Kit(String key, String name, List<String> description, ItemStack itemStack) {
-        this.key = key;
-        this.name = name;
-        this.description = description;
-        this.itemStack = itemStack;
+  public Kit(String key, String name, List<String> description, ItemStack itemStack) {
+    this.key = key;
+    this.name = name;
+    this.description = description;
+    this.itemStack = itemStack;
+  }
+
+  public boolean isUnlockedByPlayer(Player p) {
+    return false;
+  }
+
+  public boolean isUnlockedOnDefault() {
+    return unlockedOnDefault;
+  }
+
+  public void setUnlockedOnDefault(boolean unlockedOnDefault) {
+    this.unlockedOnDefault = unlockedOnDefault;
+  }
+
+  public void addKitItem(ItemStack item, Integer slot) {
+    kitItems.put(item, slot);
+  }
+
+  public HashMap<ItemStack, Integer> getKitItems() {
+    return kitItems;
+  }
+
+  public void setKitItems(HashMap<ItemStack, Integer> kitItems) {
+    this.kitItems = kitItems;
+  }
+
+  /**
+   * @return main plugin
+   */
+  public PluginMain getPlugin() {
+    return plugin;
+  }
+
+  /**
+   * @return config file of kits
+   */
+  public FileConfiguration getKitsConfig() {
+    return kitsConfig;
+  }
+
+  public void saveKitsConfig() {
+    ConfigUtils.saveConfig(plugin, kitsConfig, "kits");
+    kitsConfig = ConfigUtils.getConfig(plugin, "kits");
+  }
+
+  /**
+   * Retrieves the name of the object.
+   *
+   * @return the name of the object
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets the name of the object.
+   *
+   * @param name the new name to set
+   */
+  public void setName(String name) {
+    if(name != null) {
+      this.name = name;
     }
+  }
 
-    public boolean isUnlockedByPlayer(Player p) {
-        return false;
+  public String getKey() {
+    if(key.isEmpty()) {
+      return name;
     }
+    return key;
+  }
 
-    public boolean isUnlockedOnDefault() {
-        return unlockedOnDefault;
-    }
+  public ItemStack getItemStack() {
+    ItemStack itemStack1 = itemStack;
+    itemStack1.setAmount(1);
+    return itemStack1;
+  }
 
-    public void setUnlockedOnDefault(boolean unlockedOnDefault) {
-        this.unlockedOnDefault = unlockedOnDefault;
-    }
+  public ArrayList<String> getDescription() {
+    return new ArrayList<>(description);
+  }
 
-    public void addKitItem(ItemStack item, Integer slot) {
-        kitItems.put(item, slot);
-    }
+  public void giveKitItems(Player player) {
+    player.getInventory().clear();
+    player.getInventory().setArmorContents(null);
+    kitItems.forEach((item, slot) -> player.getInventory().setItem(slot, handleItem(player, item)));
+    if(kitHelmet != null) player.getInventory().setHelmet(handleItem(player, kitHelmet));
+    if(kitChestplate != null) player.getInventory().setChestplate(handleItem(player, kitChestplate));
+    if(kitLeggings != null) player.getInventory().setLeggings(handleItem(player, kitLeggings));
+    if(kitBoots != null) player.getInventory().setBoots(handleItem(player, kitBoots));
+  }
 
-    public HashMap<ItemStack, Integer> getKitItems() {
-        return kitItems;
-    }
+  /**
+   * This method allows you to change kit items given to a player from their original form.
+   * If nothing is to be changed for any items, then return itemstack straight away.
+   *
+   * @param player    Player to give the item to
+   * @param itemStack The item stack to be handled
+   * @return The item stack after being handled
+   */
+  public ItemStack handleItem(Player player, ItemStack itemStack) {
+    return KitRegistry.getHandleItem().apply(player, itemStack);
+  }
 
-    public void setKitItems(HashMap<ItemStack, Integer> kitItems) {
-        this.kitItems = kitItems;
-    }
+  /**
+   * @return Returns the configuration path for the kit
+   */
+  public String getKitConfigPath() {
+    return key;
+  }
 
-    /**
-     * @return main plugin
-     */
-    public PluginMain getPlugin() {
-        return plugin;
+  /**
+   * @return Returns the configuration section for the kit
+   */
+  public ConfigurationSection getKitConfigSection() {
+    ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(getKitConfigPath());
+    if(configurationSection == null) {
+      kitsConfig.createSection(getKitConfigPath());
     }
+    return configurationSection;
+  }
 
-    /**
-     * @return config file of kits
-     */
-    public FileConfiguration getKitsConfig() {
-        return kitsConfig;
-    }
+  public ItemStack getKitHelmet() {
+    return kitHelmet;
+  }
 
-    public void saveKitsConfig() {
-        ConfigUtils.saveConfig(plugin, kitsConfig, "kits");
-        kitsConfig = ConfigUtils.getConfig(plugin, "kits");
-    }
+  public void setKitHelmet(ItemStack kitHelmet) {
+    this.kitHelmet = kitHelmet;
+  }
 
-    /**
-     * Retrieves the name of the object.
-     *
-     * @return the name of the object
-     */
-    public String getName() {
-        return name;
-    }
+  public ItemStack getKitChestplate() {
+    return kitChestplate;
+  }
 
-    /**
-     * Sets the name of the object.
-     *
-     * @param name the new name to set
-     */
-    public void setName(String name) {
-        if (name != null) {
-            this.name = name;
-        }
-    }
+  public void setKitChestplate(ItemStack kitChestplate) {
+    this.kitChestplate = kitChestplate;
+  }
 
-    public String getKey() {
-        if (key.isEmpty()) {
-            return name;
-        }
-        return key;
-    }
+  public ItemStack getKitLeggings() {
+    return kitLeggings;
+  }
 
-    public ItemStack getItemStack() {
-        ItemStack itemStack1 = itemStack;
-        itemStack1.setAmount(1);
-        return itemStack1;
-    }
+  public void setKitLeggings(ItemStack kitLeggings) {
+    this.kitLeggings = kitLeggings;
+  }
 
-    public ArrayList<String> getDescription() {
-        return new ArrayList<>(description);
-    }
+  public ItemStack getKitBoots() {
+    return kitBoots;
+  }
 
-    public void giveKitItems(Player player) {
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
-        kitItems.forEach((item, slot) -> player.getInventory().setItem(slot, handleItem(player, item)));
-        if (kitHelmet != null) player.getInventory().setHelmet(handleItem(player, kitHelmet));
-        if (kitChestplate != null) player.getInventory().setChestplate(handleItem(player, kitChestplate));
-        if (kitLeggings != null) player.getInventory().setLeggings(handleItem(player, kitLeggings));
-        if (kitBoots != null) player.getInventory().setBoots(handleItem(player, kitBoots));
-    }
+  public void setKitBoots(ItemStack kitBoots) {
+    this.kitBoots = kitBoots;
+  }
 
-    /**
-     * This method allows you to change kit items given to a player from their original form.
-     * If nothing is to be changed for any items, then return itemstack straight away.
-     *
-     * @param player    Player to give the item to
-     * @param itemStack The item stack to be handled
-     * @return The item stack after being handled
-     */
-    public ItemStack handleItem(Player player, ItemStack itemStack) {
-        return KitRegistry.getHandleItem().apply(player, itemStack);
-    }
+  public void setKitPermission(String kitPermission) {
+    this.kitPermission = kitPermission;
+  }
 
-    /**
-     * @return Returns the configuration path for the kit
-     */
-    public String getKitConfigPath() {
-        return key;
-    }
+  public String getKitPermission() {
+    return kitPermission;
+  }
 
-    /**
-     * @return Returns the configuration section for the kit
-     */
-    public ConfigurationSection getKitConfigSection() {
-        ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(getKitConfigPath());
-        if (configurationSection == null) {
-            kitsConfig.createSection(getKitConfigPath());
-        }
-        return configurationSection;
-    }
+  public Object getOptionalConfiguration(String path, Object defaultValue) {
+    return optionalConfiguration.getOrDefault(path, defaultValue);
+  }
 
-    public ItemStack getKitHelmet() {
-        return kitHelmet;
-    }
+  public Object getOptionalConfiguration(String path) {
+    return optionalConfiguration.get(path);
+  }
 
-    public void setKitHelmet(ItemStack kitHelmet) {
-        this.kitHelmet = kitHelmet;
-    }
+  public void addOptionalConfiguration(String path, Object object) {
+    optionalConfiguration.put(path, object);
+  }
 
-    public ItemStack getKitChestplate() {
-        return kitChestplate;
-    }
+  public List<KitAction> getKitActions() {
+    return kitActions;
+  }
 
-    public void setKitChestplate(ItemStack kitChestplate) {
-        this.kitChestplate = kitChestplate;
+  public void setKitActions(List<String> list) {
+    for(String actionName : list) {
+      try {
+        kitActions.add(KitAction.valueOf(actionName));
+      }catch(IllegalArgumentException exception) {
+        plugin.getDebugger().debug(Level.SEVERE, "The action value " + actionName + " isn't known. Check your kits.yml!");
+      }
     }
+  }
 
-    public ItemStack getKitLeggings() {
-        return kitLeggings;
-    }
+  public boolean hasKitAction(KitAction kitAction) {
+    return kitActions.contains(kitAction);
+  }
 
-    public void setKitLeggings(ItemStack kitLeggings) {
-        this.kitLeggings = kitLeggings;
-    }
-
-    public ItemStack getKitBoots() {
-        return kitBoots;
-    }
-
-    public void setKitBoots(ItemStack kitBoots) {
-        this.kitBoots = kitBoots;
-    }
-
-    public void setKitPermission(String kitPermission) {
-        this.kitPermission = kitPermission;
-    }
-
-    public String getKitPermission() {
-        return kitPermission;
-    }
-
-    public Object getOptionalConfiguration(String path, Object defaultValue) {
-        return optionalConfiguration.getOrDefault(path, defaultValue);
-    }
-
-    public Object getOptionalConfiguration(String path) {
-        return optionalConfiguration.get(path);
-    }
-
-    public void addOptionalConfiguration(String path, Object object) {
-        optionalConfiguration.put(path, object);
-    }
+  public void addKitActions(KitAction kitAction) {
+    kitActions.add(kitAction);
+  }
 }

@@ -177,6 +177,8 @@ public class Message {
     messages.put("KIT_KIT_MENU_LORE_LOCKED", new Message("Kit.Menu.Lore.Locked", "", false));
     messages.put("KIT_KIT_MENU_LORE_UNLOCK_LEVEL", new Message("Kit.Menu.Lore.Unlock-At-Level", "", false));
     messages.put("KIT_KIT_MENU_LORE_UNLOCK_STORE", new Message("Kit.Menu.Lore.Unlock-In-Store", "", false));
+    messages.put("KIT_CANNOT_WEAR_ARMOR", new Message("Kit.No-Armor", "", false));
+
     // Leaderboard
     // Leaderboard.type.hologram
     messages.put("LEADERBOARD_TYPE_HOLOGRAM_HEADER", new Message("Leaderboard.Type.Hologram.Header", "", false));

@@ -45,7 +45,7 @@ public class LanguageMigrator {
 
   public enum CoreFileVersion {
     /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(2), KITS(2),
-    LANGUAGE(1), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
+    LANGUAGE(2), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
     private final int version;
@@ -139,6 +139,15 @@ public class LanguageMigrator {
                 "    Spectators: true\r\n");
             MigratorUtils.removeLineFromFile(file, "Separate-Arena-Chat: true");
             MigratorUtils.removeLineFromFile(file, "Separate-Arena-Chat: false");
+            break;
+          default:
+            break;
+        }
+        break;
+      case LANGUAGE:
+        switch(version) {
+          case 1:
+            MigratorUtils.insertAfterLine(file, "Kit:", "  No-Armor: \"&cYou can't wear armor with your kit!\"");
             break;
           default:
             break;
