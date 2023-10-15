@@ -59,7 +59,7 @@ public class KitMenuHandler implements Listener {
     }
     NormalFastInv gui = new NormalFastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
     for(Kit kit : plugin.getKitRegistry().getKits()) {
-      ItemStack itemStack = kit.getItemStack();
+      ItemStack itemStack = new ItemStack(kit.getItemStack());
       itemStack = new ItemBuilder(itemStack)
           .lore(kit.isUnlockedByPlayer(player) ? unlockedString : lockedString)
           .build();

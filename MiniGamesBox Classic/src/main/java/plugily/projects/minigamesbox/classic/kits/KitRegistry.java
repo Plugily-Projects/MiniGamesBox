@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.kits;
 
 import com.cryptomorin.xseries.XItemStack;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -98,32 +99,31 @@ public class KitRegistry {
    * @param  kit_key  the key of the kit to load the configuration for
    */
   public void loadKitConfig(String kit_key, List<String> optionalConfigurations) {
+    plugin.getDebugger().debug(Level.SEVERE, "Loading Kit " + kit_key + " ...");
     ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(kit_key);
 
     if (configurationSection == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have any configuration.");
-      plugin.getDebugger().debug(Level.SEVERE, "Kit" + kit_key + " will not be loaded.");
+      plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
+      return;
+    }
+    if(!configurationSection.getBoolean("enabled", false)) {
+      plugin.getDebugger().debug("Kit " + kit_key + " is disabled by kits.yml");
       return;
     }
 
     String kit_name = configurationSection.getString("name", kit_key);
 
-    if (configurationSection.getConfigurationSection("display_item") == null) {
-      configurationSection.set("display_item", XItemStack.serialize(new ItemStack(Material.BEDROCK)));
-    }
-
-    ItemStack itemStack = XItemStack.deserialize(Objects.requireNonNull(configurationSection.getConfigurationSection("display_item")));
-
-    if(!configurationSection.getBoolean("enabled", false)) {
-      plugin.getDebugger().debug("Kit " + kit_key + " is disabled by kits.yml");
-      return;
+    ItemStack itemStack = XMaterial.BEDROCK.parseItem();
+    if (configurationSection.getConfigurationSection("display_item") != null) {
+      itemStack = XItemStack.deserialize(configurationSection.getConfigurationSection("display_item"));
     }
 
     String kitType = configurationSection.getString("kit_type");
 
     if (kitType == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " kit_type is null.");
-      plugin.getDebugger().debug(Level.SEVERE, "Kit" + kit_key + " will not be loaded.");
+      plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
     }
 
@@ -145,14 +145,14 @@ public class KitRegistry {
       }
       default: {
         plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " kit_type is not recognised.");
-        plugin.getDebugger().debug(Level.SEVERE, "Kit" + kit_key + " will not be loaded.");
+        plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
         return;
       }
     }
 
     if (configurationSection.getString("unlockedOnDefault") == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have an unlockedOnDefault configuration.");
-      plugin.getDebugger().debug(Level.SEVERE, "Kit" + kit_key + " will not be loaded.");
+      plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
     }
     kit.setUnlockedOnDefault(configurationSection.getBoolean("unlockedOnDefault"));
@@ -209,7 +209,7 @@ public class KitRegistry {
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " will not give any armour items.");
     }
 
-    if (configurationSection.getString("default_kit") != null) {
+    if (configurationSection.getBoolean("default_kit", false)) {
       this.setDefaultKit(kit);
       plugin.getDebugger().debug("Default kit set to " + kit.getKey());
     }
@@ -263,7 +263,7 @@ public class KitRegistry {
     return handleItem;
   }
 
-  public static void setHandleItem(HandleItem handleItem) {
+  public void setHandleItem(HandleItem handleItem) {
     KitRegistry.handleItem = handleItem;
   }
 
