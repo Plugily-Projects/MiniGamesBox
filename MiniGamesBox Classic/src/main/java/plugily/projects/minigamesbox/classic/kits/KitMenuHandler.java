@@ -61,6 +61,9 @@ public class KitMenuHandler implements Listener {
     for(Kit kit : plugin.getKitRegistry().getKits()) {
       ItemStack itemStack = new ItemStack(kit.getItemStack());
       itemStack = new ItemBuilder(itemStack)
+          .name(kit.getName())
+          .lore(kit.getDescription())
+          .lore("")
           .lore(kit.isUnlockedByPlayer(player) ? unlockedString : lockedString)
           .build();
 

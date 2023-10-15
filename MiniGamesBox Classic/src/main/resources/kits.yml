@@ -137,7 +137,7 @@ Naked:
       slot: 0
   armour: { }
   actions:
-    - "NO_AMOUR"
+    - "NO_ARMOUR"
 
 # Don't edit it. But who's stopping you? It's your server!
 # Really, don't edit ;p
