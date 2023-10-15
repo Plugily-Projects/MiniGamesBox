@@ -27,6 +27,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class Kit {
     private String kitPermission = "";
 
     private boolean unlockedOnDefault = false;
-    private String[] description = new String[0];
+    private List<String> description;
 
     private final HashMap<String, Object> optionalConfiguration = new HashMap<>();
 
@@ -60,9 +61,10 @@ public class Kit {
     private ItemStack kitLeggings;
     private ItemStack kitBoots;
 
-    public Kit(String key, String name, ItemStack itemStack) {
+    public Kit(String key, String name, List<String> description, ItemStack itemStack) {
         this.key = key;
         this.name = name;
+        this.description = description;
         this.itemStack = itemStack;
     }
 
@@ -142,22 +144,9 @@ public class Kit {
         return itemStack1;
     }
 
-    public String[] getDescription() {
-        return description.clone();
+    public ArrayList<String> getDescription() {
+        return new ArrayList<>(description);
     }
-
-    public void setDescription(String[] description) {
-        if (description != null) {
-            this.description = description.clone();
-        }
-    }
-
-    public void setDescription(List<String> description) {
-        if (description != null) {
-            this.description = description.toArray(new String[0]);
-        }
-    }
-
 
     public void giveKitItems(Player player) {
         player.getInventory().clear();

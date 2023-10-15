@@ -21,6 +21,9 @@ package plugily.projects.minigamesbox.classic.kits.basekits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -30,8 +33,8 @@ public class LevelKit extends Kit {
 
   private int level;
 
-  public LevelKit(String key, String name, ItemStack itemStack) {
-    super(key, name, itemStack);
+  public LevelKit(String key, String name, List<String> description, ItemStack itemStack) {
+    super(key, name, description, itemStack);
   }
 
   public int getLevel() {

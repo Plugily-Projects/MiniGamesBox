@@ -21,6 +21,9 @@ package plugily.projects.minigamesbox.classic.kits.basekits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -28,12 +31,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class PremiumKit extends Kit {
 
-  public PremiumKit(String key, String name, ItemStack itemStack) {
-    super(key, name, itemStack);
+  public PremiumKit(String key, String name, List<String> description, ItemStack itemStack) {
+    super(key, name, description, itemStack);
   }
 
   @Override
   public boolean isUnlockedByPlayer(Player player) {
-    return player.hasPermission( getPlugin().getPluginNamePrefixLong() + ".kits.locked") || player.hasPermission(getPlugin().getPluginNamePrefixLong() + ".kit." + getKey().toLowerCase());
+    return player.hasPermission(getPlugin().getPluginNamePrefixLong() + ".kits.locked") || player.hasPermission(getPlugin().getPluginNamePrefixLong() + ".kit." + getKey().toLowerCase());
   }
 }

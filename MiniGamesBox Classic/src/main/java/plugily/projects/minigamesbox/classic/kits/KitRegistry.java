@@ -20,7 +20,6 @@ package plugily.projects.minigamesbox.classic.kits;
 
 import com.cryptomorin.xseries.XItemStack;
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -32,10 +31,7 @@ import plugily.projects.minigamesbox.classic.kits.basekits.PremiumKit;
 import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -86,8 +82,8 @@ public class KitRegistry {
    */
   public void registerKits(List<String> optionalConfigurations) {
 
-    for (String key : kitsConfig.getKeys(false)) {
-      if (!Objects.equals(key, "Do-Not-Edit")) {
+    for(String key : kitsConfig.getKeys(false)) {
+      if(!Objects.equals(key, "Do-Not-Edit")) {
         loadKitConfig(key, optionalConfigurations);
       }
     }
@@ -96,13 +92,13 @@ public class KitRegistry {
   /**
    * Loads the configuration for a kit.
    *
-   * @param  kit_key  the key of the kit to load the configuration for
+   * @param kit_key the key of the kit to load the configuration for
    */
   public void loadKitConfig(String kit_key, List<String> optionalConfigurations) {
     plugin.getDebugger().debug(Level.SEVERE, "Loading Kit " + kit_key + " ...");
     ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(kit_key);
 
-    if (configurationSection == null) {
+    if(configurationSection == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have any configuration.");
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
@@ -113,15 +109,16 @@ public class KitRegistry {
     }
 
     String kit_name = configurationSection.getString("name", kit_key);
+    List<String> kit_description = configurationSection.getStringList("description");
 
     ItemStack itemStack = XMaterial.BEDROCK.parseItem();
-    if (configurationSection.getConfigurationSection("display_item") != null) {
+    if(configurationSection.getConfigurationSection("display_item") != null) {
       itemStack = XItemStack.deserialize(configurationSection.getConfigurationSection("display_item"));
     }
 
     String kitType = configurationSection.getString("kit_type");
 
-    if (kitType == null) {
+    if(kitType == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " kit_type is null.");
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
@@ -129,18 +126,18 @@ public class KitRegistry {
 
     Kit kit;
 
-    switch (kitType) {
+    switch(kitType) {
       case "free": {
-        kit = new FreeKit(kit_key, kit_name, itemStack);
+        kit = new FreeKit(kit_key, kit_name, kit_description, itemStack);
         break;
       }
       case "level": {
-        kit = new LevelKit(kit_key, kit_name, itemStack);
+        kit = new LevelKit(kit_key, kit_name, kit_description, itemStack);
         ((LevelKit) kit).setLevel(configurationSection.getInt("required-level"));
         break;
       }
       case "premium": {
-        kit = new PremiumKit(kit_key, kit_name, itemStack);
+        kit = new PremiumKit(kit_key, kit_name, kit_description, itemStack);
         break;
       }
       default: {
@@ -150,7 +147,7 @@ public class KitRegistry {
       }
     }
 
-    if (configurationSection.getString("unlockedOnDefault") == null) {
+    if(configurationSection.getString("unlockedOnDefault") == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have an unlockedOnDefault configuration.");
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
@@ -160,7 +157,7 @@ public class KitRegistry {
     HashMap<ItemStack, Integer> kitItems = new HashMap<>();
 
     ConfigurationSection inventoryConfigurationSection = configurationSection.getConfigurationSection("inventory");
-    if (inventoryConfigurationSection != null) {
+    if(inventoryConfigurationSection != null) {
       inventoryConfigurationSection.getKeys(false).forEach((k) -> {
 
         ConfigurationSection itemConfigurationSection = inventoryConfigurationSection.getConfigurationSection(k);
@@ -174,49 +171,47 @@ public class KitRegistry {
         kitItems.put(item, slot);
       });
       kit.setKitItems(kitItems);
-    }
-    else {
+    } else {
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " does not have an inventory configuration section.");
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " will not give any inventory items.");
     }
 
 
     ConfigurationSection armourConfigurationSection = configurationSection.getConfigurationSection("armour");
-    if (armourConfigurationSection != null) {
+    if(armourConfigurationSection != null) {
 
       ConfigurationSection helmetConfigurationSection = armourConfigurationSection.getConfigurationSection("helmet");
-      if (helmetConfigurationSection != null) {
+      if(helmetConfigurationSection != null) {
         kit.setKitHelmet(XItemStack.deserialize(helmetConfigurationSection));
       }
 
       ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.getConfigurationSection("chestplate");
-      if (chestplateConfigurationSection != null) {
+      if(chestplateConfigurationSection != null) {
         kit.setKitChestplate(XItemStack.deserialize(chestplateConfigurationSection));
       }
 
       ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.getConfigurationSection("leggings");
-      if (leggingsConfigurationSection != null) {
+      if(leggingsConfigurationSection != null) {
         kit.setKitLeggings(XItemStack.deserialize(leggingsConfigurationSection));
       }
 
       ConfigurationSection bootsConfigurationSection = armourConfigurationSection.getConfigurationSection("boots");
-      if (bootsConfigurationSection != null) {
+      if(bootsConfigurationSection != null) {
         kit.setKitBoots(XItemStack.deserialize(bootsConfigurationSection));
       }
-    }
-    else {
+    } else {
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " does not have an armour configuration section.");
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " will not give any armour items.");
     }
 
-    if (configurationSection.getBoolean("default_kit", false)) {
+    if(configurationSection.getBoolean("default_kit", false)) {
       this.setDefaultKit(kit);
       plugin.getDebugger().debug("Default kit set to " + kit.getKey());
     }
 
-    if (optionalConfigurations != null) {
+    if(optionalConfigurations != null) {
       optionalConfigurations.forEach((k) -> {
-        if (configurationSection.contains(k)) {
+        if(configurationSection.contains(k)) {
           kit.addOptionalConfiguration(k, configurationSection.get(k));
           plugin.getDebugger().debug("Kit " + kit.getKey() + " has optional configuration " + k);
         }

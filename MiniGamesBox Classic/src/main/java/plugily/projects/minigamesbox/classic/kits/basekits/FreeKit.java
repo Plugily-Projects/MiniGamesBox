@@ -22,6 +22,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -29,8 +32,8 @@ import plugily.projects.minigamesbox.classic.kits.KitRegistry;
  */
 public class FreeKit extends Kit {
 
-  public FreeKit(String key, String name, ItemStack itemStack) {
-    super(key, name, itemStack);
+  public FreeKit(String key, String name, List<String> description, ItemStack itemStack) {
+    super(key, name, description, itemStack);
   }
 
   /**
