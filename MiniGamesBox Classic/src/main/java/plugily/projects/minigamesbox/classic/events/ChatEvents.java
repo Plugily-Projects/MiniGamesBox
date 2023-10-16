@@ -83,7 +83,7 @@ public class ChatEvents implements Listener {
   }
 
   private String formatChatPlaceholders(User user, PluginArena arena) {
-    String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().arena(arena).build();
+    String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().getRaw();
     if(user.isSpectator()) {
       if(formatted.contains("%kit%")) {
         formatted =
