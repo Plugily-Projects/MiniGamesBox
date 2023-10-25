@@ -243,25 +243,35 @@ public class Kit {
     optionalConfiguration.put(path, object);
   }
 
-  public List<KitAbility> getKitActions() {
+  public List<KitAbility> getAbilities() {
     return kitAbilities;
   }
 
-  public void setKitActions(List<String> list) {
+  public void setAbilities(List<String> list) {
     for(String actionName : list) {
       try {
         kitAbilities.add(KitAbility.valueOf(actionName));
-      }catch(IllegalArgumentException exception) {
+      } catch(IllegalArgumentException exception) {
         plugin.getDebugger().debug(Level.SEVERE, "The action value " + actionName + " isn't known. Check your kits.yml!");
       }
     }
   }
 
-  public boolean hasKitAction(KitAbility kitAbility) {
+  public boolean hasAbility(KitAbility kitAbility) {
     return kitAbilities.contains(kitAbility);
   }
 
-  public void addKitActions(KitAbility kitAbility) {
+  public void addKitAbility(KitAbility kitAbility) {
     kitAbilities.add(kitAbility);
+  }
+
+  public void removeKitAbility(KitAbility kitAbility) {
+    kitAbilities.remove(kitAbility);
+  }
+
+  /*
+  Use the method with the kit optional configuration path, e.g. restock.material
+   */
+  public void reStock(Player player) {
   }
 }

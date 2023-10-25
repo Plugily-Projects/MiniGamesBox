@@ -205,7 +205,7 @@ public class KitRegistry {
     }
 
     List<String> kit_actions = configurationSection.getStringList("actions");
-    kit.setKitActions(kit_actions);
+    kit.setAbilities(kit_actions);
 
     if(configurationSection.getBoolean("default_kit", false)) {
       this.setDefaultKit(kit);
