@@ -61,15 +61,17 @@ import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
-import plugily.projects.minigamesbox.classic.kits.KitAbilityHandler;
+import plugily.projects.minigamesbox.classic.kits.ability.KitAbilityHandler;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
+import plugily.projects.minigamesbox.classic.kits.ability.KitAbilityManager;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBarManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
+import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
 import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
 import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
@@ -131,6 +133,7 @@ public class PluginMain extends JavaPlugin {
   private KitRegistry kitRegistry;
   private MessageManager messageManager;
   private LanguageManager languageManager;
+  private KitAbilityManager kitAbilityManager;
   private PluginArgumentsRegistry argumentsRegistry;
   private PluginArenaManager arenaManager;
   private Metrics metrics;
@@ -221,6 +224,7 @@ public class PluginMain extends JavaPlugin {
   public void initializeDefaultClasses() {
     messageManager = new MessageManager(this);
     languageManager = new LanguageManager(this);
+    kitAbilityManager = new KitAbilityManager(this);
     MessageBuilder.init(this);
     TitleBuilder.init(this);
     languageConfig = ConfigUtils.getConfig(this, "language");
@@ -568,5 +572,9 @@ public class PluginMain extends JavaPlugin {
 
   public Random getRandom() {
     return random;
+  }
+
+  public KitAbilityManager getKitAbilityManager() {
+    return kitAbilityManager;
   }
 }

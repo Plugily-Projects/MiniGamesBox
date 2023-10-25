@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.kits.KitAbility;
+import plugily.projects.minigamesbox.classic.kits.ability.KitAbility;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
@@ -248,11 +248,11 @@ public class Kit {
   }
 
   public void setAbilities(List<String> list) {
-    for(String actionName : list) {
+    for(String abilityName : list) {
       try {
-        kitAbilities.add(KitAbility.valueOf(actionName));
+        kitAbilities.add(plugin.getKitAbilityManager().getKitAbility(abilityName));
       } catch(IllegalArgumentException exception) {
-        plugin.getDebugger().debug(Level.SEVERE, "The action value " + actionName + " isn't known. Check your kits.yml!");
+        plugin.getDebugger().debug(Level.SEVERE, "The kit-ability " + abilityName + " isn't known. Check your kits.yml!");
       }
     }
   }
