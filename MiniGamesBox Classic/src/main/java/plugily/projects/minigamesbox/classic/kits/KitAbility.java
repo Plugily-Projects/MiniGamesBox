@@ -18,7 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.kits;
 
-public enum KitAction {
+public enum KitAbility {
 
   NO_ARMOUR
   /* todo add more */

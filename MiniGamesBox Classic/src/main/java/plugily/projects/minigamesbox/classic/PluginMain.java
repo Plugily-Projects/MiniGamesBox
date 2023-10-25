@@ -61,7 +61,7 @@ import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
-import plugily.projects.minigamesbox.classic.kits.KitActionsHandler;
+import plugily.projects.minigamesbox.classic.kits.KitAbilityHandler;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
@@ -238,7 +238,7 @@ public class PluginMain extends JavaPlugin {
     specialItemManager = new SpecialItemManager(this);
     new SpecialItemEvent(this);
     kitMenuHandler = new KitMenuHandler(this);
-    new KitActionsHandler(this);
+    new KitAbilityHandler(this);
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);

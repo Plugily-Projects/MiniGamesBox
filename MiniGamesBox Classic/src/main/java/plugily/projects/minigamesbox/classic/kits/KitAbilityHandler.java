@@ -36,12 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class KitActionsHandler implements Listener {
+public class KitAbilityHandler implements Listener {
 
   private final PluginMain plugin;
   private final List<Material> armorTypes = new ArrayList<>();
 
-  public KitActionsHandler(PluginMain plugin) {
+  public KitAbilityHandler(PluginMain plugin) {
     this.plugin = plugin;
     if(!plugin.getConfigPreferences().getOption("KITS")) {
       return;
@@ -68,7 +68,7 @@ public class KitActionsHandler implements Listener {
     if(!plugin.getArenaRegistry().isInArena((Player) event.getWhoClicked())) {
       return;
     }
-    if(!user.getKit().hasKitAction(KitAction.NO_ARMOUR)) {
+    if(!user.getKit().hasKitAction(KitAbility.NO_ARMOUR)) {
       return;
     }
     if(!(event.getInventory().getType().equals(InventoryType.PLAYER) || event.getInventory().getType().equals(InventoryType.CRAFTING))) {
@@ -95,7 +95,7 @@ public class KitActionsHandler implements Listener {
     if(!plugin.getArenaRegistry().isInArena(event.getPlayer())) {
       return;
     }
-    if(!plugin.getUserManager().getUser(event.getPlayer()).getKit().hasKitAction(KitAction.NO_ARMOUR) || !event.hasItem()) {
+    if(!plugin.getUserManager().getUser(event.getPlayer()).getKit().hasKitAction(KitAbility.NO_ARMOUR) || !event.hasItem()) {
       return;
     }
     if(armorTypes.contains(event.getItem().getType())) {

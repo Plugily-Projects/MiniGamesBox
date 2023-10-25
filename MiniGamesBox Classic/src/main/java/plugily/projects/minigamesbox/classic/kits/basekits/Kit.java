@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.kits.KitAction;
+import plugily.projects.minigamesbox.classic.kits.KitAbility;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
@@ -62,7 +62,7 @@ public class Kit {
   private ItemStack kitChestplate;
   private ItemStack kitLeggings;
   private ItemStack kitBoots;
-  private List<KitAction> kitActions = new ArrayList<>();
+  private List<KitAbility> kitAbilities = new ArrayList<>();
 
   public Kit(String key, String name, List<String> description, ItemStack itemStack) {
     this.key = key;
@@ -243,25 +243,25 @@ public class Kit {
     optionalConfiguration.put(path, object);
   }
 
-  public List<KitAction> getKitActions() {
-    return kitActions;
+  public List<KitAbility> getKitActions() {
+    return kitAbilities;
   }
 
   public void setKitActions(List<String> list) {
     for(String actionName : list) {
       try {
-        kitActions.add(KitAction.valueOf(actionName));
+        kitAbilities.add(KitAbility.valueOf(actionName));
       }catch(IllegalArgumentException exception) {
         plugin.getDebugger().debug(Level.SEVERE, "The action value " + actionName + " isn't known. Check your kits.yml!");
       }
     }
   }
 
-  public boolean hasKitAction(KitAction kitAction) {
-    return kitActions.contains(kitAction);
+  public boolean hasKitAction(KitAbility kitAbility) {
+    return kitAbilities.contains(kitAbility);
   }
 
-  public void addKitActions(KitAction kitAction) {
-    kitActions.add(kitAction);
+  public void addKitActions(KitAbility kitAbility) {
+    kitAbilities.add(kitAbility);
   }
 }
