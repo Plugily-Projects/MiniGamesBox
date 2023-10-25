@@ -136,7 +136,7 @@ Naked:
           DURABILITY: 10
       slot: 0
   armour: { }
-  actions:
+  abilities:
     - "NO_ARMOUR"
 
 # Don't edit it. But who's stopping you? It's your server!

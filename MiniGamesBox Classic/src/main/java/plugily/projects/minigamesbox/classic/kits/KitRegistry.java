@@ -204,7 +204,7 @@ public class KitRegistry {
       plugin.getDebugger().debug(Level.SEVERE, "The kit " + kit.getKey() + " will not give any armour items.");
     }
 
-    List<String> kit_actions = configurationSection.getStringList("actions");
+    List<String> kit_actions = configurationSection.getStringList("abilities");
     kit.setAbilities(kit_actions);
 
     if(configurationSection.getBoolean("default_kit", false)) {
