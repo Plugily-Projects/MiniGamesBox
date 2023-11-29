@@ -84,7 +84,9 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new ArenaSelectorArgument(this);
     new LeaderboardArgument(this);
     new LeaveArgument(this);
-    new SelectKitArgument(this);
+    if(plugin.getConfigPreferences().getOption("KITS")) {
+      new SelectKitArgument(this);
+    }
     new StatsArgument(this);
 
     //register admin arguments

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 /**
  * @author Tigerpanzer_02
- *     <p>Created at 09.10.2021
+ * <p>Created at 09.10.2021
  */
 public class ChatEvents implements Listener {
 
@@ -46,36 +46,46 @@ public class ChatEvents implements Listener {
   @EventHandler
   public void onChatIngame(AsyncPlayerChatEvent event) {
     PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
-    if (arena == null) {
-      if (!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
-        for (PluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
-          for (Player player : loopArena.getPlayers()) {
-            if (!plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player)) {
+    if(plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
+      if(arena == null) {
+        for(PluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
+          for(Player player : loopArena.getPlayers()) {
+            if(!plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player)) {
               event.getRecipients().remove(player);
             }
           }
         }
+        return;
       }
-      return;
-    }
-    if (!plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
-      event
-          .getRecipients()
-          .removeIf(player -> !plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player));
+      event.getRecipients().removeIf(player -> !plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player));
       event.getRecipients().addAll(new ArrayList<>(arena.getPlayers()));
+      if(plugin.getConfigPreferences().getOption("SEPARATE_ARENA_SPECTATORS")) {
+        if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
+          event.getRecipients().removeIf(player -> arena.getPlayersLeft().contains(player));
+        } else {
+          event.getRecipients().removeIf(player -> !arena.getPlayersLeft().contains(player));
+        }
+      }
+    } else if(plugin.getConfigPreferences().getOption("SEPARATE_ARENA_SPECTATORS")) {
+      for(PluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
+        if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
+          event.getRecipients().removeIf(player -> loopArena.getPlayersLeft().contains(player));
+        } else {
+          event.getRecipients().removeIf(player -> !loopArena.getPlayersLeft().contains(player));
+        }
+      }
     }
-    if (plugin.getConfigPreferences().getOption("PLUGIN_CHAT_FORMAT")) {
-      String format =
-          formatChatPlaceholders(plugin.getUserManager().getUser(event.getPlayer()), arena);
+    if(plugin.getConfigPreferences().getOption("PLUGIN_CHAT_FORMAT")) {
+      String format = formatChatPlaceholders(plugin.getUserManager().getUser(event.getPlayer()), arena);
       event.setFormat(format);
       event.setMessage(event.getMessage());
     }
   }
 
   private String formatChatPlaceholders(User user, PluginArena arena) {
-    String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().arena(arena).build();
-    if (user.isSpectator()) {
-      if (formatted.contains("%kit%")) {
+    String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().getRaw();
+    if(user.isSpectator()) {
+      if(formatted.contains("%kit%")) {
         formatted =
             StringUtils.replace(
                 formatted, "%kit%", new MessageBuilder("IN_GAME_DEATH_TAG").asKey().build());
@@ -83,7 +93,7 @@ public class ChatEvents implements Listener {
         formatted = new MessageBuilder("IN_GAME_DEATH_TAG").asKey().build() + formatted;
       }
     } else {
-      if (user.getKit() == null) {
+      if(user.getKit() == null) {
         formatted = StringUtils.replace(formatted, "%kit%", "-");
       } else {
         formatted = StringUtils.replace(formatted, "%kit%", user.getKit().getName());

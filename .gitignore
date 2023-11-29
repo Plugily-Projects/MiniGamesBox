@@ -115,3 +115,7 @@ run/
 # gradle
 .gradle
 buildSrc/build
+MiniGamesBox Classic/build
+MiniGamesBox Database/build
+MiniGamesBox Inventory/build
+MiniGamesBox Utils/build

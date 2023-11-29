@@ -59,14 +59,18 @@ public class KitMenuHandler implements Listener {
     }
     NormalFastInv gui = new NormalFastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
     for(Kit kit : plugin.getKitRegistry().getKits()) {
-      ItemStack itemStack = kit.getItemStack();
+      ItemStack itemStack = new ItemStack(kit.getItemStack());
       itemStack = new ItemBuilder(itemStack)
+          .name(kit.getName())
+          .lore(kit.getDescription())
+          .lore("")
           .lore(kit.isUnlockedByPlayer(player) ? unlockedString : lockedString)
+          .colorizeItem()
           .build();
 
       gui.addItem(new SimpleClickableItem(itemStack, event -> {
         event.setCancelled(true);
-        if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player) || !ItemUtils.isItemStackNamed(event.getCurrentItem())) {
+        if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player)) {
           return;
         }
         PluginArena arena = plugin.getArenaRegistry().getArena(player);

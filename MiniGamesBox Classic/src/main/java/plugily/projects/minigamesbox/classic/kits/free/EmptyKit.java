@@ -19,11 +19,9 @@
 package plugily.projects.minigamesbox.classic.kits.free;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 
-import java.util.List;
+import java.util.Collections;
 
 /**
  * @author Tigerpanzer_02
@@ -31,31 +29,8 @@ import java.util.List;
  * Created at 02.12.2021
  */
 public class EmptyKit extends FreeKit {
-
-  public EmptyKit() {
-    setName("");
-    setKey("");
-    List<String> description = getPlugin().getBukkitHelper().splitString("", 40);
-    setDescription(description.toArray(new String[0]));
+  public EmptyKit(String key, String name) {
+    super(key, name, Collections.singletonList("Kit Example"), XMaterial.BEDROCK.parseItem());
     getPlugin().getKitRegistry().registerKit(this);
-  }
-
-  @Override
-  public boolean isUnlockedByPlayer(Player player) {
-    return true;
-  }
-
-  @Override
-  public void giveKitItems(Player player) {
-  }
-
-  @Override
-  public Material getMaterial() {
-    return XMaterial.BEDROCK.parseMaterial();
-  }
-
-  @Override
-  public void reStock(Player player) {
-    //no restock items for this kit
   }
 }

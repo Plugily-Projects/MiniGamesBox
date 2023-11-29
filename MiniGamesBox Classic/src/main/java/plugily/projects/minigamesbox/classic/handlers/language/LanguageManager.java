@@ -102,14 +102,14 @@ public class LanguageManager {
     LocaleService service = ServiceRegistry.getLocaleService(plugin);
     if(service == null) {
       plugin.getDebugger().debug(Level.WARNING, "&cLocales cannot be downloaded because API website is unreachable, locales will be disabled.");
-      pluginLocale = LocaleRegistry.getByName("English");
+      pluginLocale = LocaleRegistry.getByName("Default");
       return;
     }
     if(service.isValidVersion()) {
       plugin.getDebugger().debug("LocaleService got valid version!");
       LocaleService.DownloadStatus status = service.demandLocaleDownload(pluginLocale);
       if(status == LocaleService.DownloadStatus.FAIL) {
-        pluginLocale = LocaleRegistry.getByName("English");
+        pluginLocale = LocaleRegistry.getByName("Default");
         plugin.getDebugger().debug(Level.WARNING, "&cLocale service couldn't download latest locale for plugin! English locale will be used instead!");
         return;
       } else if(status == LocaleService.DownloadStatus.SUCCESS) {
@@ -118,7 +118,7 @@ public class LanguageManager {
         plugin.getDebugger().debug(Level.WARNING, "&aLocale " + pluginLocale.getPrefix() + " is latest! Awesome!");
       }
     } else {
-      pluginLocale = LocaleRegistry.getByName("English");
+      pluginLocale = LocaleRegistry.getByName("Default");
       plugin.getDebugger().debug(Level.WARNING, "&cYour plugin version is too old to use latest locale! Please update plugin to access latest updates of locale!");
       return;
     }
@@ -127,7 +127,7 @@ public class LanguageManager {
     if(!file.exists()) {
       plugin.getDebugger().debug(Level.WARNING, "Failed to load localization file for locale " + pluginLocale.getPrefix() + "! Using English instead");
       plugin.getDebugger().debug(Level.WARNING, "Cause: " + "File does not exists");
-      pluginLocale = LocaleRegistry.getByName("English");
+      pluginLocale = LocaleRegistry.getByName("Default");
       return;
     }
     file = new File(plugin.getDataFolder() + "/locales/", pluginLocale.getPrefix() + ".yml");
@@ -137,7 +137,7 @@ public class LanguageManager {
     } catch(InvalidConfigurationException | IOException ex) {
       plugin.getDebugger().debug(Level.WARNING, "Failed to load localization file for locale " + pluginLocale.getPrefix() + "! Using English instead");
       plugin.getDebugger().debug(Level.WARNING, "Cause: " + ex.getMessage());
-      pluginLocale = LocaleRegistry.getByName("English");
+      pluginLocale = LocaleRegistry.getByName("Default");
       return;
     }
     localeFile = config;
@@ -159,12 +159,12 @@ public class LanguageManager {
     }
     if(pluginLocale == null) {
       plugin.getDebugger().debug(Level.WARNING, "&cPlugin locale is invalid! Using default one...");
-      pluginLocale = LocaleRegistry.getByName("English");
+      pluginLocale = LocaleRegistry.getByName("Default");
     }
     /* is snapshot release */
     if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("-SNAPSHOT")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
       plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in this versions because they're lacking latest translations! Enabling English one...");
-      pluginLocale = LocaleRegistry.getByName("English");
+      pluginLocale = LocaleRegistry.getByName("Default");
       return;
     }
     plugin.getDebugger().debug(Level.WARNING, "&aLoaded locale " + pluginLocale.getName() + " (" + pluginLocale.getOriginalName() + " ID: "
@@ -173,7 +173,7 @@ public class LanguageManager {
   }
 
   public boolean isDefaultLanguageUsed() {
-    return "English".equals(pluginLocale.getName());
+    return "Default".equalsIgnoreCase(pluginLocale.getName());
   }
 
   public String getLanguageMessage(String path) {

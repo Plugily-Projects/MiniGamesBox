@@ -141,6 +141,15 @@ public class ArmorStandHologram {
     return this;
   }
 
+  public void moveStands(Location location) {
+    double distanceAbove = -0.27;
+    double y = location.getY();
+    for(ArmorStand armor : armorStands) {
+      armor.teleport(location.add(0, y, 0));
+      y += distanceAbove;
+    }
+  }
+
   public void delete() {
     for(ArmorStand armor : armorStands) {
       armor.setCustomNameVisible(false);

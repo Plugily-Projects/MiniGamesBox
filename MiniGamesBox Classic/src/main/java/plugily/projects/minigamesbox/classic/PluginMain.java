@@ -61,24 +61,28 @@ import plugily.projects.minigamesbox.classic.handlers.reward.RewardsFactory;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
 import plugily.projects.minigamesbox.classic.handlers.sign.SignManager;
+import plugily.projects.minigamesbox.classic.kits.ability.KitAbilityHandler;
 import plugily.projects.minigamesbox.classic.kits.KitMenuHandler;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
+import plugily.projects.minigamesbox.classic.kits.ability.KitAbilityManager;
 import plugily.projects.minigamesbox.classic.preferences.ConfigPreferences;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBarManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
+import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
 import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
 import plugily.projects.minigamesbox.classic.utils.items.ItemManager;
 import plugily.projects.minigamesbox.classic.utils.misc.Debugger;
 import plugily.projects.minigamesbox.classic.utils.misc.MessageUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
-import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.UpdateChecker;
 import plugily.projects.minigamesbox.classic.utils.services.exception.ExceptionLogHandler;
+import plugily.projects.minigamesbox.classic.utils.services.locale.Locale;
+import plugily.projects.minigamesbox.classic.utils.services.locale.LocaleRegistry;
 import plugily.projects.minigamesbox.classic.utils.services.metrics.Metrics;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.events.EventsInitializer;
@@ -129,6 +133,7 @@ public class PluginMain extends JavaPlugin {
   private KitRegistry kitRegistry;
   private MessageManager messageManager;
   private LanguageManager languageManager;
+  private KitAbilityManager kitAbilityManager;
   private PluginArgumentsRegistry argumentsRegistry;
   private PluginArenaManager arenaManager;
   private Metrics metrics;
@@ -170,6 +175,7 @@ public class PluginMain extends JavaPlugin {
     }
 
     setupFiles();
+    LocaleRegistry.registerLocale(new Locale("Default", "Default", "default", "Internal Plugin", Arrays.asList("default")));
 
     if(!ServiceRegistry.registerService(this)) {
       debugger.sendConsoleMsg(pluginMessagePrefix + "&cSadly, we can't connect to Plugily Projects Services. Some functions may won't work. e.g. Translations, Automatic Error Report");
@@ -218,6 +224,7 @@ public class PluginMain extends JavaPlugin {
   public void initializeDefaultClasses() {
     messageManager = new MessageManager(this);
     languageManager = new LanguageManager(this);
+    kitAbilityManager = new KitAbilityManager(this);
     MessageBuilder.init(this);
     TitleBuilder.init(this);
     languageConfig = ConfigUtils.getConfig(this, "language");
@@ -235,6 +242,7 @@ public class PluginMain extends JavaPlugin {
     specialItemManager = new SpecialItemManager(this);
     new SpecialItemEvent(this);
     kitMenuHandler = new KitMenuHandler(this);
+    new KitAbilityHandler(this);
     rewardsHandler = new RewardsFactory(this);
     hologramManager = new HologramManager(this);
     powerupRegistry = new PowerupRegistry(this);
@@ -564,5 +572,9 @@ public class PluginMain extends JavaPlugin {
 
   public Random getRandom() {
     return random;
+  }
+
+  public KitAbilityManager getKitAbilityManager() {
+    return kitAbilityManager;
   }
 }
