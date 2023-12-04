@@ -127,7 +127,7 @@ Holidays: true
 Powerups: false
 
 
-# Should the plugin enable kits which can be found in kits.yml
+# Should the plugin enable kits which can be found in /kits
 Kits: false
 
 
