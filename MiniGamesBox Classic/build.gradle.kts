@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":MiniGamesBox-Utils", "shadow"))
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("io.papermc:paperlib:1.0.8")
+    implementation("org.openjdk.nashorn:nashorn-core:15.4")
     compileOnly("com.mojang:authlib:3.11.50")
     compileOnly("de.simonsator:DevelopmentPAFSpigot:1.0.67")
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")

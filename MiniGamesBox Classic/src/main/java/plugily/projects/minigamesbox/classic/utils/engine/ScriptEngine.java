@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.utils.engine;
 
 import org.bukkit.Bukkit;
 
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.logging.Level;
@@ -34,7 +35,12 @@ public class ScriptEngine {
   private final javax.script.ScriptEngine scriptEngine;
 
   public ScriptEngine() {
-    scriptEngine = new ScriptEngineManager().getEngineByName("js");
+    if(Double.parseDouble(System.getProperty("java.specification.version")) < 11) {
+      scriptEngine = new ScriptEngineManager().getEngineByName("js");
+    } else {
+      ScriptEngineFactory nashornScriptEngineFactory = new org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory();
+      scriptEngine = nashornScriptEngineFactory.getScriptEngine();
+    }
   }
 
   public void setValue(String value, Object valueObject) {
