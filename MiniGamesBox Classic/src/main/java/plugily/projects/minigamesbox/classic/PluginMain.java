@@ -272,7 +272,7 @@ public class PluginMain extends JavaPlugin {
     PluginArena.init(this);
     if(configPreferences.getOption("LEADERBOARDS")) {
       if(!new File(getDataFolder(), "internal/leaderboards_data.yml").exists()) {
-        new File(getDataFolder().getName() + "/internal").mkdir();
+        new File(getDataFolder() + "/internal").mkdir();
       }
       //running later due to plugin specific stats
       Bukkit.getScheduler().runTaskLater(this, () -> leaderboardRegistry = new LeaderboardRegistry(this), 20L * 15);
