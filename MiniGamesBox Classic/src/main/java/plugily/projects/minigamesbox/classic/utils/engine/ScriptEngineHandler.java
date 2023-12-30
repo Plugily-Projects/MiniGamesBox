@@ -18,11 +18,10 @@
 
 package plugily.projects.minigamesbox.classic.utils.engine;
 
+import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
 import org.bukkit.Bukkit;
 
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.ScriptEngine;
 import java.util.logging.Level;
 
 /**
@@ -30,17 +29,12 @@ import java.util.logging.Level;
  * <p>
  * Created at 21.09.2021
  */
-public class ScriptEngine {
+public class ScriptEngineHandler {
 
-  private final javax.script.ScriptEngine scriptEngine;
+  private final ScriptEngine scriptEngine;
 
-  public ScriptEngine() {
-    if(Double.parseDouble(System.getProperty("java.specification.version")) < 11) {
-      scriptEngine = new ScriptEngineManager().getEngineByName("js");
-    } else {
-      ScriptEngineFactory nashornScriptEngineFactory = new org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory();
-      scriptEngine = nashornScriptEngineFactory.getScriptEngine();
-    }
+  public ScriptEngineHandler() {
+    scriptEngine = new GraalJSEngineFactory().getScriptEngine();
   }
 
   public void setValue(String value, Object valueObject) {
@@ -49,12 +43,14 @@ public class ScriptEngine {
   }
 
   public void execute(String executable) {
-    if(scriptEngine == null)
+    if(scriptEngine == null) {
+      Bukkit.getLogger().log(Level.SEVERE, "Script engine is missing!");
       return;
-
+    }
     try {
       scriptEngine.eval(executable);
-    } catch(ScriptException e) {
+    } catch(Exception e) {
+      Bukkit.getLogger().log(Level.SEVERE, "---- THIS IS AN ISSUE BY USER CONFIGURATION NOT AUTHOR BUG ----");
       Bukkit.getLogger().log(Level.SEVERE, "Script failed to parse expression! Expression was written wrongly!");
       Bukkit.getLogger().log(Level.SEVERE, "Expression value: " + executable);
       Bukkit.getLogger().log(Level.SEVERE, "Error log:");

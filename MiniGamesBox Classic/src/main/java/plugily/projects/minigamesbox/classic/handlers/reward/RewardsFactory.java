@@ -26,7 +26,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
-import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngine;
+import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngineHandler;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -151,18 +151,23 @@ public class RewardsFactory {
 
   private void executeReward(Player player, PluginArena arena, Reward reward) {
     //cannot execute if chance wasn't met
+    plugin.getDebugger().debug("Trying to perform reward {0} as {1} executor", reward.getType(), reward.getExecutor());
     if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
+      plugin.getDebugger().debug("Reward {0} did not execute because chance is {1}", reward.getType(), reward.getChance());
       return;
     }
     String command = reward.getExecutableCode();
     if(command == null || command.isEmpty()) {
+      plugin.getDebugger().debug("Reward {0} did not execute because there is no ExecutableCode {1}", reward.getType(), command);
       return;
     }
     MessageBuilder messageBuilder = new MessageBuilder(command, false);
     if(player != null) {
+      plugin.getDebugger().debug("Reward {0} added player as argument", reward.getType());
       messageBuilder = messageBuilder.player(player);
     }
     if(arena != null) {
+      plugin.getDebugger().debug("Reward {0} added arena as argument", reward.getType());
       messageBuilder = messageBuilder.arena(arena);
     }
     command = messageBuilder.build();
@@ -176,7 +181,7 @@ public class RewardsFactory {
         }
         break;
       case SCRIPT:
-        ScriptEngine engine = new ScriptEngine();
+        ScriptEngineHandler engine = new ScriptEngineHandler();
         if(player != null) {
           engine.setValue("player", player);
         }
@@ -190,7 +195,7 @@ public class RewardsFactory {
       default:
         break;
     }
-    plugin.getDebugger().debug("Executed command {0} as {1} executor", command, reward.getExecutor());
+    plugin.getDebugger().debug("Reward {0} Executed command {1} as {2} executor", reward.getType(), command, reward.getExecutor());
   }
 
   public void performReward(Player player, PluginArena arena, RewardType type, int executeNumber) {
@@ -229,10 +234,10 @@ public class RewardsFactory {
       if(config.isConfigurationSection("rewards." + rewardType.getPath())) {
         ConfigurationSection section = config.getConfigurationSection("rewards." + rewardType.getPath());
         addNumberReward(registeredRewards, rewardType, section);
-        plugin.getDebugger().debug(Level.WARNING, "Rewards section {0} found. Registering as number reward", rewardType.getPath());
+        plugin.getDebugger().debug(Level.INFO, "Rewards section {0} found. Registering as number reward", rewardType.getPath());
       } else {
         addReward(registeredRewards, rewardType);
-        plugin.getDebugger().debug(Level.WARNING, "Rewards section {0} not found. Registering as normal reward", rewardType.getPath());
+        plugin.getDebugger().debug(Level.INFO, "Rewards section {0} not configured. Registering as normal reward", rewardType.getPath());
       }
     }
     for(Map.Entry<RewardType, Integer> entry : registeredRewards.entrySet()) {
