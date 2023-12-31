@@ -1,6 +1,6 @@
 ### 1.3.4 
 * Moved kits.yml into kits folder, separate file per kit
-* Fixed script engine on upper java 11/(15) (File size doubled)
+* Fixed script engine on upper java 11/(15) (File size increased)
 * Fixed VersionUtils.spawnEntity on spigot upper 1.15
 
 ### 1.3.3 Release (29.11.2023)

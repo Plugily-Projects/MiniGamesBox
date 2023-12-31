@@ -181,7 +181,7 @@ public class RewardsFactory {
         }
         break;
       case SCRIPT:
-        ScriptEngineHandler engine = new ScriptEngineHandler();
+        ScriptEngineHandler engine = new ScriptEngineHandler(plugin);
         if(player != null) {
           engine.setValue("player", player);
         }

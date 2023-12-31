@@ -18,8 +18,8 @@
 
 package plugily.projects.minigamesbox.classic.utils.engine;
 
-import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
 import org.bukkit.Bukkit;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import javax.script.ScriptEngine;
 import java.util.logging.Level;
@@ -33,8 +33,8 @@ public class ScriptEngineHandler {
 
   private final ScriptEngine scriptEngine;
 
-  public ScriptEngineHandler() {
-    scriptEngine = new GraalJSEngineFactory().getScriptEngine();
+  public ScriptEngineHandler(PluginMain plugin) {
+    scriptEngine = plugin.getJavaScriptEngine().getEngine();
   }
 
   public void setValue(String value, Object valueObject) {
