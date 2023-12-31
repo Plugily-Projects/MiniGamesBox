@@ -124,6 +124,8 @@ public class LanguageMigrator {
             renameToFile(file, "old_");
             plugin.saveResource("kits.yml", false);
             break;
+          case 2:
+            renameToFile(file, "deprecated_");
           default:
             break;
         }

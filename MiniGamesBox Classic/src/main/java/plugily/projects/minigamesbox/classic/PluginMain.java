@@ -71,6 +71,7 @@ import plugily.projects.minigamesbox.classic.user.UserManager;
 import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBarManager;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.dimensional.CuboidSelector;
+import plugily.projects.minigamesbox.classic.utils.engine.JavaScriptEngine;
 import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
 import plugily.projects.minigamesbox.classic.utils.helper.BukkitHelper;
 import plugily.projects.minigamesbox.classic.utils.hologram.HologramManager;
@@ -112,6 +113,8 @@ public class PluginMain extends JavaPlugin {
   private UserManager userManager;
   private StatsStorage statsStorage;
   private BukkitHelper bukkitHelper;
+
+  private JavaScriptEngine javaScriptEngine;
   private CuboidSelector cuboidSelector;
   private SpecialItemManager specialItemManager;
   private RewardsFactory rewardsHandler;
@@ -230,6 +233,7 @@ public class PluginMain extends JavaPlugin {
     languageConfig = ConfigUtils.getConfig(this, "language");
     actionBarManager = new ActionBarManager(this);
     bukkitHelper = new BukkitHelper(this);
+    javaScriptEngine = new JavaScriptEngine(this);
     partyHandler = new PartySupportInitializer().initialize(this);
     kitRegistry = new KitRegistry(this);
     User.init(this);
@@ -272,7 +276,7 @@ public class PluginMain extends JavaPlugin {
     PluginArena.init(this);
     if(configPreferences.getOption("LEADERBOARDS")) {
       if(!new File(getDataFolder(), "internal/leaderboards_data.yml").exists()) {
-        new File(getDataFolder().getName() + "/internal").mkdir();
+        new File(getDataFolder() + "/internal").mkdir();
       }
       //running later due to plugin specific stats
       Bukkit.getScheduler().runTaskLater(this, () -> leaderboardRegistry = new LeaderboardRegistry(this), 20L * 15);
@@ -444,6 +448,10 @@ public class PluginMain extends JavaPlugin {
 
   public BukkitHelper getBukkitHelper() {
     return bukkitHelper;
+  }
+
+  public JavaScriptEngine getJavaScriptEngine() {
+    return javaScriptEngine;
   }
 
   public SpecialItemManager getSpecialItemManager() {
