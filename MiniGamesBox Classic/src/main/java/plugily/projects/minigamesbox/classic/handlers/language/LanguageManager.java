@@ -31,7 +31,6 @@ import plugily.projects.minigamesbox.classic.utils.services.locale.LocaleService
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +48,7 @@ public class LanguageManager {
   private FileConfiguration localeFile;
   private FileConfiguration languageConfig;
   private boolean messagesIntegrityPassed = true;
-  private FileConfiguration defaultLanguageConfig;
+  private final FileConfiguration defaultLanguageConfig;
 
   /**
    * Initializes language management system
@@ -143,7 +142,7 @@ public class LanguageManager {
     localeFile = config;
   }
 
-  private void setupLocale() {
+  public void setupLocale() {
     String localeName = plugin.getConfig().getString("locale", "default").toLowerCase();
     for(Locale locale : LocaleRegistry.getRegisteredLocales()) {
       if(locale.getPrefix().equalsIgnoreCase(localeName)) {
