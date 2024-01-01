@@ -104,6 +104,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new LocationWandArgument(this);
     new PlaceholderCheckArgument(this);
     new LocalesArgument(this);
+    new LocaleArgument(this);
     spyChat = new SpyChatArgument(this);
     new TeleportArgument(this);
     if(plugin.getConfigPreferences().getOption("LEADERBOARDS")) {
