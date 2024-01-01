@@ -50,6 +50,26 @@ public class Locale {
   }
 
   /**
+   * Retrieves the Locale object matching the specified locale prefix or name.
+   *
+   * @param  locale  the locale prefix or name to search for
+   * @return         the Locale object matching the specified locale prefix or name, or null if no match is found
+   */
+  public static Locale getLocale(String locale) {
+    for(Locale l : LocaleRegistry.getRegisteredLocales()) {
+      if(l.getPrefix().equals(locale)) {
+        return l;
+      }
+    }
+    for(Locale l : LocaleRegistry.getRegisteredLocales()) {
+      if(l.getName().equals(locale)) {
+        return l;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Gets name of locale, ex. English or German
    *
    * @return name of locale
