@@ -1,6 +1,6 @@
-### 1.3.4 
 ### 1.3.5 Release (03.01.2024)
 * Fixed GameProfile API 1.20 change
+* Fixed none kits related plugins issues
 
 ### 1.3.4 Release (31.12.2023)
 * Moved kits.yml into kits folder, separate file per kit
