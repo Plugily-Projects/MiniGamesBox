@@ -18,19 +18,13 @@
 
 package plugily.projects.minigamesbox.classic.utils.services.locale;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -55,7 +49,7 @@ public class LocaleService {
       return;
     }
     this.plugin = plugin;
-    try(Scanner scanner = new Scanner(requestLocaleFetch(null), "UTF-8").useDelimiter("\\A")) {
+    try(Scanner scanner = new Scanner(requestLocaleFetch(null), StandardCharsets.UTF_8).useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
       File file = new File(plugin.getDataFolder().getPath() + "/locales/locale_data.yml");
       if(!file.exists()) {
@@ -125,7 +119,7 @@ public class LocaleService {
 
   /**
    * Sends a demand request to download latest locale from Plugily-Projects/locale_storage repository
-   * Whole repository can be seen here https://github.com/Plugily-Projects/locale_storage
+   * Whole repository can be seen here <a href="https://github.com/Plugily-Projects/locale_storage">...</a>
    *
    * @param locale locale to download
    * @return SUCCESS for downloaded locale, FAIL for service fault, LATEST when locale is latest as one in repository
@@ -143,7 +137,7 @@ public class LocaleService {
   }
 
   private DownloadStatus writeFile(Locale locale) {
-    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A")) {
+    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), StandardCharsets.UTF_8).useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
       try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml"), StandardCharsets.UTF_8)) {
         writer.write(data);
@@ -170,8 +164,8 @@ public class LocaleService {
   }
 
   private boolean isExact(Locale locale, File file) {
-    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A");
-        Scanner localScanner = new Scanner(file, "UTF-8").useDelimiter("\\A")) {
+    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), StandardCharsets.UTF_8).useDelimiter("\\A");
+        Scanner localScanner = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\\A")) {
       String onlineData = scanner.hasNext() ? scanner.next() : "";
       String localData = localScanner.hasNext() ? localScanner.next() : "";
 
