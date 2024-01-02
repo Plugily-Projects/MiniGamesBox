@@ -36,6 +36,7 @@ public class LocaleArgument {
             registry.getPlugin().saveConfig();
 
             registry.getPlugin().getLanguageManager().setupLocale();
+            new MessageBuilder(ChatColor.GREEN + "Locale changed to "+locale.getPrefix()+"! Make sure to make a proper restart of your server.").prefix().send(player);
           }
         });
   }

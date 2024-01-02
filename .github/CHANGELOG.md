@@ -1,4 +1,5 @@
 ### 1.3.5 Release (03.01.2024)
+* Added new command /pluginadmin locale <locale> to set your locale
 * Fixed GameProfile API 1.20 change
 * Fixed none kits related plugins issues
 
