@@ -1,4 +1,8 @@
 ### 1.3.4 
+### 1.3.5 Release (03.01.2024)
+* Fixed GameProfile API 1.20 change
+
+### 1.3.4 Release (31.12.2023)
 * Moved kits.yml into kits folder, separate file per kit
 * Fixed script engine on upper java 11/(15) (File size increased)
 * Fixed VersionUtils.spawnEntity on spigot upper 1.15
