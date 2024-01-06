@@ -208,11 +208,6 @@ public class KitRegistry {
     List<String> kit_actions = kitsConfig.getStringList("abilities");
     kit.setAbilities(kit_actions);
 
-    if(kitsConfig.getBoolean("default_kit", false)) {
-      this.setDefaultKit(kit);
-      plugin.getDebugger().debug("Default kit set to " + kit.getKey());
-    }
-
     if(optionalConfigurations != null) {
       optionalConfigurations.forEach((configuration) -> {
         if(kitsConfig.contains(configuration)) {
