@@ -96,7 +96,10 @@ public class PluginArenaManager {
     new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
     new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
 
-    plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
+    if(plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
+      return;
+    }
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);

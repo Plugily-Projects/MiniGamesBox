@@ -103,7 +103,10 @@ public class PluginStartingState implements ArenaStateHandler {
         player.getInventory().clear();
         player.setGameMode(GameMode.SURVIVAL);
         User user = plugin.getUserManager().getUser(player);
-        user.getKit().giveKitItems(player);
+        if(plugin.getConfigPreferences().getOption("KITS")) {
+          user.getKit().giveKitItems(player);
+          return;
+        }
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_GAME_START").asKey().arena(arena).player(player).sendPlayer();

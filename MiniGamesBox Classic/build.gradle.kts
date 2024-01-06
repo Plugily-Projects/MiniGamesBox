@@ -23,14 +23,15 @@ plugins {
 }
 
 dependencies {
-    implementation("me.tigerhix.lib:scoreboard:1.4.2") { isTransitive = false }
-    implementation("com.github.cryptomorin:XSeries:9.4.0") { isTransitive = false }
+    implementation("me.tigerhix.lib:scoreboard:1.4.3") { isTransitive = false }
+    implementation("com.github.cryptomorin:XSeries:9.8.0") { isTransitive = false }
     implementation(project(":MiniGamesBox-Inventory", "shadow"))
     implementation(project(":MiniGamesBox-Database", "shadow"))
     implementation(project(":MiniGamesBox-Utils", "shadow"))
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("io.papermc:paperlib:1.0.8")
     implementation("org.openjdk.nashorn:nashorn-core:15.4")
+    implementation("org.ow2.asm:asm:9.6")
     compileOnly("com.mojang:authlib:3.11.50")
     compileOnly("de.simonsator:DevelopmentPAFSpigot:1.0.67")
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")

@@ -33,7 +33,6 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.awt.*;
 import java.io.File;
-import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -84,13 +83,16 @@ public class KitRegistry {
   public void registerKits(List<String> optionalConfigurations) {
     try {
       if(!new File(plugin.getDataFolder() + File.separator + "kits").exists()) {
-        return;
+        new File(plugin.getDataFolder() + "/kits").mkdir();
       }
       for(File file : new File(plugin.getDataFolder() + File.separator + "kits").listFiles()) {
-        FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "kits/" + file.getName().replaceFirst("[.][^.]+$", ""));
-        loadKitConfig(kitsConfig, optionalConfigurations);
+        plugin.getDebugger().debug(Level.INFO, "Trying to load " + file.getName());
+        FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + file.getName().replace(".yml", ""));
+        loadKitConfig(file.getName().replace(".yml", ""), kitsConfig, optionalConfigurations);
       }
-    } catch(Exception ignored) {
+    } catch(Exception exception) {
+      plugin.getDebugger().debug(Level.WARNING, "ERROR IN LOADING KITS");
+      exception.printStackTrace();
     }
   }
 
@@ -99,9 +101,8 @@ public class KitRegistry {
    *
    * @param kitsConfig the yml of the kit to load the configuration for
    */
-  public void loadKitConfig(FileConfiguration kitsConfig, List<String> optionalConfigurations) {
-    String kit_key = kitsConfig.getName();
-    plugin.getDebugger().debug(Level.SEVERE, "Loading Kit " + kit_key + " ...");
+  public void loadKitConfig(String kit_key, FileConfiguration kitsConfig, List<String> optionalConfigurations) {
+    plugin.getDebugger().debug(Level.INFO, "Loading Kit " + kit_key + " ...");
 
     if(!kitsConfig.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit_key + " is disabled by kit file");

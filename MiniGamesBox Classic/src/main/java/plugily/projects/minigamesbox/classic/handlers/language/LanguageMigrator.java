@@ -32,7 +32,7 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 
 /*
-  NOTE FOR CONTRIBUTORS - Please do not touch this class if you don't now how it works! You can break migrator modyfing these values!
+  NOTE FOR CONTRIBUTORS - Please do not touch this class if you don't know how it works! You can break migrator modifying these values!
  */
 
 /**

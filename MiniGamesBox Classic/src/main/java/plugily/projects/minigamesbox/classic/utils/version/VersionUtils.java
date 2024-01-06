@@ -639,7 +639,11 @@ public final class VersionUtils {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_15_R2)) {
       return location.getWorld().spawnEntity(location, entityType);
     }
-    return location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    if(isPaper) {
+      return location.getWorld().spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    } else {
+      return location.getWorld().spawnEntity(location, entityType, false);
+    }
   }
 
 }

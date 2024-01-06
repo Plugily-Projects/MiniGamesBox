@@ -66,7 +66,6 @@ public class Kit {
 
   public Kit(String key, String name, List<String> description, ItemStack itemStack) {
     this.key = key;
-    this.kitsConfig = ConfigUtils.getConfig(plugin, "kits/" + key);
     this.name = name;
     this.description = description;
     this.itemStack = itemStack;
@@ -111,8 +110,8 @@ public class Kit {
   }
 
   public void saveKitsConfig() {
-    ConfigUtils.saveConfig(plugin, kitsConfig, "kits/" + key);
-    kitsConfig = ConfigUtils.getConfig(plugin, "kits/" + key);
+    ConfigUtils.saveConfig(plugin, kitsConfig, "kits");
+    kitsConfig = ConfigUtils.getConfig(plugin, "kits");
   }
 
   /**
@@ -253,7 +252,7 @@ public class Kit {
       try {
         kitAbilities.add(plugin.getKitAbilityManager().getKitAbility(abilityName));
       } catch(IllegalArgumentException exception) {
-        plugin.getDebugger().debug(Level.SEVERE, "The kit-ability " + abilityName + " isn't known. Check your kit folder!");
+        plugin.getDebugger().debug(Level.SEVERE, "The kit-ability " + abilityName + " isn't known. Check your kits.yml!");
       }
     }
   }
