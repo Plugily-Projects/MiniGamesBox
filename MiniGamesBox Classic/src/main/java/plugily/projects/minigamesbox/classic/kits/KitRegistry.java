@@ -31,8 +31,10 @@ import plugily.projects.minigamesbox.classic.kits.basekits.PremiumKit;
 import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
+import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -253,6 +255,34 @@ public class KitRegistry {
    */
   public List<Kit> getKits() {
     return kits;
+  }
+  /**
+   * Retrieves a Kit object based on the provided key.
+   *
+   * @param  key  the key used to search for the Kit
+   * @return      the Kit object with the matching key, or null if not found
+   */  public Kit getKitByKey(String key) {
+    for (Kit kit : kits) {
+      if (kit.getKey().equalsIgnoreCase(key)) {
+        return kit;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Retrieves a Kit object from the 'kits' list by its name.
+   *
+   * @param  key   the name of the Kit object to retrieve
+   * @return       the Kit object with the specified name, or null if not found
+   */
+  public Kit getKitByName(String key) {
+    for (Kit kit : kits) {
+      if (kit.getName().equalsIgnoreCase(key)) {
+        return kit;
+      }
+    }
+    return null;
   }
 
   public static HandleItem getHandleItem() {
