@@ -31,8 +31,8 @@ import plugily.projects.minigamesbox.classic.kits.basekits.PremiumKit;
 import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
-import java.awt.*;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
