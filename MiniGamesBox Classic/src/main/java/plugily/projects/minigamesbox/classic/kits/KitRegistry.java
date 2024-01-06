@@ -23,6 +23,7 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.codehaus.plexus.util.FileUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
@@ -86,9 +87,9 @@ public class KitRegistry {
         new File(plugin.getDataFolder() + "/kits").mkdir();
       }
       for(File file : new File(plugin.getDataFolder() + File.separator + "kits").listFiles()) {
-        plugin.getDebugger().debug(Level.INFO, "Trying to load " + file.getName());
-        FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + file.getName().replace(".yml", ""));
-        loadKitConfig(file.getName().replace(".yml", ""), kitsConfig, optionalConfigurations);
+        plugin.getDebugger().debug(Level.INFO, "Trying to load " + FileUtils.removeExtension(file.getName()));
+        FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + FileUtils.removeExtension(file.getName()));
+        loadKitConfig(FileUtils.removeExtension(file.getName()), kitsConfig, optionalConfigurations);
       }
     } catch(Exception exception) {
       plugin.getDebugger().debug(Level.WARNING, "ERROR IN LOADING KITS");
