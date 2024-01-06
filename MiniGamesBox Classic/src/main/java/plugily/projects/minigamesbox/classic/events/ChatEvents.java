@@ -93,7 +93,7 @@ public class ChatEvents implements Listener {
         formatted = new MessageBuilder("IN_GAME_DEATH_TAG").asKey().build() + formatted;
       }
     } else {
-      if(user.getKit() == null) {
+      if(!plugin.getConfigPreferences().getOption("KITS") || user.getKit() == null) {
         formatted = StringUtils.replace(formatted, "%kit%", "-");
       } else {
         formatted = StringUtils.replace(formatted, "%kit%", user.getKit().getName());

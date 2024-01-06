@@ -141,11 +141,17 @@ public class PlaceholderManager {
     registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
+        if(!plugin.getConfigPreferences().getOption("KITS")) {
+          return null;
+        }
         return plugin.getUserManager().getUser(player).getKit().getName();
       }
 
       @Override
       public String getValue(Player player, PluginArena arena) {
+        if(!plugin.getConfigPreferences().getOption("KITS")) {
+          return null;
+        }
         return plugin.getUserManager().getUser(player).getKit().getName();
       }
     });
