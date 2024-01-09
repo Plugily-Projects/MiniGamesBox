@@ -92,7 +92,6 @@ public class PluginStartingState implements ArenaStateHandler {
     }
     if(timer == 0 || arena.isForceStart()) {
       Bukkit.getPluginManager().callEvent(new PlugilyGameStartEvent(arena));
-      arenaState = ArenaState.IN_GAME;
       arena.getBossbarManager().setProgress(1.0);
       org.bukkit.Location arenaLoc = arena.getStartLocation();
       for(Player player : arena.getPlayers()) {
@@ -116,6 +115,7 @@ public class PluginStartingState implements ArenaStateHandler {
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
       setArenaTimer(arenaTimer);
+      arenaState = ArenaState.IN_GAME;
     }
     SoundHelper.playArenaCountdown(arena);
     if(arena.isForceStart()) {
