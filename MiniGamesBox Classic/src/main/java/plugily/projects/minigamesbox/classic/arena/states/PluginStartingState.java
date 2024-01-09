@@ -86,6 +86,7 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setExp(1);
         player.setLevel(0);
       }
+      plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Arena players: {1}", arena.getId(), arena.getPlayers().stream().map(Player::getName).toArray());
       plugin.getDebugger().performance("ArenaUpdate", "END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
       return;
