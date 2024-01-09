@@ -100,7 +100,6 @@ public class PluginArenaManager {
 
     if(plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
-      return;
     }
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
     if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {

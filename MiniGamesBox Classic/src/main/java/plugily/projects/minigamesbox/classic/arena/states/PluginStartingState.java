@@ -109,7 +109,6 @@ public class PluginStartingState implements ArenaStateHandler {
         User user = plugin.getUserManager().getUser(player);
         if(plugin.getConfigPreferences().getOption("KITS")) {
           user.getKit().giveKitItems(player);
-          return;
         }
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);

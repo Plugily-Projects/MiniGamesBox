@@ -111,8 +111,8 @@ public class Kit {
   }
 
   public void saveKitsConfig() {
-    ConfigUtils.saveConfig(plugin, kitsConfig, "kits");
-    kitsConfig = ConfigUtils.getConfig(plugin, "kits");
+    ConfigUtils.saveConfig(plugin, kitsConfig, "/kits/" + key);
+    kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + key);
   }
 
   /**
@@ -253,7 +253,7 @@ public class Kit {
       try {
         kitAbilities.add(plugin.getKitAbilityManager().getKitAbility(abilityName));
       } catch(IllegalArgumentException exception) {
-        plugin.getDebugger().debug(Level.SEVERE, "The kit-ability " + abilityName + " isn't known. Check your kits.yml!");
+        plugin.getDebugger().debug(Level.SEVERE, "The kit-ability " + abilityName + " isn't known. Check your kit folder!");
       }
     }
   }
