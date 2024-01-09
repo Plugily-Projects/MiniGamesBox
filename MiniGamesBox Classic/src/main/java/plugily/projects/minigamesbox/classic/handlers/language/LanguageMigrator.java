@@ -94,6 +94,9 @@ public class LanguageMigrator {
   private void updateCoreFiles() {
     for(CoreFileVersion coreFileVersion : CoreFileVersion.values()) {
       String fileName = coreFileVersion.name().toLowerCase();
+      if (fileName.equalsIgnoreCase(CoreFileVersion.KITS.name())) {
+        continue;
+      }
       int newVersion = coreFileVersion.getVersion();
       File file = new File(plugin.getDataFolder() + "/" + fileName + ".yml");
       FileConfiguration configuration = ConfigUtils.getConfig(plugin, fileName, false);
@@ -122,7 +125,6 @@ public class LanguageMigrator {
         switch(version) {
           case 1:
             renameToFile(file, "old_");
-            plugin.saveResource("kits.yml", false);
             break;
           case 2:
             renameToFile(file, "deprecated_");
