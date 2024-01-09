@@ -44,7 +44,7 @@ public class ConfigOption {
     options.put("BLOCK_IN_GAME_COMMANDS", new ConfigOption("Block.In-Game.Commands", true, true));
     options.put("BLOCK_IN_GAME_ITEM_MOVE", new ConfigOption("Block.In-Game.Item-Move", true, true));
     options.put("DATABASE", new ConfigOption("Database", false, true));
-    options.put("REWARDS", new ConfigOption("Rewards", true, true));
+    options.put("REWARDS", new ConfigOption("Rewards", false, true));
     options.put("PLUGIN_CHAT_FORMAT", new ConfigOption("Plugin-Chat-Format", true, true));
     options.put("SEPARATE_ARENA_CHAT", new ConfigOption("Chat.Separate.Arena", true, true));
     options.put("SEPARATE_ARENA_SPECTATORS", new ConfigOption("Chat.Separate.Spectators", true, true));
@@ -52,7 +52,7 @@ public class ConfigOption {
     options.put("SIGN_BLOCK_STATES", new ConfigOption("Sign-Block-States", true, true));
     options.put("HOLIDAYS", new ConfigOption("Holidays", true, true));
     options.put("POWERUPS", new ConfigOption("Powerups", false, false));
-    options.put("KITS", new ConfigOption("Kits", false, false));
+    options.put("KITS", new ConfigOption("Kits.Enabled", false, false));
     options.put("LEADERBOARDS", new ConfigOption("Leaderboard", true, true));
 
 

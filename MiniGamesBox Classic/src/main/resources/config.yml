@@ -38,7 +38,6 @@ Inventory-Manager: true
 # Kits configuration
 Kit:
   # Should we load kits?
-  # todo - this option doesn't do anything at the moment
   Enabled: true
   # What is the default kit for players?
   # This should be the same name as the file name of the kits file in the kits folder
@@ -93,7 +92,7 @@ Database: false
 
 # Should we enable in game rewards? See rewards.yml for more...
 # You should also check out our script engine tutorial for rewards! https://tutorial.plugily.xyz
-Rewards: true
+Rewards: false
 
 
 # Enable in game (eg. '[KIT][LEVEL] Tigerpanzer_02: hey') special formatting?
@@ -133,10 +132,6 @@ Holidays: true
 
 # Should the plugin enable special powerups which can be found in powerups.yml
 Powerups: false
-
-
-# Should the plugin enable kits which can be found in /kits
-Kits: false
 
 
 # Should we create leaderboards out of the stats?
