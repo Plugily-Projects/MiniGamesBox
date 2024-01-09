@@ -258,7 +258,8 @@ public class KitRegistry {
    *
    * @param  key  the key used to search for the Kit
    * @return      the Kit object with the matching key, or null if not found
-   */  public Kit getKitByKey(String key) {
+   */
+  public Kit getKitByKey(String key) {
     for (Kit kit : kits) {
       if (kit.getKey().equalsIgnoreCase(key)) {
         return kit;
