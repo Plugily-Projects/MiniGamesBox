@@ -114,7 +114,6 @@ public class PluginStartingState implements ArenaStateHandler {
         plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
-      setArenaTimer(arenaTimer);
       arenaState = ArenaState.IN_GAME;
     }
     SoundHelper.playArenaCountdown(arena);
