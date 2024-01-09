@@ -53,6 +53,7 @@ public class PluginStartingState implements ArenaStateHandler {
     setArenaState(ArenaState.STARTING);
     setArenaTimer(-999);
     plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Arena players: {1}", arena.getId(), arena.getPlayers().stream().map(Player::getName).toArray());
 
     int timer = arena.getTimer();
 
@@ -86,7 +87,6 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setExp(1);
         player.setLevel(0);
       }
-      plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Arena players: {1}", arena.getId(), arena.getPlayers().stream().map(Player::getName).toArray());
       plugin.getDebugger().performance("ArenaUpdate", "END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
       return;
@@ -125,13 +125,12 @@ public class PluginStartingState implements ArenaStateHandler {
     if(arena.getMaximumPlayers() == arena.getPlayers().size()) {
       int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
 
-      if(arena.getTimer() > shorter) {
+      if (arena.getTimer() > shorter) {
         arenaTimer = shorter;
         arenaState = ArenaState.FULL_GAME;
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS").asKey().arena(arena).sendArena();
       }
     }
-
     plugin.getDebugger().performance("ArenaUpdate", "END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
   }
