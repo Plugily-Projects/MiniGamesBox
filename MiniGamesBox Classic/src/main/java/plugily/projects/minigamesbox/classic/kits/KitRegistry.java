@@ -35,6 +35,7 @@ import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 /**
@@ -255,22 +256,30 @@ public class KitRegistry {
 
   /**
    * Sets the default kit for the plugin using the config option
+   *
+   * @param defaultKitName name of the default kit
    */
-  public void setDefaultKit() {
-    String defaultKitKey = plugin.getConfig().getString("Kit.Default-Kit", "knight");
-    Kit defaultKit = getKitByKey(defaultKitKey);
-    if (defaultKit == null) {
+  public void setDefaultKit(String defaultKitName) {
+    String defaultKitKey = plugin.getConfig().getString("Kit.Default-Kit", defaultKitName);
+    AtomicReference<Kit> defaultKit = new AtomicReference<>(getKitByKey(defaultKitKey));
+    if (defaultKit.get() == null) {
       if (getKits().isEmpty()) {
         plugin.getDebugger().debug(Level.SEVERE, "Default kit set is not found and there are no available kits.");
         plugin.getDebugger().debug(Level.SEVERE, "Please add kits to the 'kits' folder and restart the server");
         plugin.onDisable();
         return;
       }
-      defaultKit = getKits().get(0);
-      plugin.getDebugger().debug("Default kit {0} not found, using {1}", defaultKitKey, defaultKit.getKey());
+      getKits().stream().filter(Kit::isUnlockedOnDefault).findFirst().ifPresent(defaultKit::set);
+      if (defaultKit.get() == null) {
+        plugin.getDebugger().debug(Level.SEVERE, "Default kit set is not found and there are no available free kits.");
+        plugin.getDebugger().debug(Level.SEVERE, "Please add free kits to the 'kits' folder and restart the server");
+        plugin.onDisable();
+        return;
+      }
+      plugin.getDebugger().debug("Default kit {0} not found, using {1}", defaultKitKey, defaultKit.get().getKey());
     }
-    this.plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit.getName());
-    this.defaultKit = defaultKit;
+    this.plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit.get().getName());
+    this.defaultKit = defaultKit.get();
   }
 
   /**
