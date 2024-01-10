@@ -70,9 +70,6 @@ public class KitRegistry {
   public void registerKit(Kit kit) {
     if (!plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKit method will not be ran.");
-      return;
-    }
-    if (!plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
     }
