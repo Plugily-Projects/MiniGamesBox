@@ -18,6 +18,8 @@
 
 package plugily.projects.minigamesbox.classic.preferences;
 
+import plugily.projects.minigamesbox.classic.PluginMain;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +54,7 @@ public class ConfigOption {
     options.put("SIGN_BLOCK_STATES", new ConfigOption("Sign-Block-States", true, true));
     options.put("HOLIDAYS", new ConfigOption("Holidays", true, true));
     options.put("POWERUPS", new ConfigOption("Powerups", false, false));
-    options.put("KITS", new ConfigOption("Kits.Enabled", false, false));
+    options.put("KITS", new ConfigOption("Kit.Enabled", false, false));
     options.put("LEADERBOARDS", new ConfigOption("Leaderboard", true, true));
 
 
@@ -80,6 +82,11 @@ public class ConfigOption {
   private final boolean protectedOption;
 
 
+  /**
+   * @param path            The path to the config option
+   * @param value           The default value of the option
+   * @param protectedOption Whether the option is protected
+   */
   public ConfigOption(String path, boolean value, boolean protectedOption) {
     this.path = path;
     this.value = value;
