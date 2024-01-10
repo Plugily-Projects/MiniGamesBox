@@ -69,6 +69,10 @@ public class KitRegistry {
    */
   public void registerKit(Kit kit) {
     if (!plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKit method will not be ran.");
+      return;
+    }
+    if (!plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
     }
@@ -91,11 +95,22 @@ public class KitRegistry {
    * Registers the kits by loading their configurations.
    */
   public void registerKits(List<String> optionalConfigurations) {
+    if (!plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKits method will not be ran.");
+      return;
+    }
     try {
       if (!new File(plugin.getDataFolder() + File.separator + "kits").exists()) {
         new File(plugin.getDataFolder() + "/kits").mkdir();
       }
-      for (File file : new File(plugin.getDataFolder() + File.separator + "kits").listFiles()) {
+      File[] kitsFiles = new File(plugin.getDataFolder() + File.separator + "kits").listFiles();
+      if (kitsFiles == null || kitsFiles.length == 0) {
+        plugin.getDebugger().debug(Level.SEVERE, "No kits found in kits folder, but kits are enabled in config.yml.");
+        plugin.getDebugger().debug(Level.SEVERE, "Please add kits to kits folder and restart the server.");
+        plugin.onDisable();
+        return;
+      }
+      for (File file : kitsFiles) {
         plugin.getDebugger().debug(Level.INFO, "Trying to load " + FileUtils.removeExtension(file.getName()));
         FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + FileUtils.removeExtension(file.getName()));
         loadKitConfig(FileUtils.removeExtension(file.getName()), kitsConfig, optionalConfigurations);
