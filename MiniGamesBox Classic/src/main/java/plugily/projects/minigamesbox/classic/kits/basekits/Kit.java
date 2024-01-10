@@ -53,7 +53,7 @@ public class Kit {
   private String kitPermission = "";
 
   private boolean unlockedOnDefault = false;
-  private List<String> description;
+  private final List<String> description;
 
   private final HashMap<String, Object> optionalConfiguration = new HashMap<>();
 
@@ -62,12 +62,12 @@ public class Kit {
   private ItemStack kitChestplate;
   private ItemStack kitLeggings;
   private ItemStack kitBoots;
-  private List<KitAbility> kitAbilities = new ArrayList<>();
+  private final List<KitAbility> kitAbilities = new ArrayList<>();
 
   public Kit(String key, String name, List<String> description, ItemStack itemStack) {
     this.key = key;
-    this.kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + key);
     this.name = name;
+    this.kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + key);
     this.description = description;
     this.itemStack = itemStack;
   }

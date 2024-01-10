@@ -45,7 +45,10 @@ public class ConfigPreferences {
   }
 
   private void loadOptions() {
-    ConfigOption.getOptions().forEach((s, option) -> options.put(s, new ConfigOption(option.getPath(), plugin.getConfig().getBoolean(option.getPath(), option.getValue()), option.isProtected())));
+    ConfigOption.getOptions().forEach((s, option) -> {
+      options.put(s, new ConfigOption(option.getPath(), plugin.getConfig().getBoolean(option.getPath(), option.getValue()), option.isProtected()));
+      plugin.getDebugger().performance("Config", "Loaded option: {0} with value: {1}, default value: {2}", s, plugin.getConfig().getBoolean(option.getPath(), option.getValue()), option.getValue());
+    });
   }
 
   private void loadCommandShortener() {
@@ -75,7 +78,6 @@ public class ConfigPreferences {
     if(configOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
-
     return configOption.getValue();
   }
 

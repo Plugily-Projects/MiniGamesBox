@@ -162,7 +162,7 @@ public class LanguageManager {
     }
     /* is snapshot release */
     if((plugin.getDescription().getVersion().contains("locales") || plugin.getDescription().getVersion().contains("-SNAPSHOT")) && !plugin.getConfig().getBoolean("Developer-Mode", false)) {
-      plugin.getDebugger().debug(Level.WARNING, "&cLocales aren't supported in this versions because they're lacking latest translations! Enabling English one...");
+      plugin.getDebugger().debug(Level.WARNING, "Locales aren't supported in this versions because they're lacking latest translations! Enabling English one...");
       pluginLocale = LocaleRegistry.getByName("Default");
       return;
     }

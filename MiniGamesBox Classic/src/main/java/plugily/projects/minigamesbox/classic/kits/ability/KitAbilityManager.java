@@ -33,9 +33,14 @@ public class KitAbilityManager {
   public KitAbilityManager(PluginMain plugin) {
     this.plugin = plugin;
     if(!plugin.getConfigPreferences().getOption("KITS")) {
+      this.plugin.getDebugger().performance("Kit", "Kits are disabled, kits abilities will not be loaded!");
       return;
     }
     loadKitAbilities();
+    this.plugin.getDebugger().performance("Kit", "Loaded {0} kit abilities:", kitAbilities.size());
+    kitAbilities.forEach((k, v) -> {
+      this.plugin.getDebugger().performance("Kit", " - {0}", k);
+    });
   }
 
   private void loadKitAbilities() {
