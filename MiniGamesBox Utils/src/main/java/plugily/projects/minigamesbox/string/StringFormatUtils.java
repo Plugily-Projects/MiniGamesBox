@@ -58,15 +58,14 @@ public class StringFormatUtils {
     int progressBars = (int) (totalBars * percent);
     int leftOver = (totalBars - progressBars);
 
-    StringBuilder sb = new StringBuilder();
-    sb.append(completedCharacter);
+    StringBuilder progressBar = new StringBuilder(completedCharacter);
     for(int i = 0; i < progressBars; i++) {
-      sb.append(symbol);
+      progressBar.append(symbol);
     }
-    sb.append(notCompletedCharacter);
+    progressBar.append(notCompletedCharacter);
     for(int i = 0; i < leftOver; i++) {
-      sb.append(symbol);
+      progressBar.append(symbol);
     }
-    return sb.toString();
+    return progressBar.toString();
   }
 }

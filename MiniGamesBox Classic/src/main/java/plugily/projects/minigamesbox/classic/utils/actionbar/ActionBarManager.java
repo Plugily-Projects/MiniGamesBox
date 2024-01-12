@@ -96,7 +96,6 @@ public class ActionBarManager extends BukkitRunnable {
           default:
             break;
         }
-        removeFinishedActionBar(player, actionBar);
       });
       for(ActionBar actionBar : bars) {
         if(actionBar.getActionBarType() == ActionBar.ActionBarType.COOLDOWN || actionBar.getActionBarType() == ActionBar.ActionBarType.PROGRESS) {
