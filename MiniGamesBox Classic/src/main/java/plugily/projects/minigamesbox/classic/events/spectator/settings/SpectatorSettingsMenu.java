@@ -220,6 +220,10 @@ public class SpectatorSettingsMenu implements Listener {
       return;
     }
     Player target = targetPlayer.get(player);
+    if(player.getLocation().getWorld() != target.getLocation().getWorld()) {
+      //Fix Cannot measure distance between worlds
+      return;
+    }
     double distance = player.getLocation().distance(target.getLocation());
     plugin.getActionBarManager().addActionBar(player, new ActionBar(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_TARGET_PLAYER_ACTION_BAR").asKey().arena(user.getArena()).integer((int) distance).player(target), ActionBar.ActionBarType.DISPLAY));
     if(distance <= 15) {
