@@ -23,6 +23,7 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.codehaus.plexus.util.FileUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
@@ -32,7 +33,9 @@ import plugily.projects.minigamesbox.classic.kits.free.EmptyKit;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 /**
@@ -42,13 +45,21 @@ import java.util.logging.Level;
  */
 public class KitRegistry {
 
-  public final List<Kit> kits = new java.util.ArrayList<>();
-  private Kit defaultKit;
-  public final PluginMain plugin;
   private static HandleItem handleItem;
+  public final List<Kit> kits = new java.util.ArrayList<>();
+  public final PluginMain plugin;
+  private Kit defaultKit;
 
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
+  }
+
+  public static HandleItem getHandleItem() {
+    return handleItem;
+  }
+
+  public void setHandleItem(HandleItem handleItem) {
+    KitRegistry.handleItem = handleItem;
   }
 
   /**
@@ -57,17 +68,18 @@ public class KitRegistry {
    * @param kit Kit to register
    */
   public void registerKit(Kit kit) {
-    if(!plugin.getConfigPreferences().getOption("KITS")) {
+    if (!plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKit method will not be ran.");
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
     }
-    if(kits.contains(kit)) {
+    if (kits.contains(kit)) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as its already registered");
       return;
     }
 
     ConfigurationSection configurationSection = kit.getKitConfigSection();
-    if(configurationSection != null && !configurationSection.getBoolean("enabled", false)) {
+    if (configurationSection != null && !configurationSection.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit.getKey() + " is disabled by kit file");
       return;
     }
@@ -80,16 +92,27 @@ public class KitRegistry {
    * Registers the kits by loading their configurations.
    */
   public void registerKits(List<String> optionalConfigurations) {
+    if (!plugin.getConfigPreferences().getOption("KITS")) {
+      plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKits method will not be ran.");
+      return;
+    }
     try {
-      if(!new File(plugin.getDataFolder() + File.separator + "kits").exists()) {
+      if (!new File(plugin.getDataFolder() + File.separator + "kits").exists()) {
         new File(plugin.getDataFolder() + "/kits").mkdir();
       }
-      for(File file : new File(plugin.getDataFolder() + File.separator + "kits").listFiles()) {
-        plugin.getDebugger().debug(Level.INFO, "Trying to load " + file.getName());
-        FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + file.getName().replace(".yml", ""));
-        loadKitConfig(file.getName().replace(".yml", ""), kitsConfig, optionalConfigurations);
+      File[] kitsFiles = new File(plugin.getDataFolder() + File.separator + "kits").listFiles();
+      if (kitsFiles == null || kitsFiles.length == 0) {
+        plugin.getDebugger().debug(Level.SEVERE, "No kits found in kits folder, but kits are enabled in config.yml.");
+        plugin.getDebugger().debug(Level.SEVERE, "Please add kits to kits folder and restart the server.");
+        plugin.onDisable();
+        return;
       }
-    } catch(Exception exception) {
+      for (File file : kitsFiles) {
+        plugin.getDebugger().debug(Level.INFO, "Trying to load " + FileUtils.removeExtension(file.getName()));
+        FileConfiguration kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + FileUtils.removeExtension(file.getName()));
+        loadKitConfig(FileUtils.removeExtension(file.getName()), kitsConfig, optionalConfigurations);
+      }
+    } catch (Exception exception) {
       plugin.getDebugger().debug(Level.WARNING, "ERROR IN LOADING KITS");
       exception.printStackTrace();
     }
@@ -103,7 +126,7 @@ public class KitRegistry {
   public void loadKitConfig(String kit_key, FileConfiguration kitsConfig, List<String> optionalConfigurations) {
     plugin.getDebugger().debug(Level.INFO, "Loading Kit " + kit_key + " ...");
 
-    if(!kitsConfig.getBoolean("enabled", false)) {
+    if (!kitsConfig.getBoolean("enabled", false)) {
       plugin.getDebugger().debug("Kit " + kit_key + " is disabled by kit file");
       return;
     }
@@ -112,13 +135,13 @@ public class KitRegistry {
     List<String> kit_description = kitsConfig.getStringList("description");
 
     ItemStack itemStack = XMaterial.BEDROCK.parseItem();
-    if(kitsConfig.getConfigurationSection("display_item") != null) {
+    if (kitsConfig.getConfigurationSection("display_item") != null) {
       itemStack = XItemStack.deserialize(kitsConfig.getConfigurationSection("display_item"));
     }
 
     String kitType = kitsConfig.getString("kit_type");
 
-    if(kitType == null) {
+    if (kitType == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " kit_type is null.");
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
@@ -126,7 +149,7 @@ public class KitRegistry {
 
     Kit kit;
 
-    switch(kitType) {
+    switch (kitType) {
       case "free": {
         kit = new FreeKit(kit_key, kit_name, kit_description, itemStack);
         break;
@@ -147,7 +170,7 @@ public class KitRegistry {
       }
     }
 
-    if(kitsConfig.getString("unlockedOnDefault") == null) {
+    if (kitsConfig.getString("unlockedOnDefault") == null) {
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " does not have an unlockedOnDefault configuration.");
       plugin.getDebugger().debug(Level.SEVERE, "Kit " + kit_key + " will not be loaded.");
       return;
@@ -157,7 +180,7 @@ public class KitRegistry {
     HashMap<ItemStack, Integer> kitItems = new HashMap<>();
 
     ConfigurationSection inventoryConfigurationSection = kitsConfig.getConfigurationSection("inventory");
-    if(inventoryConfigurationSection != null) {
+    if (inventoryConfigurationSection != null) {
       inventoryConfigurationSection.getKeys(false).forEach((k) -> {
 
         ConfigurationSection itemConfigurationSection = inventoryConfigurationSection.getConfigurationSection(k);
@@ -178,25 +201,25 @@ public class KitRegistry {
 
 
     ConfigurationSection armourConfigurationSection = kitsConfig.getConfigurationSection("armour");
-    if(armourConfigurationSection != null) {
+    if (armourConfigurationSection != null) {
 
       ConfigurationSection helmetConfigurationSection = armourConfigurationSection.getConfigurationSection("helmet");
-      if(helmetConfigurationSection != null) {
+      if (helmetConfigurationSection != null) {
         kit.setKitHelmet(XItemStack.deserialize(helmetConfigurationSection));
       }
 
       ConfigurationSection chestplateConfigurationSection = armourConfigurationSection.getConfigurationSection("chestplate");
-      if(chestplateConfigurationSection != null) {
+      if (chestplateConfigurationSection != null) {
         kit.setKitChestplate(XItemStack.deserialize(chestplateConfigurationSection));
       }
 
       ConfigurationSection leggingsConfigurationSection = armourConfigurationSection.getConfigurationSection("leggings");
-      if(leggingsConfigurationSection != null) {
+      if (leggingsConfigurationSection != null) {
         kit.setKitLeggings(XItemStack.deserialize(leggingsConfigurationSection));
       }
 
       ConfigurationSection bootsConfigurationSection = armourConfigurationSection.getConfigurationSection("boots");
-      if(bootsConfigurationSection != null) {
+      if (bootsConfigurationSection != null) {
         kit.setKitBoots(XItemStack.deserialize(bootsConfigurationSection));
       }
     } else {
@@ -207,14 +230,9 @@ public class KitRegistry {
     List<String> kit_actions = kitsConfig.getStringList("abilities");
     kit.setAbilities(kit_actions);
 
-    if(kitsConfig.getBoolean("default_kit", false)) {
-      this.setDefaultKit(kit);
-      plugin.getDebugger().debug("Default kit set to " + kit.getKey());
-    }
-
-    if(optionalConfigurations != null) {
+    if (optionalConfigurations != null) {
       optionalConfigurations.forEach((configuration) -> {
-        if(kitsConfig.contains(configuration)) {
+        if (kitsConfig.contains(configuration)) {
           kit.addOptionalConfiguration(configuration, kitsConfig.get(configuration));
           plugin.getDebugger().debug("Kit " + kit.getKey() + " has optional configuration " + configuration);
         }
@@ -231,7 +249,7 @@ public class KitRegistry {
    * @return default game kit
    */
   public Kit getDefaultKit() {
-    if(defaultKit == null) {
+    if (defaultKit == null) {
       setDefaultKit(new EmptyKit("default", "default"));
     }
     plugin.getDebugger().debug("getDefaultKit is {0}", defaultKit.getName());
@@ -249,6 +267,34 @@ public class KitRegistry {
   }
 
   /**
+   * Sets the default kit for the plugin using the config option
+   *
+   * @param defaultKitName name of the default kit
+   */
+  public void setDefaultKit(String defaultKitName) {
+    String defaultKitKey = plugin.getConfig().getString("Kit.Default", defaultKitName);
+    AtomicReference<Kit> defaultKit = new AtomicReference<>(getKitByKey(defaultKitKey));
+    if (defaultKit.get() == null) {
+      if (getKits().isEmpty()) {
+        plugin.getDebugger().debug(Level.SEVERE, "Default kit set is not found and there are no available kits.");
+        plugin.getDebugger().debug(Level.SEVERE, "Please add kits to the 'kits' folder and restart the server");
+        plugin.onDisable();
+        return;
+      }
+      getKits().stream().filter(Kit::isUnlockedOnDefault).findFirst().ifPresent(defaultKit::set);
+      if (defaultKit.get() == null) {
+        plugin.getDebugger().debug(Level.SEVERE, "Default kit set is not found and there are no available free kits.");
+        plugin.getDebugger().debug(Level.SEVERE, "Please add free kits to the 'kits' folder and restart the server");
+        plugin.onDisable();
+        return;
+      }
+      plugin.getDebugger().debug("Default kit {0} not found, using {1}", defaultKitKey, defaultKit.get().getKey());
+    }
+    this.plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit.get().getName());
+    this.defaultKit = defaultKit.get();
+  }
+
+  /**
    * Returns all available kits
    *
    * @return list of all registered kits
@@ -257,12 +303,34 @@ public class KitRegistry {
     return kits;
   }
 
-  public static HandleItem getHandleItem() {
-    return handleItem;
+  /**
+   * Retrieves a Kit object based on the provided key.
+   *
+   * @param key the key used to search for the Kit
+   * @return the Kit object with the matching key, or null if not found
+   */
+  public Kit getKitByKey(String key) {
+    for (Kit kit : kits) {
+      if (kit.getKey().equalsIgnoreCase(key)) {
+        return kit;
+      }
+    }
+    return null;
   }
 
-  public void setHandleItem(HandleItem handleItem) {
-    KitRegistry.handleItem = handleItem;
+  /**
+   * Retrieves a Kit object from the 'kits' list by its name.
+   *
+   * @param key the name of the Kit object to retrieve
+   * @return the Kit object with the specified name, or null if not found
+   */
+  public Kit getKitByName(String key) {
+    for (Kit kit : kits) {
+      if (kit.getName().equalsIgnoreCase(key)) {
+        return kit;
+      }
+    }
+    return null;
   }
 
 }

@@ -53,6 +53,11 @@ public class PluginStartingState implements ArenaStateHandler {
     setArenaState(ArenaState.STARTING);
     setArenaTimer(-999);
     plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Arena players: {1}", arena.getId());
+    for (Player player : arena.getPlayers()) {
+      plugin.getDebugger().performance("ArenaUpdate", "Arena {0}: {1}", arena.getId(), player.getName());
+    }
+
 
     int timer = arena.getTimer();
 
@@ -92,7 +97,6 @@ public class PluginStartingState implements ArenaStateHandler {
     }
     if(timer == 0 || arena.isForceStart()) {
       Bukkit.getPluginManager().callEvent(new PlugilyGameStartEvent(arena));
-      arenaState = ArenaState.IN_GAME;
       arena.getBossbarManager().setProgress(1.0);
       org.bukkit.Location arenaLoc = arena.getStartLocation();
       for(Player player : arena.getPlayers()) {
@@ -105,7 +109,6 @@ public class PluginStartingState implements ArenaStateHandler {
         User user = plugin.getUserManager().getUser(player);
         if(plugin.getConfigPreferences().getOption("KITS")) {
           user.getKit().giveKitItems(player);
-          return;
         }
         player.updateInventory();
         plugin.getUserManager().addExperience(player, 10);
@@ -115,6 +118,8 @@ public class PluginStartingState implements ArenaStateHandler {
         plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
+      plugin.getDebugger().performance("ArenaUpdate", "Arena {0} current timer set to {1}", arena.getId(), arenaTimer);
+      arenaState = ArenaState.IN_GAME;
     }
     SoundHelper.playArenaCountdown(arena);
     if(arena.isForceStart()) {
@@ -124,13 +129,12 @@ public class PluginStartingState implements ArenaStateHandler {
     if(arena.getMaximumPlayers() == arena.getPlayers().size()) {
       int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
 
-      if(arena.getTimer() > shorter) {
+      if (arena.getTimer() > shorter) {
         arenaTimer = shorter;
         arenaState = ArenaState.FULL_GAME;
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS").asKey().arena(arena).sendArena();
       }
     }
-
     plugin.getDebugger().performance("ArenaUpdate", "END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
 
   }

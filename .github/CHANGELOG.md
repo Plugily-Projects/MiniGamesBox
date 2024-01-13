@@ -1,3 +1,15 @@
+### 1.3.6 Release (13.01.2024)
+* Fixed IAE Cannot measure distance between worlds if players are in different worlds
+* Fixed NPE on Setup MaterialLocationItem / Multi Handleritem RIGHT_CLICK_AIR
+* Fixed kit loading
+* Fixed arena starting
+* Removed legacy particles on newer version to prevent IllegalArgumentException because no class found of modern material
+* Moved Plugin-Chat-Format to Chat.Format in config.yml
+* Moved Default Kit to config.yml, removed Kits section, added Kit section with Kit.Enabled and Kit.Default
+* Removed default_kit from kitsname.yml files
+* Adjusted rewards are now by default disabled
+* Added more debug messages
+
 ### 1.3.5 Release (03.01.2024)
 * Added new command /pluginadmin locale <locale> to set your locale
 * Fixed GameProfile API 1.20 change

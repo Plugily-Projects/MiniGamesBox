@@ -24,6 +24,7 @@ import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,6 +115,10 @@ public class Debugger {
       return;
     }
     logger.log(Level.INFO, debuggerPrefix + msg, params);
+  }
+
+  public Set<String> getListenedPerformance() {
+    return listenedPerformance;
   }
 
 }

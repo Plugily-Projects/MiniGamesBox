@@ -172,15 +172,14 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
             new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
             return;
           }
-          Location location = interactEvent.getClickedBlock().getLocation();
-          Block block = location.getBlock();
+
           switch(interactEvent.getAction()) {
             case PHYSICAL:
             case LEFT_CLICK_AIR:
               new MessageBuilder("&c&l✘ &cYou can't use a location that is at your player location, please select the " + checkMaterials + "!").prefix().send(interactEvent.getPlayer());
               break;
             case LEFT_CLICK_BLOCK:
-              if(!checkMaterial(block)) {
+              if(!checkMaterial(interactEvent.getClickedBlock().getLocation().getBlock())) {
                 new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to remove it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
@@ -188,7 +187,8 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
               removeLocation(interactEvent.getPlayer(), false);
               break;
             case RIGHT_CLICK_BLOCK:
-              if(!checkMaterial(block)) {
+              Location location = interactEvent.getClickedBlock().getLocation();
+              if(!checkMaterial(location.getBlock())) {
                 new MessageBuilder("&c&l✘ &cPlease only use location where already is a " + checkMaterials + " to add it as a " + name.toUpperCase() + "!").prefix().send(interactEvent.getPlayer());
                 return;
               }
@@ -197,7 +197,7 @@ public class MaterialMultiLocationItem implements CategoryItemHandler {
                 new MessageBuilder("&c&l✖ &cWarning | Server spawn protection is set to &6" + Bukkit.getServer().getSpawnRadius()
                     + " &cand location you want to place is in radius of this protection! &c&lNon opped players won't be able to interact with this " + checkMaterials + " and can't join the game! Reduce the spawn radius (server.properties) or change your location!").prefix().send(interactEvent.getPlayer());
               }
-              addLocation(interactEvent.getPlayer(), block.getLocation());
+              addLocation(interactEvent.getPlayer(), location.getBlock().getLocation());
               break;
             case RIGHT_CLICK_AIR:
               teleport(interactEvent.getPlayer());
