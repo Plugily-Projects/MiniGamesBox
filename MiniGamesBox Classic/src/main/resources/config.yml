@@ -42,7 +42,7 @@ Kit:
   Enabled: true
   # What is the default kit for players?
   # This should be the same name as the file name of the kits file in the kits folder
-  Default-Kit: knight
+  Default: "knight"
 
 Commands:
   # Commands which can be used in game, remove all of them to disable (only works if Block.In-Game.Commands = true)
@@ -193,4 +193,4 @@ Update-Notifier:
 # You edited it, huh? Next time hurt yourself!
 Do-Not-Edit:
   File-Version: 1
-  Core-Version: 2
+  Core-Version: 3

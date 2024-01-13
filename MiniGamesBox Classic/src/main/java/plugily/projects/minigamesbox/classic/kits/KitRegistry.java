@@ -272,7 +272,7 @@ public class KitRegistry {
    * @param defaultKitName name of the default kit
    */
   public void setDefaultKit(String defaultKitName) {
-    String defaultKitKey = plugin.getConfig().getString("Kit.Default-Kit", defaultKitName);
+    String defaultKitKey = plugin.getConfig().getString("Kit.Default", defaultKitName);
     AtomicReference<Kit> defaultKit = new AtomicReference<>(getKitByKey(defaultKitKey));
     if (defaultKit.get() == null) {
       if (getKits().isEmpty()) {

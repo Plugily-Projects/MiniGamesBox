@@ -44,7 +44,7 @@ import java.util.logging.Level;
 public class LanguageMigrator {
 
   public enum CoreFileVersion {
-    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(2), KITS(2),
+    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(3), KITS(2),
     LANGUAGE(2), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
@@ -144,6 +144,21 @@ public class LanguageMigrator {
             MigratorUtils.removeLineFromFile(file, "Separate-Arena-Chat: true");
             MigratorUtils.removeLineFromFile(file, "Separate-Arena-Chat: false");
             break;
+          case 2:
+            MigratorUtils.insertAfterLine(file, "Chat:", "  Format: true");
+            MigratorUtils.addNewLines(file, "# Kits configuration\n" +
+                "# A server restart is required for changes to apply\n" +
+                "Kit:\n" +
+                "  # Should we load kits?\n" +
+                "  Enabled: true\n" +
+                "  # What is the default kit for players?\n" +
+                "  # This should be the same name as the file name of the kits file in the kits folder\n" +
+                "  Default: \"knight\"\r\n");
+            MigratorUtils.removeLineFromFile(file, "# Enable in game (eg. '[KIT][LEVEL] Tigerpanzer_02: hey') special formatting?");
+            MigratorUtils.removeLineFromFile(file, "# Formatting is configurable in language.yml");
+            MigratorUtils.removeLineFromFile(file, "# You can use PlaceholderAPI placeholders in chat format!");
+            MigratorUtils.removeLineFromFile(file, "              Plugin-Chat-Format: true");
+            MigratorUtils.removeLineFromFile(file, "              Plugin-Chat-Format: false");
           default:
             break;
         }
@@ -151,7 +166,7 @@ public class LanguageMigrator {
       case LANGUAGE:
         switch(version) {
           case 1:
-            MigratorUtils.insertAfterLine(file, "Kit:", "  No-Armor: \"%color_chat_issue%%plugin_prefix% You can't wear armor with your kit!\"");
+            MigratorUtils.insertAfterLine(file, "Chat:", "  No-Armor: \"%color_chat_issue%%plugin_prefix% You can't wear armor with your kit!\"");
             break;
           default:
             break;
