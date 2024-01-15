@@ -61,6 +61,11 @@ public class PluginRestartingState implements ArenaStateHandler {
       arena.getMapRestorerManager().fullyRestoreArena();
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
+          for(Player player : Bukkit.getOnlinePlayers()) {
+            User user = plugin.getUserManager().getUser(player);
+            plugin.getUserManager().saveAllStatistic(user);
+            plugin.getUserManager().removeUser(user);
+          }
           plugin.getServer().shutdown();
         }
         plugin.getArenaRegistry().shuffleBungeeArena();

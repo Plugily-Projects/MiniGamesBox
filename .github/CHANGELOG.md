@@ -1,5 +1,6 @@
 ### 1.3.7 Release (15.01.2024)
 * Added playernames to FileStats
+* Saving users mysql stats before server shutdown on game end
 * Moved FoodLose/HungerLose to core
 * Fixed LanguageMigrator file version fetching
 * Fixed Java Heap Space issue when getProgressBar division zero
