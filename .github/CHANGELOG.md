@@ -1,3 +1,6 @@
+### 1.3.7 Release 
+* Moved FoodLose/HungerLose to core
+
 ### 1.3.6 Release (13.01.2024)
 * Fixed IAE Cannot measure distance between worlds if players are in different worlds
 * Fixed NPE on Setup MaterialLocationItem / Multi Handleritem RIGHT_CLICK_AIR

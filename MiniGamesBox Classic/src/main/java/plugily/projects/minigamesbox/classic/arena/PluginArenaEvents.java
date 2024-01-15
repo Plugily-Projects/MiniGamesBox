@@ -21,8 +21,10 @@ package plugily.projects.minigamesbox.classic.arena;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
@@ -94,6 +96,22 @@ public class PluginArenaEvents implements Listener {
         break;
       default:
         break;
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGH)
+  public void onFoodLevelChange(FoodLevelChangeEvent event) {
+    if (event.getEntity().getType() != EntityType.PLAYER) {
+      return;
+    }
+    Player player = (Player) event.getEntity();
+    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    if (arena == null) {
+      return;
+    }
+    if (!plugin.getConfigPreferences().getOption("HUNGER_LOSE")) {
+      event.setCancelled(true);
+      event.setFoodLevel(20);
     }
   }
 
