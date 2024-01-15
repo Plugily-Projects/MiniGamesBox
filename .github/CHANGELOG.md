@@ -1,6 +1,7 @@
 ### 1.3.7 Release 
 * Moved FoodLose/HungerLose to core
 * Fixed LanguageMigrator file version fetching
+* Fixed Java Heap Space issue when getProgressBar division zero
 
 ### 1.3.6 Release (13.01.2024)
 * Fixed IAE Cannot measure distance between worlds if players are in different worlds

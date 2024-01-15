@@ -54,6 +54,9 @@ public class StringFormatUtils {
    * @return String with requested progress
    */
   public static String getProgressBar(int current, int max, int totalBars, String symbol, String completedCharacter, String notCompletedCharacter) {
+    if(max == 0) {
+      max = current;
+    }
     float percent = (float) current / max;
     int progressBars = (int) (totalBars * percent);
     int leftOver = (totalBars - progressBars);
