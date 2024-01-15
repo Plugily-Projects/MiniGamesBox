@@ -150,7 +150,7 @@ public class LanguageMigrator {
                 "# A server restart is required for changes to apply\n" +
                 "Kit:\n" +
                 "  # Should we load kits?\n" +
-                "  Enabled: true\n" +
+                "  Enabled: false\n" +
                 "  # What is the default kit for players?\n" +
                 "  # This should be the same name as the file name of the kits file in the kits folder\n" +
                 "  Default: \"knight\"\r\n");
@@ -230,12 +230,12 @@ public class LanguageMigrator {
   }
 
   private void updateCoreFileVersion(File file, FileConfiguration fileConfiguration, int oldVersion, int newVersion) {
-    int fileVersion = fileConfiguration.getInt("Do-Not-Edit.Core-Version", 0);
+    int fileVersion = fileConfiguration.getInt("Do-Not-Edit.File-Version", 0);
     updateFileVersion(file, newVersion, oldVersion, fileVersion, fileVersion);
   }
 
   public void updatePluginFileVersion(File file, FileConfiguration fileConfiguration, int oldVersion, int newVersion) {
-    int coreVersion = fileConfiguration.getInt("Do-Not-Edit.File-Version", 0);
+    int coreVersion = fileConfiguration.getInt("Do-Not-Edit.Core-Version", 0);
     updateFileVersion(file, coreVersion, coreVersion, newVersion, oldVersion);
   }
 
