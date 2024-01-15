@@ -110,7 +110,7 @@ public class FileStats implements UserDatabase {
 
   @Override
   public String getPlayerName(UUID uuid) {
-    return Bukkit.getOfflinePlayer(uuid).getName();
+    return config.getString(uuid + ".playername", Bukkit.getOfflinePlayer(uuid).getName());
   }
 
   private void updateStats(User user) {
@@ -125,6 +125,7 @@ public class FileStats implements UserDatabase {
         }
       }
     });
+    config.set(uuid + ".playername", user.getPlayer().getName());
     ConfigUtils.saveConfig(plugin, config, "stats");
   }
 }

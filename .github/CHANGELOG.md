@@ -1,4 +1,5 @@
-### 1.3.7 Release 
+### 1.3.7 Release (15.01.2024)
+* Added playernames to FileStats
 * Moved FoodLose/HungerLose to core
 * Fixed LanguageMigrator file version fetching
 * Fixed Java Heap Space issue when getProgressBar division zero
