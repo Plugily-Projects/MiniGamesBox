@@ -44,7 +44,7 @@ import java.util.logging.Level;
 public class LanguageMigrator {
 
   public enum CoreFileVersion {
-    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(3), KITS(2),
+    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(4), KITS(2),
     LANGUAGE(2), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
@@ -150,7 +150,7 @@ public class LanguageMigrator {
                 "# A server restart is required for changes to apply\n" +
                 "Kit:\n" +
                 "  # Should we load kits?\n" +
-                "  Enabled: true\n" +
+                "  Enabled: false\n" +
                 "  # What is the default kit for players?\n" +
                 "  # This should be the same name as the file name of the kits file in the kits folder\n" +
                 "  Default: \"knight\"\r\n");
@@ -159,6 +159,12 @@ public class LanguageMigrator {
             MigratorUtils.removeLineFromFile(file, "# You can use PlaceholderAPI placeholders in chat format!");
             MigratorUtils.removeLineFromFile(file, "              Plugin-Chat-Format: true");
             MigratorUtils.removeLineFromFile(file, "              Plugin-Chat-Format: false");
+            break;
+          case 3:
+            MigratorUtils.removeLineFromFile(file, "  Food: false");
+            MigratorUtils.removeLineFromFile(file, "  True: false");
+            MigratorUtils.insertAfterLine(file, "Damage:", "  Hunger: false");
+            break;
           default:
             break;
         }
@@ -224,12 +230,12 @@ public class LanguageMigrator {
   }
 
   private void updateCoreFileVersion(File file, FileConfiguration fileConfiguration, int oldVersion, int newVersion) {
-    int fileVersion = fileConfiguration.getInt("Do-Not-Edit.Core-Version", 0);
+    int fileVersion = fileConfiguration.getInt("Do-Not-Edit.File-Version", 0);
     updateFileVersion(file, newVersion, oldVersion, fileVersion, fileVersion);
   }
 
   public void updatePluginFileVersion(File file, FileConfiguration fileConfiguration, int oldVersion, int newVersion) {
-    int coreVersion = fileConfiguration.getInt("Do-Not-Edit.File-Version", 0);
+    int coreVersion = fileConfiguration.getInt("Do-Not-Edit.Core-Version", 0);
     updateFileVersion(file, coreVersion, coreVersion, newVersion, oldVersion);
   }
 

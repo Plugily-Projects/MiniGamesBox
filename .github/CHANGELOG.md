@@ -1,3 +1,11 @@
+### 1.3.7 Release (15.01.2024)
+* Added playernames to FileStats
+* Saving users mysql stats before server shutdown on game end
+* Moved FoodLose/HungerLose to core
+* Fixed LanguageMigrator file version fetching
+* Fixed Java Heap Space issue when getProgressBar division zero
+* Fixed user kit is null if not selected
+
 ### 1.3.6 Release (13.01.2024)
 * Fixed IAE Cannot measure distance between worlds if players are in different worlds
 * Fixed NPE on Setup MaterialLocationItem / Multi Handleritem RIGHT_CLICK_AIR

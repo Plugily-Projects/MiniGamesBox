@@ -69,6 +69,9 @@ public class User {
   }
 
   public Kit getKit() {
+    if(kit == null) {
+      return plugin.getKitRegistry().getDefaultKit();
+    }
     return kit;
   }
 
