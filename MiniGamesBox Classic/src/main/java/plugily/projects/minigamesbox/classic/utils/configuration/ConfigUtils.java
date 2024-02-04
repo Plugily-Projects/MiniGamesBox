@@ -92,4 +92,41 @@ public class ConfigUtils {
       Bukkit.getConsoleSender().sendMessage("Create blank file " + name + ".yml or restart the server!");
     }
   }
+
+  /**
+   * Removes the extension from the given filename.
+   *
+   * @param filename the name of the file with extension
+   * @return the filename without the extension
+   */
+  public static String removeExtension(String filename) {
+    String ext = extension(filename);
+    if (ext.isEmpty()) {
+      return filename;
+    } else {
+      int index = filename.lastIndexOf(ext) - 1;
+      return filename.substring(0, index);
+    }
+  }
+
+  /**
+   * A function to extract the file extension from a given filename.
+   *
+   * @param filename the name of the file
+   * @return the file extension
+   */
+  private static String extension(String filename) {
+    int lastSep = filename.lastIndexOf(File.separatorChar);
+    int lastDot;
+    if (lastSep < 0) {
+      lastDot = filename.lastIndexOf(46);
+    } else {
+      lastDot = filename.substring(lastSep + 1).lastIndexOf(46);
+      if (lastDot >= 0) {
+        lastDot += lastSep + 1;
+      }
+    }
+
+    return lastDot >= 0 && lastDot > lastSep ? filename.substring(lastDot + 1) : "";
+  }
 }
