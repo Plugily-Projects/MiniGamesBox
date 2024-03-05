@@ -47,6 +47,7 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
+        relocate("org.openjdk.nashorn", "plugily.projects.minigamesbox.classic.utils.skript.nashorn")
         relocate("com.cryptomorin.xseries.particles", "plugily.projects.minigamesbox.classic.utils.version.xseries")
         relocate("com.cryptomorin.xseries", "plugily.projects.minigamesbox.classic.utils.version.xseries")
         relocate("me.tigerhix.lib.scoreboard", "plugily.projects.minigamesbox.classic.utils.scoreboard")
