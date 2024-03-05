@@ -1,3 +1,7 @@
+### 1.3.8 Release (xx.03.2024)
+* Relocated NashornScriptEngine to not conflict with other plugins with ScriptEngine
+* Fixed Arena stops if arena players are less than defined min players (developers: if needed plugin should call stopGame)
+
 ### 1.3.7 Release (15.01.2024)
 * Added playernames to FileStats
 * Saving users mysql stats before server shutdown on game end
