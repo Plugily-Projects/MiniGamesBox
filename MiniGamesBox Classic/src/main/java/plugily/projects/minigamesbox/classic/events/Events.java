@@ -35,6 +35,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -151,6 +152,23 @@ public class Events implements Listener {
           event.setCancelled(true);
         }
       }
+    }
+  }
+
+  @EventHandler
+  public void onPlayerCraft(CraftItemEvent event) {
+    if (!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ITEM_MOVE")) {
+      return;
+    }
+    if (!(event.getWhoClicked() instanceof Player)) {
+      return;
+    }
+    PluginArena arena = plugin.getArenaRegistry().getArena(((Player) event.getWhoClicked()));
+    if (arena == null) {
+      return;
+    }
+    if (arena.getArenaState() != ArenaState.IN_GAME) {
+      event.setCancelled(true);
     }
   }
 
