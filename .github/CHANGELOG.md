@@ -1,6 +1,7 @@
 ### 1.3.8 Release (xx.03.2024)
 * Relocated NashornScriptEngine to not conflict with other plugins with ScriptEngine
 * Fixed Arena stops if arena players are less than defined min players (developers: if needed plugin should call stopGame)
+* Fixed crafting was possible in rare cases if Item-Move option in config.yml disabled
 
 ### 1.3.7 Release (15.01.2024)
 * Added playernames to FileStats
