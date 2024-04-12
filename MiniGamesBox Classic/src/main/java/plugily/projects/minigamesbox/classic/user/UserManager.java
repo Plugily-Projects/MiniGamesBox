@@ -129,7 +129,7 @@ public class UserManager {
   }
 
   public void removeUser(User user) {
-    users.remove(user);
+    users.remove(user.getUniqueId());
   }
 
   public UserDatabase getDatabase() {
