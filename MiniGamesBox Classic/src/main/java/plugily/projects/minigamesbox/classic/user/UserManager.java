@@ -29,7 +29,9 @@ import plugily.projects.minigamesbox.classic.user.data.MysqlManager;
 import plugily.projects.minigamesbox.classic.user.data.UserDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Tigerpanzer_02
@@ -39,7 +41,7 @@ import java.util.List;
 public class UserManager {
 
   private final UserDatabase database;
-  private final List<User> users = new ArrayList<>();
+  private final HashMap<UUID, User> users = new HashMap<>();
   private final PluginMain plugin;
 
   public UserManager(PluginMain plugin) {
@@ -59,15 +61,13 @@ public class UserManager {
   public User getUser(Player player) {
     java.util.UUID playerId = player.getUniqueId();
 
-    for(User user : users) {
-      if(user.getUniqueId().equals(playerId)) {
-        return user;
-      }
+    if (users.containsKey(playerId)){
+      return users.get(playerId);
     }
 
     plugin.getDebugger().debug("Registering new user {0} ({1})", playerId, player.getName());
     User user = new User(playerId);
-    users.add(user);
+    users.put(playerId, user);
     return user;
   }
 
