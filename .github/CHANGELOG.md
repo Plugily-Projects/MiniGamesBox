@@ -2,6 +2,7 @@
 * Relocated NashornScriptEngine to not conflict with other plugins with ScriptEngine
 * Fixed Arena stops if arena players are less than defined min players (developers: if needed plugin should call stopGame)
 * Fixed crafting was possible in rare cases if Item-Move option in config.yml disabled
+* Updated to XSeries 9.10.0
 
 ### 1.3.7 Release (15.01.2024)
 * Added playernames to FileStats
