@@ -124,10 +124,14 @@ public class MysqlManager implements UserDatabase {
 
   @Override
   public void saveAllStatistic(User user) {
-    try {
-      Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> database.executeUpdate(getUpdateQuery(user)));
-    } catch(IllegalPluginAccessException ignored) {
-      database.executeUpdate(getUpdateQuery(user));
+    if (!user.isInitialized()){
+      plugin.getDebugger().debug("User been saving while is not is not initialized.");
+    } else {
+      try {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> database.executeUpdate(getUpdateQuery(user)));
+      } catch (IllegalPluginAccessException ignored) {
+        database.executeUpdate(getUpdateQuery(user));
+      }
     }
   }
 
@@ -145,6 +149,7 @@ public class MysqlManager implements UserDatabase {
         } else {
           createUserStats(user, uuid, statement, playerName);
         }
+        user.setInitialized(true);
       } catch(SQLException exception) {
         throwException(exception);
       }
