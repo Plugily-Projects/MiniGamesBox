@@ -2,6 +2,9 @@
 * Relocated NashornScriptEngine to not conflict with other plugins with ScriptEngine
 * Fixed Arena stops if arena players are less than defined min players (developers: if needed plugin should call stopGame)
 * Fixed crafting was possible in rare cases if Item-Move option in config.yml disabled
+* Fixed mysql user statistic reset when users got kicked directly from the server
+* Optimized statistic performance
+* Changed default language string In-Game.Join.Arena-Not_Configured to be less confusing
 * Updated to XSeries 9.10.0
 
 ### 1.3.7 Release (15.01.2024)
