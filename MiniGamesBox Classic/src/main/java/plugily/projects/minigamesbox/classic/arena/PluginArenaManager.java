@@ -235,11 +235,11 @@ public class PluginArenaManager {
 
     User user = plugin.getUserManager().getUser(player);
 
-    if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && (arena.getPlayers().isEmpty() || arena.getPlayers().size() < arena.getMinimumPlayers())) {
-      stopGame(true, arena);
-      arena.getPlugin().getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
-    }
     if(!user.isSpectator()) {
+      if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
+        stopGame(true, arena);
+        arena.getPlugin().getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
+      }
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
     plugin.getUserManager().saveAllStatistic(user);

@@ -46,6 +46,7 @@ public class User {
   private Kit kit;
   private final Map<StatisticType, Integer> stats = new HashMap<>();
   private final Map<String, Double> cooldowns = new HashMap<>();
+  private boolean initialized;
 
   @Deprecated
   public User(Player player) {
@@ -170,4 +171,11 @@ public class User {
     return cooldown <= cooldownCounter ? 0 : cooldown - cooldownCounter;
   }
 
+  public boolean isInitialized() {
+    return initialized;
+  }
+
+  public void setInitialized(boolean initialized) {
+    this.initialized = initialized;
+  }
 }

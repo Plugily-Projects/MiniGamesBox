@@ -24,7 +24,7 @@ plugins {
 
 dependencies {
     implementation("me.tigerhix.lib:scoreboard:1.4.3") { isTransitive = false }
-    implementation("com.github.cryptomorin:XSeries:9.8.0") { isTransitive = false }
+    implementation("com.github.cryptomorin:XSeries:9.10.0") { isTransitive = false }
     implementation(project(":MiniGamesBox-Inventory", "shadow"))
     implementation(project(":MiniGamesBox-Database", "shadow"))
     implementation(project(":MiniGamesBox-Utils", "shadow"))
@@ -47,6 +47,7 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
+        relocate("org.openjdk.nashorn", "plugily.projects.minigamesbox.classic.utils.skript.nashorn")
         relocate("com.cryptomorin.xseries.particles", "plugily.projects.minigamesbox.classic.utils.version.xseries")
         relocate("com.cryptomorin.xseries", "plugily.projects.minigamesbox.classic.utils.version.xseries")
         relocate("me.tigerhix.lib.scoreboard", "plugily.projects.minigamesbox.classic.utils.scoreboard")
