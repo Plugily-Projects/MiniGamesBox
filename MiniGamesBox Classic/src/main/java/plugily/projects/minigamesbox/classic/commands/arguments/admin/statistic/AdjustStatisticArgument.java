@@ -23,12 +23,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.api.stats.IStatisticType;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.number.NumberUtils;
 
 /**
@@ -74,7 +74,7 @@ public class AdjustStatisticArgument {
         java.util.Optional<Integer> opt = NumberUtils.parseInt(args[3]);
 
         if(opt.isPresent()) {
-          User user = registry.getPlugin().getUserManager().getUser(target);
+          IUser user = registry.getPlugin().getUserManager().getUser(target);
           if(set) {
             user.setStatistic(statisticType, opt.get());
           } else {

@@ -25,6 +25,12 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.TestOnly;
+import plugily.projects.minigamesbox.api.IPluginMain;
+import plugily.projects.minigamesbox.api.handlers.language.ILanguageManager;
+import plugily.projects.minigamesbox.api.kit.IKitRegistry;
+import plugily.projects.minigamesbox.api.preferences.IConfigPreferences;
+import plugily.projects.minigamesbox.api.user.IUserManager;
+import plugily.projects.minigamesbox.api.utils.misc.IDebugger;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaManager;
@@ -92,7 +98,7 @@ import java.util.logging.Level;
  * <p>
  * Created at 12.09.2021
  */
-public class PluginMain extends JavaPlugin {
+public class PluginMain extends JavaPlugin implements IPluginMain {
 
   private final String pluginMessagePrefix = "[" + getDescription().getName() + "] ";
   private String pluginNamePrefix;
@@ -406,11 +412,13 @@ public class PluginMain extends JavaPlugin {
     return pluginMessagePrefix;
   }
 
-  public Debugger getDebugger() {
+  @Override
+  public IDebugger getDebugger() {
     return debugger;
   }
 
-  public ConfigPreferences getConfigPreferences() {
+  @Override
+  public IConfigPreferences getConfigPreferences() {
     return configPreferences;
   }
 
@@ -426,7 +434,8 @@ public class PluginMain extends JavaPlugin {
     return messageUtils;
   }
 
-  public UserManager getUserManager() {
+  @Override
+  public IUserManager getUserManager() {
     return userManager;
   }
 
@@ -498,18 +507,22 @@ public class PluginMain extends JavaPlugin {
     return internalData;
   }
 
+  @Override
   public String getPluginNamePrefix() {
     return pluginNamePrefix;
   }
 
+  @Override
   public String getPluginNamePrefixLong() {
     return pluginNamePrefixLong;
   }
 
+  @Override
   public String getCommandAdminPrefix() {
     return pluginNamePrefix + "a";
   }
 
+  @Override
   public String getCommandAdminPrefixLong() {
     return pluginNamePrefixLong + "admin";
   }
@@ -518,7 +531,8 @@ public class PluginMain extends JavaPlugin {
     return arenaRegistry;
   }
 
-  public KitRegistry getKitRegistry() {
+  @Override
+  public IKitRegistry getKitRegistry() {
     return kitRegistry;
   }
 
@@ -526,7 +540,8 @@ public class PluginMain extends JavaPlugin {
     return messageManager;
   }
 
-  public LanguageManager getLanguageManager() {
+  @Override
+  public ILanguageManager getLanguageManager() {
     return languageManager;
   }
 

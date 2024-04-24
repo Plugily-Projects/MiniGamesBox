@@ -27,8 +27,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.preferences.ICommandShorter;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
@@ -45,7 +45,7 @@ public class PluginArenaEvents implements Listener {
 
   @EventHandler
   public void playerCommandExecution(PlayerCommandPreprocessEvent event) {
-    for(CommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
+    for(ICommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
       if(event.getMessage().equalsIgnoreCase(commandShorter.getShortCommand())) {
         event.getPlayer().performCommand(commandShorter.getExecuteCommand());
         event.setCancelled(true);

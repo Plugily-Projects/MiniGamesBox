@@ -23,10 +23,10 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.arena.managers.IBossbarManager;
-import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  */
 public class BossbarManager implements IBossbarManager {
 
-  private final PluginMain plugin;
+  private final IPluginMain plugin;
   private final PluginArena arena;
   private final int interval;
   private int currentLine;
@@ -60,13 +60,13 @@ public class BossbarManager implements IBossbarManager {
 
     String bossBarTitle = new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).build();
 
-    for (IArenaState IArenaState : IArenaState.values()) {
-      if (IArenaState == IArenaState.FULL_GAME) {
+    for (IArenaState arenaState : IArenaState.values()) {
+      if (arenaState == IArenaState.FULL_GAME) {
         continue;
       }
-      List<String> titlesList = plugin.getLanguageManager().getLanguageList("Bossbar.Content." + IArenaState.getFormattedName());
+      List<String> titlesList = plugin.getLanguageManager().getLanguageList("Bossbar.Content." + arenaState.getFormattedName());
       titlesList.add(bossBarTitle);
-      bossbarLines.put(IArenaState, titlesList);
+      bossbarLines.put(arenaState, titlesList);
     }
     plugin.getDebugger().debug("Arena {0} loaded Bossbar content: {1}", arena.getId(), bossbarLines.toString());
   }

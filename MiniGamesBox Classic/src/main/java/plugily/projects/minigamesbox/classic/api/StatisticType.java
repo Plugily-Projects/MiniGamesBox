@@ -33,7 +33,6 @@ public class StatisticType implements IStatisticType {
 
   private static final Map<String, StatisticType> statistics = new HashMap<>();
 
-
   static {
     statistics.put("WINS", new StatisticType("wins", true, "int(11) NOT NULL DEFAULT '0'", true));
     statistics.put("LOSES", new StatisticType("loses", true, "int(11) NOT NULL DEFAULT '0'", true));

@@ -31,6 +31,8 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerSwapHandItemsEvent;
 
+import java.util.HashSet;
+
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -92,10 +94,10 @@ public class SpecialItemEvent implements Listener {
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
 
     if(arena == null) {
-      plugin.getRewardsHandler().performReward(player, relatedSpecialItem.getRewards());
+      plugin.getRewardsHandler().performReward(player, new HashSet<>(relatedSpecialItem.getRewards()));
       return;
     }
-    plugin.getRewardsHandler().performReward(player, arena, relatedSpecialItem.getRewards());
+    plugin.getRewardsHandler().performReward(player, arena, new HashSet<>(relatedSpecialItem.getRewards()));
     if(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").getPath().equals(relatedSpecialItem.getPath())) {
       PluginArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
       return;

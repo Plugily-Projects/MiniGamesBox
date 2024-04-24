@@ -26,16 +26,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
+import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameStateChangeEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.managers.BossbarManager;
 import plugily.projects.minigamesbox.classic.arena.managers.PluginMapRestorerManager;
 import plugily.projects.minigamesbox.classic.arena.managers.PluginScoreboardManager;
 import plugily.projects.minigamesbox.classic.arena.options.ArenaOption;
 import plugily.projects.minigamesbox.classic.arena.states.*;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -86,7 +87,6 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     loadArenaOptions();
   }
 
-  @Override
   public void loadArenaOptions() {
     arenaOptions.clear();
     arenaOptions = plugin.getArenaOptionManager().getDefaultArenaOptions();
@@ -238,6 +238,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     return id;
   }
 
+  @Override
   public int getMinimumPlayers() {
     return getArenaOption("MINIMUM_PLAYERS");
   }
@@ -276,6 +277,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     setArenaOption("TIMER", timer);
   }
 
+  @Override
   public int getMaximumPlayers() {
     return getArenaOption("MAXIMUM_PLAYERS");
   }
@@ -313,6 +315,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     plugin.getSignManager().updateSigns();
   }
 
+  @Override
   @NotNull
   public Set<Player> getPlayers() {
     return players;
@@ -385,10 +388,11 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
 
 
   @NotNull
+  @Override
   public List<Player> getPlayersLeft() {
     List<Player> playersLeft = new ArrayList<>();
 
-    for (User user : plugin.getUserManager().getUsers(this)) {
+    for (IUser user : plugin.getUserManager().getUsers(this)) {
       if (!user.isSpectator()) {
         playersLeft.add(user.getPlayer());
       }
@@ -397,7 +401,8 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     return playersLeft;
   }
 
-  public PluginMain getPlugin() {
+  @Override
+  public IPluginMain getPlugin() {
     return plugin;
   }
 

@@ -16,24 +16,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event.game;
+package plugily.projects.minigamesbox.api.events.game;
 
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
- * Called when arena has started
+ * Called when arena game state has changed
  */
-public class PlugilyGameStartEvent extends PlugilyEvent {
+public class PlugilyGameStateChangeEvent extends PlugilyEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
+  private final IArenaState IArenaState;
 
-  public PlugilyGameStartEvent(PluginArena arena) {
-    super(arena);
+  public PlugilyGameStateChangeEvent(IPluginArena eventArena, IArenaState IArenaState) {
+    super(eventArena);
+    this.IArenaState = IArenaState;
   }
 
   public static HandlerList getHandlerList() {
@@ -45,4 +48,7 @@ public class PlugilyGameStartEvent extends PlugilyEvent {
     return HANDLERS;
   }
 
+  public IArenaState getArenaState() {
+    return IArenaState;
+  }
 }

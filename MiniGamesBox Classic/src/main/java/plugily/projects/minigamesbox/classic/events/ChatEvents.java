@@ -23,10 +23,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.ArrayList;
 
@@ -82,7 +82,7 @@ public class ChatEvents implements Listener {
     }
   }
 
-  private String formatChatPlaceholders(User user, PluginArena arena) {
+  private String formatChatPlaceholders(IUser user, PluginArena arena) {
     String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().getRaw();
     if(user.isSpectator()) {
       if(formatted.contains("%kit%")) {

@@ -27,6 +27,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
@@ -74,7 +75,7 @@ public class PluginArenaUtils {
 
   public static void preparePlayerForGame(
       PluginArena arena, Player player, Location location, boolean spectator) {
-    User user = plugin.getUserManager().getUser(player);
+    IUser user = plugin.getUserManager().getUser(player);
     if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
       InventorySerializer.saveInventoryToFile(plugin, player);
     }
@@ -126,7 +127,7 @@ public class PluginArenaUtils {
         VersionUtils.showPlayer(plugin, players, player);
       }
     }
-    User user = plugin.getUserManager().getUser(player);
+    IUser user = plugin.getUserManager().getUser(player);
     user.setSpectator(false);
     user.setPermanentSpectator(false);
 

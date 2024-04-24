@@ -22,13 +22,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameStartEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.helper.SoundHelper;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -106,7 +106,7 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setLevel(0);
         player.getInventory().clear();
         player.setGameMode(GameMode.SURVIVAL);
-        User user = plugin.getUserManager().getUser(player);
+        IUser user = plugin.getUserManager().getUser(player);
         if(plugin.getConfigPreferences().getOption("KITS")) {
           user.getKit().giveKitItems(player);
         }

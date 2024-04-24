@@ -15,20 +15,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package plugily.projects.minigamesbox.classic.handlers.powerup;
+
+package plugily.projects.minigamesbox.api.handlers.powerup;
 
 import com.cryptomorin.xseries.XMaterial;
-import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
+import plugily.projects.minigamesbox.api.handlers.reward.IReward;
 
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 08.10.2021
- */
-/**
  * The interface for power-ups
  */
 public interface BasePowerup {
@@ -70,9 +70,9 @@ public interface BasePowerup {
    *
    * @return the pickup consumer
    */
-  Consumer<PowerupPickupHandler> getOnPickup();
+  Consumer<IPowerupPickupHandler> getOnPickup();
 
-  Set<Reward> getRewards();
+  Set<IReward> getRewards();
 
   enum PotionType {
     PLAYER, ALL

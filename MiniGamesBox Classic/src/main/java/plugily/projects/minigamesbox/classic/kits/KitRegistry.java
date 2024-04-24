@@ -23,6 +23,8 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.api.kit.IKit;
+import plugily.projects.minigamesbox.api.kit.IKitRegistry;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.kits.basekits.FreeKit;
 import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
@@ -42,12 +44,12 @@ import java.util.logging.Level;
  * <p>
  * Created at 21.09.2021
  */
-public class KitRegistry {
+public class KitRegistry implements IKitRegistry {
 
   private static HandleItem handleItem;
-  public final List<Kit> kits = new java.util.ArrayList<>();
+  public final List<IKit> kits = new java.util.ArrayList<>();
   public final PluginMain plugin;
-  private Kit defaultKit;
+  private IKit defaultKit;
 
   public KitRegistry(PluginMain plugin) {
     this.plugin = plugin;
@@ -61,14 +63,10 @@ public class KitRegistry {
     KitRegistry.handleItem = handleItem;
   }
 
-  /**
-   * Method for registering clone and empty kit
-   *
-   * @param kit Kit to register
-   */
-  public void registerKit(Kit kit) {
+  @Override
+  public void registerKit(IKit kit) {
     if (!plugin.getConfigPreferences().getOption("KITS")) {
-      plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKit method will not be ran.");
+      plugin.getDebugger().performance("Kit", "Kits are disabled, thus registerKit method will not be ran.");
       plugin.getDebugger().debug("Kit " + kit.getKey() + " can't be added as kits are disabled");
       return;
     }
@@ -92,7 +90,7 @@ public class KitRegistry {
    */
   public void registerKits(List<String> optionalConfigurations) {
     if (!plugin.getConfigPreferences().getOption("KITS")) {
-      plugin.getDebugger().performance("Kit","Kits are disabled, thus registerKits method will not be ran.");
+      plugin.getDebugger().performance("Kit", "Kits are disabled, thus registerKits method will not be ran.");
       return;
     }
     try {
@@ -242,12 +240,8 @@ public class KitRegistry {
     kits.add(kit);
   }
 
-  /**
-   * Return default game kit
-   *
-   * @return default game kit
-   */
-  public Kit getDefaultKit() {
+  @Override
+  public IKit getDefaultKit() {
     if (defaultKit == null) {
       setDefaultKit(new EmptyKit("default", "default"));
     }
@@ -272,7 +266,7 @@ public class KitRegistry {
    */
   public void setDefaultKit(String defaultKitName) {
     String defaultKitKey = plugin.getConfig().getString("Kit.Default", defaultKitName);
-    AtomicReference<Kit> defaultKit = new AtomicReference<>(getKitByKey(defaultKitKey));
+    AtomicReference<IKit> defaultKit = new AtomicReference<>(getKitByKey(defaultKitKey));
     if (defaultKit.get() == null) {
       if (getKits().isEmpty()) {
         plugin.getDebugger().debug(Level.SEVERE, "Default kit set is not found and there are no available kits.");
@@ -280,7 +274,7 @@ public class KitRegistry {
         plugin.onDisable();
         return;
       }
-      getKits().stream().filter(Kit::isUnlockedOnDefault).findFirst().ifPresent(defaultKit::set);
+      getKits().stream().filter(IKit::isUnlockedOnDefault).findFirst().ifPresent(defaultKit::set);
       if (defaultKit.get() == null) {
         plugin.getDebugger().debug(Level.SEVERE, "Default kit set is not found and there are no available free kits.");
         plugin.getDebugger().debug(Level.SEVERE, "Please add free kits to the 'kits' folder and restart the server");
@@ -293,23 +287,15 @@ public class KitRegistry {
     this.defaultKit = defaultKit.get();
   }
 
-  /**
-   * Returns all available kits
-   *
-   * @return list of all registered kits
-   */
-  public List<Kit> getKits() {
+
+  @Override
+  public List<IKit> getKits() {
     return kits;
   }
 
-  /**
-   * Retrieves a Kit object based on the provided key.
-   *
-   * @param key the key used to search for the Kit
-   * @return the Kit object with the matching key, or null if not found
-   */
-  public Kit getKitByKey(String key) {
-    for (Kit kit : kits) {
+  @Override
+  public IKit getKitByKey(String key) {
+    for (IKit kit : kits) {
       if (kit.getKey().equalsIgnoreCase(key)) {
         return kit;
       }
@@ -317,14 +303,10 @@ public class KitRegistry {
     return null;
   }
 
-  /**
-   * Retrieves a Kit object from the 'kits' list by its name.
-   *
-   * @param key the name of the Kit object to retrieve
-   * @return the Kit object with the specified name, or null if not found
-   */
-  public Kit getKitByName(String key) {
-    for (Kit kit : kits) {
+
+  @Override
+  public IKit getKitByName(String key) {
+    for (IKit kit : kits) {
       if (kit.getName().equalsIgnoreCase(key)) {
         return kit;
       }

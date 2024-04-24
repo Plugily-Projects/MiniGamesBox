@@ -16,28 +16,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event.game;
+package plugily.projects.minigamesbox.api.events.game;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.api.arena.IArenaState;
-import plugily.projects.minigamesbox.api.events.game.IPlugilyGameStateChangeEvent;
-import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
- * Called when arena game state has changed
+ * Called when player is attempting to join arena
  */
-public class PlugilyGameStateChangeEvent extends PlugilyEvent implements IPlugilyGameStateChangeEvent {
+public class PlugilyGameJoinAttemptEvent extends PlugilyEvent implements Cancellable {
 
   private static final HandlerList HANDLERS = new HandlerList();
-  private final IArenaState IArenaState;
+  private final Player player;
+  private boolean isCancelled;
 
-  public PlugilyGameStateChangeEvent(PluginArena eventArena, IArenaState IArenaState) {
-    super(eventArena);
-    this.IArenaState = IArenaState;
+  public PlugilyGameJoinAttemptEvent(Player player, IPluginArena targetArena) {
+    super(targetArena);
+    this.player = player;
+    isCancelled = false;
   }
 
   public static HandlerList getHandlerList() {
@@ -45,12 +47,22 @@ public class PlugilyGameStateChangeEvent extends PlugilyEvent implements IPlugil
   }
 
   @Override
+  public boolean isCancelled() {
+    return isCancelled;
+  }
+
+  @Override
+  public void setCancelled(boolean isCancelled) {
+    this.isCancelled = isCancelled;
+  }
+
+  public Player getPlayer() {
+    return player;
+  }
+
+  @Override
   public HandlerList getHandlers() {
     return HANDLERS;
   }
 
-  @Override
-  public IArenaState getArenaState() {
-    return IArenaState;
-  }
 }

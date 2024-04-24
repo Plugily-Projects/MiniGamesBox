@@ -20,14 +20,15 @@ package plugily.projects.minigamesbox.classic.user;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.stats.IStatisticType;
+import plugily.projects.minigamesbox.api.user.IUser;
+import plugily.projects.minigamesbox.api.user.IUserManager;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.data.FileStats;
 import plugily.projects.minigamesbox.classic.user.data.MysqlManager;
-import plugily.projects.minigamesbox.classic.user.data.UserDatabase;
+import plugily.projects.minigamesbox.api.user.data.UserDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ import java.util.UUID;
  * <p>
  * Created at 01.11.2021
  */
-public class UserManager {
+public class UserManager implements IUserManager {
 
   private final UserDatabase database;
   private final HashMap<UUID, User> users = new HashMap<>();
@@ -59,6 +60,7 @@ public class UserManager {
     Bukkit.getServer().getOnlinePlayers().stream().map(this::getUser).forEach(this::loadStatistics);
   }
 
+  @Override
   public User getUser(Player player) {
     java.util.UUID playerId = player.getUniqueId();
 
@@ -72,22 +74,25 @@ public class UserManager {
     return user;
   }
 
-  public List<User> getUsers(PluginArena arena) {
+  @Override
+  public List<IUser> getUsers(IPluginArena arena) {
     List<User> users = new ArrayList<>(arena.getPlayers().size());
 
     for (Player player : arena.getPlayers()) {
       users.add(getUser(player));
     }
 
-    return users;
+    return new ArrayList<>(users);
   }
 
-  public void saveStatistic(User user, StatisticType stat) {
+  @Override
+  public void saveStatistic(IUser user, IStatisticType stat) {
     if(stat.isPersistent()) {
       database.saveStatistic(user, stat);
     }
   }
 
+  @Override
   public void addExperience(Player player, int i) {
     User user = getUser(player);
     int expBoost = plugin.getPermissionsManager().getPermissionCategoryValue("EXP_BOOSTER", player);
@@ -96,16 +101,19 @@ public class UserManager {
     updateLevelStat(user, plugin.getArenaRegistry().getArena(player));
   }
 
-  public void addStat(Player player, StatisticType stat) {
+  @Override
+  public void addStat(Player player, IStatisticType stat) {
     addStat(getUser(player), stat);
   }
 
-  public void addStat(User user, IStatisticType stat) {
+  @Override
+  public void addStat(IUser user, IStatisticType stat) {
     user.adjustStatistic(stat, 1);
     updateLevelStat(user, user.getArena());
   }
 
-  public void updateLevelStat(User user, PluginArena arena) {
+  @Override
+  public void updateLevelStat(IUser user, IPluginArena arena) {
     IStatisticType nextLevelExp = plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP");
 
     if(user.getStatistic(nextLevelExp) < user.getStatistic(plugin.getStatsStorage().getStatisticType("EXP"))) {
@@ -121,18 +129,22 @@ public class UserManager {
     }
   }
 
-  public void saveAllStatistic(User user) {
+  @Override
+  public void saveAllStatistic(IUser user) {
     database.saveAllStatistic(user);
   }
 
-  public void loadStatistics(User user) {
+  @Override
+  public void loadStatistics(IUser user) {
     database.loadStatistics(user);
   }
 
-  public void removeUser(User user) {
+  @Override
+  public void removeUser(IUser user) {
     users.remove(user.getUniqueId());
   }
 
+  @Override
   public UserDatabase getDatabase() {
     return database;
   }

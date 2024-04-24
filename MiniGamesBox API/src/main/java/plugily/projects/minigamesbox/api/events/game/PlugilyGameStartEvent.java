@@ -16,38 +16,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event;
+package plugily.projects.minigamesbox.api.events.game;
 
-import org.bukkit.event.Event;
-import org.bukkit.plugin.java.JavaPlugin;
-import plugily.projects.minigamesbox.api.events.IPlugilyEvent;
-import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
 
 /**
- * Represents Plugily Projects game related events.
+ * @author Tigerpanzer_02
+ * <p>
+ * Created at 21.09.2021
+ * Called when arena has started
  */
-public abstract class PlugilyEvent extends Event implements IPlugilyEvent {
+public class PlugilyGameStartEvent extends PlugilyEvent {
 
-  protected PluginArena arena;
-  protected String pluginName;
+  private static final HandlerList HANDLERS = new HandlerList();
 
-  public PlugilyEvent(PluginArena eventArena) {
-    arena = eventArena;
-    if(arena != null) {
-      pluginName = eventArena.getPlugin().getName();
-    } else {
-      pluginName = JavaPlugin.getPlugin(PluginMain.class).getName();
-    }
+  public PlugilyGameStartEvent(IPluginArena arena) {
+    super(arena);
+  }
+
+  public static HandlerList getHandlerList() {
+    return HANDLERS;
   }
 
   @Override
-  public PluginArena getArena() {
-    return arena;
+  public @NotNull HandlerList getHandlers() {
+    return HANDLERS;
   }
 
-  @Override
-  public String getPluginName() {
-    return pluginName;
-  }
 }

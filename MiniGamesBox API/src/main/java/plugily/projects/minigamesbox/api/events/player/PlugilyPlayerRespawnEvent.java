@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event.player;
+package plugily.projects.minigamesbox.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
 
 /**
  * Called when the player respawns on wave end
@@ -33,7 +33,7 @@ public class PlugilyPlayerRespawnEvent extends PlugilyEvent implements Cancellab
     private final Player player;
     private boolean isCancelled = false;
 
-    public PlugilyPlayerRespawnEvent(Player player, PluginArena arena) {
+    public PlugilyPlayerRespawnEvent(Player player, IPluginArena arena) {
         super(arena);
         this.player = player;
     }

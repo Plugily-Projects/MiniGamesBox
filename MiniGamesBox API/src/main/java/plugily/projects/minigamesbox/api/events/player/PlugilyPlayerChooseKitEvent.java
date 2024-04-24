@@ -1,5 +1,3 @@
-
-
 /*
  *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
  *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
@@ -18,50 +16,45 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event.player;
+package plugily.projects.minigamesbox.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.handlers.powerup.BasePowerup;
-import plugily.projects.minigamesbox.classic.handlers.powerup.PowerupRegistry;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
+import plugily.projects.minigamesbox.api.kit.IKit;
 
 /**
  * @author Tigerpanzer_02
- * @see PowerupRegistry
  * <p>
- * Called when player pick up a power-up.
+ * Created at 21.09.2021
+ * Called when player choose kit ingame
  */
-public class PlugilyPlayerPowerupPickupEvent extends PlugilyEvent implements Cancellable {
+public class PlugilyPlayerChooseKitEvent extends PlugilyEvent implements Cancellable {
 
-  private static final HandlerList HANDLERS = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   private final Player player;
-  private final BasePowerup powerup;
-  private boolean isCancelled = false;
+  private final IKit kit;
+  private boolean isCancelled;
 
-  public PlugilyPlayerPowerupPickupEvent(PluginArena eventArena, Player player, BasePowerup powerup) {
-    super(eventArena);
+  public PlugilyPlayerChooseKitEvent(Player player, IKit kit, IPluginArena arena) {
+    super(arena);
     this.player = player;
-    this.powerup = powerup;
+    this.kit = kit;
+    isCancelled = false;
   }
 
   public static HandlerList getHandlerList() {
-    return HANDLERS;
+    return handlers;
   }
 
   public Player getPlayer() {
     return player;
   }
 
-  public BasePowerup getPowerup() {
-    return powerup;
-  }
-
-  @Override
-  public HandlerList getHandlers() {
-    return HANDLERS;
+  public IKit getKit() {
+    return kit;
   }
 
   @Override
@@ -72,5 +65,10 @@ public class PlugilyPlayerPowerupPickupEvent extends PlugilyEvent implements Can
   @Override
   public void setCancelled(boolean cancelled) {
     isCancelled = cancelled;
+  }
+
+  @Override
+  public HandlerList getHandlers() {
+    return handlers;
   }
 }

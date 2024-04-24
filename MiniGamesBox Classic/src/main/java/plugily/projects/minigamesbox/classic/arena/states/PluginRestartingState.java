@@ -21,11 +21,11 @@ package plugily.projects.minigamesbox.classic.arena.states;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.HashSet;
@@ -62,7 +62,7 @@ public class PluginRestartingState implements ArenaStateHandler {
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
           for(Player player : Bukkit.getOnlinePlayers()) {
-            User user = plugin.getUserManager().getUser(player);
+            IUser user = plugin.getUserManager().getUser(player);
             plugin.getUserManager().saveAllStatistic(user);
             plugin.getUserManager().removeUser(user);
           }

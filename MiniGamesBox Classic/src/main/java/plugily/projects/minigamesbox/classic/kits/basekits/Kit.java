@@ -23,9 +23,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.api.IPluginMain;
+import plugily.projects.minigamesbox.api.kit.IKit;
+import plugily.projects.minigamesbox.api.kit.ability.IKitAbility;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.kits.ability.KitAbility;
 import plugily.projects.minigamesbox.classic.kits.KitRegistry;
+import plugily.projects.minigamesbox.classic.kits.ability.KitAbility;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ import java.util.logging.Level;
  * <p>
  * Created at 21.09.2021
  */
-public class Kit {
+public class Kit implements IKit {
 
   private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
@@ -72,10 +75,12 @@ public class Kit {
     this.itemStack = itemStack;
   }
 
+  @Override
   public boolean isUnlockedByPlayer(Player p) {
     return false;
   }
 
+  @Override
   public boolean isUnlockedOnDefault() {
     return unlockedOnDefault;
   }
@@ -88,6 +93,7 @@ public class Kit {
     kitItems.put(item, slot);
   }
 
+  @Override
   public HashMap<ItemStack, Integer> getKitItems() {
     return kitItems;
   }
@@ -96,10 +102,9 @@ public class Kit {
     this.kitItems = kitItems;
   }
 
-  /**
-   * @return main plugin
-   */
-  public PluginMain getPlugin() {
+
+  @Override
+  public IPluginMain getPlugin() {
     return plugin;
   }
 
@@ -115,11 +120,7 @@ public class Kit {
     kitsConfig = ConfigUtils.getConfig(plugin, "/kits/" + key);
   }
 
-  /**
-   * Retrieves the name of the object.
-   *
-   * @return the name of the object
-   */
+  @Override
   public String getName() {
     return name;
   }
@@ -135,6 +136,7 @@ public class Kit {
     }
   }
 
+  @Override
   public String getKey() {
     if(key.isEmpty()) {
       return name;
@@ -142,16 +144,19 @@ public class Kit {
     return key;
   }
 
+  @Override
   public ItemStack getItemStack() {
     ItemStack itemStack1 = itemStack;
     itemStack1.setAmount(1);
     return itemStack1;
   }
 
+  @Override
   public ArrayList<String> getDescription() {
     return new ArrayList<>(description);
   }
 
+  @Override
   public void giveKitItems(Player player) {
     player.getInventory().clear();
     player.getInventory().setArmorContents(null);
@@ -181,9 +186,8 @@ public class Kit {
     return key;
   }
 
-  /**
-   * @return Returns the configuration section for the kit
-   */
+
+  @Override
   public ConfigurationSection getKitConfigSection() {
     ConfigurationSection configurationSection = kitsConfig.getConfigurationSection(getKitConfigPath());
     if(configurationSection == null) {
@@ -258,7 +262,8 @@ public class Kit {
     }
   }
 
-  public boolean hasAbility(KitAbility kitAbility) {
+  @Override
+  public boolean hasAbility(IKitAbility kitAbility) {
     return kitAbilities.contains(kitAbility);
   }
 

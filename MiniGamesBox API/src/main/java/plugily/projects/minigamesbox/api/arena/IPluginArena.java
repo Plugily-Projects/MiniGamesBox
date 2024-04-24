@@ -1,17 +1,21 @@
 package plugily.projects.minigamesbox.api.arena;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.arena.managers.IBossbarManager;
-import plugily.projects.minigamesbox.api.events.game.IPlugilyGameStateChangeEvent;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameStateChangeEvent;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Lagggpixel
  * @since April 24, 2024
  */
 public interface IPluginArena {
-  void loadArenaOptions();
 
   /**
    * Returns whether option value is true or false
@@ -37,6 +41,8 @@ public interface IPluginArena {
    * @see IPluginArenaRegistry#getArena(String)
    */
   String getId();
+
+  int getMinimumPlayers();
 
   /**
    * Get arena map name.
@@ -75,6 +81,8 @@ public interface IPluginArena {
    */
   void setTimer(int timer, boolean forceArenaTimer);
 
+  int getMaximumPlayers();
+
   /**
    * Gets the current arena state
    * @return The current arena state
@@ -88,7 +96,7 @@ public interface IPluginArena {
    * @param ArenaState      new game state of arena
    * @param forceArenaState should it force the arenaState?
    * @see IArenaState
-   * @see IPlugilyGameStateChangeEvent
+   * @see PlugilyGameStateChangeEvent
    */
   void setArenaState(@NotNull IArenaState ArenaState, boolean forceArenaState);
 
@@ -98,9 +106,16 @@ public interface IPluginArena {
    *
    * @param ArenaState new game state of arena
    * @see IArenaState
-   * @see IPlugilyGameStateChangeEvent
+   * @see PlugilyGameStateChangeEvent
    */
   void setArenaState(@NotNull IArenaState ArenaState);
+
+
+  /**
+   * Gets all the players in the arena
+   * @return a set containing all the players
+   */
+  @NotNull Set<Player> getPlayers();
 
   /**
    * Get spectator location of arena.
@@ -115,6 +130,14 @@ public interface IPluginArena {
    * @param spectatorLoc new end location of arena
    */
   void setSpectatorLocation(Location spectatorLoc);
+
+  @NotNull List<Player> getPlayersLeft();
+
+  /**
+   * Returns the plugin main class
+   * @return plugin main
+   */
+  IPluginMain getPlugin();
 
   enum IBarAction {
     ADD, REMOVE;

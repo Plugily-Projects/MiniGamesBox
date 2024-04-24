@@ -23,16 +23,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameJoinAttemptEvent;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameLeaveAttemptEvent;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameStopEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameLeaveAttemptEvent;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStopEvent;
 import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.language.TitleBuilder;
 import plugily.projects.minigamesbox.classic.handlers.party.GameParty;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -59,7 +59,7 @@ public class PluginArenaManager {
    *
    * @param player player to join
    * @param arena  arena to join
-   * @see plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent
+   * @see PlugilyGameJoinAttemptEvent
    */
   public void joinAttempt(@NotNull Player player, @NotNull PluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial join attempt for {1}", arena.getId(), player.getName());
@@ -235,12 +235,12 @@ public class PluginArenaManager {
 
     Bukkit.getPluginManager().callEvent(new PlugilyGameLeaveAttemptEvent(player, arena));
 
-    User user = plugin.getUserManager().getUser(player);
+    IUser user = plugin.getUserManager().getUser(player);
 
     if(!user.isSpectator()) {
       if(arena.getArenaState() != IArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != IArenaState.STARTING && arena.getPlayers().isEmpty()) {
         stopGame(true, arena);
-        arena.getPlugin().getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
+        plugin.getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
       }
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }

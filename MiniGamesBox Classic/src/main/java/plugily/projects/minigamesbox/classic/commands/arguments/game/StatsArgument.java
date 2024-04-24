@@ -22,10 +22,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.api.stats.IStatisticType;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.Collection;
 
@@ -45,7 +45,7 @@ public class StatsArgument {
           new MessageBuilder("COMMANDS_PLAYER_NOT_FOUND").asKey().send(sender);
           return;
         }
-        User user = registry.getPlugin().getUserManager().getUser(player);
+        IUser user = registry.getPlugin().getUserManager().getUser(player);
         sendLeaderboardHeader(sender, player);
         sendLeaderboardBody(sender, user);
         sendLeaderboardFooter(sender);
@@ -55,7 +55,7 @@ public class StatsArgument {
         new MessageBuilder("LEADERBOARD_TYPE_CHAT_FOOTER").asKey().send(sender);
       }
 
-      private void sendLeaderboardBody(CommandSender sender, User user) {
+      private void sendLeaderboardBody(CommandSender sender, IUser user) {
         Collection<IStatisticType> statisticTypes = registry.getPlugin().getStatsStorage().getStatistics().values();
         for(IStatisticType statisticType : statisticTypes) {
           if(!statisticType.isPersistent()) {

@@ -16,15 +16,40 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.api;
+package plugily.projects.minigamesbox.api.events.game;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
 
 /**
- * @author Lagggpixel
+ * @author Tigerpanzer_02
  * <p>
- * Created at 04.24.2024
- * @version 1.0.0
+ * Created at 21.09.2021
+ * Called when player is attempting to leave arena
  */
-public interface MinigamesAPI {
+public class PlugilyGameLeaveAttemptEvent extends PlugilyEvent {
+
+  private static final HandlerList HANDLERS = new HandlerList();
+  private final Player player;
+
+  public PlugilyGameLeaveAttemptEvent(Player player, IPluginArena arena) {
+    super(arena);
+    this.player = player;
+  }
+
+  public static HandlerList getHandlerList() {
+    return HANDLERS;
+  }
+
+  public Player getPlayer() {
+    return player;
+  }
+
+  @Override
+  public HandlerList getHandlers() {
+    return HANDLERS;
+  }
 
 }

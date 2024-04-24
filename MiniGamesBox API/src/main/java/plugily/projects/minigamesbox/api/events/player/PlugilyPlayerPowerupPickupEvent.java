@@ -1,3 +1,5 @@
+
+
 /*
  *  MiniGamesBox - Library box with massive content that could be seen as minigames core.
  *  Copyright (C) 2023 Plugily Projects - maintained by Tigerpanzer_02 and contributors
@@ -16,33 +18,47 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event.game;
+package plugily.projects.minigamesbox.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
+import plugily.projects.minigamesbox.api.handlers.powerup.BasePowerup;
 
 /**
  * @author Tigerpanzer_02
  * <p>
- * Created at 21.09.2021
- * Called when player is attempting to join arena
+ * Called when player pick up a power-up.
  */
-public class PlugilyGameJoinAttemptEvent extends PlugilyEvent implements Cancellable {
+public class PlugilyPlayerPowerupPickupEvent extends PlugilyEvent implements Cancellable {
 
   private static final HandlerList HANDLERS = new HandlerList();
   private final Player player;
-  private boolean isCancelled;
+  private final BasePowerup powerup;
+  private boolean isCancelled = false;
 
-  public PlugilyGameJoinAttemptEvent(Player player, PluginArena targetArena) {
-    super(targetArena);
+  public PlugilyPlayerPowerupPickupEvent(IPluginArena eventArena, Player player, BasePowerup powerup) {
+    super(eventArena);
     this.player = player;
-    isCancelled = false;
+    this.powerup = powerup;
   }
 
   public static HandlerList getHandlerList() {
+    return HANDLERS;
+  }
+
+  public Player getPlayer() {
+    return player;
+  }
+
+  public BasePowerup getPowerup() {
+    return powerup;
+  }
+
+  @Override
+  public HandlerList getHandlers() {
     return HANDLERS;
   }
 
@@ -52,17 +68,7 @@ public class PlugilyGameJoinAttemptEvent extends PlugilyEvent implements Cancell
   }
 
   @Override
-  public void setCancelled(boolean isCancelled) {
-    this.isCancelled = isCancelled;
+  public void setCancelled(boolean cancelled) {
+    isCancelled = cancelled;
   }
-
-  public Player getPlayer() {
-    return player;
-  }
-
-  @Override
-  public HandlerList getHandlers() {
-    return HANDLERS;
-  }
-
 }

@@ -18,10 +18,10 @@
 package plugily.projects.minigamesbox.classic.api;
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.api.stats.IStatsStorage;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 
 import java.util.Collections;
@@ -64,7 +64,7 @@ public class StatsStorage implements IStatsStorage {
       }
 
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return Integer.toString(getUserStats(player, statisticType));
       }
     });

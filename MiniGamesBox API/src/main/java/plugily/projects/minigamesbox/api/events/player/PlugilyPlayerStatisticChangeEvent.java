@@ -16,24 +16,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.api.event.game;
+package plugily.projects.minigamesbox.api.events.player;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.PlugilyEvent;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 21.09.2021
- * Called when arena is stopped (game has ended)
+ * Called when player receive new statistic
  */
-public class PlugilyGameStopEvent extends PlugilyEvent {
+public class PlugilyPlayerStatisticChangeEvent extends PlugilyEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
+  private final Player player;
+  private final IStatisticType statisticType;
+  private final int number;
 
-  public PlugilyGameStopEvent(PluginArena arena) {
-    super(arena);
+  public PlugilyPlayerStatisticChangeEvent(IPluginArena eventArena, Player player, IStatisticType statisticType, int number) {
+    super(eventArena);
+    this.player = player;
+    this.statisticType = statisticType;
+    this.number = number;
   }
 
   public static HandlerList getHandlerList() {
@@ -45,4 +53,15 @@ public class PlugilyGameStopEvent extends PlugilyEvent {
     return HANDLERS;
   }
 
+  public Player getPlayer() {
+    return player;
+  }
+
+  public IStatisticType getStatisticType() {
+    return statisticType;
+  }
+
+  public int getNumber() {
+    return number;
+  }
 }

@@ -16,13 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package plugily.projects.minigamesbox.classic.user.data;
+package plugily.projects.minigamesbox.api.user.data;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.api.stats.IStatisticType;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
-import plugily.projects.minigamesbox.classic.user.User;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.database.MysqlDatabase;
 
 import java.util.Map;
@@ -41,21 +40,21 @@ public interface UserDatabase {
    * @param user user to retrieve statistic from
    * @param stat stat to save to storage
    */
-  void saveStatistic(User user, StatisticType stat);
+  void saveStatistic(IUser user, IStatisticType stat);
 
   /**
    * Saves player statistic into yaml or MySQL storage based on user choice
    *
    * @param user user to retrieve statistic from
    */
-  void saveAllStatistic(User user);
+  void saveAllStatistic(IUser user);
 
   /**
    * Loads player statistic from yaml or MySQL storage based on user choice
    *
    * @param user user to load statistic for
    */
-  void loadStatistics(User user);
+  void loadStatistics(IUser user);
 
   /**
    * Add a column on mysql database instances, skips for file stats

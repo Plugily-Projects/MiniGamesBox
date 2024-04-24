@@ -25,8 +25,9 @@ import me.tigerhix.lib.scoreboard.type.Scoreboard;
 import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
-import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -47,7 +48,7 @@ public class PluginScoreboardManager {
   private final Map<UUID, Scoreboard> boardMap = new ConcurrentHashMap<>();
   private final Map<UUID, org.bukkit.scoreboard.Scoreboard> lastBoardMap = new ConcurrentHashMap<>();
   private final org.bukkit.scoreboard.Scoreboard dummyBoard = Bukkit.getScoreboardManager().getNewScoreboard();
-  private final PluginMain plugin;
+  private final IPluginMain plugin;
   private final String boardTitle;
   private final PluginArena arena;
 
@@ -63,7 +64,7 @@ public class PluginScoreboardManager {
    * @param user user that represents game player
    * @see User
    */
-  public void createScoreboard(User user) {
+  public void createScoreboard(IUser user) {
     Player player = user.getPlayer();
     lastBoardMap.put(player.getUniqueId(), player.getScoreboard());
     player.setScoreboard(dummyBoard);
@@ -93,7 +94,7 @@ public class PluginScoreboardManager {
    * @param user user that represents game player
    * @see User
    */
-  public void removeScoreboard(User user) {
+  public void removeScoreboard(IUser user) {
     Optional.ofNullable(boardMap.remove(user.getUniqueId())).ifPresent(Scoreboard::deactivate);
     Optional.ofNullable(lastBoardMap.remove(user.getUniqueId())).ifPresent(user.getPlayer()::setScoreboard);
   }
@@ -106,7 +107,7 @@ public class PluginScoreboardManager {
     boardMap.clear();
   }
 
-  public List<Entry> formatScoreboard(User user) {
+  public List<Entry> formatScoreboard(IUser user) {
     EntryBuilder builder = new EntryBuilder();
 
     for(String line : plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
