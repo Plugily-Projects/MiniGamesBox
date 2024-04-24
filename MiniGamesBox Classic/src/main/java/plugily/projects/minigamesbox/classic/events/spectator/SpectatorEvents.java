@@ -34,8 +34,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
@@ -131,7 +131,7 @@ public class SpectatorEvents implements Listener {
     if(!plugin.getUserManager().getUser(player).isSpectator()) {
       return;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
     if(arena == null) {
       return;
     }
@@ -191,7 +191,7 @@ public class SpectatorEvents implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onDropItem(PlayerDropItemEvent event) {
-    PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
+    IPluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(arena != null && (arena.getArenaState() != IArenaState.IN_GAME || plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
       event.setCancelled(true);
     }

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.events.game.PlugilyGameJoinAttemptEvent;
 import plugily.projects.minigamesbox.api.events.game.PlugilyGameLeaveAttemptEvent;
 import plugily.projects.minigamesbox.api.events.game.PlugilyGameStopEvent;
@@ -61,7 +62,7 @@ public class PluginArenaManager {
    * @param arena  arena to join
    * @see PlugilyGameJoinAttemptEvent
    */
-  public void joinAttempt(@NotNull Player player, @NotNull PluginArena arena) {
+  public void joinAttempt(@NotNull Player player, @NotNull IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial join attempt for {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
     if(!canJoinArenaAndMessage(player, arena) || !checkFullGamePermission(player, arena)) {
@@ -118,7 +119,7 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
 
-  private boolean joinAsParty(@NotNull Player player, @NotNull PluginArena arena) {
+  private boolean joinAsParty(@NotNull Player player, @NotNull IPluginArena arena) {
     //check if player is in party and send party members to the game
     GameParty party = plugin.getPartyHandler().getParty(player);
 
@@ -128,7 +129,7 @@ public class PluginArenaManager {
           if(player.getUniqueId().equals(partyPlayer.getUniqueId())) {
             continue;
           }
-          PluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
+          IPluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
 
           if(partyPlayerGame != null) {
             if(partyPlayerGame.getArenaState() == IArenaState.IN_GAME) {
@@ -152,15 +153,15 @@ public class PluginArenaManager {
     return true;
   }
 
-  public void additionalPartyJoin(Player player, PluginArena arena, Player partyLeader) {
+  public void additionalPartyJoin(Player player, IPluginArena arena, Player partyLeader) {
 
   }
 
-  public void additionalSpectatorSettings(Player player, PluginArena arena) {
+  public void additionalSpectatorSettings(Player player, IPluginArena arena) {
 
   }
 
-  private boolean checkFullGamePermission(Player player, PluginArena arena) {
+  private boolean checkFullGamePermission(Player player, IPluginArena arena) {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
@@ -183,7 +184,7 @@ public class PluginArenaManager {
     return false;
   }
 
-  private boolean canJoinArenaAndMessage(Player player, PluginArena arena) {
+  private boolean canJoinArenaAndMessage(Player player, IPluginArena arena) {
     if(!arena.isReady()) {
       new MessageBuilder("IN_GAME_JOIN_ARENA_NOT_CONFIGURED").asKey().player(player).arena(arena).sendPlayer();
       return false;
@@ -229,7 +230,7 @@ public class PluginArenaManager {
    * @param arena  arena to leave
    * @see PlugilyGameLeaveAttemptEvent
    */
-  public void leaveAttempt(@NotNull Player player, @NotNull PluginArena arena) {
+  public void leaveAttempt(@NotNull Player player, @NotNull IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial leave attempt of {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
 
@@ -257,7 +258,7 @@ public class PluginArenaManager {
    * @param arena     which arena should stop
    * @see PlugilyGameStopEvent
    */
-  public void stopGame(boolean quickStop, @NotNull PluginArena arena) {
+  public void stopGame(boolean quickStop, @NotNull IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Game stop event start", arena.getId());
     long start = System.currentTimeMillis();
 
@@ -281,7 +282,7 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Game stop event finished took {1}ms", arena.getId(), System.currentTimeMillis() - start);
   }
 
-  private void spawnFireworks(PluginArena arena, Player player) {
+  private void spawnFireworks(IPluginArena arena, Player player) {
     if(!plugin.getConfigPreferences().getOption("FIREWORK")) {
       return;
     }

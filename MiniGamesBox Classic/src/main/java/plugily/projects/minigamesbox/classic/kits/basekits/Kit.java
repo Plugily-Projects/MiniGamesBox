@@ -27,7 +27,6 @@ import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.kit.IKit;
 import plugily.projects.minigamesbox.api.kit.ability.IKitAbility;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.kits.KitRegistry;
 import plugily.projects.minigamesbox.classic.kits.ability.KitAbility;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
@@ -176,7 +175,7 @@ public class Kit implements IKit {
    * @return The item stack after being handled
    */
   public ItemStack handleItem(Player player, ItemStack itemStack) {
-    return KitRegistry.getHandleItem().apply(player, itemStack);
+    return plugin.getKitRegistry().getHandleItem().apply(player, itemStack);
   }
 
   /**
@@ -236,14 +235,17 @@ public class Kit implements IKit {
     return kitPermission;
   }
 
+  @Override
   public Object getOptionalConfiguration(String path, Object defaultValue) {
     return optionalConfiguration.getOrDefault(path, defaultValue);
   }
 
+  @Override
   public Object getOptionalConfiguration(String path) {
     return optionalConfiguration.get(path);
   }
 
+  @Override
   public void addOptionalConfiguration(String path, Object object) {
     optionalConfiguration.put(path, object);
   }

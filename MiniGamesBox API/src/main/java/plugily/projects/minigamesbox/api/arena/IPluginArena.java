@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.arena.managers.IBossbarManager;
+import plugily.projects.minigamesbox.api.arena.managers.IPluginMapRestorerManager;
+import plugily.projects.minigamesbox.api.arena.managers.IPluginScoreboardManager;
 import plugily.projects.minigamesbox.api.events.game.PlugilyGameStateChangeEvent;
 
 import java.util.List;
@@ -24,6 +26,12 @@ public interface IPluginArena {
    * @return true or false based on user configuration
    */
   Integer getArenaOption(String name);
+
+  boolean isReady();
+
+  void setReady(boolean ready);
+
+  void setForceStart(boolean forceStart);
 
   /**
    * Returns boss bar of the game.
@@ -83,6 +91,8 @@ public interface IPluginArena {
 
   int getMaximumPlayers();
 
+  IPluginMapRestorerManager getMapRestorerManager();
+
   /**
    * Gets the current arena state
    * @return The current arena state
@@ -131,6 +141,22 @@ public interface IPluginArena {
    */
   void setSpectatorLocation(Location spectatorLoc);
 
+  Location getLobbyLocation();
+
+  void setLobbyLocation(Location loc);
+
+  Location getStartLocation();
+
+  void setStartLocation(Location location);
+
+  void teleportToEndLocation(Player player);
+
+  Location getEndLocation();
+
+  Location getLocation(GameLocation gameLocation);
+
+  IPluginScoreboardManager getScoreboardManager();
+
   @NotNull List<Player> getPlayersLeft();
 
   /**
@@ -141,5 +167,9 @@ public interface IPluginArena {
 
   enum IBarAction {
     ADD, REMOVE;
+  }
+
+  enum GameLocation {
+    START, LOBBY, END, SPECTATOR
   }
 }

@@ -1,4 +1,4 @@
-package plugily.projects.minigamesbox.classic.kits;
+package plugily.projects.minigamesbox.api.kit;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

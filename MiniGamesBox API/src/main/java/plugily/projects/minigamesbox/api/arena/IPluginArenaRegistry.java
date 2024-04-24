@@ -1,8 +1,11 @@
 package plugily.projects.minigamesbox.api.arena;
 
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * @author Lagggpixel
@@ -33,4 +36,24 @@ public interface IPluginArenaRegistry {
    * @return Arena or null if not found
    */
   @Nullable IPluginArena getArena(String id);
+
+  int getArenaPlayersOnline();
+
+  void registerArena(IPluginArena arena);
+
+  void unregisterArena(IPluginArena arena);
+
+  void registerArenas();
+
+  void registerArena(String key);
+
+  @NotNull List<IPluginArena> getArenas();
+
+  List<World> getArenaIngameWorlds();
+
+  List<World> getArenaWorlds();
+
+  void shuffleBungeeArena();
+
+  int getBungeeArena();
 }

@@ -42,6 +42,10 @@ dependencies {
 }
 
 tasks {
+    compileJava {
+        dependsOn(":MiniGamesBox-API:jar")
+    }
+
     build {
         dependsOn(shadowJar)
     }

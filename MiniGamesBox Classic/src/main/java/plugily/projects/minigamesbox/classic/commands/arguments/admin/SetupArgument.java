@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -56,7 +56,7 @@ public class SetupArgument {
         }
         switch(args[1].toLowerCase()) {
           case "create":
-            for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+            for(IPluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
               if(arena.getId().equalsIgnoreCase(args[2])) {
                 new MessageBuilder(ChatColor.DARK_RED + "Arena with that ID already exists!").prefix().send(player);
                 new MessageBuilder(ChatColor.DARK_RED + "Usage: /" + registry.getPlugin().getCommandAdminPrefix() + " setup edit <ID>").prefix().send(player);
@@ -70,7 +70,7 @@ public class SetupArgument {
             }
             break;
           case "edit":
-            PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[2]);
+            IPluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[2]);
             if(arena == null) {
               new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
               return;

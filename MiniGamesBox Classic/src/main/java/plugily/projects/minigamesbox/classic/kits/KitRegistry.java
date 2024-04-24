@@ -23,6 +23,7 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.api.kit.HandleItem;
 import plugily.projects.minigamesbox.api.kit.IKit;
 import plugily.projects.minigamesbox.api.kit.IKitRegistry;
 import plugily.projects.minigamesbox.classic.PluginMain;
@@ -55,10 +56,12 @@ public class KitRegistry implements IKitRegistry {
     this.plugin = plugin;
   }
 
-  public static HandleItem getHandleItem() {
+  @Override
+  public HandleItem getHandleItem() {
     return handleItem;
   }
 
+  @Override
   public void setHandleItem(HandleItem handleItem) {
     KitRegistry.handleItem = handleItem;
   }
@@ -85,9 +88,7 @@ public class KitRegistry implements IKitRegistry {
     kits.add(kit);
   }
 
-  /**
-   * Registers the kits by loading their configurations.
-   */
+  @Override
   public void registerKits(List<String> optionalConfigurations) {
     if (!plugin.getConfigPreferences().getOption("KITS")) {
       plugin.getDebugger().performance("Kit", "Kits are disabled, thus registerKits method will not be ran.");
@@ -249,21 +250,13 @@ public class KitRegistry implements IKitRegistry {
     return defaultKit;
   }
 
-  /**
-   * Sets default game kit
-   *
-   * @param defaultKit default kit to set, must be FreeKit
-   */
-  public void setDefaultKit(Kit defaultKit) {
+  @Override
+  public void setDefaultKit(IKit defaultKit) {
     plugin.getDebugger().debug("DefaultKit set to {0}", defaultKit.getName());
     this.defaultKit = defaultKit;
   }
 
-  /**
-   * Sets the default kit for the plugin using the config option
-   *
-   * @param defaultKitName name of the default kit
-   */
+  @Override
   public void setDefaultKit(String defaultKitName) {
     String defaultKitKey = plugin.getConfig().getString("Kit.Default", defaultKitName);
     AtomicReference<IKit> defaultKit = new AtomicReference<>(getKitByKey(defaultKitKey));

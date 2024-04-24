@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -46,7 +47,7 @@ public class LeaveArgument {
           return;
         }
         new MessageBuilder("COMMANDS_TELEPORTED_TO_LOBBY").asKey().player(player).sendPlayer();
-        PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(player);
+        IPluginArena arena = registry.getPlugin().getArenaRegistry().getArena(player);
 
         if(arena == null) {
           return;

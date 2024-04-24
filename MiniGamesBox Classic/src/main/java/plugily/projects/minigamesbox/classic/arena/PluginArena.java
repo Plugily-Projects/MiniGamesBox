@@ -29,6 +29,8 @@ import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.api.IPluginMain;
 import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.arena.managers.IPluginMapRestorerManager;
+import plugily.projects.minigamesbox.api.arena.managers.IPluginScoreboardManager;
 import plugily.projects.minigamesbox.api.events.game.PlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
@@ -175,10 +177,12 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     }
   }
 
+  @Override
   public boolean isReady() {
     return ready;
   }
 
+  @Override
   public void setReady(boolean ready) {
     this.ready = ready;
   }
@@ -224,6 +228,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     return forceStart;
   }
 
+  @Override
   public void setForceStart(boolean forceStart) {
     this.forceStart = forceStart;
   }
@@ -286,7 +291,8 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     setArenaOption("MAXIMUM_PLAYERS", maximumPlayers);
   }
 
-  public PluginMapRestorerManager getMapRestorerManager() {
+  @Override
+  public IPluginMapRestorerManager getMapRestorerManager() {
     return mapRestorerManager;
   }
 
@@ -333,22 +339,27 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     gameLocations.put(GameLocation.SPECTATOR, spectatorLoc);
   }
 
+  @Override
   public Location getLobbyLocation() {
     return gameLocations.get(GameLocation.LOBBY);
   }
 
+  @Override
   public void setLobbyLocation(Location loc) {
     gameLocations.put(GameLocation.LOBBY, loc);
   }
 
+  @Override
   public Location getStartLocation() {
     return gameLocations.get(GameLocation.START);
   }
 
+  @Override
   public void setStartLocation(Location location) {
     gameLocations.put(GameLocation.START, location);
   }
 
+  @Override
   public void teleportToEndLocation(Player player) {
     // We should check for #isEnabled to make sure plugin is enabled
     // This happens in some cases
@@ -360,10 +371,12 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     VersionUtils.teleport(player, getEndLocation());
   }
 
+  @Override
   public Location getEndLocation() {
     return gameLocations.get(GameLocation.END);
   }
 
+  @Override
   public Location getLocation(GameLocation gameLocation) {
     return gameLocations.get(gameLocation);
   }
@@ -378,7 +391,8 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     setArenaState(IArenaState.WAITING_FOR_PLAYERS, true);
   }
 
-  public PluginScoreboardManager getScoreboardManager() {
+  @Override
+  public IPluginScoreboardManager getScoreboardManager() {
     return scoreboardManager;
   }
 
@@ -405,9 +419,4 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public IPluginMain getPlugin() {
     return plugin;
   }
-
-  public enum GameLocation {
-    START, LOBBY, END, SPECTATOR
-  }
-
 }

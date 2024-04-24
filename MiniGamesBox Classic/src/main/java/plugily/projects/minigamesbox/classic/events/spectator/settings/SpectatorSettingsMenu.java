@@ -30,9 +30,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
@@ -101,7 +101,7 @@ public class SpectatorSettingsMenu implements Listener {
     for(SpectatorSettingsItem item : settingsItems) {
       gui.setItem(item.getSlot(), item.getItemStack(), event -> {
         Player player = (Player) event.getWhoClicked();
-        PluginArena arena = plugin.getArenaRegistry().getArena(player);
+        IPluginArena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }

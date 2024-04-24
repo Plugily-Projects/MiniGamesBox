@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -55,7 +55,7 @@ public class ArenaSelectorArgument {
 
         NormalFastInv arenaSelector = new NormalFastInv(registry.getPlugin().getArenaRegistry().getArenas().size(), new MessageBuilder("ARENA_SELECTOR_INVENTORY_TITLE").asKey().build());
 
-        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(IPluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           ItemStack itemStack = XMaterial.matchXMaterial(registry.getPlugin().getConfig().getString("Arena-Selector.State-Item." + arena.getArenaState().getFormattedName(), "YELLOW_WOOL").toUpperCase()).orElse(XMaterial.YELLOW_WOOL).parseItem();
           if(itemStack == null) {
             continue;

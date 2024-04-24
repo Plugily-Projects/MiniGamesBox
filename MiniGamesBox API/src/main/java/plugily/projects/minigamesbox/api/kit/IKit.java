@@ -45,5 +45,11 @@ public interface IKit {
    */
   ConfigurationSection getKitConfigSection();
 
+  Object getOptionalConfiguration(String path, Object defaultValue);
+
+  Object getOptionalConfiguration(String path);
+
+  void addOptionalConfiguration(String path, Object object);
+
   boolean hasAbility(IKitAbility kitAbility);
 }

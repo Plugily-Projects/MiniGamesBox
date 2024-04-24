@@ -26,6 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.api.IPluginMain;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArenaRegistry;
 import plugily.projects.minigamesbox.api.handlers.language.ILanguageManager;
 import plugily.projects.minigamesbox.api.kit.IKitRegistry;
 import plugily.projects.minigamesbox.api.preferences.IConfigPreferences;
@@ -384,7 +386,7 @@ public class PluginMain extends JavaPlugin implements IPluginMain {
 
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
     if(getArenaRegistry() != null) {
-      for(PluginArena arena : getArenaRegistry().getArenas()) {
+      for(IPluginArena arena : getArenaRegistry().getArenas()) {
         for(Player player : new ArrayList<>(arena.getPlayers())) {
           getArenaManager().leaveAttempt(player, arena);
         }
@@ -527,7 +529,8 @@ public class PluginMain extends JavaPlugin implements IPluginMain {
     return pluginNamePrefixLong + "admin";
   }
 
-  public PluginArenaRegistry getArenaRegistry() {
+  @Override
+  public IPluginArenaRegistry getArenaRegistry() {
     return arenaRegistry;
   }
 

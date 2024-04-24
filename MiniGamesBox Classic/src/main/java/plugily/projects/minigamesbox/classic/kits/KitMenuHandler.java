@@ -22,10 +22,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.events.player.PlugilyPlayerChooseKitEvent;
 import plugily.projects.minigamesbox.api.kit.IKit;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
 import plugily.projects.minigamesbox.inventory.common.item.SimpleClickableItem;
@@ -72,7 +72,7 @@ public class KitMenuHandler implements Listener {
         if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player)) {
           return;
         }
-        PluginArena arena = plugin.getArenaRegistry().getArena(player);
+        IPluginArena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }

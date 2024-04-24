@@ -1,6 +1,7 @@
 package plugily.projects.minigamesbox.api;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import plugily.projects.minigamesbox.api.arena.IPluginArenaRegistry;
 import plugily.projects.minigamesbox.api.handlers.language.ILanguageManager;
 import plugily.projects.minigamesbox.api.kit.IKitRegistry;
 import plugily.projects.minigamesbox.api.preferences.IConfigPreferences;
@@ -30,6 +31,8 @@ public interface IPluginMain {
   String getCommandAdminPrefix();
 
   String getCommandAdminPrefixLong();
+
+  IPluginArenaRegistry getArenaRegistry();
 
   IKitRegistry getKitRegistry();
 
