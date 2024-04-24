@@ -23,9 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.TestOnly;
 import plugily.projects.minigamesbox.classic.api.StatsStorage;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
@@ -140,11 +138,6 @@ public class PluginMain extends JavaPlugin {
   @TestOnly
   public PluginMain() {
     super();
-  }
-
-  @TestOnly
-  protected PluginMain(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-    super(loader, description, dataFolder, file);
   }
 
   @Override
