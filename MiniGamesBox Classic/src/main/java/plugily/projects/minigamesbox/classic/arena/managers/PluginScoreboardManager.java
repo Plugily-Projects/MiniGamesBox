@@ -25,8 +25,8 @@ import me.tigerhix.lib.scoreboard.type.Scoreboard;
 import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -109,7 +109,7 @@ public class PluginScoreboardManager {
   public List<Entry> formatScoreboard(User user) {
     EntryBuilder builder = new EntryBuilder();
 
-    for(String line : plugin.getLanguageManager().getLanguageList(arena.getArenaState() == ArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
+    for(String line : plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
         : "Scoreboard.Content." + arena.getArenaState().getFormattedName())) {
       builder.next(new MessageBuilder(line).player(user.getPlayer()).arena(arena).build());
     }

@@ -20,7 +20,7 @@ package plugily.projects.minigamesbox.classic.api.event.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
@@ -34,10 +34,10 @@ public class PlugilyPlayerStatisticChangeEvent extends PlugilyEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
   private final Player player;
-  private final StatisticType statisticType;
+  private final IStatisticType statisticType;
   private final int number;
 
-  public PlugilyPlayerStatisticChangeEvent(PluginArena eventArena, Player player, StatisticType statisticType, int number) {
+  public PlugilyPlayerStatisticChangeEvent(PluginArena eventArena, Player player, IStatisticType statisticType, int number) {
     super(eventArena);
     this.player = player;
     this.statisticType = statisticType;
@@ -57,7 +57,7 @@ public class PlugilyPlayerStatisticChangeEvent extends PlugilyEvent {
     return player;
   }
 
-  public StatisticType getStatisticType() {
+  public IStatisticType getStatisticType() {
     return statisticType;
   }
 

@@ -20,7 +20,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -47,7 +47,7 @@ public class StopArgument {
           if(arena == null) {
             return;
           }
-          if(arena.getArenaState() != ArenaState.ENDING) {
+          if(arena.getArenaState() != IArenaState.ENDING) {
             registry.getPlugin().getArenaManager().stopGame(true, arena);
             new MessageBuilder("COMMANDS_COMMAND_EXECUTED").asKey().send(sender);
           }

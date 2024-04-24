@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.user;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
@@ -99,13 +100,13 @@ public class UserManager {
     addStat(getUser(player), stat);
   }
 
-  public void addStat(User user, StatisticType stat) {
+  public void addStat(User user, IStatisticType stat) {
     user.adjustStatistic(stat, 1);
     updateLevelStat(user, user.getArena());
   }
 
   public void updateLevelStat(User user, PluginArena arena) {
-    StatisticType nextLevelExp = plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP");
+    IStatisticType nextLevelExp = plugin.getStatsStorage().getStatisticType("NEXT_LEVEL_EXP");
 
     if(user.getStatistic(nextLevelExp) < user.getStatistic(plugin.getStatsStorage().getStatisticType("EXP"))) {
       user.adjustStatistic(plugin.getStatsStorage().getStatisticType("LEVEL"), 1);

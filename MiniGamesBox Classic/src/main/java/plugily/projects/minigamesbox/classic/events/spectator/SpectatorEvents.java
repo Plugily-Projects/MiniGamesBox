@@ -17,7 +17,6 @@
  */
 package plugily.projects.minigamesbox.classic.events.spectator;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
@@ -30,21 +29,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.player.*;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyEntityPickupItemEvent;
@@ -202,7 +192,7 @@ public class SpectatorEvents implements Listener {
   @EventHandler(priority = EventPriority.HIGH)
   public void onDropItem(PlayerDropItemEvent event) {
     PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
-    if(arena != null && (arena.getArenaState() != ArenaState.IN_GAME || plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
+    if(arena != null && (arena.getArenaState() != IArenaState.IN_GAME || plugin.getUserManager().getUser(event.getPlayer()).isSpectator())) {
       event.setCancelled(true);
     }
   }

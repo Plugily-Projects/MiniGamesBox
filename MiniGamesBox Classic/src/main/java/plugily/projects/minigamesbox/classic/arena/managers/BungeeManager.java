@@ -28,8 +28,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -48,13 +48,13 @@ public class BungeeManager implements Listener {
 
   private final PluginMain plugin;
   private final FileConfiguration config;
-  private final Map<ArenaState, String> motd = new EnumMap<>(ArenaState.class);
+  private final Map<IArenaState, String> motd = new EnumMap<>(IArenaState.class);
 
   public BungeeManager(PluginMain plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "bungee");
 
-    for(ArenaState arenaState : ArenaState.values()) {
+    for(IArenaState arenaState : IArenaState.values()) {
       motd.put(arenaState, plugin.getLanguageManager().getLanguageMessage("Placeholders.Motd." + arenaState.getFormattedName()));
     }
 

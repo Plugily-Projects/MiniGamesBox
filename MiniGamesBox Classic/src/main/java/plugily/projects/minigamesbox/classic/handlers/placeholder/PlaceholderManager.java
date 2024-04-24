@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class PlaceholderManager {
 
   public PlaceholderManager(PluginMain plugin) {
     this.plugin = plugin;
-    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       plugin.getDebugger().debug(plugin.getPluginMessagePrefix() + "Hooking into PlaceholderAPI");
       new PAPIPlaceholders(plugin);
     }
@@ -108,12 +109,12 @@ public class PlaceholderManager {
     registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
       public String getValue(Player player, PluginArena arena) {
-        return arena.getArenaState().getPlaceholder();
+        return ArenaState.getPlaceholder(arena.getArenaState());
       }
 
       @Override
       public String getValue(PluginArena arena) {
-        return arena.getArenaState().getPlaceholder();
+        return ArenaState.getPlaceholder(arena.getArenaState());
       }
     });
     registerPlaceholder(new Placeholder("name", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
@@ -141,7 +142,7 @@ public class PlaceholderManager {
     registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
-        if(!plugin.getConfigPreferences().getOption("KITS")) {
+        if (!plugin.getConfigPreferences().getOption("KITS")) {
           return null;
         }
         return plugin.getUserManager().getUser(player).getKit().getName();
@@ -149,7 +150,7 @@ public class PlaceholderManager {
 
       @Override
       public String getValue(Player player, PluginArena arena) {
-        if(!plugin.getConfigPreferences().getOption("KITS")) {
+        if (!plugin.getConfigPreferences().getOption("KITS")) {
           return null;
         }
         return plugin.getUserManager().getUser(player).getKit().getName();
@@ -159,7 +160,7 @@ public class PlaceholderManager {
   }
 
   public void registerPlaceholder(Placeholder placeholder) {
-    switch(placeholder.getPlaceholderExecutor()) {
+    switch (placeholder.getPlaceholderExecutor()) {
       case PLACEHOLDER_API:
         registeredPAPIPlaceholders.add(placeholder);
         break;

@@ -20,9 +20,10 @@ package plugily.projects.minigamesbox.classic.user.data;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import plugily.projects.minigamesbox.database.MysqlDatabase;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
+import plugily.projects.minigamesbox.database.MysqlDatabase;
 
 import java.util.Map;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public interface UserDatabase {
    * @return Map of UUID keys and Integer values sorted in ascending order of requested statistic type
    */
   @NotNull
-  Map<UUID, Integer> getStats(StatisticType stat);
+  Map<UUID, Integer> getStats(IStatisticType stat);
 
   /**
    * Disable the database

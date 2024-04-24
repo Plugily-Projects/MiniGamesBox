@@ -25,7 +25,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.user.User;
@@ -112,7 +115,7 @@ public class PluginArenaUtils {
       user.setSpectator(false);
     }
     player.updateInventory();
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.ADD, player);
+    arena.getBossbarManager().doBarAction(IPluginArena.IBarAction.ADD, player);
     arena.getScoreboardManager().createScoreboard(user);
   }
 
@@ -147,7 +150,7 @@ public class PluginArenaUtils {
     VersionUtils.setGlowing(player, false);
 
     arena.getScoreboardManager().removeScoreboard(user);
-    arena.getBossbarManager().doBarAction(PluginArena.BarAction.REMOVE, player);
+    arena.getBossbarManager().doBarAction(IPluginArena.IBarAction.REMOVE, player);
     arena.teleportToEndLocation(player);
     arena.getPlayers().remove(player);
 
@@ -169,13 +172,13 @@ public class PluginArenaUtils {
       new MessageBuilder("COMMANDS_NOT_PLAYING").asKey().player(player).sendPlayer();
       return;
     }
-    if(!arena.getArenaState().isLobbyStage(arena)) {
+    if(!ArenaState.isLobbyStage(arena)) {
       return;
     }
 
     plugin.getDebugger().debug("Arena {0} got force started by {1} with timer {2}", arena.getId(), player.getName(), timer);
-    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
-      arena.setArenaState(ArenaState.STARTING, true);
+    if(arena.getArenaState() == IArenaState.WAITING_FOR_PLAYERS) {
+      arena.setArenaState(IArenaState.STARTING, true);
     }
     if(timer <= 0) {
       arena.setForceStart(true);

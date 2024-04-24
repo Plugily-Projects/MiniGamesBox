@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -87,7 +88,7 @@ public class PluginArenaEvents implements Listener {
         }
         break;
       case VOID:
-        if(arena.getArenaState() != ArenaState.IN_GAME) {
+        if(arena.getArenaState() != IArenaState.IN_GAME) {
           victim.damage(0);
           VersionUtils.teleport(victim, arena.getLobbyLocation());
         } else {

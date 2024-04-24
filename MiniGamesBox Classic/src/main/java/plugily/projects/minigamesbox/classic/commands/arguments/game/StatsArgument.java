@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -56,8 +56,8 @@ public class StatsArgument {
       }
 
       private void sendLeaderboardBody(CommandSender sender, User user) {
-        Collection<StatisticType> statisticTypes = registry.getPlugin().getStatsStorage().getStatistics().values();
-        for(StatisticType statisticType : statisticTypes) {
+        Collection<IStatisticType> statisticTypes = registry.getPlugin().getStatsStorage().getStatistics().values();
+        for(IStatisticType statisticType : statisticTypes) {
           if(!statisticType.isPersistent()) {
             continue;
           }

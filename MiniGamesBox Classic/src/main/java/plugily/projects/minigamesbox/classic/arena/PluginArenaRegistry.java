@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,6 +25,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import plugily.projects.minigamesbox.api.arena.IPluginArenaRegistry;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * <p>
  * Created at 01.11.2021
  */
-public class PluginArenaRegistry {
+public class PluginArenaRegistry implements IPluginArenaRegistry {
 
   private final List<PluginArena> arenas = new ArrayList<>();
   private final PluginMain plugin;
@@ -56,24 +56,14 @@ public class PluginArenaRegistry {
     this.plugin = plugin;
   }
 
-  /**
-   * Checks if player is in any arena
-   *
-   * @param player player to check
-   * @return true when player is in arena, false if otherwise
-   */
+  @Override
   public boolean isInArena(@NotNull Player player) {
     return getArena(player) != null;
   }
 
-  /**
-   * Returns arena where the player is
-   *
-   * @param player target player
-   * @return Arena or null if not playing
-   * @see #isInArena(Player) to check if player is playing
-   */
+
   @Nullable
+  @Override
   public PluginArena getArena(Player player) {
     if(player == null) {
       return null;
@@ -92,12 +82,7 @@ public class PluginArenaRegistry {
     return null;
   }
 
-  /**
-   * Returns arena based by ID
-   *
-   * @param id name of arena
-   * @return Arena or null if not found
-   */
+  @Override
   @Nullable
   public PluginArena getArena(String id) {
     for(PluginArena loopArena : arenas) {

@@ -20,14 +20,14 @@ package plugily.projects.minigamesbox.classic.user.data;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.database.MysqlDatabase;
-import plugily.projects.minigamesbox.sorter.SortUtils;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
+import plugily.projects.minigamesbox.database.MysqlDatabase;
+import plugily.projects.minigamesbox.sorter.SortUtils;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -80,7 +80,7 @@ public class FileStats implements UserDatabase {
 
   @NotNull
   @Override
-  public Map<UUID, Integer> getStats(StatisticType stat) {
+  public Map<UUID, Integer> getStats(IStatisticType stat) {
     Map<UUID, Integer> stats = new TreeMap<>();
     for(String string : config.getKeys(false)) {
       if(string.equals("data-version")) {

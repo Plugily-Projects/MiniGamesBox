@@ -20,12 +20,7 @@ package plugily.projects.minigamesbox.classic.events;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Painting;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,9 +36,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -145,7 +139,7 @@ public class Events implements Listener {
     if(arena == null) {
       return;
     }
-    if(arena.getArenaState() != ArenaState.IN_GAME) {
+    if(arena.getArenaState() != IArenaState.IN_GAME) {
       if(event.getClickedInventory() == event.getWhoClicked().getInventory()) {
         if(event.getView().getType() == InventoryType.WORKBENCH || event.getView().getType() == InventoryType.ANVIL || event.getView().getType() == InventoryType.ENCHANTING || event.getView().getType() == InventoryType.CRAFTING || event.getView().getType() == InventoryType.PLAYER) {
           event.setResult(Event.Result.DENY);
@@ -167,7 +161,7 @@ public class Events implements Listener {
     if (arena == null) {
       return;
     }
-    if (arena.getArenaState() != ArenaState.IN_GAME) {
+    if (arena.getArenaState() != IArenaState.IN_GAME) {
       event.setCancelled(true);
     }
   }

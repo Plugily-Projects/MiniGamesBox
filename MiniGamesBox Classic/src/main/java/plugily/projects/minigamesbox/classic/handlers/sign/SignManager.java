@@ -31,8 +31,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.jetbrains.annotations.Nullable;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -57,12 +57,12 @@ public class SignManager implements Listener {
 
   private final PluginMain plugin;
   private final List<ArenaSign> arenaSigns = new ArrayList<>();
-  private final Map<ArenaState, String> gameStateToString = new EnumMap<>(ArenaState.class);
+  private final Map<IArenaState, String> gameStateToString = new EnumMap<>(IArenaState.class);
   private final List<String> signLines;
 
   public SignManager(PluginMain plugin) {
     this.plugin = plugin;
-    for(ArenaState arenaState : ArenaState.values()) {
+    for(IArenaState arenaState : IArenaState.values()) {
       gameStateToString.put(arenaState, plugin.getLanguageManager().getLanguageMessage("Placeholders.Game-States." + arenaState.getFormattedName()));
     }
 
@@ -256,7 +256,7 @@ public class SignManager implements Listener {
     return arenaSigns;
   }
 
-  public Map<ArenaState, String> getGameStateToString() {
+  public Map<IArenaState, String> getGameStateToString() {
     return gameStateToString;
   }
 }

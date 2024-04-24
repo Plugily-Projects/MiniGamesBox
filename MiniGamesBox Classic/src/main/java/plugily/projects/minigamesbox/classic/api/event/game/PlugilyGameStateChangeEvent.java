@@ -19,9 +19,10 @@
 package plugily.projects.minigamesbox.classic.api.event.game;
 
 import org.bukkit.event.HandlerList;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.events.game.IPlugilyGameStateChangeEvent;
 import plugily.projects.minigamesbox.classic.api.event.PlugilyEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 
 /**
  * @author Tigerpanzer_02
@@ -29,14 +30,14 @@ import plugily.projects.minigamesbox.classic.arena.ArenaState;
  * Created at 21.09.2021
  * Called when arena game state has changed
  */
-public class PlugilyGameStateChangeEvent extends PlugilyEvent {
+public class PlugilyGameStateChangeEvent extends PlugilyEvent implements IPlugilyGameStateChangeEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
-  private final ArenaState arenaState;
+  private final IArenaState IArenaState;
 
-  public PlugilyGameStateChangeEvent(PluginArena eventArena, ArenaState arenaState) {
+  public PlugilyGameStateChangeEvent(PluginArena eventArena, IArenaState IArenaState) {
     super(eventArena);
-    this.arenaState = arenaState;
+    this.IArenaState = IArenaState;
   }
 
   public static HandlerList getHandlerList() {
@@ -48,7 +49,8 @@ public class PlugilyGameStateChangeEvent extends PlugilyEvent {
     return HANDLERS;
   }
 
-  public ArenaState getArenaState() {
-    return arenaState;
+  @Override
+  public IArenaState getArenaState() {
+    return IArenaState;
   }
 }

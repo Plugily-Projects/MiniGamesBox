@@ -20,8 +20,8 @@ package plugily.projects.minigamesbox.classic.arena.states;
 
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -35,7 +35,7 @@ public class PluginWaitingState implements ArenaStateHandler {
 
   private PluginMain plugin;
   private int arenaTimer;
-  private ArenaState arenaState;
+  private IArenaState arenaState;
 
   @Override
   public void init(PluginMain plugin) {
@@ -44,9 +44,9 @@ public class PluginWaitingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
-    setArenaState(ArenaState.WAITING_FOR_PLAYERS);
+    setArenaState(IArenaState.WAITING_FOR_PLAYERS);
     setArenaTimer(-999);
-    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
     int minPlayers = arena.getMinimumPlayers();
 
@@ -55,18 +55,18 @@ public class PluginWaitingState implements ArenaStateHandler {
         arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().integer(minPlayers).arena(arena).sendArena();
       }
-      plugin.getDebugger().performance("ArenaUpdate","END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+      plugin.getDebugger().performance("ArenaUpdate","END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
       return;
     }
     new MessageBuilder("IN_GAME_MESSAGES_LOBBY_ENOUGH_PLAYERS").asKey().arena(arena).sendArena();
-    arenaState = ArenaState.STARTING;
+    arenaState = IArenaState.STARTING;
     arenaTimer = plugin.getConfig().getInt("Time-Manager.Starting", 60);
     for(Player player : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
-    plugin.getDebugger().performance("ArenaUpdate","END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.WAITING_FOR_PLAYERS, arenaState, arenaTimer);
 
   }
 
@@ -76,7 +76,7 @@ public class PluginWaitingState implements ArenaStateHandler {
   }
 
   @Override
-  public ArenaState getArenaStateChange() {
+  public IArenaState getArenaStateChange() {
     return arenaState;
   }
 
@@ -84,7 +84,7 @@ public class PluginWaitingState implements ArenaStateHandler {
     this.arenaTimer = arenaTimer;
   }
 
-  public void setArenaState(ArenaState arenaState) {
+  public void setArenaState(IArenaState arenaState) {
     this.arenaState = arenaState;
   }
 

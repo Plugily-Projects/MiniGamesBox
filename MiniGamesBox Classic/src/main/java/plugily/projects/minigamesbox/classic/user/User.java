@@ -20,8 +20,8 @@ package plugily.projects.minigamesbox.classic.user;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -44,7 +44,7 @@ public class User {
   private boolean spectator = false;
   private boolean permanentSpectator = false;
   private Kit kit;
-  private final Map<StatisticType, Integer> stats = new HashMap<>();
+  private final Map<IStatisticType, Integer> stats = new HashMap<>();
   private final Map<String, Double> cooldowns = new HashMap<>();
   private boolean initialized;
 
@@ -108,11 +108,11 @@ public class User {
     return getStatistic(plugin.getStatsStorage().getStatisticType(statistic.toUpperCase()));
   }
 
-  public int getStatistic(StatisticType statisticType) {
+  public int getStatistic(IStatisticType statisticType) {
     return stats.computeIfAbsent(statisticType, t -> 0);
   }
 
-  public void setStatistic(StatisticType statisticType, int value) {
+  public void setStatistic(IStatisticType statisticType, int value) {
     changeUserStatistic(statisticType, value);
   }
 
@@ -120,7 +120,7 @@ public class User {
     changeUserStatistic(plugin.getStatsStorage().getStatisticType(statistic), value);
   }
 
-  private void changeUserStatistic(StatisticType statisticType, int value) {
+  private void changeUserStatistic(IStatisticType statisticType, int value) {
     stats.put(statisticType, value);
 
     Player player = getPlayer();
@@ -135,17 +135,17 @@ public class User {
     }
   }
 
-  public void adjustStatistic(StatisticType statisticType, int value) {
+  public void adjustStatistic(IStatisticType statisticType, int value) {
     changeUserStatistic(statisticType, getStatistic(statisticType) + value);
   }
 
   public void adjustStatistic(String statistic, int value) {
-    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    IStatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
     changeUserStatistic(statisticType, getStatistic(statisticType) + value);
   }
 
   public void resetNonePersistentStatistics() {
-    for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
+    for(IStatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
       if(!statisticType.isPersistent()) {
         setStatistic(statisticType, 0);
       }

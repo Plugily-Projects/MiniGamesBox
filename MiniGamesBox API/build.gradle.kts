@@ -16,14 +16,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = "MiniGamesBox"
-include(":MiniGamesBox-API")
-include(":MiniGamesBox-Inventory")
-include(":MiniGamesBox-Classic")
-include(":MiniGamesBox-Database")
-include(":MiniGamesBox-Utils")
-project(":MiniGamesBox-API").projectDir = file("MiniGamesBox API")
-project(":MiniGamesBox-Inventory").projectDir = file("MiniGamesBox Inventory")
-project(":MiniGamesBox-Classic").projectDir = file("MiniGamesBox Classic")
-project(":MiniGamesBox-Database").projectDir = file("MiniGamesBox Database")
-project(":MiniGamesBox-Utils").projectDir = file("MiniGamesBox Utils")
+plugins {
+    id("plugily.projects.java-conventions")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    java
+}
+
+dependencies {
+}
+
+tasks{
+    build {
+        dependsOn(shadowJar)
+    }
+
+    shadowJar {
+        archiveClassifier.set("")
+    }
+}
+
+description = "MiniGamesBox-API"

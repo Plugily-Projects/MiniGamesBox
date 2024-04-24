@@ -16,14 +16,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-rootProject.name = "MiniGamesBox"
-include(":MiniGamesBox-API")
-include(":MiniGamesBox-Inventory")
-include(":MiniGamesBox-Classic")
-include(":MiniGamesBox-Database")
-include(":MiniGamesBox-Utils")
-project(":MiniGamesBox-API").projectDir = file("MiniGamesBox API")
-project(":MiniGamesBox-Inventory").projectDir = file("MiniGamesBox Inventory")
-project(":MiniGamesBox-Classic").projectDir = file("MiniGamesBox Classic")
-project(":MiniGamesBox-Database").projectDir = file("MiniGamesBox Database")
-project(":MiniGamesBox-Utils").projectDir = file("MiniGamesBox Utils")
+package plugily.projects.minigamesbox.api;
+
+
+/**
+ * @author Lagggpixel
+ * <p>
+ * Created at 04.24.2024
+ * @version 1.0.0
+ */
+public interface MinigamesAPI {
+
+}

@@ -20,7 +20,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.game;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.completion.CompletableArgument;
@@ -42,7 +42,7 @@ public class LeaderboardArgument {
   public LeaderboardArgument(PluginArgumentsRegistry registry) {
     this.registry = registry;
     List<String> stats = new ArrayList<>();
-    for(StatisticType val : registry.getPlugin().getStatsStorage().getStatistics().values()) {
+    for(IStatisticType val : registry.getPlugin().getStatsStorage().getStatistics().values()) {
       if(!val.isPersistent()) {
         continue;
       }
@@ -57,7 +57,7 @@ public class LeaderboardArgument {
           return;
         }
         try {
-          StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
+          IStatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[1].toUpperCase());
           printLeaderboard(sender, statisticType);
         } catch(IllegalArgumentException e) {
           new MessageBuilder("LEADERBOARD_INVALID_NAME").asKey().send(sender);
@@ -66,7 +66,7 @@ public class LeaderboardArgument {
     });
   }
 
-  private void printLeaderboard(CommandSender sender, StatisticType statisticType) {
+  private void printLeaderboard(CommandSender sender, IStatisticType statisticType) {
     java.util.Map<UUID, Integer> stats = registry.getPlugin().getStatsStorage().getStats(statisticType);
     new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_HEADER").asKey().send(sender);
     String statistic = StringUtils.capitalize(statisticType.getName().toLowerCase().replace('_', ' '));

@@ -29,8 +29,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -57,7 +57,7 @@ public class LobbyEvents implements Listener {
     if(arena == null) {
       return;
     }
-    if(arena.getArenaState() != ArenaState.IN_GAME) {
+    if(arena.getArenaState() != IArenaState.IN_GAME) {
       event.setFoodLevel(20);
       event.setCancelled(true);
     }
@@ -70,7 +70,7 @@ public class LobbyEvents implements Listener {
     }
     Player player = (Player) event.getEntity();
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
+    if(arena == null || arena.getArenaState() == IArenaState.IN_GAME) {
       return;
     }
     event.setCancelled(true);
@@ -81,7 +81,7 @@ public class LobbyEvents implements Listener {
   public void onItemFrameRotate(PlayerInteractEntityEvent event) {
     Player player = event.getPlayer();
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
+    if(arena == null || arena.getArenaState() == IArenaState.IN_GAME) {
       return;
     }
     if(event.getRightClicked() instanceof ItemFrame && ((ItemFrame) event.getRightClicked()).getItem().getType() != Material.AIR) {
@@ -96,7 +96,7 @@ public class LobbyEvents implements Listener {
     }
     Player player = (Player) event.getEntity();
     PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
+    if(arena == null || arena.getArenaState() == IArenaState.IN_GAME) {
       return;
     }
     event.setCancelled(true);

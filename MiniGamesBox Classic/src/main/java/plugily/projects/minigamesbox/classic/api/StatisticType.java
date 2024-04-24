@@ -18,6 +18,8 @@
 
 package plugily.projects.minigamesbox.classic.api;
 
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,7 @@ import java.util.Map;
  * <p>
  * Created at 19.09.2021
  */
-public class StatisticType {
+public class StatisticType implements IStatisticType {
 
   private static final Map<String, StatisticType> statistics = new HashMap<>();
 
@@ -46,7 +48,6 @@ public class StatisticType {
   private final String databaseParameters;
   private final boolean protectedStatistic;
 
-
   public StatisticType(String name, boolean persistent, String databaseParameters, boolean protectedStatistic) {
     this.name = name;
     this.persistent = persistent;
@@ -61,10 +62,12 @@ public class StatisticType {
     this.protectedStatistic = false;
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public String getDatabaseParameters() {
     return databaseParameters;
   }
@@ -72,6 +75,7 @@ public class StatisticType {
   /**
    * @return default persistent of option if absent in config
    */
+  @Override
   public boolean isPersistent() {
     return persistent;
   }
@@ -79,11 +83,12 @@ public class StatisticType {
   /**
    * @return whether option is protected and cannot be unregistered
    */
+  @Override
   public boolean isProtected() {
     return protectedStatistic;
   }
 
-  public static Map<String, StatisticType> getStatistics() {
+  public static Map<String, IStatisticType> getStatistics() {
     return Collections.unmodifiableMap(statistics);
   }
 }

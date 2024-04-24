@@ -23,11 +23,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.database.MysqlDatabase;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
+import plugily.projects.minigamesbox.database.MysqlDatabase;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -165,7 +166,7 @@ public class MysqlManager implements UserDatabase {
    */
   private void loadUserStats(User user, ResultSet resultSet) throws SQLException {
     //player already exists - get the stats
-    for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
+    for(IStatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
       if(!statisticType.isPersistent()) {
         continue;
       }
@@ -196,7 +197,7 @@ public class MysqlManager implements UserDatabase {
    * @param statisticType
    * @param value
    */
-  private void setUserStat(User user, @NotNull StatisticType statisticType, int value) {
+  private void setUserStat(User user, @NotNull IStatisticType statisticType, int value) {
     if(statisticType.isPersistent()) {
       user.setStatistic(statisticType, value);
     }
@@ -204,7 +205,7 @@ public class MysqlManager implements UserDatabase {
 
   @NotNull
   @Override
-  public Map<UUID, Integer> getStats(StatisticType stat) {
+  public Map<UUID, Integer> getStats(IStatisticType stat) {
     try(Connection connection = database.getConnection();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT UUID, " + stat.getName() + " FROM " + getTableName() + " ORDER BY " + stat.getName())) {
@@ -235,7 +236,7 @@ public class MysqlManager implements UserDatabase {
    * @return
    * @throws SQLException
    */
-  private @NotNull Map<UUID, Integer> getColumnData(StatisticType statistic, @NotNull ResultSet resultSet) throws SQLException {
+  private @NotNull Map<UUID, Integer> getColumnData(IStatisticType statistic, @NotNull ResultSet resultSet) throws SQLException {
     Map<UUID, Integer> column = new LinkedHashMap<>();
     while(resultSet.next()) {
       String uuid = resultSet.getString("UUID");
@@ -256,7 +257,7 @@ public class MysqlManager implements UserDatabase {
     return column;
   }
 
-  private int getUpdatedColumnData(String uuid, StatisticType statisticType, int fromDatabase) {
+  private int getUpdatedColumnData(String uuid, IStatisticType statisticType, int fromDatabase) {
     Player player = Bukkit.getPlayer(UUID.fromString(uuid));
     if(player != null && player.isOnline()) {
       return plugin.getStatsStorage().getUserStats(player, statisticType);
