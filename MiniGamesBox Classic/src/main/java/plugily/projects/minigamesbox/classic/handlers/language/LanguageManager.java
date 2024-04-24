@@ -22,6 +22,8 @@ package plugily.projects.minigamesbox.classic.handlers.language;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import plugily.projects.minigamesbox.api.handlers.language.ILanguageManager;
+import plugily.projects.minigamesbox.api.utils.services.locale.ILocale;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
@@ -41,10 +43,10 @@ import java.util.stream.Collectors;
  * <p>
  * Created at 21.09.2021
  */
-public class LanguageManager {
+public class LanguageManager implements ILanguageManager {
 
   private final PluginMain plugin;
-  private Locale pluginLocale;
+  private ILocale pluginLocale;
   private FileConfiguration localeFile;
   private FileConfiguration languageConfig;
   private boolean messagesIntegrityPassed = true;
@@ -142,6 +144,7 @@ public class LanguageManager {
     localeFile = config;
   }
 
+  @Override
   public void setupLocale() {
     String localeName = plugin.getConfig().getString("locale", "default").toLowerCase();
     for(Locale locale : LocaleRegistry.getRegisteredLocales()) {
@@ -171,10 +174,12 @@ public class LanguageManager {
     loadLocaleFile();
   }
 
+  @Override
   public boolean isDefaultLanguageUsed() {
     return "Default".equalsIgnoreCase(pluginLocale.getName());
   }
 
+  @Override
   public String getLanguageMessage(String path) {
     if(isDefaultLanguageUsed()) {
       return getString(path);
@@ -189,10 +194,12 @@ public class LanguageManager {
     return getString(path);
   }
 
+  @Override
   public List<String> getLanguageList(String path) {
     return getLanguageListContent(path);
   }
 
+  @Override
   public List<String> getLanguageListFromKey(String key) {
     String path = plugin.getMessageManager().getPath(key);
     return getLanguageListContent(path);
@@ -244,11 +251,13 @@ public class LanguageManager {
     return languageConfig.getString(path, "not found");
   }
 
+  @Override
   public void reloadLanguage() {
     languageConfig = ConfigUtils.getConfig(plugin, "language");
   }
 
-  public Locale getPluginLocale() {
+  @Override
+  public ILocale getPluginLocale() {
     return pluginLocale;
   }
 }

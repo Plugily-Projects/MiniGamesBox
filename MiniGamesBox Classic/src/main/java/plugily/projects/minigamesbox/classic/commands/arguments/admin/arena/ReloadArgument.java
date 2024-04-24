@@ -20,15 +20,12 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,7 +53,7 @@ public class ReloadArgument {
         confirmations.remove(sender);
 
 
-        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(IPluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           registry.getPlugin().getArenaManager().stopGame(true, arena);
         }
 

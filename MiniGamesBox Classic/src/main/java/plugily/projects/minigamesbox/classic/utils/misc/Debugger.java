@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.utils.misc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import plugily.projects.minigamesbox.api.utils.misc.IDebugger;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
  * <p>
  * Created at 12.09.2021
  */
-public class Debugger {
+public class Debugger implements IDebugger {
 
   private final java.util.Set<String> listenedPerformance = new HashSet<>();
   private boolean enabled = false;
@@ -47,76 +48,65 @@ public class Debugger {
     enabled = enable;
   }
 
+  @Override
   public void setEnabled(boolean enable) {
     enabled = enable;
   }
 
+  @Override
   public void deepDebug(boolean enable) {
     deep = enable;
   }
 
+  @Override
   public void monitorPerformance(String task) {
     listenedPerformance.add(task);
   }
 
+  @Override
   public void sendConsoleMsg(String msg) {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && msg.indexOf('#') >= 0) {
+    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && msg.indexOf('#') >= 0) {
       msg = MiscUtils.matchColorRegex(msg);
     }
 
     Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
   }
 
+  @Override
   public void debug(String msg) {
     debug(Level.INFO, msg);
   }
 
-  /**
-   * Prints debug message with selected log level.
-   * Messages of level INFO or TASK won't be posted if
-   * debugger is enabled, warnings and errors will be.
-   *
-   * @param level level of debugged message
-   * @param msg   debugged message
-   */
+  @Override
   public void debug(Level level, String msg) {
-    if(!enabled && (level != Level.WARNING && level != Level.SEVERE)) {
+    if (!enabled && (level != Level.WARNING && level != Level.SEVERE)) {
       return;
     }
     logger.log(level, debuggerPrefix + ChatColor.translateAlternateColorCodes('&', msg));
   }
 
+  @Override
   public void debug(String msg, Object... params) {
     debug(Level.INFO, msg, params);
   }
 
-  /**
-   * Prints debug message with selected log level and replaces parameters.
-   * Messages of level INFO or TASK won't be posted if
-   * debugger is enabled, warnings and errors will be.
-   *
-   * @param level level of debugged message
-   * @param msg   debugged message
-   */
+  @Override
   public void debug(Level level, String msg, Object... params) {
-    if(!enabled && (level != Level.WARNING && level != Level.SEVERE)) {
+    if (!enabled && (level != Level.WARNING && level != Level.SEVERE)) {
       return;
     }
     logger.log(level, debuggerPrefix + msg, params);
   }
 
-  /**
-   * Prints performance debug message with selected log level and replaces parameters.
-   *
-   * @param msg debugged message
-   */
+  @Override
   public void performance(String monitorName, String msg, Object... params) {
-    if(!deep || !listenedPerformance.contains(monitorName)) {
+    if (!deep || !listenedPerformance.contains(monitorName)) {
       return;
     }
     logger.log(Level.INFO, debuggerPrefix + msg, params);
   }
 
+  @Override
   public Set<String> getListenedPerformance() {
     return listenedPerformance;
   }

@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.utils.services.locale;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import plugily.projects.minigamesbox.api.utils.services.locale.ILocale;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
@@ -87,7 +88,7 @@ public class LocaleService {
     return version;
   }
 
-  private InputStream requestLocaleFetch(Locale locale) {
+  private InputStream requestLocaleFetch(ILocale locale) {
     try {
       URL url = new URL("https://api.plugily.xyz/locale/v3/fetch.php");
       HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -124,7 +125,7 @@ public class LocaleService {
    * @param locale locale to download
    * @return SUCCESS for downloaded locale, FAIL for service fault, LATEST when locale is latest as one in repository
    */
-  public DownloadStatus demandLocaleDownload(Locale locale) {
+  public DownloadStatus demandLocaleDownload(ILocale locale) {
     //service fault
     if(localeData == null) {
       return DownloadStatus.FAIL;
@@ -136,7 +137,7 @@ public class LocaleService {
     return DownloadStatus.LATEST;
   }
 
-  private DownloadStatus writeFile(Locale locale) {
+  private DownloadStatus writeFile(ILocale locale) {
     try(Scanner scanner = new Scanner(requestLocaleFetch(locale), StandardCharsets.UTF_8).useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
       try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml"), StandardCharsets.UTF_8)) {
@@ -163,7 +164,7 @@ public class LocaleService {
     return !checkHigher(plugin.getDescription().getVersion(), localeData.getString("locales.valid-version", plugin.getDescription().getVersion()));
   }
 
-  private boolean isExact(Locale locale, File file) {
+  private boolean isExact(ILocale locale, File file) {
     try(Scanner scanner = new Scanner(requestLocaleFetch(locale), StandardCharsets.UTF_8).useDelimiter("\\A");
         Scanner localScanner = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\\A")) {
       String onlineData = scanner.hasNext() ? scanner.next() : "";

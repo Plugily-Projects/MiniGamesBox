@@ -21,8 +21,12 @@ package plugily.projects.minigamesbox.classic.handlers.powerup;
 
 
 import com.cryptomorin.xseries.XMaterial;
+import plugily.projects.minigamesbox.api.handlers.powerup.BasePowerup;
+import plugily.projects.minigamesbox.api.handlers.powerup.IPowerupPickupHandler;
+import plugily.projects.minigamesbox.api.handlers.reward.IReward;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -40,10 +44,10 @@ public class Powerup implements BasePowerup {
   private final List<String> effects;
   private final PotionType potionType;
   private final XMaterial material;
-  private final Consumer<PowerupPickupHandler> onPickup;
+  private final Consumer<IPowerupPickupHandler> onPickup;
   private final Set<Reward> rewards;
 
-  public Powerup(String id, String name, String description, XMaterial material, List<String> effects, PotionType potionType, Set<Reward> rewards, Consumer<PowerupPickupHandler> pickup) {
+  public Powerup(String id, String name, String description, XMaterial material, List<String> effects, PotionType potionType, Set<Reward> rewards, Consumer<IPowerupPickupHandler> pickup) {
     this.key = id;
     this.name = name;
     this.description = description;
@@ -85,12 +89,12 @@ public class Powerup implements BasePowerup {
   }
 
   @Override
-  public Set<Reward> getRewards() {
-    return rewards;
+  public Set<IReward> getRewards() {
+    return new HashSet<>(rewards);
   }
 
   @Override
-  public Consumer<PowerupPickupHandler> getOnPickup() {
+  public Consumer<IPowerupPickupHandler> getOnPickup() {
     return onPickup;
   }
 }

@@ -18,6 +18,8 @@
 
 package plugily.projects.minigamesbox.classic.utils.services.locale;
 
+import plugily.projects.minigamesbox.api.utils.services.locale.ILocale;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ import java.util.List;
  *
  * @since 1.2.0
  */
-public class Locale {
+public class Locale implements ILocale {
 
   /* LANGUAGES USED BEFORE
       new Locale("Hungarian", "Magyar", "hu_HU", "POEditor contributors", Arrays.asList("hungarian", "magyar", "hu"));
@@ -53,61 +55,44 @@ public class Locale {
    * Retrieves the Locale object matching the specified locale prefix or name.
    *
    * @param  locale  the locale prefix or name to search for
-   * @return         the Locale object matching the specified locale prefix or name, or null if no match is found
+   * @return the Locale object matching the specified locale prefix or name, or null if no match is found
    */
   public static Locale getLocale(String locale) {
-    for(Locale l : LocaleRegistry.getRegisteredLocales()) {
-      if(l.getPrefix().equals(locale)) {
+    for (Locale l : LocaleRegistry.getRegisteredLocales()) {
+      if (l.getPrefix().equals(locale)) {
         return l;
       }
     }
-    for(Locale l : LocaleRegistry.getRegisteredLocales()) {
-      if(l.getName().equals(locale)) {
+    for (Locale l : LocaleRegistry.getRegisteredLocales()) {
+      if (l.getName().equals(locale)) {
         return l;
       }
     }
     return null;
   }
 
-  /**
-   * Gets name of locale, ex. English or German
-   *
-   * @return name of locale
-   */
+
+  @Override
   public String getName() {
     return name;
   }
 
-  /**
-   * Gets original name of locale ex. for German it will return Deutsch, Polish returns Polski etc.
-   *
-   * @return name of locale in its language
-   */
+  @Override
   public String getOriginalName() {
     return originalName;
   }
 
-  /**
-   * @return authors of locale
-   */
+  @Override
   public String getAuthor() {
     return author;
   }
 
-  /**
-   * Language code ex. en_GB, de_DE, pl_PL etc.
-   *
-   * @return language code of locale
-   */
+  @Override
   public String getPrefix() {
     return prefix;
   }
 
-  /**
-   * Valid aliases of locale ex. for German - deutsch, de, german; Polish - polski, pl, polish etc.
-   *
-   * @return aliases for locale
-   */
+  @Override
   public List<String> getAliases() {
     return aliases;
   }

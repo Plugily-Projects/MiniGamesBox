@@ -25,6 +25,7 @@ plugins {
 dependencies {
     implementation("me.tigerhix.lib:scoreboard:1.4.3") { isTransitive = false }
     implementation("com.github.cryptomorin:XSeries:9.10.0") { isTransitive = false }
+    implementation(project(":MiniGamesBox-API", "shadow"))
     implementation(project(":MiniGamesBox-Inventory", "shadow"))
     implementation(project(":MiniGamesBox-Database", "shadow"))
     implementation(project(":MiniGamesBox-Utils", "shadow"))
@@ -41,6 +42,10 @@ dependencies {
 }
 
 tasks {
+    compileJava {
+        dependsOn(":MiniGamesBox-API:jar")
+    }
+
     build {
         dependsOn(shadowJar)
     }

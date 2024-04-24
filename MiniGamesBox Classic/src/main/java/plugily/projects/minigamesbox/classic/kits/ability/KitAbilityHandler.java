@@ -22,8 +22,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
 public class KitAbilityHandler implements Listener {
@@ -43,7 +43,7 @@ public class KitAbilityHandler implements Listener {
     if(!(event.getWhoClicked() instanceof Player)) {
       return;
     }
-    User user = plugin.getUserManager().getUser((Player) event.getWhoClicked());
+    IUser user = plugin.getUserManager().getUser((Player) event.getWhoClicked());
     if(!plugin.getArenaRegistry().isInArena((Player) event.getWhoClicked())) {
       return;
     }

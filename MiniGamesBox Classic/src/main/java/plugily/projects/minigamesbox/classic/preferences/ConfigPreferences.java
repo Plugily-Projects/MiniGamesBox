@@ -19,24 +19,23 @@
 package plugily.projects.minigamesbox.classic.preferences;
 
 import org.bukkit.configuration.ConfigurationSection;
+import plugily.projects.minigamesbox.api.preferences.ICommandShorter;
+import plugily.projects.minigamesbox.api.preferences.IConfigOption;
+import plugily.projects.minigamesbox.api.preferences.IConfigPreferences;
 import plugily.projects.minigamesbox.classic.PluginMain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 12.09.2021
  */
-public class ConfigPreferences {
+public class ConfigPreferences implements IConfigPreferences {
 
   private final PluginMain plugin;
   private final Map<String, ConfigOption> options = new HashMap<>();
-  private static final List<CommandShorter> commandShorts = new ArrayList<>();
+  private static final List<ICommandShorter> commandShorts = new ArrayList<>();
 
   public ConfigPreferences(PluginMain plugin) {
     this.plugin = plugin;
@@ -66,12 +65,7 @@ public class ConfigPreferences {
     }
   }
 
-  /**
-   * Returns whether option value is true or false
-   *
-   * @param name option to get value from
-   * @return true or false based on user configuration
-   */
+  @Override
   public boolean getOption(String name) {
     ConfigOption configOption = options.get(name);
 
@@ -81,25 +75,15 @@ public class ConfigPreferences {
     return configOption.getValue();
   }
 
-
-  /**
-   * Register a new config option
-   *
-   * @param name   The name of the Option
-   * @param option Contains the path and the default value
-   */
-  public void registerOption(String name, ConfigOption option) {
+  @Override
+  public void registerOption(String name, IConfigOption option) {
     if(options.containsKey(name)) {
       throw new IllegalStateException("Option with path " + name + " was already registered");
     }
     options.put(name, new ConfigOption(option.getPath(), plugin.getConfig().getBoolean(option.getPath(), option.getValue()), option.isProtected()));
   }
 
-  /**
-   * Remove config options that are not protected
-   *
-   * @param name The name of the Option
-   */
+  @Override
   public void unregisterOption(String name) {
     ConfigOption option = options.get(name);
     if(option == null) {
@@ -111,15 +95,18 @@ public class ConfigPreferences {
     options.remove(name);
   }
 
-  public Map<String, ConfigOption> getOptions() {
+  @Override
+  public Map<String, IConfigOption> getOptions() {
     return Collections.unmodifiableMap(options);
   }
 
-  public List<CommandShorter> getCommandShorts() {
+  @Override
+  public List<ICommandShorter> getCommandShorts() {
     return Collections.unmodifiableList(commandShorts);
   }
 
-  public void addCommandShorter(CommandShorter commandShorter) {
+  @Override
+  public void addCommandShorter(ICommandShorter commandShorter) {
     commandShorts.add(commandShorter);
   }
 }

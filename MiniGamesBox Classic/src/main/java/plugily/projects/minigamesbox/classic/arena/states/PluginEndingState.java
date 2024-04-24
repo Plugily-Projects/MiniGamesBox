@@ -19,8 +19,8 @@
 package plugily.projects.minigamesbox.classic.arena.states;
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 
@@ -33,7 +33,7 @@ public class PluginEndingState implements ArenaStateHandler {
 
   private PluginMain plugin;
   private int arenaTimer;
-  private ArenaState arenaState = ArenaState.ENDING;
+  private IArenaState arenaState = IArenaState.ENDING;
 
   @Override
   public void init(PluginMain plugin) {
@@ -42,18 +42,18 @@ public class PluginEndingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
-    setArenaState(ArenaState.ENDING);
+    setArenaState(IArenaState.ENDING);
     setArenaTimer(-999);
-    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.ENDING, arenaState, arenaTimer);
 
     if(arena.getTimer() <= 0) {
       for(Player player : arena.getPlayers()) {
         plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("END_GAME"));
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.Restarting", 5);
-      arenaState = ArenaState.RESTARTING;
+      arenaState = IArenaState.RESTARTING;
     }
-    plugin.getDebugger().performance("ArenaUpdate","END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.ENDING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate","END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.ENDING, arenaState, arenaTimer);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class PluginEndingState implements ArenaStateHandler {
   }
 
   @Override
-  public ArenaState getArenaStateChange() {
+  public IArenaState getArenaStateChange() {
     return arenaState;
   }
 
@@ -70,7 +70,7 @@ public class PluginEndingState implements ArenaStateHandler {
     this.arenaTimer = arenaTimer;
   }
 
-  public void setArenaState(ArenaState arenaState) {
+  public void setArenaState(IArenaState arenaState) {
     this.arenaState = arenaState;
   }
 

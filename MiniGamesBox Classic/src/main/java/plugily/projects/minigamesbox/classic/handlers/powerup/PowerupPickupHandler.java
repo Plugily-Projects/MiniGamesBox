@@ -19,6 +19,9 @@
 package plugily.projects.minigamesbox.classic.handlers.powerup;
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.handlers.powerup.BasePowerup;
+import plugily.projects.minigamesbox.api.handlers.powerup.IPowerupPickupHandler;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
@@ -26,7 +29,7 @@ import plugily.projects.minigamesbox.classic.arena.PluginArena;
  * <p>
  * Created at 08.10.2021
  */
-public class PowerupPickupHandler {
+public class PowerupPickupHandler implements IPowerupPickupHandler {
 
   private final BasePowerup powerup;
   private final PluginArena arena;
@@ -38,14 +41,17 @@ public class PowerupPickupHandler {
     this.player = player;
   }
 
+  @Override
   public BasePowerup getPowerup() {
     return powerup;
   }
 
-  public PluginArena getArena() {
+  @Override
+  public IPluginArena getArena() {
     return arena;
   }
 
+  @Override
   public Player getPlayer() {
     return player;
   }

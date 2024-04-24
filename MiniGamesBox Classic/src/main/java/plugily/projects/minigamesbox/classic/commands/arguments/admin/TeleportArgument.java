@@ -21,6 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -67,7 +68,7 @@ public class TeleportArgument {
           new MessageBuilder("COMMANDS_INVALID_LOCATION_TELEPORT").asKey().send(sender);
           return;
         }
-        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(IPluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           if(arena.getId().equalsIgnoreCase(args[1])) {
             teleport((Player) sender, arena, type);
             break;
@@ -77,7 +78,7 @@ public class TeleportArgument {
     });
   }
 
-  private void teleport(Player player, PluginArena arena, PluginArena.GameLocation gameLocation) {
+  private void teleport(Player player, IPluginArena arena, PluginArena.GameLocation gameLocation) {
     Location location = arena.getLocation(gameLocation);
     if(location == null) {
       player.sendMessage(ChatColor.RED + gameLocation.toString() + " location isn't set for this arena!");

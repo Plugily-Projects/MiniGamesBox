@@ -18,11 +18,9 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -46,7 +44,7 @@ public class PlaceholderCheckArgument {
           return;
         }
         new MessageBuilder("---- PLACEHOLDERS OF " + registry.getPlugin().getPluginNamePrefixLong().toUpperCase() + " ----").send(sender);
-        PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(((Player) sender));
+        IPluginArena arena = registry.getPlugin().getArenaRegistry().getArena(((Player) sender));
         if (arena == null) {
           if (registry.getPlugin().getArenaRegistry().getArenas().isEmpty()) {
             new MessageBuilder("!You need to have at least one arena!").send(sender);

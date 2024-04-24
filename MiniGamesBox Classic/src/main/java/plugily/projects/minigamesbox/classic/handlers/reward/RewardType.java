@@ -18,6 +18,8 @@
 
 package plugily.projects.minigamesbox.classic.handlers.reward;
 
+import plugily.projects.minigamesbox.api.handlers.reward.IRewardType;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,7 @@ import java.util.Map;
  * <p>
  * Created at 07.10.2021
  */
-public class RewardType {
+public class RewardType implements IRewardType {
 
   private static final Map<String, RewardType> rewardTypes = new HashMap<>();
 
@@ -59,29 +61,22 @@ public class RewardType {
     this.protectedOption = protectedOption;
   }
 
+  @Override
   public String getPath() {
     return path;
   }
 
+  @Override
   public ExecutorType getExecutorType() {
     return executorType;
   }
 
-  /**
-   * @return whether option is protected and cannot be unregistered
-   */
+  @Override
   public boolean isProtected() {
     return protectedOption;
   }
 
-
   public static Map<String, RewardType> getRewardTypes() {
     return Collections.unmodifiableMap(rewardTypes);
   }
-
-  public enum ExecutorType {
-    DEFAULT, NUMBER
-  }
-
-
 }

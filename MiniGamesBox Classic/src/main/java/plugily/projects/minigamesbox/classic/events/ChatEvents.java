@@ -23,10 +23,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 
 import java.util.ArrayList;
 
@@ -45,10 +45,10 @@ public class ChatEvents implements Listener {
 
   @EventHandler
   public void onChatIngame(AsyncPlayerChatEvent event) {
-    PluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
+    IPluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
     if(plugin.getConfigPreferences().getOption("SEPARATE_ARENA_CHAT")) {
       if(arena == null) {
-        for(PluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
+        for(IPluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
           for(Player player : loopArena.getPlayers()) {
             if(!plugin.getArgumentsRegistry().getSpyChat().isSpyChatEnabled(player)) {
               event.getRecipients().remove(player);
@@ -67,7 +67,7 @@ public class ChatEvents implements Listener {
         }
       }
     } else if(plugin.getConfigPreferences().getOption("SEPARATE_ARENA_SPECTATORS")) {
-      for(PluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
+      for(IPluginArena loopArena : plugin.getArenaRegistry().getArenas()) {
         if(plugin.getUserManager().getUser(event.getPlayer()).isSpectator()) {
           event.getRecipients().removeIf(player -> loopArena.getPlayersLeft().contains(player));
         } else {
@@ -82,7 +82,7 @@ public class ChatEvents implements Listener {
     }
   }
 
-  private String formatChatPlaceholders(User user, PluginArena arena) {
+  private String formatChatPlaceholders(IUser user, IPluginArena arena) {
     String formatted = new MessageBuilder("IN_GAME_GAME_CHAT_FORMAT").asKey().getRaw();
     if(user.isSpectator()) {
       if(formatted.contains("%kit%")) {

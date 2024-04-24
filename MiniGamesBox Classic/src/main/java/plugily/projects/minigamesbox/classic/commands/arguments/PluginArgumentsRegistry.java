@@ -24,34 +24,25 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.*;
-import plugily.projects.minigamesbox.string.StringMatcher;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
-import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ReloadArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.*;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.DeleteArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ForceStartArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.ReloadArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.arena.StopArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.admin.statistic.AdjustStatisticArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.ArenaSelectorArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.JoinArguments;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaderboardArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.LeaveArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.SelectKitArgument;
-import plugily.projects.minigamesbox.classic.commands.arguments.game.StatsArgument;
+import plugily.projects.minigamesbox.classic.commands.arguments.game.*;
 import plugily.projects.minigamesbox.classic.commands.completion.TabCompletion;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 import plugily.projects.minigamesbox.classic.utils.version.TextComponentBuilder;
+import plugily.projects.minigamesbox.string.StringMatcher;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -128,7 +119,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
               || !plugin.getBukkitHelper().hasPermission(sender, plugin.getPluginNamePrefixLong() + ".admin.setup")) {
             return true;
           }
-          PluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
+          IPluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
           if(arena == null) {
             new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
             return true;
@@ -266,7 +257,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     return spyChat;
   }
 
-  public List<PluginArena> getSpecificFilteredArenas(List<PluginArena> arenas, String filter) {
+  public List<IPluginArena> getSpecificFilteredArenas(List<IPluginArena> arenas, String filter) {
     return arenas;
   }
 }
