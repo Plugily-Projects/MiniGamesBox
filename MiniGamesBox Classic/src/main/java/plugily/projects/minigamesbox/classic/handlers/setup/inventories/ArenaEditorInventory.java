@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.handlers.setup.inventories;
 
 import com.cryptomorin.xseries.XMaterial;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
@@ -49,7 +50,7 @@ public class ArenaEditorInventory extends NormalFastInv implements InventoryHand
     injectItems();
     addCloseHandler(event -> {
       if(pluginSetupCategoryManager.canRegister()) {
-        PluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
+        IPluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
         if(arena != null && arena.isReady()) {
           setupInventory.setConfig("isdone", true);
           setupInventory.getPlugin().getArenaRegistry().registerArena(setupInventory.getArenaKey());

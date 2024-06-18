@@ -22,10 +22,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
-import plugily.projects.minigamesbox.classic.user.User;
 
 /**
  * @author Tigerpanzer_02
@@ -55,11 +55,11 @@ public class QuitEvent implements Listener {
     plugin
         .getSpecialItemManager()
         .removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.SERVER_JOIN);
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
     if (arena != null) {
       plugin.getArenaManager().leaveAttempt(player, arena);
     }
-    User user = plugin.getUserManager().getUser(player);
+    IUser user = plugin.getUserManager().getUser(player);
     plugin.getUserManager().saveAllStatistic(user);
     plugin.getUserManager().removeUser(user);
 

@@ -21,8 +21,8 @@ package plugily.projects.minigamesbox.classic.handlers.hologram;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.handlers.language.Message;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.hologram.ArmorStandHologram;
@@ -42,13 +42,13 @@ public class LeaderboardHologram {
 
   private final PluginMain plugin;
   private final int id;
-  private final StatisticType statistic;
+  private final IStatisticType statistic;
   private final int topAmount;
   private ArmorStandHologram hologram;
   private final Location location;
   private final String header;
 
-  public LeaderboardHologram(PluginMain plugin, int id, StatisticType statistic, int amount, Location location) {
+  public LeaderboardHologram(PluginMain plugin, int id, IStatisticType statistic, int amount, Location location) {
     this.plugin = plugin;
     this.id = id;
     this.statistic = statistic;
@@ -101,7 +101,7 @@ public class LeaderboardHologram {
     return id;
   }
 
-  public StatisticType getStatistic() {
+  public IStatisticType getStatistic() {
     return statistic;
   }
 

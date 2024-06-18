@@ -28,9 +28,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
@@ -48,13 +48,13 @@ public class BungeeManager implements Listener {
 
   private final PluginMain plugin;
   private final FileConfiguration config;
-  private final Map<ArenaState, String> motd = new EnumMap<>(ArenaState.class);
+  private final Map<IArenaState, String> motd = new EnumMap<>(IArenaState.class);
 
   public BungeeManager(PluginMain plugin) {
     this.plugin = plugin;
     config = ConfigUtils.getConfig(plugin, "bungee");
 
-    for(ArenaState arenaState : ArenaState.values()) {
+    for(IArenaState arenaState : IArenaState.values()) {
       motd.put(arenaState, plugin.getLanguageManager().getLanguageMessage("Placeholders.Motd." + arenaState.getFormattedName()));
     }
 
@@ -79,7 +79,7 @@ public class BungeeManager implements Listener {
     if(plugin.getArenaRegistry().getArenas().isEmpty() || !config.getBoolean("MOTD.Manager")) {
       return;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena());
+    IPluginArena arena = plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena());
     event.setMaxPlayers(arena.getMaximumPlayers());
     ComplementAccessor.getComplement().setMotd(event, new MessageBuilder(motd.get(arena.getArenaState())).arena(arena).build());
   }

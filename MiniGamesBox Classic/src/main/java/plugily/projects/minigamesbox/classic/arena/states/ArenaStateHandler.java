@@ -19,8 +19,8 @@
 package plugily.projects.minigamesbox.classic.arena.states;
 
 
+import plugily.projects.minigamesbox.api.arena.IArenaState;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
@@ -57,6 +57,6 @@ public interface ArenaStateHandler {
    *
    * @return ArenaState that will be executed as next
    */
-  ArenaState getArenaStateChange();
+  IArenaState getArenaStateChange();
 
 }

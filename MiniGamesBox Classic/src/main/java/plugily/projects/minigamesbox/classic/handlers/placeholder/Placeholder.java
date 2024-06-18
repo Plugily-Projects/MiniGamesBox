@@ -19,7 +19,7 @@
 package plugily.projects.minigamesbox.classic.handlers.placeholder;
 
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -74,12 +74,12 @@ public class Placeholder {
     return null;
   }
 
-  public String getValue(PluginArena arena) {
+  public String getValue(IPluginArena arena) {
     // EMPTY
     return null;
   }
 
-  public String getValue(Player player, PluginArena arena) {
+  public String getValue(Player player, IPluginArena arena) {
     // EMPTY
     return null;
   }

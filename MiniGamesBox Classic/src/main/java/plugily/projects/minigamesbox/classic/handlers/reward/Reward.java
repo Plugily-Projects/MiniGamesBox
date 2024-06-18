@@ -20,6 +20,8 @@ package plugily.projects.minigamesbox.classic.handlers.reward;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import plugily.projects.minigamesbox.api.handlers.reward.IReward;
+import plugily.projects.minigamesbox.api.handlers.reward.IRewardType;
 
 import java.util.logging.Level;
 
@@ -28,7 +30,7 @@ import java.util.logging.Level;
  * <p>
  * Created at 07.10.2021
  */
-public class Reward {
+public class Reward implements IReward {
 
   private final RewardType type;
   private final RewardExecutor executor;
@@ -76,28 +78,29 @@ public class Reward {
     executableCode = processedCode;
   }
 
+
+  @Override
   public RewardExecutor getExecutor() {
     return executor;
   }
 
+  @Override
   public String getExecutableCode() {
     return executableCode;
   }
 
+  @Override
   public double getChance() {
     return chance;
   }
 
+  @Override
   public int getNumberExecute() {
     return numberExecute;
   }
 
-  public RewardType getType() {
+  @Override
+  public IRewardType getType() {
     return type;
   }
-
-  public enum RewardExecutor {
-    CONSOLE, PLAYER, SCRIPT
-  }
-
 }

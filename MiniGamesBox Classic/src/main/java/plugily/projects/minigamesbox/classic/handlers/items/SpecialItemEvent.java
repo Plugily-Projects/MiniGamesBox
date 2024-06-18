@@ -23,13 +23,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerSwapHandItemsEvent;
+
+import java.util.HashSet;
 
 /**
  * @author Tigerpanzer_02
@@ -89,13 +91,13 @@ public class SpecialItemEvent implements Listener {
     }
     plugin.getDebugger().debug("SpecialItem {0} - Permission check for {1} true", relatedSpecialItem.getPath(), player.getName());
 
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
 
     if(arena == null) {
-      plugin.getRewardsHandler().performReward(player, relatedSpecialItem.getRewards());
+      plugin.getRewardsHandler().performReward(player, new HashSet<>(relatedSpecialItem.getRewards()));
       return;
     }
-    plugin.getRewardsHandler().performReward(player, arena, relatedSpecialItem.getRewards());
+    plugin.getRewardsHandler().performReward(player, arena, new HashSet<>(relatedSpecialItem.getRewards()));
     if(plugin.getSpecialItemManager().getSpecialItem("FORCESTART").getPath().equals(relatedSpecialItem.getPath())) {
       PluginArenaUtils.arenaForceStart(player, plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Force", 5));
       return;

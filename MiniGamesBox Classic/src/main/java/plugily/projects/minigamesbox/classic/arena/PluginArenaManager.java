@@ -22,15 +22,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameJoinAttemptEvent;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameLeaveAttemptEvent;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameStopEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameLeaveAttemptEvent;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStopEvent;
+import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.language.TitleBuilder;
 import plugily.projects.minigamesbox.classic.handlers.party.GameParty;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -57,9 +60,9 @@ public class PluginArenaManager {
    *
    * @param player player to join
    * @param arena  arena to join
-   * @see plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent
+   * @see PlugilyGameJoinAttemptEvent
    */
-  public void joinAttempt(@NotNull Player player, @NotNull PluginArena arena) {
+  public void joinAttempt(@NotNull Player player, @NotNull IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial join attempt for {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
     if(!canJoinArenaAndMessage(player, arena) || !checkFullGamePermission(player, arena)) {
@@ -73,7 +76,7 @@ public class PluginArenaManager {
 
     arena.getPlayers().add(player);
 
-    if(arena.getArenaState() == ArenaState.IN_GAME || arena.getArenaState().isStartingStage(arena) && arena.getTimer() <= 3 || arena.getArenaState() == ArenaState.ENDING) {
+    if(arena.getArenaState() == IArenaState.IN_GAME || ArenaState.isStartingStage(arena) && arena.getTimer() <= 3 || arena.getArenaState() == IArenaState.ENDING) {
       if(!plugin.getConfigPreferences().getOption("SPECTATORS")) {
         new MessageBuilder("IN_GAME_SPECTATOR_BLOCKED").asKey().player(player).arena(arena).sendPlayer();
         return;
@@ -102,9 +105,9 @@ public class PluginArenaManager {
       plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
     }
     plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
-    if(arena.getArenaState() == ArenaState.WAITING_FOR_PLAYERS) {
+    if(arena.getArenaState() == IArenaState.WAITING_FOR_PLAYERS) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
-    } else if(arena.getArenaState().isStartingStage(arena)) {
+    } else if(ArenaState.isStartingStage(arena)) {
       plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
     }
 
@@ -116,7 +119,7 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Final join attempt as player for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
 
-  private boolean joinAsParty(@NotNull Player player, @NotNull PluginArena arena) {
+  private boolean joinAsParty(@NotNull Player player, @NotNull IPluginArena arena) {
     //check if player is in party and send party members to the game
     GameParty party = plugin.getPartyHandler().getParty(player);
 
@@ -126,10 +129,10 @@ public class PluginArenaManager {
           if(player.getUniqueId().equals(partyPlayer.getUniqueId())) {
             continue;
           }
-          PluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
+          IPluginArena partyPlayerGame = plugin.getArenaRegistry().getArena(partyPlayer);
 
           if(partyPlayerGame != null) {
-            if(partyPlayerGame.getArenaState() == ArenaState.IN_GAME) {
+            if(partyPlayerGame.getArenaState() == IArenaState.IN_GAME) {
               continue;
             }
             leaveAttempt(partyPlayer, partyPlayerGame);
@@ -150,15 +153,15 @@ public class PluginArenaManager {
     return true;
   }
 
-  public void additionalPartyJoin(Player player, PluginArena arena, Player partyLeader) {
+  public void additionalPartyJoin(Player player, IPluginArena arena, Player partyLeader) {
 
   }
 
-  public void additionalSpectatorSettings(Player player, PluginArena arena) {
+  public void additionalSpectatorSettings(Player player, IPluginArena arena) {
 
   }
 
-  private boolean checkFullGamePermission(Player player, PluginArena arena) {
+  private boolean checkFullGamePermission(Player player, IPluginArena arena) {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
@@ -170,7 +173,7 @@ public class PluginArenaManager {
       if(arenaPlayer.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
         continue;
       }
-      if(arena.getArenaState().isLobbyStage(arena)) {
+      if(ArenaState.isLobbyStage(arena)) {
         leaveAttempt(arenaPlayer, arena);
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_YOU_WERE_KICKED_FOR_PREMIUM").asKey().player(player).arena(arena).sendPlayer();
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_KICKED_FOR_PREMIUM").asKey().player(arenaPlayer).arena(arena).sendArena();
@@ -181,7 +184,7 @@ public class PluginArenaManager {
     return false;
   }
 
-  private boolean canJoinArenaAndMessage(Player player, PluginArena arena) {
+  private boolean canJoinArenaAndMessage(Player player, IPluginArena arena) {
     if(!arena.isReady()) {
       new MessageBuilder("IN_GAME_JOIN_ARENA_NOT_CONFIGURED").asKey().player(player).arena(arena).sendPlayer();
       return false;
@@ -208,7 +211,7 @@ public class PluginArenaManager {
       new MessageBuilder("IN_GAME_JOIN_ALREADY_PLAYING").asKey().arena(arena).player(player).sendPlayer();
       return false;
     }
-    if(arena.getArenaState() == ArenaState.RESTARTING) {
+    if(arena.getArenaState() == IArenaState.RESTARTING) {
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         ComplementAccessor.getComplement().kickPlayer(player, new MessageBuilder(arena.getArenaState().getFormattedName() + "...").prefix().build());
         return false;
@@ -227,18 +230,18 @@ public class PluginArenaManager {
    * @param arena  arena to leave
    * @see PlugilyGameLeaveAttemptEvent
    */
-  public void leaveAttempt(@NotNull Player player, @NotNull PluginArena arena) {
+  public void leaveAttempt(@NotNull Player player, @NotNull IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Initial leave attempt of {1}", arena.getId(), player.getName());
     long start = System.currentTimeMillis();
 
     Bukkit.getPluginManager().callEvent(new PlugilyGameLeaveAttemptEvent(player, arena));
 
-    User user = plugin.getUserManager().getUser(player);
+    IUser user = plugin.getUserManager().getUser(player);
 
     if(!user.isSpectator()) {
-      if(arena.getArenaState() != ArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != ArenaState.STARTING && arena.getPlayers().isEmpty()) {
+      if(arena.getArenaState() != IArenaState.WAITING_FOR_PLAYERS && arena.getArenaState() != IArenaState.STARTING && arena.getPlayers().isEmpty()) {
         stopGame(true, arena);
-        arena.getPlugin().getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
+        plugin.getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
       }
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
@@ -255,7 +258,7 @@ public class PluginArenaManager {
    * @param arena     which arena should stop
    * @see PlugilyGameStopEvent
    */
-  public void stopGame(boolean quickStop, @NotNull PluginArena arena) {
+  public void stopGame(boolean quickStop, @NotNull IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Game stop event start", arena.getId());
     long start = System.currentTimeMillis();
 
@@ -271,7 +274,7 @@ public class PluginArenaManager {
       }
     }
     arena.setTimer(quickStop ? 0 : plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
-    arena.setArenaState(ArenaState.ENDING, true);
+    arena.setArenaState(IArenaState.ENDING, true);
     for(Player players : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);
@@ -279,7 +282,7 @@ public class PluginArenaManager {
     plugin.getDebugger().debug("[{0}] Game stop event finished took {1}ms", arena.getId(), System.currentTimeMillis() - start);
   }
 
-  private void spawnFireworks(PluginArena arena, Player player) {
+  private void spawnFireworks(IPluginArena arena, Player player) {
     if(!plugin.getConfigPreferences().getOption("FIREWORK")) {
       return;
     }
@@ -288,7 +291,7 @@ public class PluginArenaManager {
 
       @Override
       public void run() {
-        if(i == 4 || arena.getArenaState() == ArenaState.RESTARTING || !arena.getPlayers().contains(player)) {
+        if(i == 4 || arena.getArenaState() == IArenaState.RESTARTING || !arena.getPlayers().contains(player)) {
           cancel();
           return;
         }

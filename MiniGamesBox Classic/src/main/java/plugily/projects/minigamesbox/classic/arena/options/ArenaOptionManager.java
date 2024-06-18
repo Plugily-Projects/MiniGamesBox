@@ -19,11 +19,10 @@
 package plugily.projects.minigamesbox.classic.arena.options;
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,12 +69,12 @@ public class ArenaOptionManager {
   private void loadExternals(String key) {
     plugin.getPlaceholderManager().registerPlaceholder(new Placeholder("option_" + key.toLowerCase(), Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.ALL) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return String.valueOf(arena.getArenaOption(key));
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return String.valueOf(arena.getArenaOption(key));
       }
     });

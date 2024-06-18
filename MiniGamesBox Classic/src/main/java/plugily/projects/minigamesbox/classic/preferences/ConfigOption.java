@@ -18,7 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.preferences;
 
-import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.api.preferences.IConfigOption;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import java.util.Map;
  * <p>
  * Created at 18.09.2021
  */
-public class ConfigOption {
+public class ConfigOption implements IConfigOption {
 
   private static final Map<String, ConfigOption> options = new HashMap<>();
 
@@ -100,20 +100,18 @@ public class ConfigOption {
     this.protectedOption = false;
   }
 
+  @Override
   public String getPath() {
     return path;
   }
 
-  /**
-   * @return default value of option if absent in config
-   */
+  @Override
   public boolean getValue() {
     return value;
   }
 
-  /**
-   * @return whether option is protected and cannot be unregistered
-   */
+
+  @Override
   public boolean isProtected() {
     return protectedOption;
   }

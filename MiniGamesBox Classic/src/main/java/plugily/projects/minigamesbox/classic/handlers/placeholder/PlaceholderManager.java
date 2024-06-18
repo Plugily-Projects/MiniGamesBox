@@ -21,8 +21,9 @@ package plugily.projects.minigamesbox.classic.handlers.placeholder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class PlaceholderManager {
 
   public PlaceholderManager(PluginMain plugin) {
     this.plugin = plugin;
-    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       plugin.getDebugger().debug(plugin.getPluginMessagePrefix() + "Hooking into PlaceholderAPI");
       new PAPIPlaceholders(plugin);
     }
@@ -62,94 +63,94 @@ public class PlaceholderManager {
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return getValue();
       }
 
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return getValue();
       }
     });
     registerPlaceholder(new Placeholder("players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return Integer.toString(arena.getPlayers().size());
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return Integer.toString(arena.getPlayers().size());
       }
     });
     //dup of arena_option_max_players
     registerPlaceholder(new Placeholder("max_players", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return Integer.toString(arena.getMaximumPlayers());
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return Integer.toString(arena.getMaximumPlayers());
       }
     });
     registerPlaceholder(new Placeholder("state", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return arena.getArenaState().toString().toLowerCase();
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return arena.getArenaState().toString().toLowerCase();
       }
     });
     registerPlaceholder(new Placeholder("state_pretty", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
-        return arena.getArenaState().getPlaceholder();
+      public String getValue(Player player, IPluginArena arena) {
+        return ArenaState.getPlaceholder(arena.getArenaState());
       }
 
       @Override
-      public String getValue(PluginArena arena) {
-        return arena.getArenaState().getPlaceholder();
+      public String getValue(IPluginArena arena) {
+        return ArenaState.getPlaceholder(arena.getArenaState());
       }
     });
     registerPlaceholder(new Placeholder("name", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return arena.getMapName();
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return arena.getMapName();
       }
     });
     registerPlaceholder(new Placeholder("timer", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return Integer.toString(arena.getTimer());
       }
 
       @Override
-      public String getValue(PluginArena arena) {
+      public String getValue(IPluginArena arena) {
         return Integer.toString(arena.getTimer());
       }
     });
     registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
-        if(!plugin.getConfigPreferences().getOption("KITS")) {
+        if (!plugin.getConfigPreferences().getOption("KITS")) {
           return null;
         }
         return plugin.getUserManager().getUser(player).getKit().getName();
       }
 
       @Override
-      public String getValue(Player player, PluginArena arena) {
-        if(!plugin.getConfigPreferences().getOption("KITS")) {
+      public String getValue(Player player, IPluginArena arena) {
+        if (!plugin.getConfigPreferences().getOption("KITS")) {
           return null;
         }
         return plugin.getUserManager().getUser(player).getKit().getName();
@@ -159,7 +160,7 @@ public class PlaceholderManager {
   }
 
   public void registerPlaceholder(Placeholder placeholder) {
-    switch(placeholder.getPlaceholderExecutor()) {
+    switch (placeholder.getPlaceholderExecutor()) {
       case PLACEHOLDER_API:
         registeredPAPIPlaceholders.add(placeholder);
         break;

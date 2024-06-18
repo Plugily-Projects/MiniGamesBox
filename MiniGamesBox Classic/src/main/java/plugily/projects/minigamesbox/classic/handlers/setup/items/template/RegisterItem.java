@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.setup.SetupInventory;
 import plugily.projects.minigamesbox.classic.handlers.setup.categories.PluginSetupCategoryManager;
@@ -45,7 +45,7 @@ public class RegisterItem implements ClickableItem {
     this.setupInventory = setupInventory;
     this.pluginSetupCategoryManager = pluginSetupCategoryManager;
     if(pluginSetupCategoryManager.canRegister()) {
-      PluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
+      IPluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
       if(arena != null && arena.isReady()) {
         registerStatus = RegisterStatus.ARENA_READY;
       } else {
@@ -97,7 +97,7 @@ public class RegisterItem implements ClickableItem {
     switch(registerStatus) {
       case ARENA_READY:
       case ARENA_REGISTER:
-        PluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
+        IPluginArena arena = setupInventory.getPlugin().getArenaRegistry().getArena(setupInventory.getArenaKey());
         if(arena != null) {
           arena.setReady(true);
         }

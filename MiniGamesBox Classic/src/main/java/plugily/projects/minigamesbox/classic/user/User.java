@@ -20,12 +20,13 @@ package plugily.projects.minigamesbox.classic.user;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.player.PlugilyPlayerStatisticChangeEvent;
+import plugily.projects.minigamesbox.api.kit.IKit;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
-import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerStatisticChangeEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,15 +37,15 @@ import java.util.UUID;
  * <p>
  * Created at 01.11.2021
  */
-public class User {
+public class User implements IUser {
 
   private static PluginMain plugin;
   private static long cooldownCounter = 0;
   private final UUID uuid;
   private boolean spectator = false;
   private boolean permanentSpectator = false;
-  private Kit kit;
-  private final Map<StatisticType, Integer> stats = new HashMap<>();
+  private IKit kit;
+  private final Map<IStatisticType, Integer> stats = new HashMap<>();
   private final Map<String, Double> cooldowns = new HashMap<>();
   private boolean initialized;
 
@@ -57,6 +58,7 @@ public class User {
     this.uuid = uuid;
   }
 
+  @Override
   public UUID getUniqueId() {
     return uuid;
   }
@@ -69,58 +71,70 @@ public class User {
     Bukkit.getScheduler().runTaskTimer(plugin, () -> cooldownCounter++, 20, 20);
   }
 
-  public Kit getKit() {
+  @Override
+  public IKit getKit() {
     if(kit == null) {
       return plugin.getKitRegistry().getDefaultKit();
     }
     return kit;
   }
 
-  public void setKit(Kit kit) {
+  @Override
+  public void setKit(IKit kit) {
     this.kit = kit;
   }
 
-  public PluginArena getArena() {
+  @Override
+  public IPluginArena getArena() {
     return plugin.getArenaRegistry().getArena(getPlayer());
   }
 
+  @Override
   public Player getPlayer() {
     return Bukkit.getPlayer(uuid);
   }
 
+  @Override
   public boolean isSpectator() {
     return spectator;
   }
 
+  @Override
   public void setSpectator(boolean spectator) {
     this.spectator = spectator;
   }
 
+  @Override
   public boolean isPermanentSpectator() {
     return permanentSpectator;
   }
 
+  @Override
   public void setPermanentSpectator(boolean permanentSpectator) {
     this.permanentSpectator = permanentSpectator;
   }
 
+  @Override
   public int getStatistic(String statistic) {
     return getStatistic(plugin.getStatsStorage().getStatisticType(statistic.toUpperCase()));
   }
 
-  public int getStatistic(StatisticType statisticType) {
+  @Override
+  public int getStatistic(IStatisticType statisticType) {
     return stats.computeIfAbsent(statisticType, t -> 0);
   }
 
-  public void setStatistic(StatisticType statisticType, int value) {
+  @Override
+  public void setStatistic(IStatisticType statisticType, int value) {
     changeUserStatistic(statisticType, value);
   }
 
+  @Override
   public void setStatistic(String statistic, int value) {
     changeUserStatistic(plugin.getStatsStorage().getStatisticType(statistic), value);
   }
 
-  private void changeUserStatistic(StatisticType statisticType, int value) {
+  private void changeUserStatistic(IStatisticType statisticType, int value) {
     stats.put(statisticType, value);
 
     Player player = getPlayer();
@@ -135,23 +149,27 @@ public class User {
     }
   }
 
-  public void adjustStatistic(StatisticType statisticType, int value) {
+  @Override
+  public void adjustStatistic(IStatisticType statisticType, int value) {
     changeUserStatistic(statisticType, getStatistic(statisticType) + value);
   }
 
+  @Override
   public void adjustStatistic(String statistic, int value) {
-    StatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
+    IStatisticType statisticType = plugin.getStatsStorage().getStatisticType(statistic);
     changeUserStatistic(statisticType, getStatistic(statisticType) + value);
   }
 
+  @Override
   public void resetNonePersistentStatistics() {
-    for(StatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
+    for(IStatisticType statisticType : plugin.getStatsStorage().getStatistics().values()) {
       if(!statisticType.isPersistent()) {
         setStatistic(statisticType, 0);
       }
     }
   }
 
+  @Override
   public boolean checkCanCastCooldownAndMessage(String cooldown) {
     double time = getCooldown(cooldown);
 
@@ -162,19 +180,23 @@ public class User {
     return false;
   }
 
+  @Override
   public void setCooldown(String key, double seconds) {
     cooldowns.put(key, seconds + cooldownCounter);
   }
 
+  @Override
   public double getCooldown(String key) {
     double cooldown = cooldowns.getOrDefault(key, 0.0);
     return cooldown <= cooldownCounter ? 0 : cooldown - cooldownCounter;
   }
 
+  @Override
   public boolean isInitialized() {
     return initialized;
   }
 
+  @Override
   public void setInitialized(boolean initialized) {
     this.initialized = initialized;
   }

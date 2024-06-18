@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.handlers.language;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
@@ -41,7 +42,7 @@ public class TitleBuilder {
   private Player player;
   private String value;
   private int integer = -99;
-  private PluginArena arena;
+  private IPluginArena arena;
   private static PluginMain plugin;
 
 
@@ -73,7 +74,7 @@ public class TitleBuilder {
     return this;
   }
 
-  public TitleBuilder arena(PluginArena arena) {
+  public TitleBuilder arena(IPluginArena arena) {
     this.arena = arena;
     return this;
   }
