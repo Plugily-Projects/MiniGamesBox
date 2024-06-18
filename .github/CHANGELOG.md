@@ -1,3 +1,8 @@
+### 1.3.9 Release (18.06.2024)
+* Major API Revamp for exposing methods that were not exposed previously to external plugins
+* Fixed move false not working
+* Added support for 1.20.5, 1.20.6, 1.21
+
 ### 1.3.8 Release (24.04.2024)
 * Relocated NashornScriptEngine to not conflict with other plugins with ScriptEngine
 * Fixed Arena stops if arena players are less than defined min players (developers: if needed plugin should call stopGame)
