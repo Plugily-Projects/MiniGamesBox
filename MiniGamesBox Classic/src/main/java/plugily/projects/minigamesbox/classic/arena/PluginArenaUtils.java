@@ -35,6 +35,8 @@ import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * @author Tigerpanzer_02
  * <p>Created at 01.11.2021
@@ -71,52 +73,53 @@ public class PluginArenaUtils {
       VersionUtils.hidePlayer(plugin, players, player);
     }
   }
-
-  public static void preparePlayerForGame(
+  
+  public static CompletableFuture<Void> preparePlayerForGame(
       IPluginArena arena, Player player, Location location, boolean spectator) {
-    IUser user = plugin.getUserManager().getUser(player);
-    if(plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
-      InventorySerializer.saveInventoryToFile(plugin, player);
-    }
-    VersionUtils.teleport(player, location);
-    player.getInventory().clear();
-    player
-        .getActivePotionEffects()
-        .forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-    VersionUtils.setMaxHealth(player, VersionUtils.getMaxHealth(player));
-    player.setHealth(VersionUtils.getMaxHealth(player));
-    player.setFoodLevel(20);
-    player.setGameMode(GameMode.SURVIVAL);
-    player
-        .getInventory()
-        .setArmorContents(
-            new ItemStack[]{
-                new ItemStack(Material.AIR),
-                new ItemStack(Material.AIR),
-                new ItemStack(Material.AIR),
-                new ItemStack(Material.AIR)
-            });
-    player.setExp(1);
-    player.setLevel(0);
-    player.setWalkSpeed(0.2f);
-    player.setFlySpeed(0.1f);
+    return VersionUtils.teleport(player, location).thenAccept(bo -> {
+      IUser user = plugin.getUserManager().getUser(player);
+      if (plugin.getConfigPreferences().getOption("INVENTORY_MANAGER")) {
+        InventorySerializer.saveInventoryToFile(plugin, player);
+      }
+      player.getInventory().clear();
+      player
+              .getActivePotionEffects()
+              .forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+      VersionUtils.setMaxHealth(player, VersionUtils.getMaxHealth(player));
+      player.setHealth(VersionUtils.getMaxHealth(player));
+      player.setFoodLevel(20);
+      player.setGameMode(GameMode.SURVIVAL);
+      player
+              .getInventory()
+              .setArmorContents(
+                      new ItemStack[]{
+                              new ItemStack(Material.AIR),
+                              new ItemStack(Material.AIR),
+                              new ItemStack(Material.AIR),
+                              new ItemStack(Material.AIR)
+                      });
+      player.setExp(1);
+      player.setLevel(0);
+      player.setWalkSpeed(0.2f);
+      player.setFlySpeed(0.1f);
 
-    if(spectator) {
-      player.setAllowFlight(true);
-      player.setFlying(true);
-      user.setSpectator(true);
-      player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
-      plugin
-          .getSpecialItemManager()
-          .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
-    } else {
-      player.setAllowFlight(false);
-      player.setFlying(false);
-      user.setSpectator(false);
-    }
-    player.updateInventory();
-    arena.getBossbarManager().doBarAction(IPluginArena.IBarAction.ADD, player);
-    arena.getScoreboardManager().createScoreboard(user);
+      if (spectator) {
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        user.setSpectator(true);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
+        plugin
+                .getSpecialItemManager()
+                .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
+      } else {
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        user.setSpectator(false);
+      }
+      player.updateInventory();
+      arena.getBossbarManager().doBarAction(IPluginArena.IBarAction.ADD, player);
+      arena.getScoreboardManager().createScoreboard(user);
+    });
   }
 
   public static void resetPlayerAfterGame(IPluginArena arena, Player player) {

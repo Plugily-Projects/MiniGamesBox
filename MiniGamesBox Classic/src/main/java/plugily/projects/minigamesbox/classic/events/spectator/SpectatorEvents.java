@@ -136,8 +136,7 @@ public class SpectatorEvents implements Listener {
       return;
     }
     if(player.getLocation().getY() < VersionUtils.getWorldMinHeight(player.getWorld())) {
-      VersionUtils.teleport(player, arena.getStartLocation());
-      event.setDamage(0);
+      VersionUtils.teleport(player, arena.getStartLocation()).thenAccept(bol -> event.setDamage(0));
     }
     event.setCancelled(true);
   }
