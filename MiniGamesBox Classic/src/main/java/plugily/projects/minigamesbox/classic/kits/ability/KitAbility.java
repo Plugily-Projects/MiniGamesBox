@@ -25,9 +25,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.api.kit.ability.IKitAbility;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.helper.ArmorHelper;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEvent;
 
@@ -36,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class KitAbility {
+public class KitAbility implements IKitAbility {
   private static final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
   private static final Map<String, KitAbility> kitAbilities = new HashMap<>();
 
@@ -45,7 +46,7 @@ public class KitAbility {
       if(!(inventoryClickEvent.getInventory().getType().equals(InventoryType.PLAYER) || inventoryClickEvent.getInventory().getType().equals(InventoryType.CRAFTING))) {
         return;
       }
-      User user = plugin.getUserManager().getUser((Player) inventoryClickEvent.getWhoClicked());
+      IUser user = plugin.getUserManager().getUser((Player) inventoryClickEvent.getWhoClicked());
       Bukkit.getScheduler().runTaskLater(plugin, () -> {
         for(ItemStack stack : inventoryClickEvent.getWhoClicked().getInventory().getArmorContents()) {
           if(stack == null || !ArmorHelper.getArmorTypes().contains(stack.getType())) {
@@ -78,10 +79,12 @@ public class KitAbility {
     this.interactConsumer = playerInteractHandler;
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public Consumer<InventoryClickEvent> getClickConsumer() {
     return clickConsumer;
   }

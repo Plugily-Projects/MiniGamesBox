@@ -21,7 +21,7 @@ package plugily.projects.minigamesbox.classic.commands.arguments.admin.arena;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -52,7 +52,7 @@ public class DeleteArgument {
           new MessageBuilder("COMMANDS_TYPE_ARENA_NAME").asKey().send(sender);
           return;
         }
-        PluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[1]);
+        IPluginArena arena = registry.getPlugin().getArenaRegistry().getArena(args[1]);
         if(arena == null) {
           new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
           return;

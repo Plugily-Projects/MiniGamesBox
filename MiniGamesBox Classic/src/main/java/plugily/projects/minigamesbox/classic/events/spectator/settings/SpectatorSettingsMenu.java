@@ -30,12 +30,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.actionbar.ActionBar;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
@@ -43,12 +43,7 @@ import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 import plugily.projects.minigamesbox.classic.utils.version.events.api.PlugilyPlayerInteractEntityEvent;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -106,7 +101,7 @@ public class SpectatorSettingsMenu implements Listener {
     for(SpectatorSettingsItem item : settingsItems) {
       gui.setItem(item.getSlot(), item.getItemStack(), event -> {
         Player player = (Player) event.getWhoClicked();
-        PluginArena arena = plugin.getArenaRegistry().getArena(player);
+        IPluginArena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }
@@ -196,7 +191,7 @@ public class SpectatorSettingsMenu implements Listener {
           case NONE:
             break;
         }
-        plugin.getRewardsHandler().performReward(player, item.getRewards());
+        plugin.getRewardsHandler().performReward(player, new HashSet<>(item.getRewards()));
       });
     }
     return gui;
@@ -205,7 +200,7 @@ public class SpectatorSettingsMenu implements Listener {
   @EventHandler
   public void onPlayerMovement(PlayerMoveEvent event) {
     Player player = event.getPlayer();
-    User user = plugin.getUserManager().getUser(player);
+    IUser user = plugin.getUserManager().getUser(player);
     if(user.getArena() != null) {
       firstPersonMode.forEach(spectator -> {
         if(spectator.getSpectatorTarget() instanceof Player) {

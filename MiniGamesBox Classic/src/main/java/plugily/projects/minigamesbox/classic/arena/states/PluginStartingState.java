@@ -21,14 +21,14 @@ package plugily.projects.minigamesbox.classic.arena.states;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameStartEvent;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameStartEvent;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.helper.SoundHelper;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -41,7 +41,7 @@ public class PluginStartingState implements ArenaStateHandler {
 
   private PluginMain plugin;
   private int arenaTimer;
-  private ArenaState arenaState;
+  private IArenaState IArenaState;
 
   @Override
   public void init(PluginMain plugin) {
@@ -50,9 +50,9 @@ public class PluginStartingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
-    setArenaState(ArenaState.STARTING);
+    setArenaState(IArenaState.STARTING);
     setArenaTimer(-999);
-    plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.STARTING, IArenaState, arenaTimer);
     plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Arena players: {1}", arena.getId());
     for (Player player : arena.getPlayers()) {
       plugin.getDebugger().performance("ArenaUpdate", "Arena {0}: {1}", arena.getId(), player.getName());
@@ -81,7 +81,7 @@ public class PluginStartingState implements ArenaStateHandler {
     if(!arena.isForceStart() && arena.getPlayers().size() < minPlayers) {
       arena.getBossbarManager().setProgress(1.0);
       new MessageBuilder("IN_GAME_MESSAGES_LOBBY_WAITING_FOR_PLAYERS").asKey().arena(arena).integer(minPlayers).sendArena();
-      arenaState = ArenaState.WAITING_FOR_PLAYERS;
+      IArenaState = IArenaState.WAITING_FOR_PLAYERS;
       for(Player player : arena.getPlayers()) {
         plugin.getSpecialItemManager().removeSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
         plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
@@ -91,7 +91,7 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setExp(1);
         player.setLevel(0);
       }
-      plugin.getDebugger().performance("ArenaUpdate", "END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+      plugin.getDebugger().performance("ArenaUpdate", "END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.STARTING, IArenaState, arenaTimer);
 
       return;
     }
@@ -106,7 +106,7 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setLevel(0);
         player.getInventory().clear();
         player.setGameMode(GameMode.SURVIVAL);
-        User user = plugin.getUserManager().getUser(player);
+        IUser user = plugin.getUserManager().getUser(player);
         if(plugin.getConfigPreferences().getOption("KITS")) {
           user.getKit().giveKitItems(player);
         }
@@ -120,7 +120,7 @@ public class PluginStartingState implements ArenaStateHandler {
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
       plugin.getDebugger().performance("ArenaUpdate", "Arena {0} current timer set to {1}", arena.getId(), arenaTimer);
-      arenaState = ArenaState.IN_GAME;
+      IArenaState = IArenaState.IN_GAME;
     }
     SoundHelper.playArenaCountdown(arena);
     if(arena.isForceStart()) {
@@ -132,11 +132,11 @@ public class PluginStartingState implements ArenaStateHandler {
 
       if (arena.getTimer() > shorter) {
         arenaTimer = shorter;
-        arenaState = ArenaState.FULL_GAME;
+        IArenaState = IArenaState.FULL_GAME;
         new MessageBuilder("IN_GAME_MESSAGES_LOBBY_MAX_PLAYERS").asKey().arena(arena).sendArena();
       }
     }
-    plugin.getDebugger().performance("ArenaUpdate", "END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.STARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.STARTING, IArenaState, arenaTimer);
 
   }
 
@@ -146,16 +146,16 @@ public class PluginStartingState implements ArenaStateHandler {
   }
 
   @Override
-  public ArenaState getArenaStateChange() {
-    return arenaState;
+  public IArenaState getArenaStateChange() {
+    return IArenaState;
   }
 
   public void setArenaTimer(int arenaTimer) {
     this.arenaTimer = arenaTimer;
   }
 
-  public void setArenaState(ArenaState arenaState) {
-    this.arenaState = arenaState;
+  public void setArenaState(IArenaState IArenaState) {
+    this.IArenaState = IArenaState;
   }
 
   public PluginMain getPlugin() {

@@ -56,7 +56,10 @@ public class ServerVersion {
     v1_20_R1,
     v1_20_R2,
     v1_20_R3,
-    v1_20_R4;
+    v1_20_R4,
+    V1_20_R5,
+    V1_20_R6,
+    V1_21_R1;
 
     private final int value;
 

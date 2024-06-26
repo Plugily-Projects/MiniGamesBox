@@ -20,12 +20,12 @@ package plugily.projects.minigamesbox.classic.arena.states;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.arena.PluginArenaUtils;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 
 import java.util.HashSet;
@@ -39,7 +39,7 @@ public class PluginRestartingState implements ArenaStateHandler {
 
   private PluginMain plugin;
   private int arenaTimer;
-  private ArenaState arenaState;
+  private IArenaState arenaState;
 
   @Override
   public void init(PluginMain plugin) {
@@ -48,9 +48,9 @@ public class PluginRestartingState implements ArenaStateHandler {
 
   @Override
   public void handleCall(PluginArena arena) {
-    setArenaState(ArenaState.RESTARTING);
+    setArenaState(IArenaState.RESTARTING);
     setArenaTimer(-999);
-    plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.RESTARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "START Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.RESTARTING, arenaState, arenaTimer);
 
     if(arena.getTimer() <= 0) {
       arena.getScoreboardManager().stopAllScoreboards();
@@ -62,7 +62,7 @@ public class PluginRestartingState implements ArenaStateHandler {
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
           for(Player player : Bukkit.getOnlinePlayers()) {
-            User user = plugin.getUserManager().getUser(player);
+            IUser user = plugin.getUserManager().getUser(player);
             plugin.getUserManager().saveAllStatistic(user);
             plugin.getUserManager().removeUser(user);
           }
@@ -74,9 +74,9 @@ public class PluginRestartingState implements ArenaStateHandler {
         }
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);
-      arenaState = ArenaState.WAITING_FOR_PLAYERS;
+      arenaState = IArenaState.WAITING_FOR_PLAYERS;
     }
-    plugin.getDebugger().performance("ArenaUpdate", "END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), ArenaState.RESTARTING, arenaState, arenaTimer);
+    plugin.getDebugger().performance("ArenaUpdate", "END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.RESTARTING, arenaState, arenaTimer);
 
   }
 
@@ -86,7 +86,7 @@ public class PluginRestartingState implements ArenaStateHandler {
   }
 
   @Override
-  public ArenaState getArenaStateChange() {
+  public IArenaState getArenaStateChange() {
     return arenaState;
   }
 
@@ -94,7 +94,7 @@ public class PluginRestartingState implements ArenaStateHandler {
     this.arenaTimer = arenaTimer;
   }
 
-  public void setArenaState(ArenaState arenaState) {
+  public void setArenaState(IArenaState arenaState) {
     this.arenaState = arenaState;
   }
 

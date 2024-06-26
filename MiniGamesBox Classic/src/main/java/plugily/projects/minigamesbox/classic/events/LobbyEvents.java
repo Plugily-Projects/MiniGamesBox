@@ -29,8 +29,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
@@ -53,11 +54,11 @@ public class LobbyEvents implements Listener {
     if(event.getEntity().getType() != EntityType.PLAYER) {
       return;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
+    IPluginArena arena = plugin.getArenaRegistry().getArena((Player) event.getEntity());
     if(arena == null) {
       return;
     }
-    if(arena.getArenaState() != ArenaState.IN_GAME) {
+    if(arena.getArenaState() != IArenaState.IN_GAME) {
       event.setFoodLevel(20);
       event.setCancelled(true);
     }
@@ -69,8 +70,8 @@ public class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
+    if(arena == null || arena.getArenaState() == IArenaState.IN_GAME) {
       return;
     }
     event.setCancelled(true);
@@ -80,8 +81,8 @@ public class LobbyEvents implements Listener {
   @EventHandler
   public void onItemFrameRotate(PlayerInteractEntityEvent event) {
     Player player = event.getPlayer();
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
+    if(arena == null || arena.getArenaState() == IArenaState.IN_GAME) {
       return;
     }
     if(event.getRightClicked() instanceof ItemFrame && ((ItemFrame) event.getRightClicked()).getItem().getType() != Material.AIR) {
@@ -95,8 +96,8 @@ public class LobbyEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
-    if(arena == null || arena.getArenaState() == ArenaState.IN_GAME) {
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
+    if(arena == null || arena.getArenaState() == IArenaState.IN_GAME) {
       return;
     }
     event.setCancelled(true);

@@ -25,8 +25,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import plugily.projects.minigamesbox.api.events.game.PlugilyGameJoinAttemptEvent;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.game.PlugilyGameJoinAttemptEvent;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 /**

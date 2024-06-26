@@ -18,11 +18,9 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
@@ -51,7 +49,7 @@ public class ListArenasArgument {
           return;
         }
 
-        for(PluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
+        for(IPluginArena arena : registry.getPlugin().getArenaRegistry().getArenas()) {
           String listMessage = new MessageBuilder("COMMANDS_ADMIN_LIST_FORMAT").asKey().arena(arena).build();
           boolean senderIsPlayer = sender instanceof Player;
           if(!senderIsPlayer) {

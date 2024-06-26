@@ -157,7 +157,7 @@ public class SpecialItem {
 
   public void setItem(Player player) {
     if(!move) {
-      new HandlerItem(itemStack).setMovementCancel(true);
+      new HandlerItem(itemStack).setMovementCancel(true).build();
     }
 
     PlayerInventory playerInventory = player.getInventory();

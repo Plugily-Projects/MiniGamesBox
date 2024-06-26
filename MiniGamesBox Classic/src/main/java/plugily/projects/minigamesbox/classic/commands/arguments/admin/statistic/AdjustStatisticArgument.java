@@ -22,14 +22,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.number.NumberUtils;
-import plugily.projects.minigamesbox.classic.api.StatisticType;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
+import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabelData;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.LabeledCommandArgument;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.user.User;
+import plugily.projects.minigamesbox.number.NumberUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -54,7 +54,7 @@ public class AdjustStatisticArgument {
           new MessageBuilder(ChatColor.RED + "Please type statistic to interact with!").prefix().send(sender);
           return;
         }
-        StatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[2].toUpperCase());
+        IStatisticType statisticType = registry.getPlugin().getStatsStorage().getStatisticType(args[2].toUpperCase());
         if(args.length == 3) {
           new MessageBuilder(ChatColor.RED + "Please type amount of statistic to interact with!").prefix().send(sender);
           return;
@@ -74,7 +74,7 @@ public class AdjustStatisticArgument {
         java.util.Optional<Integer> opt = NumberUtils.parseInt(args[3]);
 
         if(opt.isPresent()) {
-          User user = registry.getPlugin().getUserManager().getUser(target);
+          IUser user = registry.getPlugin().getUserManager().getUser(target);
           if(set) {
             user.setStatistic(statisticType, opt.get());
           } else {

@@ -22,7 +22,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
 
@@ -57,13 +57,13 @@ public class TabCompletion implements TabCompleter {
         commands.addAll(registry.getMappedArguments().get(cmd.getName().toLowerCase()).stream().map(CommandArgument::getArgumentName)
             .collect(Collectors.toList()));
       } else if(args.length == 2 && (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("tp"))) {
-        commands.addAll(registry.getPlugin().getArenaRegistry().getArenas().stream().map(PluginArena::getId).collect(Collectors.toList()));
+        commands.addAll(registry.getPlugin().getArenaRegistry().getArenas().stream().map(IPluginArena::getId).collect(Collectors.toList()));
       }
     }
 
     if(cmd.getName().equalsIgnoreCase(registry.getPlugin().getPluginNamePrefixLong())) {
       if(args.length == 2 && args[0].equalsIgnoreCase("join")) {
-        commands.addAll(registry.getPlugin().getArenaRegistry().getArenas().stream().map(PluginArena::getId).collect(Collectors.toList()));
+        commands.addAll(registry.getPlugin().getArenaRegistry().getArenas().stream().map(IPluginArena::getId).collect(Collectors.toList()));
       } else if(args.length == 1) {
         commands.addAll(registry.getMappedArguments().get(cmd.getName().toLowerCase()).stream().map(CommandArgument::getArgumentName)
             .collect(Collectors.toList()));

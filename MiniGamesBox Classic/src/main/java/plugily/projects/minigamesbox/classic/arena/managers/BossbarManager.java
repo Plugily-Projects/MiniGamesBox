@@ -23,8 +23,10 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.ArenaState;
+import plugily.projects.minigamesbox.api.IPluginMain;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.arena.managers.IBossbarManager;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
@@ -40,13 +42,13 @@ import java.util.stream.Collectors;
  * <p>
  * Created at 27.11.2021
  */
-public class BossbarManager {
+public class BossbarManager implements IBossbarManager {
 
-  private final PluginMain plugin;
+  private final IPluginMain plugin;
   private final PluginArena arena;
   private final int interval;
   private int currentLine;
-  private final Map<ArenaState, List<String>> bossbarLines = new EnumMap<>(ArenaState.class);
+  private final Map<IArenaState, List<String>> bossbarLines = new EnumMap<>(IArenaState.class);
   private List<BossBar> gameBars = new ArrayList<>();
 
   public BossbarManager(PluginArena arena) {
@@ -58,8 +60,8 @@ public class BossbarManager {
 
     String bossBarTitle = new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).build();
 
-    for(ArenaState arenaState : ArenaState.values()) {
-      if(arenaState == ArenaState.FULL_GAME) {
+    for (IArenaState arenaState : IArenaState.values()) {
+      if (arenaState == IArenaState.FULL_GAME) {
         continue;
       }
       List<String> titlesList = plugin.getLanguageManager().getLanguageList("Bossbar.Content." + arenaState.getFormattedName());
@@ -69,21 +71,22 @@ public class BossbarManager {
     plugin.getDebugger().debug("Arena {0} loaded Bossbar content: {1}", arena.getId(), bossbarLines.toString());
   }
 
+  @Override
   public void bossBarUpdate() {
-    if(gameBars.isEmpty()) {
+    if (gameBars.isEmpty()) {
       return;
     }
-    List<String> values = new ArrayList<>(bossbarLines.get(arena.getArenaState() == ArenaState.FULL_GAME ? ArenaState.STARTING : arena.getArenaState()));
+    List<String> values = new ArrayList<>(bossbarLines.get(arena.getArenaState() == IArenaState.FULL_GAME ? IArenaState.STARTING : arena.getArenaState()));
 
-    if(currentLine > values.size() - 1) {
+    if (currentLine > values.size() - 1) {
       currentLine = 0;
     }
-    for(BossBar bar : gameBars) {
+    for (BossBar bar : gameBars) {
       String bossbarMessage = new MessageBuilder(values.get(currentLine)).arena(arena).player(bar.getPlayers().get(0)).build();
       bar.setTitle(bossbarMessage);
     }
 
-    if(arena.getArenaOption("BAR_TOGGLE_VALUE") > interval) {
+    if (arena.getArenaOption("BAR_TOGGLE_VALUE") > interval) {
       currentLine++;
       arena.setArenaOption("BAR_TOGGLE_VALUE", 0);
       arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
@@ -92,25 +95,21 @@ public class BossbarManager {
     arena.changeArenaOptionBy("BAR_TOGGLE_VALUE", 1);
   }
 
-  /**
-   * Executes boss bar action for arena
-   *
-   * @param action add or remove a player from boss bar
-   * @param player player
-   */
-  public void doBarAction(PluginArena.BarAction action, Player player) {
-    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
+
+  @Override
+  public void doBarAction(IPluginArena.IBarAction action, Player player) {
+    if (ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
       return;
     }
-    switch(action) {
+    switch (action) {
       case ADD:
-          BossBar newBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
-          newBar.addPlayer(player);
-          gameBars.add(newBar);
+        BossBar newBar = Bukkit.createBossBar(new MessageBuilder("BOSSBAR_TITLE").asKey().arena(arena).player(player).build(), BarColor.BLUE, BarStyle.SOLID);
+        newBar.addPlayer(player);
+        gameBars.add(newBar);
         break;
       case REMOVE:
         List<BossBar> bars = gameBars.stream().filter(bossBar -> bossBar.getPlayers().contains(player)).collect(Collectors.toList());
-        for(BossBar bar : bars) {
+        for (BossBar bar : bars) {
           bar.removePlayer(player);
           gameBars.remove(bar);
         }
@@ -121,7 +120,7 @@ public class BossbarManager {
   }
 
   public void setProgress(double progress) {
-    if(gameBars.isEmpty()) {
+    if (gameBars.isEmpty()) {
       return;
     }
     gameBars.forEach(bossbar -> bossbar.setProgress(progress));
