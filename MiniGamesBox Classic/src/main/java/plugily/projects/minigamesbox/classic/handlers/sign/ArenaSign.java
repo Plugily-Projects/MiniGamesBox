@@ -23,7 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.jetbrains.annotations.Nullable;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.utils.helper.MaterialUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
@@ -42,9 +42,9 @@ public class ArenaSign {
 
   private final Sign sign;
   private Block behind;
-  private final PluginArena arena;
+  private final IPluginArena arena;
 
-  public ArenaSign(Sign sign, PluginArena arena) {
+  public ArenaSign(Sign sign, IPluginArena arena) {
     this.sign = sign;
     this.arena = arena;
     setBehindBlock();
@@ -85,7 +85,7 @@ public class ArenaSign {
     return behind;
   }
 
-  public PluginArena getArena() {
+  public IPluginArena getArena() {
     return arena;
   }
 

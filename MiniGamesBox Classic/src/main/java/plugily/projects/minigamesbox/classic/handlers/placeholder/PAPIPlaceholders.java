@@ -21,8 +21,8 @@ package plugily.projects.minigamesbox.classic.handlers.placeholder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 
 /**
  * @author Tigerpanzer_02
@@ -73,7 +73,7 @@ public class PAPIPlaceholders extends PlaceholderExpansion {
     if(data.length < 3) {
       return null;
     }
-    PluginArena arena = plugin.getArenaRegistry().getArena(data[1]);
+    IPluginArena arena = plugin.getArenaRegistry().getArena(data[1]);
     if(arena == null) {
       return null;
     }

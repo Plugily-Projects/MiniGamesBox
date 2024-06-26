@@ -18,8 +18,10 @@
 package plugily.projects.minigamesbox.classic.api;
 
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
+import plugily.projects.minigamesbox.api.stats.IStatsStorage;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 
 import java.util.Collections;
@@ -33,11 +35,11 @@ import java.util.UUID;
  * Created at 21.09.2021
  * Class for accessing users statistics.
  */
-public class StatsStorage {
+public class StatsStorage implements IStatsStorage {
 
   private final PluginMain plugin;
 
-  private final Map<String, StatisticType> statistics = new HashMap<>();
+  private final Map<String, IStatisticType> statistics = new HashMap<>();
 
   public StatsStorage(PluginMain plugin) {
     this.plugin = plugin;
@@ -51,7 +53,7 @@ public class StatsStorage {
     });
   }
 
-  private void loadExternals(StatisticType statisticType) {
+  private void loadExternals(IStatisticType statisticType) {
     if(statisticType.isPersistent()) {
       plugin.getUserManager().getDatabase().addColumn(statisticType.getName(), statisticType.getDatabaseParameters());
     }
@@ -62,7 +64,7 @@ public class StatsStorage {
       }
 
       @Override
-      public String getValue(Player player, PluginArena arena) {
+      public String getValue(Player player, IPluginArena arena) {
         return Integer.toString(getUserStats(player, statisticType));
       }
     });
@@ -74,7 +76,8 @@ public class StatsStorage {
    * @param stat Statistic type to get (kills, deaths etc.)
    * @return Map of UUID keys and Integer values sorted in ascending order of requested statistic type
    */
-  public Map<UUID, Integer> getStats(StatisticType stat) {
+  @Override
+  public Map<UUID, Integer> getStats(IStatisticType stat) {
     return plugin.getUserManager().getDatabase().getStats(stat);
   }
 
@@ -86,7 +89,8 @@ public class StatsStorage {
    * @return int of statistic
    * @see StatisticType
    */
-  public int getUserStats(Player player, StatisticType statisticType) {
+  @Override
+  public int getUserStats(Player player, IStatisticType statisticType) {
     return plugin.getUserManager().getUser(player).getStatistic(statisticType);
   }
 
@@ -97,8 +101,9 @@ public class StatsStorage {
    * @param key option to get value from
    * @return true or false based on user configuration
    */
+  @Override
   public String getStatisticName(String key) {
-    StatisticType statisticType = statistics.get(key);
+    IStatisticType statisticType = statistics.get(key);
 
     if(statisticType == null) {
       throw new IllegalStateException("Statistic with key " + key + " does not exist");
@@ -114,8 +119,9 @@ public class StatsStorage {
    * @param key option to get value from
    * @return true or false based on user configuration
    */
-  public StatisticType getStatisticType(String key) {
-    StatisticType statisticType = statistics.get(key);
+  @Override
+  public IStatisticType getStatisticType(String key) {
+    IStatisticType statisticType = statistics.get(key);
 
     if(statisticType == null) {
       throw new IllegalStateException("Statistic with key " + key + " does not exist");
@@ -130,7 +136,8 @@ public class StatsStorage {
    * @param key           The key of the statistic
    * @param statisticType Contains the name and the persistent
    */
-  public void registerStatistic(String key, StatisticType statisticType) {
+  @Override
+  public void registerStatistic(String key, IStatisticType statisticType) {
     if(statistics.containsKey(key)) {
       throw new IllegalStateException("Statistic with key " + key + " was already registered");
     }
@@ -143,8 +150,9 @@ public class StatsStorage {
    *
    * @param name The name of the Option
    */
+  @Override
   public void unregisterStatistic(String name) {
-    StatisticType statisticType = statistics.get(name);
+    IStatisticType statisticType = statistics.get(name);
     if(statisticType == null) {
       return;
     }
@@ -157,7 +165,8 @@ public class StatsStorage {
     statistics.remove(name);
   }
 
-  public Map<String, StatisticType> getStatistics() {
+  @Override
+  public Map<String, IStatisticType> getStatistics() {
     return Collections.unmodifiableMap(statistics);
   }
 

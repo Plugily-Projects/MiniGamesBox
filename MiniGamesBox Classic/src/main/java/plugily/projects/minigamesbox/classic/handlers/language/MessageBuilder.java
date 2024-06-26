@@ -24,12 +24,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import plugily.projects.minigamesbox.string.StringFormatUtils;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
+import plugily.projects.minigamesbox.classic.arena.states.ArenaState;
 import plugily.projects.minigamesbox.classic.handlers.placeholder.Placeholder;
 import plugily.projects.minigamesbox.classic.utils.misc.MiscUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
+import plugily.projects.minigamesbox.string.StringFormatUtils;
 
 /**
  * @author Tigerpanzer_02
@@ -49,7 +50,7 @@ public class MessageBuilder {
   private Player player;
   private String value;
   private int integer;
-  private PluginArena arena;
+  private IPluginArena arena;
   private static PluginMain plugin;
 
   public static void init(PluginMain plugin) {
@@ -132,7 +133,7 @@ public class MessageBuilder {
     return this;
   }
 
-  public MessageBuilder arena(PluginArena arena) {
+  public MessageBuilder arena(IPluginArena arena) {
     this.arena = arena;
     formatArena();
     return this;
@@ -213,7 +214,7 @@ public class MessageBuilder {
     message = replace(message, "%arena_id%", () -> placeholderColorOther + arena.getId() + messageColor);
     message = replace(message, "%arena_state%", () -> placeholderColorOther + arena.getArenaState() + messageColor);
     message = replace(message, "%arena_state_formatted%", () -> placeholderColorOther + arena.getArenaState().getFormattedName() + messageColor);
-    message = replace(message, "%arena_state_placeholder%", () -> placeholderColorOther + arena.getArenaState().getPlaceholder() + messageColor);
+    message = replace(message, "%arena_state_placeholder%", () -> placeholderColorOther + ArenaState.getPlaceholder(arena.getArenaState()) + messageColor);
     message = replace(message, "%arena_time%", () -> placeholderColorOther + arena.getTimer() + messageColor);
     message = replace(message, "%arena_time_formatted%", () -> placeholderColorOther + StringFormatUtils.formatIntoMMSS(arena.getTimer()) + messageColor);
   }
@@ -271,7 +272,7 @@ public class MessageBuilder {
     }
   }
 
-  public void send(PluginArena arena) {
+  public void send(IPluginArena arena) {
     build();
     if(message != null && !message.isEmpty()) {
       for(Player arenaPlayer : arena.getPlayers()) {

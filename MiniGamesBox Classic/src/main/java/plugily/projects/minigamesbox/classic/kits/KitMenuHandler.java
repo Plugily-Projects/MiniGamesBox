@@ -22,13 +22,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.events.player.PlugilyPlayerChooseKitEvent;
+import plugily.projects.minigamesbox.api.kit.IKit;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.api.event.player.PlugilyPlayerChooseKitEvent;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
-import plugily.projects.minigamesbox.classic.kits.basekits.Kit;
 import plugily.projects.minigamesbox.classic.utils.helper.ItemBuilder;
-import plugily.projects.minigamesbox.classic.utils.helper.ItemUtils;
 import plugily.projects.minigamesbox.inventory.common.item.SimpleClickableItem;
 import plugily.projects.minigamesbox.inventory.normal.NormalFastInv;
 
@@ -58,7 +57,7 @@ public class KitMenuHandler implements Listener {
       return;
     }
     NormalFastInv gui = new NormalFastInv(plugin.getBukkitHelper().serializeInt(plugin.getKitRegistry().getKits().size()), new MessageBuilder("KIT_KIT_MENU_TITLE").asKey().build());
-    for(Kit kit : plugin.getKitRegistry().getKits()) {
+    for(IKit kit : plugin.getKitRegistry().getKits()) {
       ItemStack itemStack = new ItemStack(kit.getItemStack());
       itemStack = new ItemBuilder(itemStack)
           .name(kit.getName())
@@ -73,7 +72,7 @@ public class KitMenuHandler implements Listener {
         if(!(event.isLeftClick() || event.isRightClick()) || !(event.getWhoClicked() instanceof Player)) {
           return;
         }
-        PluginArena arena = plugin.getArenaRegistry().getArena(player);
+        IPluginArena arena = plugin.getArenaRegistry().getArena(player);
         if(arena == null) {
           return;
         }

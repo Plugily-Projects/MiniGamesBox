@@ -18,13 +18,11 @@
 
 package plugily.projects.minigamesbox.classic.commands.arguments.admin;
 
-import java.util.Locale;
-
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import plugily.projects.minigamesbox.number.NumberUtils;
+import plugily.projects.minigamesbox.api.stats.IStatisticType;
 import plugily.projects.minigamesbox.classic.api.StatisticType;
 import plugily.projects.minigamesbox.classic.commands.arguments.PluginArgumentsRegistry;
 import plugily.projects.minigamesbox.classic.commands.arguments.data.CommandArgument;
@@ -34,6 +32,9 @@ import plugily.projects.minigamesbox.classic.handlers.hologram.LeaderboardHologr
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.serialization.LocationSerializer;
+import plugily.projects.minigamesbox.number.NumberUtils;
+
+import java.util.Locale;
 
 /**
  * @author Tigerpanzer_02
@@ -83,7 +84,7 @@ public class HologramArgument {
       return;
     }
 
-    StatisticType statistic;
+    IStatisticType statistic;
     try {
       statistic = registry.getPlugin().getStatsStorage().getStatisticType(args[2].toUpperCase(Locale.ENGLISH));
     } catch(IllegalStateException ex) {
@@ -121,7 +122,7 @@ public class HologramArgument {
 
   private void sendInvalidStatisticMessage(Player player) {
     StringBuilder values = new StringBuilder();
-    for(StatisticType value : registry.getPlugin().getStatsStorage().getStatistics().values()) {
+    for(IStatisticType value : registry.getPlugin().getStatsStorage().getStatistics().values()) {
       values.append(value.getName()).append(' ');
     }
     new MessageBuilder("&cInvalid statistic type! Valid types: &e" + values).prefix().player(player).sendPlayer();

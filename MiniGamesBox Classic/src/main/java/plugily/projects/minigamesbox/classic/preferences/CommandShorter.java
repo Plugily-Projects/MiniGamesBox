@@ -18,12 +18,14 @@
 
 package plugily.projects.minigamesbox.classic.preferences;
 
+import plugily.projects.minigamesbox.api.preferences.ICommandShorter;
+
 /**
  * @author Tigerpanzer_02
  * <p>
  * Created at 01.03.2022
  */
-public class CommandShorter {
+public class CommandShorter implements ICommandShorter {
 
   private final String shortCommand;
   private final String executeCommand;
@@ -33,10 +35,12 @@ public class CommandShorter {
     this.executeCommand = executeCommand;
   }
 
+  @Override
   public String getShortCommand() {
     return shortCommand;
   }
 
+  @Override
   public String getExecuteCommand() {
     return executeCommand;
   }

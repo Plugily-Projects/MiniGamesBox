@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,6 +25,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.arena.IPluginArenaRegistry;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
@@ -43,9 +44,9 @@ import java.util.stream.Collectors;
  * <p>
  * Created at 01.11.2021
  */
-public class PluginArenaRegistry {
+public class PluginArenaRegistry implements IPluginArenaRegistry {
 
-  private final List<PluginArena> arenas = new ArrayList<>();
+  private final List<IPluginArena> arenas = new ArrayList<>();
   private final PluginMain plugin;
   private final List<World> arenaIngameWorlds = new ArrayList<>();
   private final List<World> arenaWorlds = new ArrayList<>();
@@ -56,32 +57,22 @@ public class PluginArenaRegistry {
     this.plugin = plugin;
   }
 
-  /**
-   * Checks if player is in any arena
-   *
-   * @param player player to check
-   * @return true when player is in arena, false if otherwise
-   */
+  @Override
   public boolean isInArena(@NotNull Player player) {
     return getArena(player) != null;
   }
 
-  /**
-   * Returns arena where the player is
-   *
-   * @param player target player
-   * @return Arena or null if not playing
-   * @see #isInArena(Player) to check if player is playing
-   */
+
   @Nullable
-  public PluginArena getArena(Player player) {
+  @Override
+  public IPluginArena getArena(Player player) {
     if(player == null) {
       return null;
     }
 
     java.util.UUID playerId = player.getUniqueId();
 
-    for(PluginArena loopArena : arenas) {
+    for(IPluginArena loopArena : arenas) {
       for(Player arenaPlayer : loopArena.getPlayers()) {
         if(arenaPlayer.getUniqueId().equals(playerId)) {
           return loopArena;
@@ -92,15 +83,10 @@ public class PluginArenaRegistry {
     return null;
   }
 
-  /**
-   * Returns arena based by ID
-   *
-   * @param id name of arena
-   * @return Arena or null if not found
-   */
+  @Override
   @Nullable
-  public PluginArena getArena(String id) {
-    for(PluginArena loopArena : arenas) {
+  public IPluginArena getArena(String id) {
+    for(IPluginArena loopArena : arenas) {
       if(loopArena.getId().equalsIgnoreCase(id)) {
         return loopArena;
       }
@@ -108,15 +94,17 @@ public class PluginArenaRegistry {
     return null;
   }
 
+  @Override
   public int getArenaPlayersOnline() {
     int players = 0;
-    for(PluginArena arena : arenas) {
+    for(IPluginArena arena : arenas) {
       players += arena.getPlayers().size();
     }
     return players;
   }
 
-  public void registerArena(PluginArena arena) {
+  @Override
+  public void registerArena(IPluginArena arena) {
     plugin.getDebugger().debug("[{0}] Instance registered", arena.getId());
     arenas.add(arena);
     World startWorld = arena.getStartLocation().getWorld();
@@ -134,7 +122,8 @@ public class PluginArenaRegistry {
     }
   }
 
-  public void unregisterArena(PluginArena arena) {
+  @Override
+  public void unregisterArena(IPluginArena arena) {
     plugin.getArenaManager().stopGame(true, arena);
     for(Player player : new HashSet<>(arena.getPlayers())) {
       plugin.getArenaManager().leaveAttempt(player, arena);
@@ -163,11 +152,12 @@ public class PluginArenaRegistry {
     return new PluginArena(id);
   }
 
+  @Override
   public void registerArenas() {
     plugin.getDebugger().debug("[ArenaRegistry] Initial arenas registration");
     long start = System.currentTimeMillis();
     if(!arenas.isEmpty()) {
-      for(PluginArena arena : new ArrayList<>(arenas)) {
+      for(IPluginArena arena : new ArrayList<>(arenas)) {
         unregisterArena(arena);
       }
     }
@@ -186,13 +176,14 @@ public class PluginArenaRegistry {
     plugin.getDebugger().debug("[ArenaRegistry] Arenas registration completed took {0}ms", System.currentTimeMillis() - start);
   }
 
+  @Override
   public void registerArena(String key) {
     plugin.getDebugger().debug("[ArenaRegistry] Initial arena registration for " + key);
     long start = System.currentTimeMillis();
     if(!arenas.isEmpty()) {
-      List<PluginArena> sameArenas = arenas.stream().filter(pluginArena -> pluginArena.getId().equals(key)).collect(Collectors.toList());
+      List<IPluginArena> sameArenas = arenas.stream().filter(pluginArena -> pluginArena.getId().equals(key)).collect(Collectors.toList());
       if(!sameArenas.isEmpty()) {
-        for(PluginArena arena : new ArrayList<>(sameArenas)) {
+        for(IPluginArena arena : new ArrayList<>(sameArenas)) {
           unregisterArena(arena);
         }
       }
@@ -264,24 +255,29 @@ public class PluginArenaRegistry {
   }
 
   @NotNull
-  public List<PluginArena> getArenas() {
-    return arenas;
+  @Override
+  public List<IPluginArena> getArenas() {
+    return new ArrayList<>(arenas);
   }
 
+  @Override
   public List<World> getArenaIngameWorlds() {
     return arenaIngameWorlds;
   }
 
+  @Override
   public List<World> getArenaWorlds() {
     return arenaWorlds;
   }
 
+  @Override
   public void shuffleBungeeArena() {
     if(!arenas.isEmpty()) {
       bungeeArena = ThreadLocalRandom.current().nextInt(arenas.size());
     }
   }
 
+  @Override
   public int getBungeeArena() {
     if(bungeeArena == -999 && !arenas.isEmpty()) {
       bungeeArena = ThreadLocalRandom.current().nextInt(arenas.size());

@@ -26,8 +26,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import plugily.projects.minigamesbox.api.arena.IArenaState;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.preferences.ICommandShorter;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.preferences.CommandShorter;
 import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
 
 /**
@@ -44,7 +46,7 @@ public class PluginArenaEvents implements Listener {
 
   @EventHandler
   public void playerCommandExecution(PlayerCommandPreprocessEvent event) {
-    for(CommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
+    for(ICommandShorter commandShorter : plugin.getConfigPreferences().getCommandShorts()) {
       if(event.getMessage().equalsIgnoreCase(commandShorter.getShortCommand())) {
         event.getPlayer().performCommand(commandShorter.getExecuteCommand());
         event.setCancelled(true);
@@ -59,7 +61,7 @@ public class PluginArenaEvents implements Listener {
       return;
     }
     Player victim = (Player) event.getEntity();
-    PluginArena arena = plugin.getArenaRegistry().getArena(victim);
+    IPluginArena arena = plugin.getArenaRegistry().getArena(victim);
     if(arena == null) {
       return;
     }
@@ -87,7 +89,7 @@ public class PluginArenaEvents implements Listener {
         }
         break;
       case VOID:
-        if(arena.getArenaState() != ArenaState.IN_GAME) {
+        if(arena.getArenaState() != IArenaState.IN_GAME) {
           victim.damage(0);
           VersionUtils.teleport(victim, arena.getLobbyLocation());
         } else {
@@ -105,7 +107,7 @@ public class PluginArenaEvents implements Listener {
       return;
     }
     Player player = (Player) event.getEntity();
-    PluginArena arena = plugin.getArenaRegistry().getArena(player);
+    IPluginArena arena = plugin.getArenaRegistry().getArena(player);
     if (arena == null) {
       return;
     }
@@ -115,11 +117,11 @@ public class PluginArenaEvents implements Listener {
     }
   }
 
-  public boolean additionalFallDamageRules(Player victim, PluginArena arena, EntityDamageEvent event) {
+  public boolean additionalFallDamageRules(Player victim, IPluginArena arena, EntityDamageEvent event) {
     return false;
   }
 
-  public void handleIngameVoidDeath(Player victim, PluginArena arena) {
+  public void handleIngameVoidDeath(Player victim, IPluginArena arena) {
     victim.damage(1000.0);
     VersionUtils.teleport(victim, arena.getStartLocation());
   }

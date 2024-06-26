@@ -22,17 +22,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
+import plugily.projects.minigamesbox.api.handlers.reward.IReward;
+import plugily.projects.minigamesbox.api.handlers.reward.IRewardType;
 import plugily.projects.minigamesbox.classic.PluginMain;
-import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.configuration.ConfigUtils;
 import plugily.projects.minigamesbox.classic.utils.engine.ScriptEngineHandler;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
@@ -111,12 +109,12 @@ public class RewardsFactory {
     registerRewards();
   }
 
-  public Map<String, RewardType> getRewardTypes() {
+  public Map<String, IRewardType> getRewardTypes() {
     return Collections.unmodifiableMap(rewardTypes);
   }
 
 
-  public void performReward(PluginArena arena, RewardType type) {
+  public void performReward(IPluginArena arena, IRewardType type) {
     if(!enabled) {
       return;
     }
@@ -126,22 +124,22 @@ public class RewardsFactory {
   }
 
 
-  public void performReward(Player player, RewardType type) {
+  public void performReward(Player player, IRewardType type) {
     performReward(player, null, type);
   }
 
-  public void performReward(Player player, PluginArena arena, RewardType type) {
+  public void performReward(Player player, IPluginArena arena, IRewardType type) {
     performReward(player, arena, type, -1);
   }
 
-  public void performReward(Player player, Set<Reward> rewards) {
+  public void performReward(Player player, Set<IReward> rewards) {
     performReward(player, null, rewards);
   }
 
-  public void performReward(Player player, PluginArena arena, Set<Reward> rewards) {
+  public void performReward(Player player, IPluginArena arena, Set<IReward> rewards) {
     if(arena == null && player != null)
       arena = plugin.getArenaRegistry().getArena(player);
-    for(Reward reward : rewards) {
+    for(IReward reward : rewards) {
       if(reward == null) {
         continue;
       }
@@ -149,7 +147,7 @@ public class RewardsFactory {
     }
   }
 
-  private void executeReward(Player player, PluginArena arena, Reward reward) {
+  private void executeReward(Player player, IPluginArena arena, IReward reward) {
     //cannot execute if chance wasn't met
     plugin.getDebugger().debug("Trying to perform reward {0} as {1} executor", reward.getType(), reward.getExecutor());
     if(reward.getChance() != -1 && ThreadLocalRandom.current().nextInt(0, 100) > reward.getChance()) {
@@ -198,7 +196,7 @@ public class RewardsFactory {
     plugin.getDebugger().debug("Reward {0} Executed command {1} as {2} executor", reward.getType(), command, reward.getExecutor());
   }
 
-  public void performReward(Player player, PluginArena arena, RewardType type, int executeNumber) {
+  public void performReward(Player player, IPluginArena arena, IRewardType type, int executeNumber) {
     if(!enabled) {
       return;
     }
