@@ -186,7 +186,9 @@ public class Events implements Listener {
       return;
     }
     if(event.getPlayer().getTargetBlock(null, 7).getType() == XMaterial.CRAFTING_TABLE.parseMaterial()) {
-      event.setCancelled(true);
+      if(event.getAction().isRightClick()) {
+        event.setCancelled(true);
+      }
     }
     if(event.getClickedBlock() == null) {
       return;
