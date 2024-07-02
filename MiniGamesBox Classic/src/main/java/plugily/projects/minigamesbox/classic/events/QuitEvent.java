@@ -17,6 +17,7 @@
  */
 package plugily.projects.minigamesbox.classic.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,6 +59,7 @@ public class QuitEvent implements Listener {
     IPluginArena arena = plugin.getArenaRegistry().getArena(player);
     if (arena != null) {
       plugin.getArenaManager().leaveAttempt(player, arena);
+      plugin.getUserManager().storeUserQuitDuringGame(player, arena);
     }
     IUser user = plugin.getUserManager().getUser(player);
     plugin.getUserManager().saveAllStatistic(user);
