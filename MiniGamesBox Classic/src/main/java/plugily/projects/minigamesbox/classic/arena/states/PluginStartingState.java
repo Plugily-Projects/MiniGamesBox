@@ -100,7 +100,7 @@ public class PluginStartingState implements ArenaStateHandler {
       arena.getBossbarManager().setProgress(1.0);
       org.bukkit.Location arenaLoc = arena.getStartLocation();
       for(Player player : arena.getPlayers()) {
-        VersionUtils.teleport(player, arenaLoc);
+        VersionUtils.teleport(player, arenaLoc).thenAccept(bol -> {
         PluginArenaUtils.hidePlayersOutsideTheGame(player, arena);
         player.setExp(0);
         player.setLevel(0);
@@ -116,6 +116,7 @@ public class PluginStartingState implements ArenaStateHandler {
         plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.IN_GAME);
         plugin.getRewardsHandler().performReward(player, arena, plugin.getRewardsHandler().getRewardType("START_GAME"));
         plugin.getUserManager().addStat(user, plugin.getStatsStorage().getStatisticType("GAMES_PLAYED"));
+        });
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.In-Game", 270);
       plugin.getDebugger().performance("ArenaUpdate", "Arena {0} current timer set to {1}", arena.getId(), arenaTimer);
