@@ -1,3 +1,6 @@
+### 1.3.10 Release (09.07.2024)
+* Fixed multiverse teleportation problems on a multiworld server 
+
 ### 1.3.9 Release (18.06.2024)
 * Major API Revamp for exposing methods that were not exposed previously to external plugins
 * Fixed move false not working
