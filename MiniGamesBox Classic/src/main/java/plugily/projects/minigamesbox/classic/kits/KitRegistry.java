@@ -112,7 +112,6 @@ public class KitRegistry implements IKitRegistry {
       }
     } catch (Exception exception) {
       plugin.getDebugger().debug(Level.WARNING, "ERROR IN LOADING KITS");
-      exception.printStackTrace();
     }
   }
 

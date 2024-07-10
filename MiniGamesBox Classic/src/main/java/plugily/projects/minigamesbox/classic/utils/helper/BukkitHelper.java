@@ -78,7 +78,7 @@ public class BukkitHelper {
    * @return serialized number
    */
   public int serializeInt(int i) {
-    return (i % 9) == 0 ? i : (int) ((Math.ceil(i / 9) * 9) + 9);
+    return (i % 9) == 0 ? i : (int) ((Math.ceil((double) i / 9) * 9) + 9);
   }
 
   @SuppressWarnings("deprecation")

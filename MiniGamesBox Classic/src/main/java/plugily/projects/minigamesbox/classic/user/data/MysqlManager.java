@@ -225,7 +225,6 @@ public class MysqlManager implements UserDatabase {
     plugin.getDebugger().debug(Level.WARNING, "SQLException occurred! Cause: {0} ({1})", exception.getSQLState(), exception.getErrorCode());
     plugin.getMessageUtils().errorOccurred();
     Bukkit.getConsoleSender().sendMessage("Check configuration of mysql.yml file or try to disable mysql option in config.yml");
-    exception.printStackTrace();
   }
 
   /**

@@ -137,19 +137,20 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       }
       for(CommandArgument argument : entry.getValue()) {
         if(argument.getArgumentName().equalsIgnoreCase(args[0])) {
-          //does it make sense that it is a list?
+          boolean gotPermissions = false;
           for(String perm : argument.getPermissions()) {
             if(perm.isEmpty() || plugin.getBukkitHelper().hasPermission(sender, perm)) {
-              break;
+              gotPermissions = true;
             }
-            //user has no permission to execute command
+          }
+          if(!gotPermissions) {
+            new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().send(sender);
             return true;
           }
           if(checkSenderIsExecutorType(sender, argument.getValidExecutors())) {
             argument.execute(sender, args);
+            return true;
           }
-          //return true even if sender is not good executor or hasn't got permission
-          return true;
         }
       }
 
