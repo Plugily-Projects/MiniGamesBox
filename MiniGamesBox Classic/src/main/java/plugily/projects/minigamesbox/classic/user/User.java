@@ -49,11 +49,6 @@ public class User implements IUser {
   private final Map<String, Double> cooldowns = new HashMap<>();
   private boolean initialized;
 
-  @Deprecated
-  public User(Player player) {
-    this(player.getUniqueId());
-  }
-
   public User(UUID uuid) {
     this.uuid = uuid;
   }
