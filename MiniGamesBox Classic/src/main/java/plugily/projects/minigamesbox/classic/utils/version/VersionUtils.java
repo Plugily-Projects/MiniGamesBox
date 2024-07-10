@@ -184,15 +184,14 @@ public final class VersionUtils {
 
       try {
         return Bukkit.getScheduler().callSyncMethod(plugin, () -> PaperLib.teleportAsync(entity, location)).get();
-      } catch(InterruptedException | ExecutionException e) {
-        e.printStackTrace();
-      } catch(CancellationException e) {
+      } catch(InterruptedException | ExecutionException | CancellationException e) {
         // ignored
       }
     } else {
       entity.teleport(location);
+      return CompletableFuture.completedFuture(Boolean.TRUE);
     }
-    return new CompletableFuture<>();
+    return CompletableFuture.completedFuture(Boolean.FALSE);
   }
 
   public static void sendParticles(String particleName, Player player, Location location, int count) {
