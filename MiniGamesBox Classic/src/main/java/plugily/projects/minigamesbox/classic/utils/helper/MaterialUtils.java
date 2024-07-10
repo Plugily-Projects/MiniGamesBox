@@ -29,52 +29,52 @@ public class MaterialUtils {
 
   private static final Set<Material> WALL_SIGNS = new HashSet<Material>() {
     {
-      add(getMat("WALL_SIGN"));
-      add(getMat("ACACIA_WALL_SIGN"));
-      add(getMat("BIRCH_WALL_SIGN"));
-      add(getMat("DARK_OAK_WALL_SIGN"));
-      add(getMat("JUNGLE_WALL_SIGN"));
-      add(getMat("OAK_WALL_SIGN"));
-      add(getMat("SPRUCE_WALL_SIGN"));
-      add(getMat("WARPED_WALL_SIGN"));
-      add(getMat("CRIMSON_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("WALL_SIGN"));
+      WALL_SIGNS.add(getMat("ACACIA_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("BIRCH_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("DARK_OAK_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("JUNGLE_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("OAK_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("SPRUCE_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("WARPED_WALL_SIGN"));
+      WALL_SIGNS.add(getMat("CRIMSON_WALL_SIGN"));
     }
   };
 
   public static final Set<Material> BASIC_SIGNS = new HashSet<Material>() {
     {
-      add(getMat("SIGN"));
-      add(getMat("STANDING_SIGN"));
-      add(getMat("ACACIA_SIGN"));
-      add(getMat("BIRCH_SIGN"));
-      add(getMat("DARK_OAK_SIGN"));
-      add(getMat("JUNGLE_SIGN"));
-      add(getMat("OAK_SIGN"));
-      add(getMat("SPRUCE_SIGN"));
-      add(getMat("WARPED_SIGN"));
-      add(getMat("CRIMSON_SIGN"));
+      BASIC_SIGNS.add(getMat("SIGN"));
+      BASIC_SIGNS.add(getMat("STANDING_SIGN"));
+      BASIC_SIGNS.add(getMat("ACACIA_SIGN"));
+      BASIC_SIGNS.add(getMat("BIRCH_SIGN"));
+      BASIC_SIGNS.add(getMat("DARK_OAK_SIGN"));
+      BASIC_SIGNS.add(getMat("JUNGLE_SIGN"));
+      BASIC_SIGNS.add(getMat("OAK_SIGN"));
+      BASIC_SIGNS.add(getMat("SPRUCE_SIGN"));
+      BASIC_SIGNS.add(getMat("WARPED_SIGN"));
+      BASIC_SIGNS.add(getMat("CRIMSON_SIGN"));
     }
   };
 
   public static final Set<Material> ALL_SIGNS = new HashSet<Material>() {
     {
-      addAll(WALL_SIGNS);
-      addAll(BASIC_SIGNS);
+      ALL_SIGNS.addAll(WALL_SIGNS);
+      ALL_SIGNS.addAll(BASIC_SIGNS);
     }
   };
 
   public static final Set<Material> DOORS = new HashSet<Material>() {
     {
-      add(getMat("WOODEN_DOOR"));
-      add(getMat("ACACIA_DOOR"));
-      add(getMat("BIRCH_DOOR"));
-      add(getMat("DARK_OAK_DOOR"));
-      add(getMat("JUNGLE_DOOR"));
-      add(getMat("SPRUCE_DOOR"));
-      add(getMat("OAK_DOOR"));
-      add(getMat("WOOD_DOOR"));
-      add(getMat("WARPED_DOOR"));
-      add(getMat("CRIMSON_DOOR"));
+      DOORS.add(getMat("WOODEN_DOOR"));
+      DOORS.add(getMat("ACACIA_DOOR"));
+      DOORS.add(getMat("BIRCH_DOOR"));
+      DOORS.add(getMat("DARK_OAK_DOOR"));
+      DOORS.add(getMat("JUNGLE_DOOR"));
+      DOORS.add(getMat("SPRUCE_DOOR"));
+      DOORS.add(getMat("OAK_DOOR"));
+      DOORS.add(getMat("WOOD_DOOR"));
+      DOORS.add(getMat("WARPED_DOOR"));
+      DOORS.add(getMat("CRIMSON_DOOR"));
     }
   };
 

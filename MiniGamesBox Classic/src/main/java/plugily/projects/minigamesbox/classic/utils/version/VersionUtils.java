@@ -185,7 +185,7 @@ public final class VersionUtils {
       try {
         return Bukkit.getScheduler().callSyncMethod(plugin, () -> PaperLib.teleportAsync(entity, location)).get();
       } catch(InterruptedException | ExecutionException | CancellationException e) {
-        // ignored
+        Thread.currentThread().interrupt();
       }
     } else {
       entity.teleport(location);
