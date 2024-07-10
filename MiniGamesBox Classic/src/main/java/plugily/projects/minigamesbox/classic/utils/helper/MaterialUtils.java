@@ -88,9 +88,9 @@ public class MaterialUtils {
 
   private static Material getMat(String name) {
     Material material = Material.getMaterial(name.toUpperCase());
-    if (material== null){
+    if(material == null) {
       material = XMaterial.OAK_SIGN.parseMaterial();
     }
-    return Material.getMaterial(name.toUpperCase());
+    return material;
   }
 }
