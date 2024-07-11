@@ -196,10 +196,10 @@ public final class VersionUtils {
 
   public static void sendParticles(String particleName, Player player, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle particle = XParticle.getParticle(particleName);
+      Particle particle = XParticle.of(particleName).orElse(XParticle.ANGRY_VILLAGER).get();
       location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
-      Particle particle = XParticle.getParticle(particleName);
+      Particle particle = XParticle.of(particleName).orElse(XParticle.ANGRY_VILLAGER).get();
       Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
@@ -217,10 +217,10 @@ public final class VersionUtils {
 
   public static void sendParticles(String particleName, Set<Player> players, Location location, int count) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle particle = XParticle.getParticle(particleName);
+      Particle particle = XParticle.of(particleName).orElse(XParticle.ANGRY_VILLAGER).get();
       location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, 0, getParticleDataType(particle, location));
     } else if(isParticleBuilderSupported) {
-      Particle particle = XParticle.getParticle(particleName);
+      Particle particle = XParticle.of(particleName).orElse(XParticle.ANGRY_VILLAGER).get();
       Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
@@ -242,7 +242,7 @@ public final class VersionUtils {
 
   public static void sendParticles(String particleName, Set<Player> players, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
     if(!isPaper && ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
-      Particle particle = XParticle.getParticle(particleName);
+      Particle particle = XParticle.of(particleName).orElse(XParticle.ANGRY_VILLAGER).get();
       Object dataType = getParticleDataType(particle, location);
 
       if(dataType != null) {
@@ -251,7 +251,7 @@ public final class VersionUtils {
         location.getWorld().spawnParticle(particle, location, count, 0, 0, 0, extra);
       }
     } else if(isParticleBuilderSupported) {
-      Particle particle = XParticle.getParticle(particleName);
+      Particle particle = XParticle.of(particleName).orElse(XParticle.ANGRY_VILLAGER).get();
       Object dataType = getParticleDataType(particle, location);
 
       if(dataType == null) {
