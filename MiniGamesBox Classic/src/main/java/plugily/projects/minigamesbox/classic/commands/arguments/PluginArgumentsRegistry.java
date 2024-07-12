@@ -192,7 +192,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     data.addAll(mappedArguments.get(plugin.getPluginNamePrefixLong()).stream().filter(arg -> arg instanceof LabeledCommandArgument)
         .map(arg -> ((LabeledCommandArgument) arg).getLabelData()).collect(Collectors.toList()));
 
-    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11)) {
       for(LabelData labelData : data) {
         sender.sendMessage(labelData.getText() + " - " + labelData.getDescription().split("\n", 2)[0]);
       }

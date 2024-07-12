@@ -20,6 +20,9 @@ package plugily.projects.minigamesbox.classic.utils.version;
 
 import org.bukkit.Bukkit;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ServerVersion {
 
   public Version getVersion() {
@@ -27,119 +30,106 @@ public class ServerVersion {
   }
 
   public enum Version {
-    v0_0_R0,
-    v1_8_R1,
-    v1_8_R2,
-    v1_8_R3,
-    v1_9_R1,
-    v1_9_R2,
-    v1_10_R1,
-    v1_10_R2,
-    v1_11_R1,
-    v1_12_R1,
-    v1_13_R1,
-    v1_13_R2,
-    v1_14_R1,
-    v1_14_R2,
-    v1_15_R1,
-    v1_15_R2,
-    v1_16_R1,
-    v1_16_R2,
-    v1_16_R3,
-    v1_17_R1,
-    v1_17_R2,
-    v1_18_R1,
-    v1_18_R2,
-    v1_19_R1,
-    v1_19_R2,
-    v1_19_R3,
-    v1_20_R1,
-    v1_20_R2,
-    v1_20_R3,
-    v1_20_R4,
-    V1_20_R5,
-    V1_20_R6,
-    V1_21_R1;
+    v0_0_0(0, 0),
+    v1_8_8(8, 4),
+    v1_9(9, 4),
+    v1_10(10, 2),
+    v1_11(11, 0),
+    v1_12(12, 0),
+    v1_13(13, 1),
+    v1_14(14, 0),
+    v1_15(15, 0),
+    v1_16(16, 0),
+    v1_17(17, 0),
+    v1_18(18, 0),
+    v1_19(19, 0),
+    v1_20(20, 0),
+    v1_21(21, 0);
 
-    private final int value;
 
-    private static String[] packageVersion;
     private static Version current;
+    private final int minor;
+    private final int minPatch;
 
-    Version() {
-      value = Integer.parseInt(name().replaceAll("[^\\d.]", ""));
+    Version(int minor, int minPatch) {
+      this.minor = minor;
+      this.minPatch = minPatch;
     }
 
-    public int getValue() {
-      return value;
+    public int getMinor() {
+      return minor;
     }
 
-    public static String[] getPackageVersion() {
-      if(packageVersion == null) {
-        packageVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.");
-      }
-
-      return packageVersion;
+    public int getMinPatch() {
+      return minPatch;
     }
 
     public static Version getCurrent() {
-      if(current != null)
+      if(current != null) {
         return current;
-
-      String[] v = getPackageVersion();
-      String vv = v[v.length - 1];
-      for(Version one : values()) {
-        if(one.name().equalsIgnoreCase(vv)) {
-          current = one;
-          break;
-        }
       }
 
-      if(current == null) { // If we forgot to add new version to enum
-        current = Version.v0_0_R0;
+      Matcher serverVersion = Pattern.compile("^(?<major>\\d+)\\.(?<minor>\\d+)(?:\\.(?<patch>\\d+))?").matcher(Bukkit.getBukkitVersion());
+      if(serverVersion.find()) {
+        int serverMinor = Integer.parseInt(serverVersion.group("minor"));
+        String patch = serverVersion.group("patch");
+        int serverPatch = Integer.parseInt((patch == null || patch.isEmpty()) ? "0" : patch);
+
+        for(Version value : values()) {
+          if(value.getMinor() == serverMinor && serverPatch >= value.getMinPatch()) {
+            current = value;
+            break;
+          }
+        }
+      } else {
+        throw new IllegalStateException("Cannot parse server version: \"" + Bukkit.getBukkitVersion() + '"');
+      }
+
+      if(current == null) { // Fallback
+        current = Version.v0_0_0;
       }
 
       return current;
     }
 
     public boolean isLower(Version version) {
-      return value < version.getValue();
+      return minor < version.getMinor();
     }
 
     public boolean isHigher(Version version) {
-      return value > version.getValue();
+      return minor > version.getMinor();
     }
 
     public boolean isEqual(Version version) {
-      return value == version.getValue();
+      return minor == version.getMinor();
     }
 
     public boolean isEqualOrLower(Version version) {
-      return value <= version.getValue();
+      return minor <= version.getMinor();
     }
 
     public boolean isEqualOrHigher(Version version) {
-      return value >= version.getValue();
+      return minor >= version.getMinor();
     }
 
-    public static boolean isCurrentEqualOrHigher(Version v) {
-      return getCurrent().getValue() >= v.getValue();
+    public static boolean isCurrentEqualOrHigher(Version fixedVersion) {
+      return getCurrent().getMinor() >= fixedVersion.getMinor();
     }
 
-    public static boolean isCurrentHigher(Version v) {
-      return getCurrent().getValue() > v.getValue();
+    public static boolean isCurrentHigher(Version fixedVersion) {
+      return getCurrent().getMinor() > fixedVersion.getMinor();
     }
 
-    public static boolean isCurrentLower(Version v) {
-      return getCurrent().getValue() < v.getValue();
+    public static boolean isCurrentLower(Version fixedVersion) {
+      return getCurrent().getMinor() < fixedVersion.getMinor();
     }
 
-    public static boolean isCurrentEqualOrLower(Version v) {
-      return getCurrent().getValue() <= v.getValue();
+    public static boolean isCurrentEqualOrLower(Version fixedVersion) {
+      return getCurrent().getMinor() <= fixedVersion.getMinor();
     }
 
-    public static boolean isCurrentEqual(Version v) {
-      return getCurrent().getValue() == v.getValue();
+    public static boolean isCurrentEqual(Version fixedVersion) {
+      return getCurrent().getMinor() == fixedVersion.getMinor();
     }
   }
 }

@@ -65,7 +65,7 @@ public class Debugger implements IDebugger {
 
   @Override
   public void sendConsoleMsg(String msg) {
-    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && msg.indexOf('#') >= 0) {
+    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16) && msg.indexOf('#') >= 0) {
       msg = MiscUtils.matchColorRegex(msg);
     }
 
