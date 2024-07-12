@@ -293,7 +293,7 @@ public class PluginMain extends JavaPlugin implements IPluginMain {
       getServer().getPluginManager().disablePlugin(this);
       return false;
     }
-    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_8_R3)) {
+    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_8_8)) {
       MiscUtils.sendLineBreaker(getName());
       messageUtils.thisVersionIsNotSupported();
       MiscUtils.sendVersionInformation(this, getName(), getDescription());

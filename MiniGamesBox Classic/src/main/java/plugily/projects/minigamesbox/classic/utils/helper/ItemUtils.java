@@ -66,13 +66,13 @@ public class ItemUtils {
     SkullMeta headMeta = (SkullMeta) head.getItemMeta();
 
     GameProfile profile;
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_20_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_20)) {
       profile = new GameProfile(UUID.randomUUID(), "Plugily");
     } else {
       profile = new GameProfile(UUID.randomUUID(), null);
     }
     profile.getProperties().put("textures", new Property("textures", url));
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_15_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_15)) {
       try {
         Method mtd = headMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
         mtd.setAccessible(true);

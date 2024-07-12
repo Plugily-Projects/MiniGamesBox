@@ -111,7 +111,7 @@ public class InventorySerializer {
       for(int i = 0; i < invContents.length; i++) {
         ItemStack itemInInv = invContents[i];
         if(itemInInv != null && itemInInv.getType() != Material.AIR) {
-          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3) && itemInInv.getItemMeta() instanceof SkullMeta) {
+          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_8) && itemInInv.getItemMeta() instanceof SkullMeta) {
             SkullMeta skullMeta = ((SkullMeta) itemInInv.getItemMeta());
             if(skullMeta.getOwner() != null) {
               try {
@@ -133,7 +133,7 @@ public class InventorySerializer {
         }
       }
 
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
+      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9)) {
         invConfig.set("Offhand", inventory.getItemInOffHand());
       }
 
@@ -221,7 +221,7 @@ public class InventorySerializer {
           }
         }
         playerInventory.setArmorContents(armor);
-        if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
+        if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9)) {
           playerInventory.setItemInOffHand(invConfig.getItemStack("Offhand", new ItemStack(Material.AIR)));
         }
         VersionUtils.setMaxHealth(player, invConfig.getDouble("Max health"));

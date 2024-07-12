@@ -98,7 +98,7 @@ public class BossbarManager implements IBossbarManager {
 
   @Override
   public void doBarAction(IPluginArena.IBarAction action, Player player) {
-    if (ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9_R1) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
+    if (ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_9) || !plugin.getConfigPreferences().getOption("BOSSBAR")) {
       return;
     }
     switch (action) {
