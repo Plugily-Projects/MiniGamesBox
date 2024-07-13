@@ -68,7 +68,7 @@ public class Events implements Listener {
   @EventHandler
   public void onSpawn(CreatureSpawnEvent event) {
     if(event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM
-        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17_R1) && event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.COMMAND)) {
+        || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_17) && event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.COMMAND)) {
       return;
     }
 

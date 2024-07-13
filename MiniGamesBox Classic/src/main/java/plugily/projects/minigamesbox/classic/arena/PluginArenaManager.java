@@ -101,15 +101,15 @@ public class PluginArenaManager {
       new MessageBuilder(MessageBuilder.ActionType.JOIN).arena(arena).player(player).sendArena();
       new TitleBuilder("IN_GAME_JOIN_TITLE").asKey().arena(arena).player(player).sendPlayer();
 
-    if(plugin.getConfigPreferences().getOption("KITS")) {
-      plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
-    }
-    plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
-    if(arena.getArenaState() == IArenaState.WAITING_FOR_PLAYERS) {
-      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
-    } else if(ArenaState.isStartingStage(arena)) {
-      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
-    }
+      if(plugin.getConfigPreferences().getOption("KITS")) {
+        plugin.getUserManager().getUser(player).setKit(plugin.getKitRegistry().getDefaultKit());
+      }
+      plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.LOBBY);
+      if(arena.getArenaState() == IArenaState.WAITING_FOR_PLAYERS) {
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.WAITING_FOR_PLAYERS);
+      } else if(ArenaState.isStartingStage(arena)) {
+        plugin.getSpecialItemManager().addSpecialItemsOfStage(player, SpecialItem.DisplayStage.ENOUGH_PLAYERS_TO_START);
+      }
 
       for(Player arenaPlayer : arena.getPlayers()) {
         PluginArenaUtils.showPlayer(arenaPlayer, arena);
@@ -274,8 +274,14 @@ public class PluginArenaManager {
         }
       }
     }
-    arena.setTimer(quickStop ? 0 : plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
-    arena.setArenaState(IArenaState.ENDING, true);
+    if(quickStop) {
+      arena.setTimer(0, true);
+      arena.setArenaState(IArenaState.RESTARTING, true);
+    } else {
+      arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
+      arena.setArenaState(IArenaState.ENDING, true);
+    }
+
     for(Player players : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);

@@ -71,6 +71,7 @@ public class InventorySerializer {
         invFile.delete();
       }
 
+
       FileConfiguration invConfig = YamlConfiguration.loadConfiguration(invFile);
 
       invConfig.set("ExperienceProgress", player.getExp());
@@ -110,7 +111,7 @@ public class InventorySerializer {
       for(int i = 0; i < invContents.length; i++) {
         ItemStack itemInInv = invContents[i];
         if(itemInInv != null && itemInInv.getType() != Material.AIR) {
-          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_R3) && itemInInv.getItemMeta() instanceof SkullMeta) {
+          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_8) && itemInInv.getItemMeta() instanceof SkullMeta) {
             SkullMeta skullMeta = ((SkullMeta) itemInInv.getItemMeta());
             if(skullMeta.getOwner() != null) {
               try {
@@ -132,7 +133,7 @@ public class InventorySerializer {
         }
       }
 
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
+      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9)) {
         invConfig.set("Offhand", inventory.getItemInOffHand());
       }
 
@@ -148,7 +149,6 @@ public class InventorySerializer {
       plugin.getLogger().log(Level.INFO, "Saved inventory of {0}", player.getName());
       return true;
     } catch(Exception ex) {
-      ex.printStackTrace();
       Bukkit.getConsoleSender().sendMessage("Cannot save inventory of player!");
       Bukkit.getConsoleSender().sendMessage("Disable inventory saving option in config.yml or restart the server!");
       return false;
@@ -181,14 +181,12 @@ public class InventorySerializer {
       try {
         inventory.setContents(invContents);
       } catch(IllegalArgumentException ex) {
-        ex.printStackTrace();
         Bukkit.getConsoleSender().sendMessage("Cannot get inventory of player! Inventory has more items than the default content size.");
         Bukkit.getConsoleSender().sendMessage("Disable inventory saving option in config.yml or restart the server!");
       }
       file.delete();
       return inventory;
     } catch(Exception ex) {
-      ex.printStackTrace();
       Bukkit.getConsoleSender().sendMessage("Cannot save inventory of player!");
       Bukkit.getConsoleSender().sendMessage("Disable inventory saving option in config.yml or restart the server!");
       return Bukkit.createInventory(null, 9);
@@ -223,7 +221,7 @@ public class InventorySerializer {
           }
         }
         playerInventory.setArmorContents(armor);
-        if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9_R1)) {
+        if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9)) {
           playerInventory.setItemInOffHand(invConfig.getItemStack("Offhand", new ItemStack(Material.AIR)));
         }
         VersionUtils.setMaxHealth(player, invConfig.getDouble("Max health"));

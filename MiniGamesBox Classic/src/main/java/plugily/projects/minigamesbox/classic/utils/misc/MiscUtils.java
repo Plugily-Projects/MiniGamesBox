@@ -56,7 +56,7 @@ public class MiscUtils {
   }
 
   public static String matchColorRegex(String s) {
-    if(Version.isCurrentLower(Version.v1_16_R1)) {
+    if(Version.isCurrentLower(Version.v1_16)) {
       return s;
     }
 
@@ -198,21 +198,21 @@ public class MiscUtils {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SNAPSHOT] §eSNAPSHOT builds are just for test purposes and we do not provide any support to them!");
     }
     if(disclaimer) {
-      if(ServerVersion.Version.isCurrentEqual(Version.v0_0_R0) || ServerVersion.Version.isCurrentLower(Version.v1_12_R1)) {
+      if(ServerVersion.Version.isCurrentEqual(Version.v0_0_0) || ServerVersion.Version.isCurrentLower(Version.v1_12)) {
         Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
-        if(ServerVersion.Version.isCurrentEqual(Version.v0_0_R0)) {
+        if(ServerVersion.Version.isCurrentEqual(Version.v0_0_0)) {
           Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cIt seems like our system does not know your Server version, you should contact our support!");
         }
-        if(ServerVersion.Version.isCurrentLower(Version.v1_17_R1)) {
+        if(ServerVersion.Version.isCurrentLower(Version.v1_17)) {
           Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cWe noticed that you are using an older version of Minecraft.");
           Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cPlease keep in mind that newer versions will help improving the security and performance of your server.");
-          if(ServerVersion.Version.isCurrentLower(Version.v1_12_R1)) {
+          if(ServerVersion.Version.isCurrentLower(Version.v1_12)) {
             Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][DISCLAIMER] §cWe do not give official support for old Minecraft versions as they are to outdated, have security risks and slow down dev progress!");
           }
         }
       }
     }
-    if(support && ServerVersion.Version.isCurrentEqualOrHigher(Version.v1_12_R1)) {
+    if(support && ServerVersion.Version.isCurrentEqualOrHigher(Version.v1_12)) {
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "] ");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SUPPORT] If you have any problems, you can always contact us on our Discord server! ( https://discord.plugily.xyz )");
       Bukkit.getConsoleSender().sendMessage("[" + pluginname + "][SUPPORT] You can also check out our wiki at https://wiki.plugily.xyz");

@@ -275,7 +275,7 @@ public class Metrics {
       long secondDelay = (long) (1000 * 60 * (Math.random() * 30));
       scheduler.schedule(submitTask, initialDelay, TimeUnit.MILLISECONDS);
       scheduler.scheduleAtFixedRate(
-          submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
+          submitTask, initialDelay + secondDelay, 1800000, TimeUnit.MILLISECONDS);
     }
 
     private void submitData() {

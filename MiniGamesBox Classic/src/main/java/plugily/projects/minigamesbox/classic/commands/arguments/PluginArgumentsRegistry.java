@@ -137,19 +137,20 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       }
       for(CommandArgument argument : entry.getValue()) {
         if(argument.getArgumentName().equalsIgnoreCase(args[0])) {
-          //does it make sense that it is a list?
+          boolean gotPermissions = false;
           for(String perm : argument.getPermissions()) {
             if(perm.isEmpty() || plugin.getBukkitHelper().hasPermission(sender, perm)) {
-              break;
+              gotPermissions = true;
             }
-            //user has no permission to execute command
+          }
+          if(!gotPermissions) {
+            new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().send(sender);
             return true;
           }
           if(checkSenderIsExecutorType(sender, argument.getValidExecutors())) {
             argument.execute(sender, args);
+            return true;
           }
-          //return true even if sender is not good executor or hasn't got permission
-          return true;
         }
       }
 
@@ -191,7 +192,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     data.addAll(mappedArguments.get(plugin.getPluginNamePrefixLong()).stream().filter(arg -> arg instanceof LabeledCommandArgument)
         .map(arg -> ((LabeledCommandArgument) arg).getLabelData()).collect(Collectors.toList()));
 
-    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_11)) {
       for(LabelData labelData : data) {
         sender.sendMessage(labelData.getText() + " - " + labelData.getDescription().split("\n", 2)[0]);
       }

@@ -49,11 +49,6 @@ public class User implements IUser {
   private final Map<String, Double> cooldowns = new HashMap<>();
   private boolean initialized;
 
-  @Deprecated
-  public User(Player player) {
-    this(player.getUniqueId());
-  }
-
   public User(UUID uuid) {
     this.uuid = uuid;
   }
@@ -143,9 +138,7 @@ public class User implements IUser {
       plugin.getDebugger().debug("Set User {0} statistic to {1} for {2} ", statisticType.getName(), value, player.getName());
 
       //statistics manipulation events are called async when using mysql
-      Bukkit.getScheduler().runTask(plugin, () -> {
-        Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, value));
-      });
+      Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new PlugilyPlayerStatisticChangeEvent(plugin.getArenaRegistry().getArena(player), player, statisticType, value)));
     }
   }
 

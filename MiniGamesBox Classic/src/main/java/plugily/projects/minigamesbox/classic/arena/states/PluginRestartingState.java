@@ -77,7 +77,6 @@ public class PluginRestartingState implements ArenaStateHandler {
       arenaState = IArenaState.WAITING_FOR_PLAYERS;
     }
     plugin.getDebugger().performance("ArenaUpdate", "END Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.RESTARTING, arenaState, arenaTimer);
-
   }
 
   @Override

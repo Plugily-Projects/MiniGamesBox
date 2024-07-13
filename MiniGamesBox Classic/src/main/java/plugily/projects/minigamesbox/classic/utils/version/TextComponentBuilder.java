@@ -133,7 +133,7 @@ public class TextComponentBuilder {
   }
 
   private void send(Player onlinePlayer) {
-    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_12_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_12)) {
       onlinePlayer.sendRawMessage(message);
       return;
     }
@@ -142,7 +142,7 @@ public class TextComponentBuilder {
       component.setClickEvent(new ClickEvent(ClickEvent.Action.valueOf(String.valueOf(clickEventAction)), clickEventValue));
     }
     if(hoverEventAction != null && hoverEventValue != null) {
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1)) {
+      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16)) {
         component.setHoverEvent(new HoverEvent(HoverEvent.Action.valueOf(String.valueOf(hoverEventAction)), new Text(hoverEventValue)));
       } else {
         component.setHoverEvent(new HoverEvent(HoverEvent.Action.valueOf(String.valueOf(hoverEventAction)), TextComponent.fromLegacyText(hoverEventValue)));

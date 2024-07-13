@@ -33,7 +33,7 @@ public final class ComplementAccessor {
     } catch(NoSuchMethodException | ClassNotFoundException e) {
     }
 
-    complement = (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R3) && kyoriSupported)
+    complement = (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16) && kyoriSupported)
         ? new Complement2()
         : new Complement1();
   }

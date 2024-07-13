@@ -64,7 +64,7 @@ public class CycleEvents implements Listener {
   }
 
   private void setWeatherGameRule(World world) {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13)) {
       world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
     } else {
       world.setGameRuleValue("doWeatherCycle", "false");
@@ -72,7 +72,7 @@ public class CycleEvents implements Listener {
   }
 
   private void setDayLightGameRule(World world) {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13_R1)) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13)) {
       world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
     } else {
       world.setGameRuleValue("doDaylightCycle", "false");

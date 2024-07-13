@@ -194,11 +194,11 @@ public class ArmorStandHologram {
       }
       entityItem.setCustomNameVisible(false);
 
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10_R1)) {
+      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_10)) {
         entityItem.setGravity(true);
       }
 
-      if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R3)) {
+      if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_8)) {
         entityItem.setInvulnerable(true);
       }
       VersionUtils.teleport(entityItem, location);
@@ -214,7 +214,7 @@ public class ArmorStandHologram {
     loc.setY(y);
 
     World world = loc.getWorld();
-    if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_R1)) {
+    if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_8_8)) {
       world.getNearbyEntities(location, 0.2, 0.2, 0.2).forEach(entity -> {
         if(entity instanceof ArmorStand && !armorStands.contains(entity) && !plugin.getHologramManager().getArmorStands().contains(entity)) {
           entity.remove();

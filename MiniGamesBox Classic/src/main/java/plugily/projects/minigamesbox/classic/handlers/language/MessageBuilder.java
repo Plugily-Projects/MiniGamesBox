@@ -146,7 +146,7 @@ public class MessageBuilder {
   }
 
   private void colorRawMessage() {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16_R1) && message.indexOf('#') != -1) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_16) && message.indexOf('#') != -1) {
       message = MiscUtils.matchColorRegex(message);
     }
 

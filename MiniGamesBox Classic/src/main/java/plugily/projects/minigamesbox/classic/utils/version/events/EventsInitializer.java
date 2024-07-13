@@ -29,7 +29,7 @@ import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 public class EventsInitializer {
 
   public EventsInitializer(JavaPlugin plugin) {
-    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10_R2)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_10)) {
       new LegacyEvents(plugin);
     } else {
       new Events(plugin);

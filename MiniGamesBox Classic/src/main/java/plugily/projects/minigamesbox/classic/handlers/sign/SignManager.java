@@ -180,8 +180,8 @@ public class SignManager implements Listener {
             org.bukkit.block.BlockState state = loc.getBlock().getState();
             if(state instanceof Sign) {
               arenaSigns.add(new ArenaSign((Sign) state, arena));
-              if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_12_R1)) {
-                if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_20_R1)) {
+              if(ServerVersion.Version.isCurrentHigher(ServerVersion.Version.v1_12)) {
+                if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_20)) {
                   ((Sign) state).setWaxed(true);
                 } else {
                   ((Sign) state).setEditable(false);
@@ -213,31 +213,31 @@ public class SignManager implements Listener {
           switch(arenaSign.getArena().getArenaState()) {
             case WAITING_FOR_PLAYERS:
               behind.setType(XMaterial.WHITE_STAINED_GLASS.parseMaterial());
-              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
+              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13)) {
                 Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.WHITE_STAINED_GLASS.getData());
               }
               break;
             case STARTING:
               behind.setType(XMaterial.YELLOW_STAINED_GLASS.parseMaterial());
-              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
+              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13)) {
                 Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.YELLOW_STAINED_GLASS.getData());
               }
               break;
             case IN_GAME:
               behind.setType(XMaterial.ORANGE_STAINED_GLASS.parseMaterial());
-              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
+              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13)) {
                 Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.ORANGE_STAINED_GLASS.getData());
               }
               break;
             case ENDING:
               behind.setType(XMaterial.GRAY_STAINED_GLASS.parseMaterial());
-              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
+              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13)) {
                 Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.GRAY_STAINED_GLASS.getData());
               }
               break;
             case RESTARTING:
               behind.setType(XMaterial.BLACK_STAINED_GLASS.parseMaterial());
-              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13_R1)) {
+              if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_13)) {
                 Block.class.getMethod("setData", byte.class).invoke(behind, XMaterial.BLACK_STAINED_GLASS.getData());
               }
               break;

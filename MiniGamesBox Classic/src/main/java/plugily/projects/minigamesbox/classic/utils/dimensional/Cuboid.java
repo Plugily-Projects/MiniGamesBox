@@ -25,6 +25,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import plugily.projects.minigamesbox.classic.PluginMain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class Cuboid {
   private final int xMin, xMax, yMin, yMax, zMin, zMax;
   private final double xMinCentered, xMaxCentered, yMinCentered, yMaxCentered, zMinCentered, zMaxCentered;
   private final World world;
+
 
   public Cuboid(final Location point1, final Location point2) {
     xMin = Math.min(point1.getBlockX(), point2.getBlockX());
@@ -124,10 +127,10 @@ public class Cuboid {
   }
 
   public Location getRandomLocation() {
-    final Random rand = new Random();
-    final int x = rand.nextInt(Math.abs(xMax - xMin) + 1) + xMin;
-    final int y = rand.nextInt(Math.abs(yMax - yMin) + 1) + yMin;
-    final int z = rand.nextInt(Math.abs(zMax - zMin) + 1) + zMin;
+    PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+    final int x = plugin.getRandom().nextInt(Math.abs(xMax - xMin) + 1) + xMin;
+    final int y = plugin.getRandom().nextInt(Math.abs(yMax - yMin) + 1) + yMin;
+    final int z = plugin.getRandom().nextInt(Math.abs(zMax - zMin) + 1) + zMin;
     return new Location(world, x, y, z);
   }
 
