@@ -386,11 +386,13 @@ public class PluginMain extends JavaPlugin implements IPluginMain {
 
     Bukkit.getLogger().removeHandler(getExceptionLogHandler());
     if(getArenaRegistry() != null) {
-      for(IPluginArena arena : getArenaRegistry().getArenas()) {
-        for(Player player : new ArrayList<>(arena.getPlayers())) {
-          getArenaManager().leaveAttempt(player, arena);
+      try {
+        for(IPluginArena arena : getArenaRegistry().getArenas()) {
+          getArenaManager().stopGame(true, arena);
+          arena.getMapRestorerManager().fullyRestoreArena();
         }
-        arena.getMapRestorerManager().fullyRestoreArena();
+      } catch(Exception exception) {
+        getDebugger().debug("Error while disabling arenas: {0}", exception.getMessage());
       }
     }
     if(getUserManager() != null) {
