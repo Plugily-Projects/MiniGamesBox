@@ -274,8 +274,14 @@ public class PluginArenaManager {
         }
       }
     }
-    arena.setTimer(quickStop ? 0 : plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
-    arena.setArenaState(IArenaState.ENDING, true);
+    if(quickStop) {
+      arena.setTimer(0, true);
+      arena.setArenaState(IArenaState.RESTARTING, true);
+    } else {
+      arena.setTimer(plugin.getConfig().getInt("Time-Manager.Ending", 10), true);
+      arena.setArenaState(IArenaState.ENDING, true);
+    }
+
     for(Player players : arena.getPlayers()) {
       plugin.getSpecialItemManager().removeSpecialItemsOfStage(players, SpecialItem.DisplayStage.IN_GAME);
       plugin.getSpecialItemManager().addSpecialItemsOfStage(players, SpecialItem.DisplayStage.ENDING);
