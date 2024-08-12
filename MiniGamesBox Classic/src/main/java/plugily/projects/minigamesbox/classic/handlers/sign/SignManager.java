@@ -22,6 +22,7 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
@@ -204,8 +205,13 @@ public class SignManager implements Listener {
     long start = System.currentTimeMillis();
 
     for(ArenaSign arenaSign : arenaSigns) {
-      for(int i = 0; i < signLines.size(); i++) {
-        ComplementAccessor.getComplement().setLine(arenaSign.getSign(), i, new MessageBuilder(signLines.get(i)).arena(arenaSign.getArena()).build());
+      BlockState state = arenaSign.getSign().getBlock().getState();
+      if(state instanceof Sign) {
+        Sign sign = (Sign) state;
+        for(int i = 0; i < signLines.size(); i++) {
+          ComplementAccessor.getComplement().setLine(sign, i, new MessageBuilder(signLines.get(i)).arena(arenaSign.getArena()).build());
+        }
+        sign.update();
       }
       if(plugin.getConfig().getBoolean("Signs-Block-States-Enabled", true) && arenaSign.getBehind() != null) {
         Block behind = arenaSign.getBehind();
@@ -247,7 +253,6 @@ public class SignManager implements Listener {
         } catch(Exception ignored) {
         }
       }
-      arenaSign.getSign().update();
     }
     plugin.getDebugger().performance("SignUpdate", "[PerformanceMonitor] [SignUpdate] Updated signs took {0}ms", System.currentTimeMillis() - start);
   }
