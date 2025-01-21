@@ -58,7 +58,7 @@ public class PacketUtils {
   }
 
   public static Class<?> classByName(String newPackageName, String className) {
-    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_17) || newPackageName == null) {
+    if(ServerVersion.Version.isCurrentLower(ServerVersion.Version.v1_17)) {
       newPackageName = "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     }
 
