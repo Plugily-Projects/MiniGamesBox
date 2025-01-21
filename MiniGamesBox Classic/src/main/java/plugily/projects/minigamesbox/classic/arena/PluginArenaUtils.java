@@ -73,7 +73,7 @@ public class PluginArenaUtils {
       VersionUtils.hidePlayer(plugin, players, player);
     }
   }
-  
+
   public static CompletableFuture<Void> preparePlayerForGame(
       IPluginArena arena, Player player, Location location, boolean spectator) {
     return VersionUtils.teleport(player, location).thenAccept(bo -> {

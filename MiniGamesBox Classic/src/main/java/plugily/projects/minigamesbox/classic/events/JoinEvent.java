@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.utils.serialization.InventorySerializer;
@@ -45,6 +46,11 @@ public class JoinEvent implements Listener {
 
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
+    IPluginArena arena = plugin.getUserManager().getUsersQuitDuringGame().get(event.getPlayer().getUniqueId());
+    if(arena != null) {
+      VersionUtils.teleport(event.getPlayer(), arena.getEndLocation());
+      plugin.getUserManager().getUsersQuitDuringGame().remove(event.getPlayer().getUniqueId());
+    }
     plugin.getUserManager().loadStatistics(plugin.getUserManager().getUser(event.getPlayer()));
     //load player inventory in case of server crash, file is deleted once loaded so if file was already
     //deleted player won't receive his backup, in case of crash he will get it back

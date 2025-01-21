@@ -44,6 +44,7 @@ public class UserManager implements IUserManager {
 
   private final UserDatabase database;
   private final HashMap<UUID, User> users = new HashMap<>();
+  private final HashMap<UUID, IPluginArena> usersQuitDuringGame = new HashMap<>();
   private final PluginMain plugin;
 
   public UserManager(PluginMain plugin) {
@@ -127,6 +128,16 @@ public class UserManager implements IUserManager {
       if(arena != null)
         new MessageBuilder("IN_GAME_LEVEL_UP").asKey().arena(arena).player(user.getPlayer()).integer(level).sendPlayer();
     }
+  }
+
+  @Override
+  public void storeUserQuitDuringGame(Player player, IPluginArena arena) {
+    usersQuitDuringGame.put(player.getUniqueId(), arena);
+  }
+
+  @Override
+  public HashMap<UUID, IPluginArena> getUsersQuitDuringGame() {
+    return usersQuitDuringGame;
   }
 
   @Override

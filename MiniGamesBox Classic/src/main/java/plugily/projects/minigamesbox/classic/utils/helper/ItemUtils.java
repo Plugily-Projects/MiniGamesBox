@@ -19,8 +19,10 @@
 package plugily.projects.minigamesbox.classic.utils.helper;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.mojang.authlib.GameProfile;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -65,16 +67,16 @@ public class ItemUtils {
 
     SkullMeta headMeta = (SkullMeta) head.getItemMeta();
 
-    GameProfile profile;
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_20)) {
-      profile = new GameProfile(UUID.randomUUID(), "Plugily");
+    PlayerProfile profile;
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_21)) {
+      profile = Bukkit.getServer().createProfile(UUID.randomUUID(), "Plugily");
     } else {
-      profile = new GameProfile(UUID.randomUUID(), null);
+      profile = Bukkit.getServer().createProfile(UUID.randomUUID(), null);
     }
-    profile.getProperties().put("textures", new Property("textures", url));
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_15)) {
+    profile.setProperty(new ProfileProperty("textures", url));
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_21)) {
       try {
-        Method mtd = headMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+        Method mtd = headMeta.getClass().getDeclaredMethod("setPlayerProfile", PlayerProfile.class);
         mtd.setAccessible(true);
         mtd.invoke(headMeta, profile);
       } catch(Exception ignored) {
