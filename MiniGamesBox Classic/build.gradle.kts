@@ -22,6 +22,10 @@ plugins {
     java
 }
 
+repositories {
+    maven("https://repo2.acrylicstyle.xyz/")
+}
+
 dependencies {
     implementation("me.tigerhix.lib:scoreboard:1.4.5") { isTransitive = false }
     implementation("com.github.cryptomorin:XSeries:13.0.0") { isTransitive = false }
@@ -33,7 +37,7 @@ dependencies {
     implementation("io.papermc:paperlib:1.0.8")
     implementation("org.openjdk.nashorn:nashorn-core:15.4")
     implementation("org.ow2.asm:asm:9.6")
-    compileOnly("com.mojang:authlib:3.11.50")
+    compileOnly("com.mojang:authlib:3.13.56")
     compileOnly("de.simonsator:DevelopmentPAFSpigot:1.0.67")
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")
     compileOnly("de.simonsator:Spigot-Party-API-For-RedisBungee:1.0.3-SNAPSHOT")
