@@ -18,6 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.misc;
 
+import com.cryptomorin.xseries.XEntityType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -26,7 +27,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -87,7 +87,7 @@ public class MiscUtils {
    * @param location location to spawn firework there
    */
   public static void spawnRandomFirework(Location location) {
-    Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+    Firework fw = (Firework) location.getWorld().spawnEntity(location, XEntityType.FIREWORK_ROCKET.get());
     FireworkMeta fwm = fw.getFireworkMeta();
 
     //Get the type
