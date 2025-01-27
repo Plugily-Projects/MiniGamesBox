@@ -18,6 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.helper;
 
+import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -58,23 +59,23 @@ public class WeaponHelper {
     switch(type) {
       case WOOD:
         itemStack = XMaterial.WOODEN_SWORD.parseItem();
-        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, level);
+        itemStack.addUnsafeEnchantment(XEnchantment.UNBREAKING.get(), level);
         return itemStack;
       case IRON:
         itemStack = XMaterial.IRON_SWORD.parseItem();
-        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, level);
+        itemStack.addUnsafeEnchantment(XEnchantment.UNBREAKING.get(), level);
         return itemStack;
       case GOLD:
         itemStack = XMaterial.GOLDEN_SWORD.parseItem();
-        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, level);
+        itemStack.addUnsafeEnchantment(XEnchantment.UNBREAKING.get(), level);
         return itemStack;
       case DIAMOND:
         itemStack = XMaterial.DIAMOND_SWORD.parseItem();
-        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, level);
+        itemStack.addUnsafeEnchantment(XEnchantment.UNBREAKING.get(), level);
         return itemStack;
       case STONE:
         itemStack = XMaterial.STONE_SWORD.parseItem();
-        itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, level);
+        itemStack.addUnsafeEnchantment(XEnchantment.UNBREAKING.get(), level);
         return itemStack;
       default:
         return getUnBreakingSword(ResourceType.WOOD, 10);
