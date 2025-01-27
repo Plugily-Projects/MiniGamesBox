@@ -44,7 +44,7 @@ repositories {
     }
 
     maven {
-        url = uri('https://repo.extendedclip.com/content/repositories/placeholderapi/')
+        url = uri('https://repo.extendedclip.com/releases/')
     }
 }
 
