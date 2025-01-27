@@ -18,16 +18,14 @@
 
 package plugily.projects.minigamesbox.classic.handlers.sign;
 
-import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.jetbrains.annotations.Nullable;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.classic.utils.helper.MaterialUtils;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-
-import java.lang.reflect.InvocationTargetException;
 /**
  * @author Tigerpanzer_02
  * <p>
@@ -58,18 +56,12 @@ public class ArenaSign {
   }
 
   private Block getBlockBehind() {
-    try {
-      org.bukkit.block.BlockState state = sign.getBlock().getState();
-      Object blockData = state.getClass().getMethod("getBlockData").invoke(state);
-      BlockFace face = (BlockFace) blockData.getClass().getMethod("getFacing").invoke(blockData);
-
-      Location loc = sign.getLocation();
-      return new Location(loc.getWorld(), loc.getBlockX() - face.getModX(), loc.getBlockY() - face.getModY(),
-          loc.getBlockZ() - face.getModZ()).getBlock();
-    } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
-      return null;
+    BlockData data = sign.getBlockData();
+    if (data instanceof Directional) {
+      Directional blockDirection = (Directional) data;
+      return sign.getBlock().getRelative(blockDirection.getFacing().getOppositeFace());
     }
+    return null;
   }
 
   private Block getBlockBehindLegacy() {
