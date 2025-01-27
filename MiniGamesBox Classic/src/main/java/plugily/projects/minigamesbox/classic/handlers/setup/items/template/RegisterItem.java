@@ -18,9 +18,9 @@
 
 package plugily.projects.minigamesbox.classic.handlers.setup.items.template;
 
+import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
@@ -76,7 +76,7 @@ public class RegisterItem implements ClickableItem {
             .lore(ChatColor.GRAY + "Good job, you went through whole setup!")
             .lore("&aControls")
             .lore("&eCLICK \n&7-> Register arena")
-            .enchantment(Enchantment.DURABILITY);
+            .enchantment(XEnchantment.UNBREAKING.get());
         break;
       case ARENA_SETUP:
       default:
