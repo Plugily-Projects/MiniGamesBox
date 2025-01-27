@@ -18,19 +18,10 @@
 
 package plugily.projects.minigamesbox.classic.utils.helper;
 
-import com.cryptomorin.xseries.XMaterial;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import org.bukkit.Bukkit;
+import com.cryptomorin.xseries.profiles.builder.XSkull;
+import com.cryptomorin.xseries.profiles.objects.Profileable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-import plugily.projects.minigamesbox.classic.utils.version.VersionUtils;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.UUID;
 
 /**
  * @author Tigerpanzer_02
@@ -39,7 +30,6 @@ import java.util.UUID;
  */
 public class ItemUtils {
 
-  public static final ItemStack PLAYER_HEAD_ITEM = XMaterial.PLAYER_HEAD.parseItem();
 
   private ItemUtils() {
   }
@@ -60,59 +50,7 @@ public class ItemUtils {
   }
 
   public static ItemStack getSkull(String url) {
-    ItemStack head = PLAYER_HEAD_ITEM.clone();
-    if(url.isEmpty() || !(head.getItemMeta() instanceof SkullMeta)) {
-      return head;
-    }
-
-    SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-
-
-    if(VersionUtils.isPaper()) {
-      com.destroystokyo.paper.profile.PlayerProfile profile = Bukkit.getServer().createProfile(UUID.randomUUID(), "Plugily");
-      profile.setProperty(new com.destroystokyo.paper.profile.ProfileProperty("textures", url));
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_15)) {
-        try {
-          Method mtd = headMeta.getClass().getDeclaredMethod("setPlayerProfile", com.destroystokyo.paper.profile.PlayerProfile.class);
-          mtd.setAccessible(true);
-          mtd.invoke(headMeta, profile);
-        } catch(Exception ignored) {
-        }
-      } else {
-        try {
-          Field profileField = headMeta.getClass().getDeclaredField("profile");
-          profileField.setAccessible(true);
-          profileField.set(headMeta, profile);
-        } catch(Exception ignored) {
-        }
-      }
-    } else {
-      GameProfile gameProfile;
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_20)) {
-        gameProfile = new GameProfile(UUID.randomUUID(), "Plugily");
-      } else {
-        gameProfile = (GameProfile) Bukkit.getServer().createProfile(UUID.randomUUID(), null);
-      }
-      gameProfile.getProperties().put("textures", new Property("textures", url));
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_15)) {
-        try {
-          Method mtd = headMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-          mtd.setAccessible(true);
-          mtd.invoke(headMeta, gameProfile);
-        } catch(Exception ignored) {
-        }
-      } else {
-        try {
-          Field profileField = headMeta.getClass().getDeclaredField("profile");
-          profileField.setAccessible(true);
-          profileField.set(headMeta, gameProfile);
-        } catch(Exception ignored) {
-        }
-      }
-    }
-
-    head.setItemMeta(headMeta);
-    return head;
+    return XSkull.createItem().profile(Profileable.detect(url)).apply();
   }
 
 }
