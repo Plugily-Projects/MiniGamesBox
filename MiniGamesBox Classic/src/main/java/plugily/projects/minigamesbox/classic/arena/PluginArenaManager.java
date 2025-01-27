@@ -244,10 +244,12 @@ public class PluginArenaManager {
         stopGame(true, arena);
         plugin.getDebugger().debug(Level.INFO, "[{0}] Game stopped due to lack of players", arena.getId());
       }
-      new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
     }
     plugin.getUserManager().saveAllStatistic(user);
     PluginArenaUtils.resetPlayerAfterGame(arena, player);
+    if(!user.isSpectator()) {
+      new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendPlayer();
+    }
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);
   }
