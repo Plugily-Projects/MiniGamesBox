@@ -18,20 +18,17 @@
 
 package plugily.projects.minigamesbox.classic.utils.version;
 
+import com.cryptomorin.xseries.XAttribute;
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
 import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.*;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Banner;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -42,10 +39,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionData;
@@ -272,22 +266,22 @@ public final class VersionUtils {
   // Some particle in new versions needs their own data type
   // See https://www.spigotmc.org/threads/343001/
   private static Object getParticleDataType(Particle particle, Location location) {
-    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13) && particle == Particle.REDSTONE) {
+    if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13) && particle == XParticle.DUST.get()) {
       return new Particle.DustOptions(Color.RED, 2);
     }
 
-    if(particle == Particle.ITEM_CRACK) {
+    if(particle == XParticle.ITEM.get()) {
       return new ItemStack(location.getBlock().getType());
     }
 
-    if(particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST
+    if(particle == XParticle.BLOCK.get()
         || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13) && particle == Particle.FALLING_DUST)
         || (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_18) && particle == Particle.BLOCK_MARKER)) {
       return location.getBlock().getType().createBlockData();
     }
 
-    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_13) && (particle == Particle.LEGACY_BLOCK_CRACK
-        || particle == Particle.LEGACY_BLOCK_DUST || particle == Particle.LEGACY_FALLING_DUST)) {
+    if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_13) && (particle.name().equals("LEGACY_BLOCK_CRACK")
+        || particle.name().equals("LEGACY_BLOCK_DUST") || particle.name().equals("LEGACY_FALLING_DUST"))) {
       org.bukkit.Material type = location.getBlock().getType();
 
       try {
@@ -450,7 +444,9 @@ public final class VersionUtils {
       return entity.getMaxHealth();
     }
 
-    java.util.Optional<org.bukkit.attribute.AttributeInstance> at = MiscUtils.getEntityAttribute(entity, Attribute.GENERIC_MAX_HEALTH);
+
+
+    java.util.Optional<org.bukkit.attribute.AttributeInstance> at = MiscUtils.getEntityAttribute(entity, XAttribute.MAX_HEALTH.get());
     return at.map(AttributeInstance::getValue).orElse(20D);
   }
 
@@ -458,7 +454,7 @@ public final class VersionUtils {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_8)) {
       player.setMaxHealth(health);
     } else {
-      MiscUtils.getEntityAttribute(player, Attribute.GENERIC_MAX_HEALTH).ifPresent(ai -> ai.setBaseValue(health));
+      MiscUtils.getEntityAttribute(player, XAttribute.MAX_HEALTH.get()).ifPresent(ai -> ai.setBaseValue(health));
     }
   }
 
@@ -466,7 +462,7 @@ public final class VersionUtils {
     if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_8)) {
       entity.setMaxHealth(health);
     } else {
-      MiscUtils.getEntityAttribute(entity, Attribute.GENERIC_MAX_HEALTH).ifPresent(ai -> ai.setBaseValue(health));
+      MiscUtils.getEntityAttribute(entity, XAttribute.MAX_HEALTH.get()).ifPresent(ai -> ai.setBaseValue(health));
     }
   }
 
