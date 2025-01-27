@@ -27,11 +27,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.ChatPaginator;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.misc.complement.ComplementAccessor;
+import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Tigerpanzer_02
@@ -86,6 +86,16 @@ public class ItemBuilder {
 
   public ItemBuilder name(final String name) {
     ComplementAccessor.getComplement().setDisplayName(itemMeta, name == null ? "" : name);
+    return this;
+  }
+
+  public ItemBuilder glowEffect() {
+    if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_21)) {
+      itemMeta.setEnchantmentGlintOverride(true);
+    } else {
+      this.itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
+      this.itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    }
     return this;
   }
 
