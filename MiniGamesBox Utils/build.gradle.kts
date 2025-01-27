@@ -18,7 +18,7 @@
 
 plugins {
     id("plugily.projects.java-conventions")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id ("com.gradleup.shadow") version "9.0.0-beta5"
     java
 }
 

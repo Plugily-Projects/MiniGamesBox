@@ -12,9 +12,9 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
-        url = uri('https://papermc.io/repo/repository/maven-public/')
+        name = "papermc"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
     }
-
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 
@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:23.0.0'
 }
