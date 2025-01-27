@@ -642,4 +642,17 @@ public final class VersionUtils {
     }
   }
 
+  public static BannerMeta setBaseColor(BannerMeta meta, DyeColor color) {
+      BlockStateMeta bsm = (BlockStateMeta) meta;
+      BlockState state = ((BlockStateMeta) meta).getBlockState();
+      if (state instanceof Banner) {
+          ((Banner) state).setBaseColor(color);
+          state.update(true);
+      }
+      bsm.setBlockState(state);
+    return meta;
+
+
+}
+
 }
