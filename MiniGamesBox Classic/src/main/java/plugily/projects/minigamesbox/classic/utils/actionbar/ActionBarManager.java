@@ -22,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.string.StringFormatUtils;
 import plugily.projects.minigamesbox.classic.PluginMain;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
@@ -61,6 +62,7 @@ public class ActionBarManager extends BukkitRunnable {
     }
     for(Map.Entry<Player, List<ActionBar>> actionBarList : new HashMap<>(actionBars).entrySet()) {
       Player player = actionBarList.getKey();
+      IPluginArena arena = plugin.getArenaRegistry().getArena(player);
       List<ActionBar> bars = new ArrayList<>(actionBarList.getValue());
       if(bars.isEmpty()) {
         return;
@@ -76,22 +78,22 @@ public class ActionBarManager extends BukkitRunnable {
               } else {
                 flashing.put(actionBar.getKey(), size + 1);
               }
-              VersionUtils.sendActionBar(player, new MessageBuilder(messages.get(size)).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
+              VersionUtils.sendActionBar(player, new MessageBuilder(messages.get(size)).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).player(player).arena(arena).build());
               break;
             }
             flashing.put(actionBar.getKey(), -1);
             break;
           case COOLDOWN:
             bars.remove(actionBar);
-            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
+            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).player(player).arena(arena).build());
             break;
           case DISPLAY:
-            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
+            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).player(player).arena(arena).build());
             break;
           case PROGRESS:
             String progress = StringFormatUtils.getProgressBar(actionBar.getExecutedTicks() + 10, actionBar.getTicks(),
                 10, "█", ChatColor.COLOR_CHAR + "a", ChatColor.COLOR_CHAR + "c");
-            VersionUtils.sendActionBar(player, actionBar.getMessage().value(progress).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).build());
+            VersionUtils.sendActionBar(player, actionBar.getMessage().value(progress).integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).player(player).arena(arena).build());
             break;
           default:
             break;

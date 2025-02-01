@@ -134,6 +134,9 @@ public class MessageBuilder {
   }
 
   public MessageBuilder arena(IPluginArena arena) {
+    if (arena == null) {
+      return this;
+    }
     this.arena = arena;
     formatArena();
     return this;
