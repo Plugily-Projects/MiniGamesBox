@@ -15,7 +15,8 @@ import java.util.List;
 
 public class JavaScriptEngine {
 
-  private List<String> engineNames = new ArrayList<>(Arrays.asList("js", "JS", "javascript", "JavaScript", "ecmascript", "ECMAScript", "nashorn", "Nashorn"));
+  // private List<String> engineNames = new ArrayList<>(Arrays.asList("js", "JS", "javascript", "JavaScript", "ecmascript", "ECMAScript", "nashorn", "Nashorn"));
+  private List<String> engineNames = new ArrayList<>(Arrays.asList("plugilyprojects"));
   private ScriptEngineManager scriptEngineManager;
   private ScriptEngineFactory scriptEngineFactory;
 
