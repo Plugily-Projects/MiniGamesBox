@@ -40,8 +40,8 @@ public class ExceptionLogHandler extends Handler {
   public ExceptionLogHandler(PluginMain plugin) {
     this.plugin = plugin;
     Bukkit.getLogger().addHandler(this);
-    addBlacklistedClass("plugily.projects." + plugin.getDescription().getName().toLowerCase() + ".user.data.MysqlManager");
-    addBlacklistedClass("plugily.projects." + plugin.getDescription().getName().toLowerCase() + ".plugily.projects.commonsbox.database.MysqlDatabase");
+    addBlacklistedClass("plugily.projects." + plugin.getDescription().getName().toLowerCase() + ".minigamesbox.classic.user.data.MysqlManager");
+    addBlacklistedClass("plugily.projects." + plugin.getDescription().getName().toLowerCase() + ".minigamesbox.database.MysqlDatabase");
   }
 
   /**

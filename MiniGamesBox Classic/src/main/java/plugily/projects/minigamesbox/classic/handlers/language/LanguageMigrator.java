@@ -44,7 +44,7 @@ import java.util.logging.Level;
 public class LanguageMigrator {
 
   public enum CoreFileVersion {
-    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(4), KITS(2),
+    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(5), KITS(2),
     LANGUAGE(2), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
@@ -164,6 +164,17 @@ public class LanguageMigrator {
             MigratorUtils.removeLineFromFile(file, "  Food: false");
             MigratorUtils.removeLineFromFile(file, "  True: false");
             MigratorUtils.insertAfterLine(file, "Damage:", "  Hunger: false");
+            break;
+          case 4:
+            MigratorUtils.insertAfterLine(file, "    Item-Move: true", "    ArmorStand: \n" +
+                    "        # Should we block armor stand destroy with double click?\n" +
+                    "        Destroy: true\n" +
+                    "        # Should we block armor stand interaction?\n" +
+                    "        Interact: true\n" +
+                    "        # Should these only be blocked while ingame and arena state is in_game? (e.g. Lobby and Ending is blocked)\n" +
+                    "        # Setting it to false means on all stages of the game the event will be cancelled. \n" +
+                    "        # Setting it to true means only while IN_GAME the event will be cancelled.\n" +
+                    "        Check: true\r\n");
             break;
           default:
             break;
