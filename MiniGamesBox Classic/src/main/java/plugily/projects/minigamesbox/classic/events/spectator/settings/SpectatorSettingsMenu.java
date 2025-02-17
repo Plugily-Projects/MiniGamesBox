@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.PluginMain;
+import plugily.projects.minigamesbox.classic.handlers.items.SpecialItem;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.handlers.reward.Reward;
 import plugily.projects.minigamesbox.classic.handlers.reward.RewardType;
@@ -263,6 +264,9 @@ public class SpectatorSettingsMenu implements Listener {
     firstPersonMode.remove(player);
     player.setSpectatorTarget(null);
     player.setGameMode(GameMode.SURVIVAL);
+    player.setAllowFlight(true);
+    player.setFlying(true);
+    VersionUtils.setCollidable(player, false);
   }
 
   public NormalFastInv getInventory() {
