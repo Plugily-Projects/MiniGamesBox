@@ -111,6 +111,7 @@ public class PluginArenaUtils {
         plugin
                 .getSpecialItemManager()
                 .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);
+        VersionUtils.setCollidable(player, false);
       } else {
         player.setAllowFlight(false);
         player.setFlying(false);
