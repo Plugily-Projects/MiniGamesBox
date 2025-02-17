@@ -61,6 +61,8 @@ public class PluginRestartingState implements ArenaStateHandler {
       arena.getMapRestorerManager().fullyRestoreArena();
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
         if(ConfigUtils.getConfig(plugin, "bungee").getBoolean("Shutdown-When-Game-Ends")) {
+          // If someone else reports issues on mysql data save, may update to run sync save of allstatistic!
+          // (e.g. the data is now entered correctly in the DB, but only if "Shutdown-When-Game-Ends: false" is set in the bungee.yml, otherwise no data is entered in the database)
           for(Player player : Bukkit.getOnlinePlayers()) {
             IUser user = plugin.getUserManager().getUser(player);
             plugin.getUserManager().saveAllStatistic(user);
