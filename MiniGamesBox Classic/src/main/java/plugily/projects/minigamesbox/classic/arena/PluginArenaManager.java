@@ -249,6 +249,7 @@ public class PluginArenaManager {
     PluginArenaUtils.resetPlayerAfterGame(arena, player);
     if(!user.isSpectator()) {
       new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendArena();
+      new MessageBuilder(MessageBuilder.ActionType.LEAVE).arena(arena).player(player).sendPlayer();
     }
     plugin.getSignManager().updateSigns();
     plugin.getDebugger().debug("[{0}] Final leave attempt for {1} took {2}ms", arena.getId(), player.getName(), System.currentTimeMillis() - start);

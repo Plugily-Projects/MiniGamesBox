@@ -224,6 +224,9 @@ public class Events implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onArmorStandDestroy(EntityDamageByEntityEvent event) {
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ARMOR_STAND_DESTROY")) {
+      return;
+    }
     if(!(event.getEntity() instanceof LivingEntity)) {
       return;
     }
@@ -232,10 +235,22 @@ public class Events implements Listener {
       return;
     }
     if(event.getDamager() instanceof Player && plugin.getArenaRegistry().isInArena((Player) event.getDamager())) {
+      if(plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ARMOR_STAND_CHECK")) {
+        IPluginArena arena = plugin.getArenaRegistry().getArena((Player) event.getDamager());
+        if(arena != null && arena.getArenaState() != IArenaState.IN_GAME) {
+          return;
+        }
+      }
       event.setCancelled(true);
     } else if(event.getDamager() instanceof Projectile) {
       Projectile projectile = (Projectile) event.getDamager();
       if(projectile.getShooter() instanceof Player && plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
+        if(plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ARMOR_STAND_CHECK")) {
+          IPluginArena arena = plugin.getArenaRegistry().getArena((Player) projectile.getShooter());
+          if(arena != null && arena.getArenaState() != IArenaState.IN_GAME) {
+            return;
+          }
+        }
         event.setCancelled(true);
         return;
       }
@@ -245,9 +260,19 @@ public class Events implements Listener {
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onInteractWithArmorStand(PlayerArmorStandManipulateEvent event) {
-    if(plugin.getArenaRegistry().isInArena(event.getPlayer())) {
-      event.setCancelled(true);
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ARMOR_STAND_INTERACT")) {
+      return;
     }
+    if(!plugin.getArenaRegistry().isInArena(event.getPlayer())) {
+      return;
+    }
+    if(plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ARMOR_STAND_CHECK")) {
+      IPluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
+      if(arena != null && arena.getArenaState() != IArenaState.IN_GAME) {
+          return;
+      }
+    }
+    event.setCancelled(true);
   }
 
 

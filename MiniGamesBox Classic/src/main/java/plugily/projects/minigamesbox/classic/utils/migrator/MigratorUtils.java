@@ -53,7 +53,7 @@ public class MigratorUtils {
       Files.write(file.toPath(), updatedLines, StandardCharsets.UTF_8);
     } catch(IOException e) {
       e.printStackTrace();
-      Bukkit.getLogger().warning("[CommonsBox] Something went horribly wrong with migration! Please contact Plugily Projects!");
+      Bukkit.getLogger().warning("[MinigamesBox] Something went horribly wrong with migration! Please contact Plugily Projects!");
     }
   }
 
@@ -94,7 +94,7 @@ public class MigratorUtils {
       fw.close();
     } catch(IOException e) {
       e.printStackTrace();
-      Bukkit.getLogger().warning("[CommonsBox] Something went horribly wrong with migration! Please contact Plugily Projects!");
+      Bukkit.getLogger().warning("[MinigamesBox] Something went horribly wrong with migration! Please contact Plugily Projects!");
     }
   }
 

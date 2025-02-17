@@ -61,7 +61,7 @@ public class PluginStartingState implements ArenaStateHandler {
 
     int timer = arena.getTimer();
 
-    double startWaiting = plugin.getConfig().getDouble("Starting-Waiting-Time", 60);
+    double startWaiting = plugin.getConfig().getDouble("Time-Manager.Waiting", 60);
     arena.getBossbarManager().setProgress(timer / startWaiting);
 
     float exp = (float) (timer / startWaiting);

@@ -1,3 +1,19 @@
+### (1.3.11-)1.3.15 Release (17.02.2025)
+* Added 1.21.1-4 support
+* Added (3) new ConfigOptions for ArmorStands (BLOCK_IN_GAME_ARMOR_STAND_DESTROY, BLOCK_IN_GAME_ARMOR_STAND_CHECK, BLOCK_IN_GAME_ARMOR_STAND_INTERACT)
+* Fixed arena start time divider did not match from config.yml
+* Fixed spectator can't fly after sneaking out of first person mode
+* Fixed player collissions on spectator mode
+* Fixed sending of leave message for leaving player and the counting in arena
+* Fixed ActionBars did not convert player and arena placeholders by default
+* Fixed compatibility for BannerColoring in 1.20+
+* Fixed sign updates as cached objects got overwrite (#59)
+* Fixed CommandArgument could have multiple permissions while only the first one was checked
+* Changed onDisable process to make sure all data gets saved even on mysql
+* Changed Simplified and fixed getting of custom texture Skulls (1.20+)
+* Changed Simplified and fixed ArenaWallSign on 1.20.5+
+* Changed Attempt to fix incompatibles with other plugins which using scriptengine by rewritting name of own scriptengine [Changed ScriptEngine name to "plugilyprojects"]
+
 ### 1.3.10 Release (09.07.2024)
 * Fixed multiverse teleportation problems on a multiworld server 
 

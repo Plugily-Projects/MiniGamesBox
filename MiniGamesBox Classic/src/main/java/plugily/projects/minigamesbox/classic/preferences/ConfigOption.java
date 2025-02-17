@@ -45,6 +45,9 @@ public class ConfigOption implements IConfigOption {
     //Commands.Shorter
     options.put("BLOCK_IN_GAME_COMMANDS", new ConfigOption("Block.In-Game.Commands", true, true));
     options.put("BLOCK_IN_GAME_ITEM_MOVE", new ConfigOption("Block.In-Game.Item-Move", true, true));
+    options.put("BLOCK_IN_GAME_ARMOR_STAND_DESTROY", new ConfigOption("Block.In-Game.ArmorStand.Destroy", true, true));
+    options.put("BLOCK_IN_GAME_ARMOR_STAND_INTERACT", new ConfigOption("Block.In-Game.ArmorStand.Interact", true, true));
+    options.put("BLOCK_IN_GAME_ARMOR_STAND_CHECK", new ConfigOption("Block.In-Game.ArmorStand.Check", true, true));
     options.put("DATABASE", new ConfigOption("Database", false, true));
     options.put("REWARDS", new ConfigOption("Rewards", false, true));
     options.put("PLUGIN_CHAT_FORMAT", new ConfigOption("Chat.Format", true, true));
