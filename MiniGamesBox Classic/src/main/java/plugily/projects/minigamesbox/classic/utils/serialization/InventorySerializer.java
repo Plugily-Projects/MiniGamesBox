@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.utils.serialization;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -94,7 +95,7 @@ public class InventorySerializer {
 
       for(PotionEffect potion : activeEffects) {
         activePotions.add(potion.getType().getName() + "#" + potion.getDuration() + "#" + potion.getAmplifier());
-        if(potion.getType().equals(PotionEffectType.HEALTH_BOOST)) {
+        if(potion.getType().equals(XPotion.HEALTH_BOOST.getPotionEffectType())) {
           // Health boost effect gives +2 hearts per level, health is counted in half hearts so amplifier * 4
           maxHealth -= (potion.getAmplifier() + 1) * 4;
         }
@@ -252,17 +253,12 @@ public class InventorySerializer {
         List<String> activePotions = invConfig.getStringList("Active potion effects");
         for(String potion : activePotions) {
           String[] splited = potion.split("#", 3);
-          if(splited.length == 0)
+          if(splited.length == 0){
             continue;
-
-          PotionEffectType effectType = PotionEffectType.getByName(splited[0]);
-
-          if(effectType != null) {
-            try {
-              player.addPotionEffect(new PotionEffect(effectType, splited.length < 2 ? 30 : Integer.parseInt(splited[1]),
-                  splited.length < 3 ? 1 : Integer.parseInt(splited[2])));
+          }
+          try {
+              XPotion.of(splited[0]).get().buildPotionEffect(splited.length < 2 ? 30 : Integer.parseInt(splited[1]), splited.length < 3 ? 1 : Integer.parseInt(splited[2])).apply(player);
             } catch(NumberFormatException ignored) {
-            }
           }
         }
       } catch(Exception ignored) {
