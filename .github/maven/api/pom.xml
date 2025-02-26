@@ -27,12 +27,67 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MiniGamesBox-Utils</artifactId>
+    <artifactId>MiniGamesBox-Api</artifactId>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
+
+    <repositories>
+        <repository>
+            <id>mojang-repo</id>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
+        <repository>
+            <id>simonsators-repo</id>
+            <url>https://simonsator.de/repo/</url>
+        </repository>
+        <repository>
+            <id>alessiodp-repo</id>
+            <url>https://repo.alessiodp.com/releases/</url>
+        </repository>
+        <repository>
+            <id>plugilyprojects-repo</id>
+            <url>https://maven.plugily.xyz/releases</url>
+        </repository>
+        <repository>
+            <id>papi-repo</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>me.tigerhix.lib</groupId>
+            <artifactId>scoreboard</artifactId>
+            <version>1.4.5</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>plugily.projects</groupId>
+            <artifactId>MiniGamesBox-Database</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.github.cryptomorin</groupId>
+            <artifactId>XSeries</artifactId>
+            <version>13.0.0</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+
     <build>
         <plugins>
             <plugin>
