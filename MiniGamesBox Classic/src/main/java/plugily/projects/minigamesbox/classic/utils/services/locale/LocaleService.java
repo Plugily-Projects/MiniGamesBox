@@ -27,7 +27,7 @@ import plugily.projects.minigamesbox.classic.utils.services.ServiceRegistry;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
+
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -50,7 +50,7 @@ public class LocaleService {
       return;
     }
     this.plugin = plugin;
-    try(Scanner scanner = new Scanner(requestLocaleFetch(null), StandardCharsets.UTF_8).useDelimiter("\\A")) {
+    try(Scanner scanner = new Scanner(requestLocaleFetch(null), "UTF-8").useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
       File file = new File(plugin.getDataFolder().getPath() + "/locales/locale_data.yml");
       if(!file.exists()) {
@@ -100,9 +100,9 @@ public class LocaleService {
 
       OutputStream os = conn.getOutputStream();
       if(locale == null) {
-        os.write(("pass=localeservice&type=" + plugin.getName()).getBytes(StandardCharsets.UTF_8));
+        os.write(("pass=localeservice&type=" + plugin.getName()).getBytes("UTF-8"));
       } else {
-        os.write(("pass=localeservice&type=" + plugin.getName() + "&locale=" + locale.getPrefix()).getBytes(StandardCharsets.UTF_8));
+        os.write(("pass=localeservice&type=" + plugin.getName() + "&locale=" + locale.getPrefix()).getBytes("UTF-8"));
       }
       os.flush();
       os.close();
@@ -138,9 +138,9 @@ public class LocaleService {
   }
 
   private DownloadStatus writeFile(ILocale locale) {
-    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), StandardCharsets.UTF_8).useDelimiter("\\A")) {
+    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A")) {
       String data = scanner.hasNext() ? scanner.next() : "";
-      try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml"), StandardCharsets.UTF_8)) {
+      try(OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(plugin.getDataFolder().getPath() + "/locales/" + locale.getPrefix() + ".yml"), "UTF-8")) {
         writer.write(data);
       }
       return DownloadStatus.SUCCESS;
@@ -165,8 +165,8 @@ public class LocaleService {
   }
 
   private boolean isExact(ILocale locale, File file) {
-    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), StandardCharsets.UTF_8).useDelimiter("\\A");
-        Scanner localScanner = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\\A")) {
+    try(Scanner scanner = new Scanner(requestLocaleFetch(locale), "UTF-8").useDelimiter("\\A");
+        Scanner localScanner = new Scanner(file, "UTF-8").useDelimiter("\\A")) {
       String onlineData = scanner.hasNext() ? scanner.next() : "";
       String localData = localScanner.hasNext() ? localScanner.next() : "";
 

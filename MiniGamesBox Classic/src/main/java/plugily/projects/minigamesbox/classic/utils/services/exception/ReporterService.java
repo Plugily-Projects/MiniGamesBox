@@ -24,7 +24,6 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 /**
@@ -57,7 +56,7 @@ public class ReporterService {
       conn.setDoOutput(true);
 
       OutputStream os = conn.getOutputStream();
-      os.write(("pass=servicereporter&type=" + pluginName + "&pluginversion=" + pluginVersion + "&serverversion=" + serverVersion + "&error=" + error).getBytes(StandardCharsets.UTF_8));
+      os.write(("pass=servicereporter&type=" + pluginName + "&pluginversion=" + pluginVersion + "&serverversion=" + serverVersion + "&error=" + error).getBytes("UTF-8"));
       os.flush();
       os.close();
 

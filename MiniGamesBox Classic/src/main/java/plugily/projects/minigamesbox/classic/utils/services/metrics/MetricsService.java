@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -70,7 +69,7 @@ public class MetricsService {
           try {
             final byte[] post = ("pass=metricsservice&type=" + plugin.getName() + "&pluginversion=" + plugin.getDescription().getVersion() +
                 "&serverversion=" + plugin.getServer().getBukkitVersion() + "&ip=" + InetAddress.getLocalHost().getHostAddress() + ":" + plugin.getServer().getPort() +
-                "&playersonline=" + Bukkit.getOnlinePlayers().size()).getBytes(StandardCharsets.UTF_8);
+                "&playersonline=" + Bukkit.getOnlinePlayers().size()).getBytes("UTF-8");
             new Thread(() -> {
               try {
                 plugin.getLogger().log(Level.FINE, "Metrics data sent!");

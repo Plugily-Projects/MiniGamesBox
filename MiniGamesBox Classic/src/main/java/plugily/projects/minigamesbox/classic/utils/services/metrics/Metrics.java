@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -372,7 +371,7 @@ public class Metrics {
       }
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       try (GZIPOutputStream gzip = new GZIPOutputStream(outputStream)) {
-        gzip.write(str.getBytes(StandardCharsets.UTF_8));
+        gzip.write(str.getBytes("UTF-8"));
       }
       return outputStream.toByteArray();
     }
