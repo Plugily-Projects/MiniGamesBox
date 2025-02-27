@@ -25,7 +25,6 @@ plugins {
 repositories {
     maven("https://repo2.acrylicstyle.xyz/")
     maven(uri("https://repo.viaversion.com"))
-    maven(uri("https://jitpack.io"))
 }
 
 dependencies {
@@ -40,7 +39,6 @@ dependencies {
     implementation("org.openjdk.nashorn:nashorn-core:15.4")
     implementation("org.ow2.asm:asm:9.6")
     compileOnly("com.viaversion:viaversion-api:5.2.1")
-    compileOnly("com.github.ProtocolSupport:ProtocolSupport:master")
     compileOnly("com.mojang:authlib:3.13.56")
     compileOnly("de.simonsator:DevelopmentPAFSpigot:1.0.67")
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")
@@ -66,6 +64,10 @@ tasks {
         relocate("fr.mrmicky.fastboard", "plugily.projects.minigamesbox.classic.utils.scoreboard")
         relocate("org.bstats", "plugily.projects.minigamesbox.classic.utils.bstats")
         relocate("io.papermc.lib", "plugily.projects.minigamesbox.classic.utils.paperlib")
+    }
+
+    javadoc() {
+    exclude("**/ProtocolSupport/**")
     }
 
     processResources {

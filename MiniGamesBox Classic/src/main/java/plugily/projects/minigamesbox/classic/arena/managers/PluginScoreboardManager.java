@@ -30,7 +30,6 @@ import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
 import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
-import protocolsupport.api.ProtocolSupportAPI;
 
 import java.util.*;
 
@@ -64,16 +63,6 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
             return Via.getAPI().getPlayerVersion(getPlayer()) < ProtocolVersion.v1_13.getVersion();
           } catch(Exception ignored) {
             //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
-          }
-        }
-        if(Bukkit.getPluginManager().isPluginEnabled("ProtocolSupport")) {
-          try {
-            int version = ProtocolSupportAPI.getProtocolVersion(getPlayer()).getId();
-            if(version >= 401) {
-              return false;
-            }
-          } catch(Exception ignored) {
-            //Can't interact with protocol api
           }
         }
         return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
