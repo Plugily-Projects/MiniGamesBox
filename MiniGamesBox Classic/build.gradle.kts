@@ -25,6 +25,7 @@ plugins {
 repositories {
     maven("https://repo2.acrylicstyle.xyz/")
     maven(uri("https://repo.viaversion.com"))
+    maven(uri("https://jitpack.io"))
 }
 
 dependencies {
