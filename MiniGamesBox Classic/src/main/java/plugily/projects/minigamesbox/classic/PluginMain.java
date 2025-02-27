@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic;
 
-import me.tigerhix.lib.scoreboard.ScoreboardLib;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
@@ -205,9 +204,6 @@ public class PluginMain extends JavaPlugin implements IPluginMain {
 
     //setup ItemManager
     ItemManager.register(this);
-
-    //setup Scoreboard
-    ScoreboardLib.setPluginInstance(this);
 
     //initialize default classes
     initializeDefaultClasses();

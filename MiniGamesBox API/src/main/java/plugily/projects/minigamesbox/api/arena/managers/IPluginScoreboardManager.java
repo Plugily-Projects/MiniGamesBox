@@ -1,6 +1,6 @@
 package plugily.projects.minigamesbox.api.arena.managers;
 
-import me.tigerhix.lib.scoreboard.type.Entry;
+import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.api.user.IUser;
 
 import java.util.List;
@@ -34,5 +34,13 @@ public interface IPluginScoreboardManager {
    */
   void stopAllScoreboards();
 
-  List<Entry> formatScoreboard(IUser user);
+  /**
+   * Get Lines from the language.yml according to arena state
+   */
+  List<String> getScoreboardLines();
+
+  /**
+   * Update lines with defined placeholders
+   */
+  List<String> formatScoreboardLines(List<String> lines, Player player);
 }

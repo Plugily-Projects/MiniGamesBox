@@ -60,19 +60,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>me.tigerhix.lib</groupId>
-            <artifactId>scoreboard</artifactId>
-            <version>1.4.5</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>plugily.projects</groupId>
             <artifactId>MiniGamesBox-Database</artifactId>
             <version>${project.version}</version>

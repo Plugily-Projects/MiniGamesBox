@@ -1,3 +1,10 @@
+### 1.3.16 Release (.03.2025)
+* Changed Scoreboard API (now paket based) (Thanks MrMicky-FR FastBoard)
+* Changed Scoreboard on lower 1.12.2 now supports 30 chars
+* Changed Scoreboard on 1.13+ now supports unlimited chars
+* Changed Scoreboard on 1.20.3 will hide red score numbers
+* Changed pom files to build java 8 builds without errors
+
 ### (1.3.11-)1.3.15 Release (17.02.2025)
 * Added 1.21.1-4 support
 * Added (3) new ConfigOptions for ArmorStands (BLOCK_IN_GAME_ARMOR_STAND_DESTROY, BLOCK_IN_GAME_ARMOR_STAND_CHECK, BLOCK_IN_GAME_ARMOR_STAND_INTERACT)

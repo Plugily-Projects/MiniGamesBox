@@ -7,8 +7,9 @@ Library box with massive content that could be seen as minigames core. Used on a
 
 ## Open Source Libraries
 
-| Library                                              | Author                                        | License                                                                       | Used on module         |
-|------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------------------------|------------------------|
-| [FastInv](https://github.com/MrMicky-FR/FastInv)     | [MrMicky](https://github.com/MrMicky-FR)      | [MIT License](https://github.com/MrMicky-FR/FastInv/blob/master/LICENSE)      | MiniGamesBox Inventory |
-| [Commons Box](https://github.com/Plajer/Commons-Box) | [Plajer](https://github.com/Plajer)           | [GPLv3](https://github.com/Plajer/Commons-Box/blob/master/LICENSE.md)         | MiniGamesBox Classic, Database, Utils   |
-| [XSeries](https://github.com/CryptoMorin/XSeries)    | [CryptoMorin](https://github.com/CryptoMorin) | [MIT License](https://github.com/CryptoMorin/XSeries/blob/master/LICENSE.txt) | MiniGamesBox           |
+| Library                                              | Author                                        | License                                                                       | Used on module                        |
+|------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------------------------|---------------------------------------|
+| [FastInv](https://github.com/MrMicky-FR/FastInv)     | [MrMicky](https://github.com/MrMicky-FR)      | [MIT License](https://github.com/MrMicky-FR/FastInv/blob/master/LICENSE)      | MiniGamesBox Inventory                |
+| [FastBoard](https://github.com/MrMicky-FR/FastBoard) | [MrMicky](https://github.com/MrMicky-FR)      | [MIT License](https://github.com/MrMicky-FR/FastInv/blob/master/LICENSE)      | MiniGamesBox Classic, Api             |
+| [Commons Box](https://github.com/Plajer/Commons-Box) | [Plajer](https://github.com/Plajer)           | [GPLv3](https://github.com/Plajer/Commons-Box/blob/master/LICENSE.md)         | MiniGamesBox Classic, Database, Utils |
+| [XSeries](https://github.com/CryptoMorin/XSeries)    | [CryptoMorin](https://github.com/CryptoMorin) | [MIT License](https://github.com/CryptoMorin/XSeries/blob/master/LICENSE.txt) | MiniGamesBox                          |
