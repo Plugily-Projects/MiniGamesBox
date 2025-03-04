@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.events.spectator.settings;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XPotion;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -115,32 +116,32 @@ public class SpectatorSettingsMenu implements Listener {
         switch(item.getType()) {
           case DEFAULT_SPEED:
             new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(0).player(player).sendPlayer();
-            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(XPotion.SPEED.getPotionEffectType());
             player.setFlySpeed(0.15f);
             break;
           case SPEED1:
             new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(1).player(player).sendPlayer();
-            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(XPotion.SPEED.getPotionEffectType());
             player.setFlySpeed(0.2f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+            XPotion.SPEED.buildPotionEffect(Integer.MAX_VALUE, 1).apply(player);
             break;
           case SPEED2:
             new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(2).player(player).sendPlayer();
-            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(XPotion.SPEED.getPotionEffectType());
             player.setFlySpeed(0.25f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
+            XPotion.SPEED.buildPotionEffect(Integer.MAX_VALUE, 2).apply(player);
             break;
           case SPEED3:
             new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(3).player(player).sendPlayer();
-            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(XPotion.SPEED.getPotionEffectType());
             player.setFlySpeed(0.3f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false));
+            XPotion.SPEED.buildPotionEffect(Integer.MAX_VALUE, 3).apply(player);
             break;
           case SPEED4:
             new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_CHANGED_SPEED").asKey().arena(arena).integer(4).player(player).sendPlayer();
-            player.removePotionEffect(PotionEffectType.SPEED);
+            player.removePotionEffect(XPotion.SPEED.getPotionEffectType());
             player.setFlySpeed(0.35f);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 3, false, false));
+            XPotion.SPEED.buildPotionEffect(Integer.MAX_VALUE, 4).apply(player);
             break;
           case AUTO_TELEPORT:
             if(autoTeleport.contains(player)) {
@@ -152,11 +153,11 @@ public class SpectatorSettingsMenu implements Listener {
             }
             break;
           case NIGHT_VISION:
-            if(player.getActivePotionEffects().stream().anyMatch(potionEffect -> potionEffect.getType().equals(PotionEffectType.NIGHT_VISION))) {
-              player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            if(player.getActivePotionEffects().stream().anyMatch(potionEffect -> potionEffect.getType().equals(XPotion.NIGHT_VISION.getPotionEffectType()))) {
+              player.removePotionEffect(XPotion.NIGHT_VISION.getPotionEffectType());
               new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_DISABLED").asKey().build()).player(player).sendPlayer();
             } else {
-              player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false));
+              XPotion.NIGHT_VISION.buildPotionEffect(Integer.MAX_VALUE, 1).apply(player);
               new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_NIGHT_VISION").asKey().arena(arena).value(new MessageBuilder("IN_GAME_SPECTATOR_SPECTATOR_MENU_SETTINGS_STATUS_ENABLED").asKey().build()).player(player).sendPlayer();
             }
             break;

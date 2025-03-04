@@ -23,7 +23,6 @@ plugins {
 }
 
 dependencies {
-    implementation("me.tigerhix.lib:scoreboard:1.4.5") { isTransitive = false }
     compileOnly(project(":MiniGamesBox-Database", "shadow"))
     compileOnly("com.github.cryptomorin:XSeries:13.0.0") { isTransitive = false }
 }

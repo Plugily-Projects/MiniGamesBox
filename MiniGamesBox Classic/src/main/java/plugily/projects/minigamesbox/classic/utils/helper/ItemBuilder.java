@@ -18,6 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.utils.helper;
 
+import com.cryptomorin.xseries.XEnchantment;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -93,7 +94,7 @@ public class ItemBuilder {
     if (ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_21)) {
       itemMeta.setEnchantmentGlintOverride(true);
     } else {
-      this.itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
+      this.itemMeta.addEnchant(XEnchantment.UNBREAKING.get(), 1, true);
       this.itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     }
     return this;

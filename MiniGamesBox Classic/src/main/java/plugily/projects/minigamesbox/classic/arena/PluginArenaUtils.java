@@ -18,6 +18,7 @@
 
 package plugily.projects.minigamesbox.classic.arena;
 
+import com.cryptomorin.xseries.XPotion;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -107,7 +108,7 @@ public class PluginArenaUtils {
         player.setAllowFlight(true);
         player.setFlying(true);
         user.setSpectator(true);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0));
+        XPotion.NIGHT_VISION.buildPotionEffect(Integer.MAX_VALUE, 1).apply(player);
         plugin
                 .getSpecialItemManager()
                 .addSpecialItemsOfStage(player, SpecialItem.DisplayStage.SPECTATOR);

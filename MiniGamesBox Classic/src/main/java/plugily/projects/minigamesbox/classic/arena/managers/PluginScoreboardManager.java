@@ -18,11 +18,9 @@
 
 package plugily.projects.minigamesbox.classic.arena.managers;
 
-import me.tigerhix.lib.scoreboard.ScoreboardLib;
-import me.tigerhix.lib.scoreboard.common.EntryBuilder;
-import me.tigerhix.lib.scoreboard.type.Entry;
-import me.tigerhix.lib.scoreboard.type.Scoreboard;
-import me.tigerhix.lib.scoreboard.type.ScoreboardHandler;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import plugily.projects.minigamesbox.api.IPluginMain;
@@ -31,12 +29,9 @@ import plugily.projects.minigamesbox.api.arena.managers.IPluginScoreboardManager
 import plugily.projects.minigamesbox.api.user.IUser;
 import plugily.projects.minigamesbox.classic.arena.PluginArena;
 import plugily.projects.minigamesbox.classic.handlers.language.MessageBuilder;
+import plugily.projects.minigamesbox.classic.utils.version.ServerVersion;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /**
  * @author Tigerpanzer_02
@@ -45,9 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PluginScoreboardManager implements IPluginScoreboardManager {
 
-  private final Map<UUID, Scoreboard> boardMap = new ConcurrentHashMap<>();
-  private final Map<UUID, org.bukkit.scoreboard.Scoreboard> lastBoardMap = new ConcurrentHashMap<>();
-  private final org.bukkit.scoreboard.Scoreboard dummyBoard = Bukkit.getScoreboardManager().getNewScoreboard();
+  private final Map<UUID, FastBoard> boardMap = new HashMap<>();
   private final IPluginMain plugin;
   private final String boardTitle;
   private final PluginArena arena;
@@ -61,51 +54,57 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
   @Override
   public void createScoreboard(IUser user) {
     Player player = user.getPlayer();
-    lastBoardMap.put(player.getUniqueId(), player.getScoreboard());
-    player.setScoreboard(dummyBoard);
 
-    Scoreboard scoreboard = ScoreboardLib.createScoreboard(player).setHandler(new ScoreboardHandler() {
+    FastBoard board = new FastBoard(player) {
       @Override
-      public String getTitle(Player player) {
-        return boardTitle;
+      public boolean hasLinesMaxLength() {
+        if(Bukkit.getPluginManager().isPluginEnabled("ViaVersion")) {
+          try {
+            return Via.getAPI().getPlayerVersion(getPlayer()) < ProtocolVersion.v1_13.getVersion();
+          } catch(Exception ignored) {
+            //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
+          }
+        }
+        return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
       }
+    };
 
-      @Override
-      public List<Entry> getEntries(Player player) {
-        return formatScoreboard(user);
-      }
-    });
-    scoreboard.activate();
-    boardMap.put(player.getUniqueId(), scoreboard);
+    board.updateTitle(boardTitle);
+    board.updateLines(formatScoreboardLines(getScoreboardLines(), player));
+
+
+    boardMap.put(user.getUniqueId(), board);
   }
 
   @Override
   public void updateScoreboards() {
-    boardMap.values().forEach(Scoreboard::update);
+    boardMap.values().forEach(fastBoard -> fastBoard.updateLines(formatScoreboardLines(getScoreboardLines(), fastBoard.getPlayer())));
   }
 
   @Override
   public void removeScoreboard(IUser user) {
-    Optional.ofNullable(boardMap.remove(user.getUniqueId())).ifPresent(Scoreboard::deactivate);
-    Optional.ofNullable(lastBoardMap.remove(user.getUniqueId())).ifPresent(user.getPlayer()::setScoreboard);
+    Optional.ofNullable(boardMap.remove(user.getUniqueId())).ifPresent(FastBoard::delete);
   }
 
   @Override
   public void stopAllScoreboards() {
-    boardMap.values().forEach(Scoreboard::deactivate);
+    boardMap.values().forEach(FastBoard::delete);
     boardMap.clear();
   }
 
   @Override
-  public List<Entry> formatScoreboard(IUser user) {
-    EntryBuilder builder = new EntryBuilder();
+  public List<String> getScoreboardLines() {
+    return new ArrayList<>(plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
+        : "Scoreboard.Content." + arena.getArenaState().getFormattedName()));
+  }
 
-    for (String line : plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
-        : "Scoreboard.Content." + arena.getArenaState().getFormattedName())) {
-      builder.next(new MessageBuilder(line).player(user.getPlayer()).arena(arena).build());
+  @Override
+  public List<String> formatScoreboardLines(List<String> lines, Player player) {
+    List<String> formattedLines = new ArrayList<>();
+    for(String line : lines) {
+      formattedLines.add(new MessageBuilder(line).player(player).arena(arena).build());
     }
-
-    return builder.build();
+    return formattedLines;
   }
 
 }

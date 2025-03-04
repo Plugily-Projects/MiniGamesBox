@@ -23,7 +23,6 @@ import org.bukkit.Bukkit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,9 +47,9 @@ public class MigratorUtils {
    */
   public static void removeLineFromFile(File file, String lineToRemove) {
     try {
-      List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+      List<String> lines = Files.readAllLines(file.toPath());
       List<String> updatedLines = lines.stream().filter(s -> !s.contains(lineToRemove)).collect(Collectors.toList());
-      Files.write(file.toPath(), updatedLines, StandardCharsets.UTF_8);
+      Files.write(file.toPath(), updatedLines);
     } catch(IOException e) {
       e.printStackTrace();
       Bukkit.getLogger().warning("[MinigamesBox] Something went horribly wrong with migration! Please contact Plugily Projects!");
@@ -67,11 +66,11 @@ public class MigratorUtils {
   public static void insertAfterLine(File file, String search, String text) {
     try {
       int i = 1;
-      List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+      List<String> lines = Files.readAllLines(file.toPath());
       for(String line : lines) {
         if(line.contains(search)) {
           lines.add(i, text);
-          Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
+          Files.write(file.toPath(), lines);
           break;
         }
         i++;
