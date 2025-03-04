@@ -1,5 +1,6 @@
 ### 1.3.18 Release (xx.03.2025)
 * Fixed scoreboard on FUll Game is showing waiting stage instead of starting
+* Fixed leaving while full game stopped the game
 
 ### 1.3.17 Release (04.03.2025)
 * Changed Scoreboard API (now paket based) (Thanks MrMicky-FR FastBoard)
