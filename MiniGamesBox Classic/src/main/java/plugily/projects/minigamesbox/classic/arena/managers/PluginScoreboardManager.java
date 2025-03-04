@@ -94,7 +94,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
 
   @Override
   public List<String> getScoreboardLines() {
-    return new ArrayList<>(plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Waiting"
+    return new ArrayList<>(plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Starting"
         : "Scoreboard.Content." + arena.getArenaState().getFormattedName()));
   }
 
