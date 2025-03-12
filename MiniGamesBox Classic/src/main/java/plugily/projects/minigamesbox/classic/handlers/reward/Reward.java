@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.handlers.reward;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import plugily.projects.minigamesbox.api.handlers.reward.IReward;
 import plugily.projects.minigamesbox.api.handlers.reward.IRewardType;
@@ -50,10 +49,10 @@ public class Reward implements IReward {
     //set reward executor based on provided code
     if(rawCode.contains("p:")) {
       executor = RewardExecutor.PLAYER;
-      processedCode = StringUtils.replace(processedCode, "p:", "");
+      processedCode = processedCode.replace("p:", "");
     } else if(rawCode.contains("script:")) {
       executor = RewardExecutor.SCRIPT;
-      processedCode = StringUtils.replace(processedCode, "script:", "");
+      processedCode = processedCode.replace("script:", "");
     } else {
       executor = RewardExecutor.CONSOLE;
     }
@@ -70,7 +69,7 @@ public class Reward implements IReward {
       }
       String chanceStr = processedCode;
       chanceStr = chanceStr.substring(0, loc).replaceAll("[^0-9]+", "");
-      processedCode = StringUtils.replace(processedCode, "chance(" + chanceStr + "):", "");
+      processedCode = processedCode.replace("chance(" + chanceStr + "):", "");
       chance = Double.parseDouble(chanceStr);
     } else {
       chance = 100.0;

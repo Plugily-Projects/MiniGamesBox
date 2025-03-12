@@ -20,7 +20,6 @@ package plugily.projects.minigamesbox.classic.handlers.powerup;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -144,9 +143,9 @@ public class PowerupRegistry {
     int longDuration = 0;
 
     for(String effect : effects) {
-      String[] split = StringUtils.split(StringUtils.deleteWhitespace(effect), ',');
+      String[] split = effect.replaceAll("\\s+","").split(",");
       if(split.length == 0) {
-        split = StringUtils.split(effect, ' ');
+        split = effect.split(" ");
       }
       if(split.length <= 2) {
         return longDuration;

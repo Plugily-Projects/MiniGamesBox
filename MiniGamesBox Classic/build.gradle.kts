@@ -39,7 +39,6 @@ dependencies {
     implementation("org.openjdk.nashorn:nashorn-core:15.4")
     implementation("org.ow2.asm:asm:9.6")
     compileOnly("com.viaversion:viaversion-api:5.2.1")
-    compileOnly("com.mojang:authlib:3.13.56")
     compileOnly("de.simonsator:DevelopmentPAFSpigot:1.0.67")
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")
     compileOnly("de.simonsator:Spigot-Party-API-For-RedisBungee:1.0.3-SNAPSHOT")
