@@ -153,8 +153,12 @@
 
     <distributionManagement>
         <repository>
-            <id>plugily-projects</id>
+            <id>Release</id>
             <url>https://maven.plugily.xyz/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>Snapshot</id>
+            <url>https://maven.plugily.xyz/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 </project>
