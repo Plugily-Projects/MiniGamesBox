@@ -53,8 +53,8 @@
             <url>https://maven.plugily.xyz/releases</url>
         </repository>
         <repository>
-            <id>papi-repo</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/releases/</url>
         </repository>
     </repositories>
 
