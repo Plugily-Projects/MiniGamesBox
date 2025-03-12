@@ -28,16 +28,29 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           ref: 'development'
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.8.2
+      - name: Cache
+        uses: actions/cache@v4.2.2
+          with:
+            path: ~/.m2/repository
+            key: maven-${{ hashFiles('**/pom.xml') }}
+            restore-keys: maven-
       - name: Set up JDK
         uses: actions/setup-java@v4.6.0
         with:
           distribution: 'temurin'
           java-version: '21'
           java-package: jdk
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Publish with Gradle
-        run: ./gradlew publishMavenPublicationToSnapshotsRepository --info
-        env:
-          MAVEN_USERNAME: ${{ secrets.SNAPSHOTSUSERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.SNAPSHOTSPASSWORD }}
+      - name: Publish with Maven
+        uses: s4u/maven-settings-action@v3.1.0
+        with:
+          servers: |
+            [{
+                "id": "Snapshot",
+                "username": "${{ secrets.SNAPSHOTSUSERNAME }}",
+                "password": "${{ secrets.SNAPSHOTSPASSWORD }}"
+            }]
+      - run: mvn clean verify compile package site:site javadoc:javadoc javadoc:jar deploy -f pom.xml
