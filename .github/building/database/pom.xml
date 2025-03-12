@@ -51,7 +51,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.11.2</version>
                 <configuration>
                     <windowtitle>MiniGamesBox Inventory API docs for v${project.version}</windowtitle>
                     <description>Library box with massive content that could be seen as minigames core.</description>
@@ -64,7 +64,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.3</version>
             </extension>
         </extensions>
     </build>
