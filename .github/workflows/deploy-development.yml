@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout Latest Commit
         uses: actions/checkout@v4.2.2
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Bump Version
         id: bump
         uses: Plugily-Projects/version-bump-action@v8
