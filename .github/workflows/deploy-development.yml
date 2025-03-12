@@ -51,4 +51,4 @@ jobs:
                 "username": "${{ secrets.SNAPSHOTSUSERNAME }}",
                 "password": "${{ secrets.SNAPSHOTSPASSWORD }}"
             }]
-      - run: mvn clean verify compile package site:site javadoc:javadoc javadoc:jar deploy -f pom.xml
+      - run: mvn clean verify compile package site:site javadoc:javadoc javadoc:jar deploy -DrepositoryId=Snapshhot -f pom.xml
