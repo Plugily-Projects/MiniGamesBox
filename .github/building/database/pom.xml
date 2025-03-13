@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
+            <version>5.0.1</version>
         </dependency>
 
     </dependencies>
@@ -53,10 +53,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.11.2</version>
                 <configuration>
-                    <windowtitle>MiniGamesBox Inventory API docs for v${project.version}</windowtitle>
+                    <windowtitle>MiniGamesBox Database API docs for v${project.version}</windowtitle>
                     <description>Library box with massive content that could be seen as minigames core.</description>
-                    <destDir>minecraft/minigamesbox/inventory</destDir>
-                    <isOffline>false</isOffline>
                 </configuration>
             </plugin>
         </plugins>

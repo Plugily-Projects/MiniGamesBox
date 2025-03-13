@@ -37,24 +37,8 @@
 
     <repositories>
         <repository>
-            <id>mojang-repo</id>
-            <url>https://libraries.minecraft.net/</url>
-        </repository>
-        <repository>
-            <id>simonsators-repo</id>
-            <url>https://simonsator.de/repo/</url>
-        </repository>
-        <repository>
-            <id>alessiodp-repo</id>
-            <url>https://repo.alessiodp.com/releases/</url>
-        </repository>
-        <repository>
             <id>plugilyprojects-repo</id>
             <url>https://maven.plugily.xyz/releases</url>
-        </repository>
-        <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/releases/</url>
         </repository>
     </repositories>
 
@@ -63,13 +47,14 @@
             <groupId>plugily.projects</groupId>
             <artifactId>MiniGamesBox-Database</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>13.0.0</version>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
     </dependencies>
@@ -82,7 +67,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.11.2</version>
                 <configuration>
-                    <windowtitle>MiniGamesBox Inventory API docs for v${project.version}</windowtitle>
+                    <windowtitle>MiniGamesBox Api API docs for v${project.version}</windowtitle>
                     <description>Library box with massive content that could be seen as minigames core.</description>
                 </configuration>
             </plugin>
