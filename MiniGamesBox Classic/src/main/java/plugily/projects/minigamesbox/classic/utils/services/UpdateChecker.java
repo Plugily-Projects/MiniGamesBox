@@ -23,7 +23,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -60,7 +59,8 @@ public final class UpdateChecker {
     }
 
     for(int i = 0; i < Math.min(firstSplit.length, secondSplit.length); i++) {
-      int currentValue = NumberUtils.toInt(firstSplit[i]), newestValue = NumberUtils.toInt(secondSplit[i]);
+
+      int currentValue = Integer.parseInt(firstSplit[i]), newestValue = Integer.parseInt(secondSplit[i]);
 
       if(newestValue > currentValue) {
         return second;

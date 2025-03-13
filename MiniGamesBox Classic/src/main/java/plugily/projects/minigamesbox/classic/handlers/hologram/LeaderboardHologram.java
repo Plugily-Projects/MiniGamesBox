@@ -19,7 +19,6 @@
 
 package plugily.projects.minigamesbox.classic.handlers.hologram;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import plugily.projects.minigamesbox.api.stats.IStatisticType;
@@ -74,7 +73,7 @@ public class LeaderboardHologram {
       if(i < reverseKeys.size()) {
         UUID uuid = reverseKeys.get(i);
         text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_FORMAT").asKey().integer(i + 1).value(String.valueOf(values.get(uuid))).build();
-        text = StringUtils.replace(text, "%player%", getPlayerNameSafely(uuid));
+        text = text.replace("%player%", getPlayerNameSafely(uuid));
       } else {
         text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT").asKey().integer(i + 1).build();
       }
@@ -92,10 +91,10 @@ public class LeaderboardHologram {
   private String getPlayerNameSafely(UUID uuid) {
     String name = plugin.getUserManager().getDatabase().getPlayerName(uuid);
     // Attempts to get the bukkit name instead if the name is null from database or an empty string
-    if (name == null || name.isBlank()) {
+    if (name == null || name.isEmpty()) {
       name = Bukkit.getOfflinePlayer(uuid).getName();
     }
-    if (name == null || name.isBlank()) {
+    if (name == null || name.isEmpty()) {
       return new MessageBuilder("LEADERBOARD_UNKNOWN_PLAYER").asKey().build();
     }
     return name;

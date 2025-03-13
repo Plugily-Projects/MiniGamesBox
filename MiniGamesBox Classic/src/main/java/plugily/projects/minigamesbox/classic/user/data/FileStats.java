@@ -32,7 +32,6 @@ import plugily.projects.minigamesbox.sorter.SortUtils;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
 /**
@@ -43,16 +42,14 @@ import java.util.logging.Level;
 public class FileStats implements UserDatabase {
 
   private final PluginMain plugin;
-  private final FileConfiguration config;
-  private final AtomicBoolean updateRequired = new AtomicBoolean(false);
 
   public FileStats(PluginMain plugin) {
     this.plugin = plugin;
-    this.config = ConfigUtils.getConfig(plugin, "stats");
   }
 
   @Override
   public void saveStatistic(IUser user, IStatisticType stat) {
+    FileConfiguration config = ConfigUtils.getConfig(plugin, "stats");
     config.set(user.getUniqueId().toString() + "." + stat.getName(), user.getStatistic(stat));
     ConfigUtils.saveConfig(plugin, config, "stats");
   }
@@ -65,7 +62,7 @@ public class FileStats implements UserDatabase {
   @Override
   public void loadStatistics(IUser user) {
     String uuid = user.getUniqueId().toString();
-    plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> user.setStatistic(statisticType, config.getInt(uuid + "." + statisticType.getName())));
+    plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> user.setStatistic(statisticType, ConfigUtils.getConfig(plugin, "stats").getInt(uuid + "." + statisticType.getName())));
   }
 
   @Override
@@ -82,6 +79,7 @@ public class FileStats implements UserDatabase {
   @Override
   public Map<UUID, Integer> getStats(IStatisticType stat) {
     Map<UUID, Integer> stats = new TreeMap<>();
+    FileConfiguration config = ConfigUtils.getConfig(plugin, "stats");
     for(String string : config.getKeys(false)) {
       if(string.equals("data-version")) {
         continue;
@@ -100,7 +98,6 @@ public class FileStats implements UserDatabase {
     for(Player player : plugin.getServer().getOnlinePlayers()) {
       updateStats(plugin.getUserManager().getUser(player));
     }
-      ConfigUtils.saveConfig(plugin, config, "stats");
   }
 
   @Override
@@ -110,12 +107,12 @@ public class FileStats implements UserDatabase {
 
   @Override
   public String getPlayerName(UUID uuid) {
-    return config.getString(uuid + ".playername", Bukkit.getOfflinePlayer(uuid).getName());
+    return ConfigUtils.getConfig(plugin, "stats").getString(uuid + ".playername", Bukkit.getOfflinePlayer(uuid).getName());
   }
 
   private void updateStats(IUser user) {
     String uuid = user.getUniqueId().toString();
-
+    FileConfiguration config = ConfigUtils.getConfig(plugin, "stats");
     plugin.getStatsStorage().getStatistics().forEach((s, statisticType) -> {
       if(statisticType.isPersistent()) {
         String path = uuid + "." + statisticType.getName();
