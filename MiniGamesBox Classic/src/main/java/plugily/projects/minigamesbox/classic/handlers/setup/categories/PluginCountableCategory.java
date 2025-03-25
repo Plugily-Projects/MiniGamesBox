@@ -47,6 +47,7 @@ public class PluginCountableCategory implements SetupCategoryHandler {
     CountItem minimumPlayers = new CountItem(setupInventory, new ItemBuilder(XMaterial.COAL.parseMaterial()), "Minimum Players", "How many players are needed to start the lobby countdown?", "minimumplayers");
     itemList.add(minimumPlayers);
     gui.setItem((getInventoryLine() * 9) + 1, minimumPlayers);
+    // could be added minimum players check
     CountItem maximumPlayers = new CountItem(setupInventory, new ItemBuilder(XMaterial.REDSTONE_BLOCK.parseMaterial()), "Maximum Players", "How many players can the arena hold?", "maximumplayers");
     itemList.add(maximumPlayers);
     gui.setItem((getInventoryLine() * 9) + 2, maximumPlayers);
