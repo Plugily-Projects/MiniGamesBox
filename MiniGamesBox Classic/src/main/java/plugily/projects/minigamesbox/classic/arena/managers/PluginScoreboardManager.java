@@ -58,14 +58,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
     FastBoard board = new FastBoard(player) {
       @Override
       public boolean hasLinesMaxLength() {
-        if(Bukkit.getPluginManager().isPluginEnabled("ViaVersion")) {
-          try {
-            return Via.getAPI().getPlayerVersion(getPlayer()) < ProtocolVersion.v1_13.getVersion();
-          } catch(Exception ignored) {
-            //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
-          }
-        }
-        return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
+        return isLinesMaxLength(getPlayer());
       }
     };
 
@@ -101,10 +94,28 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
   @Override
   public List<String> formatScoreboardLines(List<String> lines, Player player) {
     List<String> formattedLines = new ArrayList<>();
+    if(isLinesMaxLength(player)) {
+      List<String> linesWithoutSpecialChars = new ArrayList<>();
+      for(String line : lines) {
+        linesWithoutSpecialChars.add(line.replace("■ ", "").replace("|", ""));
+      }
+      lines = linesWithoutSpecialChars;
+    }
     for(String line : lines) {
       formattedLines.add(new MessageBuilder(line).player(player).arena(arena).build());
     }
     return formattedLines;
+  }
+
+  private boolean isLinesMaxLength(Player player) {
+    if(Bukkit.getPluginManager().isPluginEnabled("ViaVersion")) {
+      try {
+        return Via.getAPI().getPlayerVersion(player) < ProtocolVersion.v1_13.getVersion();
+      } catch(Exception ignored) {
+        //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
+      }
+    }
+    return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
   }
 
 }
