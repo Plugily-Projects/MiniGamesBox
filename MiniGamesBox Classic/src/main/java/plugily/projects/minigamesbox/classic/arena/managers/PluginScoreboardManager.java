@@ -70,7 +70,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
     };
 
     board.updateTitle(boardTitle);
-    board.updateLines(formatScoreboardLines(getScoreboardLines(), player));
+    board.updateLines(formatScoreboardLines(getScoreboardLines(player), player));
 
 
     boardMap.put(user.getUniqueId(), board);
@@ -78,7 +78,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
 
   @Override
   public void updateScoreboards() {
-    boardMap.values().forEach(fastBoard -> fastBoard.updateLines(formatScoreboardLines(getScoreboardLines(), fastBoard.getPlayer())));
+    boardMap.values().forEach(fastBoard -> fastBoard.updateLines(formatScoreboardLines(getScoreboardLines(fastBoard.getPlayer()), fastBoard.getPlayer())));
   }
 
   @Override
@@ -93,7 +93,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
   }
 
   @Override
-  public List<String> getScoreboardLines() {
+  public List<String> getScoreboardLines(Player player) {
     return new ArrayList<>(plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Starting"
         : "Scoreboard.Content." + arena.getArenaState().getFormattedName()));
   }
