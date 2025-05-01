@@ -117,18 +117,21 @@ public class MessageBuilder {
 
   public MessageBuilder player(Player player) {
     this.player = player;
+    colorChatIssue();
     formatPlayer();
     return this;
   }
 
   public MessageBuilder value(String value) {
     this.value = value;
+    colorChatIssue();
     formatValue();
     return this;
   }
 
   public MessageBuilder integer(int integer) {
     this.integer = integer;
+    colorChatIssue();
     formatInteger();
     return this;
   }
@@ -138,6 +141,7 @@ public class MessageBuilder {
       return this;
     }
     this.arena = arena;
+    colorChatIssue();
     formatArena();
     return this;
   }

@@ -75,6 +75,49 @@ public class InventorySerializer {
 
       FileConfiguration invConfig = YamlConfiguration.loadConfiguration(invFile);
 
+      ItemStack[] invContents = inventory.getContents();
+      for(int i = 0; i < invContents.length; i++) {
+        ItemStack itemInInv = invContents[i];
+        if(itemInInv != null && itemInInv.getType() != Material.AIR) {
+          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_8) && itemInInv.getItemMeta() instanceof SkullMeta) {
+            SkullMeta skullMeta = ((SkullMeta) itemInInv.getItemMeta());
+            if(skullMeta.getOwner() != null) {
+              try {
+                Field profileField = skullMeta.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                Object profile = profileField.get(skullMeta);
+
+                Field name = profile.getClass().getDeclaredField("name");
+                name.setAccessible(true);
+                name.set(profile, "plugily");
+
+                itemInInv.setItemMeta(skullMeta);
+              } catch(NoSuchFieldException | IllegalAccessException | NullPointerException e) {
+                itemInInv = XMaterial.BEDROCK.parseItem();
+              }
+            }
+          }
+          invConfig.set("Slot " + i, itemInInv);
+        }
+      }
+
+      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9)) {
+        invConfig.set("Offhand", inventory.getItemInOffHand());
+        inventory.setItemInOffHand(null);
+      }
+
+      ItemStack[] armorContents = inventory.getArmorContents();
+      for(int b = 0; b < armorContents.length; b++) {
+        ItemStack itemStack = armorContents[b];
+        if(itemStack != null && itemStack.getType() != Material.AIR) {
+          invConfig.set("Armor " + b, itemStack);
+        }
+      }
+
+      inventory.clear();
+      inventory.setArmorContents(null);
+
+
       invConfig.set("ExperienceProgress", player.getExp());
       invConfig.set("ExperienceLevel", player.getLevel());
       invConfig.set("Current health", player.getHealth());
@@ -106,44 +149,6 @@ public class InventorySerializer {
       org.bukkit.entity.HumanEntity holder = inventory.getHolder();
       if(holder instanceof Player) {
         invConfig.set("Holder", holder.getName());
-      }
-
-      ItemStack[] invContents = inventory.getContents();
-      for(int i = 0; i < invContents.length; i++) {
-        ItemStack itemInInv = invContents[i];
-        if(itemInInv != null && itemInInv.getType() != Material.AIR) {
-          if(ServerVersion.Version.isCurrentEqualOrLower(ServerVersion.Version.v1_8_8) && itemInInv.getItemMeta() instanceof SkullMeta) {
-            SkullMeta skullMeta = ((SkullMeta) itemInInv.getItemMeta());
-            if(skullMeta.getOwner() != null) {
-              try {
-                Field profileField = skullMeta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                Object profile = profileField.get(skullMeta);
-
-                Field name = profile.getClass().getDeclaredField("name");
-                name.setAccessible(true);
-                name.set(profile, "plugily");
-
-                itemInInv.setItemMeta(skullMeta);
-              } catch(NoSuchFieldException | IllegalAccessException | NullPointerException e) {
-                itemInInv = XMaterial.BEDROCK.parseItem();
-              }
-            }
-          }
-          invConfig.set("Slot " + i, itemInInv);
-        }
-      }
-
-      if(ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_9)) {
-        invConfig.set("Offhand", inventory.getItemInOffHand());
-      }
-
-      ItemStack[] armorContents = inventory.getArmorContents();
-      for(int b = 0; b < armorContents.length; b++) {
-        ItemStack itemStack = armorContents[b];
-        if(itemStack != null && itemStack.getType() != Material.AIR) {
-          invConfig.set("Armor " + b, itemStack);
-        }
       }
 
       invConfig.save(invFile);

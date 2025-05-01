@@ -37,7 +37,7 @@ public interface IPluginScoreboardManager {
   /**
    * Get Lines from the language.yml according to arena state
    */
-  List<String> getScoreboardLines();
+  List<String> getScoreboardLines(Player player);
 
   /**
    * Update lines with defined placeholders

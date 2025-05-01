@@ -58,19 +58,12 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
     FastBoard board = new FastBoard(player) {
       @Override
       public boolean hasLinesMaxLength() {
-        if(Bukkit.getPluginManager().isPluginEnabled("ViaVersion")) {
-          try {
-            return Via.getAPI().getPlayerVersion(getPlayer()) < ProtocolVersion.v1_13.getVersion();
-          } catch(Exception ignored) {
-            //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
-          }
-        }
-        return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
+        return isLinesMaxLength(getPlayer());
       }
     };
 
     board.updateTitle(boardTitle);
-    board.updateLines(formatScoreboardLines(getScoreboardLines(), player));
+    board.updateLines(formatScoreboardLines(getScoreboardLines(player), player));
 
 
     boardMap.put(user.getUniqueId(), board);
@@ -78,7 +71,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
 
   @Override
   public void updateScoreboards() {
-    boardMap.values().forEach(fastBoard -> fastBoard.updateLines(formatScoreboardLines(getScoreboardLines(), fastBoard.getPlayer())));
+    boardMap.values().forEach(fastBoard -> fastBoard.updateLines(formatScoreboardLines(getScoreboardLines(fastBoard.getPlayer()), fastBoard.getPlayer())));
   }
 
   @Override
@@ -93,7 +86,7 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
   }
 
   @Override
-  public List<String> getScoreboardLines() {
+  public List<String> getScoreboardLines(Player player) {
     return new ArrayList<>(plugin.getLanguageManager().getLanguageList(arena.getArenaState() == IArenaState.FULL_GAME ? "Scoreboard.Content.Starting"
         : "Scoreboard.Content." + arena.getArenaState().getFormattedName()));
   }
@@ -101,10 +94,28 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
   @Override
   public List<String> formatScoreboardLines(List<String> lines, Player player) {
     List<String> formattedLines = new ArrayList<>();
+    if(isLinesMaxLength(player)) {
+      List<String> linesWithoutSpecialChars = new ArrayList<>();
+      for(String line : lines) {
+        linesWithoutSpecialChars.add(line.replace("■ ", "").replace("|", ""));
+      }
+      lines = linesWithoutSpecialChars;
+    }
     for(String line : lines) {
       formattedLines.add(new MessageBuilder(line).player(player).arena(arena).build());
     }
     return formattedLines;
+  }
+
+  private boolean isLinesMaxLength(Player player) {
+    if(Bukkit.getPluginManager().isPluginEnabled("ViaVersion")) {
+      try {
+        return Via.getAPI().getPlayerVersion(player) < ProtocolVersion.v1_13.getVersion();
+      } catch(Exception ignored) {
+        //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
+      }
+    }
+    return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
   }
 
 }

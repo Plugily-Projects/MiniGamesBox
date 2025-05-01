@@ -198,6 +198,7 @@ public class PluginArenaManager {
       return false;
     }
     String perm = plugin.getPluginNamePrefixLong() + ".join.<arena>";
+    plugin.getDebugger().debug("[{0}] Initial perm is <{1}> of name <{2}>", arena.getId(), perm, plugin.getPluginNamePrefixLong());
     if(!(player.hasPermission(perm.replace("<arena>", "*")) || player.hasPermission(perm.replace("<arena>", arena.getId())))) {
       MessageBuilder denyMessage = new MessageBuilder("IN_GAME_JOIN_NO_PERMISSION").asKey().player(player).value(perm.replace("<arena>", arena.getId()));
       if(plugin.getConfigPreferences().getOption("BUNGEEMODE")) {
