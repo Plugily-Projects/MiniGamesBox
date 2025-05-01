@@ -85,11 +85,12 @@ public class LeaderboardArgument {
   }
 
   private String formatMessage(String statisticName, String playerName, int position, int value) {
-    String message = new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_FORMAT").asKey().build();
+    String message = new MessageBuilder("LEADERBOARD_TYPE_CHAT_TOP_FORMAT").asKey().getRaw();
     message = message.replace("%number%", Integer.toString(position));
     message = message.replace("%player%", playerName);
     message = message.replace("%value%", Integer.toString(value));
     message = message.replace("%user_statistic%", statisticName);
+    message = new MessageBuilder(message).build();
     return message;
   }
 

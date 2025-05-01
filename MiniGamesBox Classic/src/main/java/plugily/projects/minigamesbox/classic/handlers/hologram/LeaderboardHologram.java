@@ -72,8 +72,9 @@ public class LeaderboardHologram {
       String text;
       if(i < reverseKeys.size()) {
         UUID uuid = reverseKeys.get(i);
-        text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_FORMAT").asKey().integer(i + 1).value(String.valueOf(values.get(uuid))).build();
+        text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_FORMAT").asKey().integer(i + 1).value(String.valueOf(values.get(uuid))).getRaw();
         text = text.replace("%player%", getPlayerNameSafely(uuid));
+        text = new MessageBuilder(text).build();
       } else {
         text = new MessageBuilder("LEADERBOARD_TYPE_HOLOGRAM_EMPTY_FORMAT").asKey().integer(i + 1).build();
       }
