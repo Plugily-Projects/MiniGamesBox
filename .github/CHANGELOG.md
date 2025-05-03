@@ -1,3 +1,17 @@
+### 1.4.2 Release (xx)
+
+
+### 1.4.1 Release (01.05.2025)
+* Fixed player names in statistics/Leaderboard module are replaced by papi placeholders instead of our player placeholder which caused empty player names
+* Fixed InventoryManager saving if player got items with attributes, now they get cleaned beforehand the attributes get saved
+* Fixed messageIssueColor does not repeat after value on string
+* Changed Provide ScoreboardLines with Player to reduce doupled code in subprojects
+* Changed By default for lower 1.13 versions remove special chars from Scoreboard lines
+* Updated Fastboard to support 1.21.5
+* Updated XSeries to 13.2.0
+* Removed PagedFastInv as PaginatedFastInv now available
+
+
 ### 1.4.0 Release (13.03.2025)
 * Fixed scoreboard on FUll Game is showing waiting stage instead of starting
 * Fixed leaving while full game stopped the game
