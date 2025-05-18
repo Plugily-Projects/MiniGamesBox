@@ -27,6 +27,8 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class MaterialUtils {
 
+  //todo missing hanging signs! Refactor block behind state (mc 1.20 +)
+
   private static final Set<Material> WALL_SIGNS = new HashSet<Material>() {
     {
       add(getMaterial("WALL_SIGN"));
@@ -38,6 +40,10 @@ public class MaterialUtils {
       add(getMaterial("SPRUCE_WALL_SIGN"));
       add(getMaterial("WARPED_WALL_SIGN"));
       add(getMaterial("CRIMSON_WALL_SIGN"));
+      add(getMaterial("BAMBOO_WALL_SIGN"));
+      add(getMaterial("CHERRY_WALL_SIGN"));
+      add(getMaterial("MANGROVE_WALL_SIGN"));
+      add(getMaterial("PALE_OAK_WALL_SIGN"));
     }
   };
 
@@ -53,6 +59,10 @@ public class MaterialUtils {
       add(getMaterial("SPRUCE_SIGN"));
       add(getMaterial("WARPED_SIGN"));
       add(getMaterial("CRIMSON_SIGN"));
+      add(getMaterial("BAMBOO_SIGN"));
+      add(getMaterial("CHERRY_SIGN"));
+      add(getMaterial("MANGROVE_SIGN"));
+      add(getMaterial("PALE_OAK_SIGN"));
     }
   };
 
@@ -65,7 +75,7 @@ public class MaterialUtils {
 
   public static final Set<Material> DOORS = new HashSet<Material>() {
     {
-      add(getMaterial("WOODEN_DOOR"));
+      add(getMaterial("IRON_DOOR"));
       add(getMaterial("ACACIA_DOOR"));
       add(getMaterial("BIRCH_DOOR"));
       add(getMaterial("DARK_OAK_DOOR"));
@@ -75,6 +85,19 @@ public class MaterialUtils {
       add(getMaterial("WOOD_DOOR"));
       add(getMaterial("WARPED_DOOR"));
       add(getMaterial("CRIMSON_DOOR"));
+      add(getMaterial("BIRCH_DOOR"));
+      add(getMaterial("CHERRY_DOOR"));
+      add(getMaterial("COPPER_DOOR"));
+      add(getMaterial("EXPOSED_COPPER_DOOR"));
+      add(getMaterial("MANGROVE_DOOR"));
+      add(getMaterial("OXIDIZED_COPPER_DOOR"));
+      add(getMaterial("PALE_OAK_DOOR"));
+      add(getMaterial("WEATHERED_COPPER_DOOR"));
+      add(getMaterial("WAXED_WEATHERED_COPPER_DOOR"));
+      add(getMaterial("WAXED_OXIDIZED_COPPER_DOOR"));
+      add(getMaterial("WAXED_EXPOSED_COPPER_DOOR"));
+      add(getMaterial("WAXED_COPPER_DOOR"));
+      add(getMaterial("WARPED_DOOR"));
     }
   };
 
