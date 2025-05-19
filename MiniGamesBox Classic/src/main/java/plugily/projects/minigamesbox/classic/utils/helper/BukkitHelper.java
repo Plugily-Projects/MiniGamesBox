@@ -231,21 +231,6 @@ public class BukkitHelper {
     return center;
   }
 
-  public String matchColorRegex(String s) {
-    String regex = "&?#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})";
-    Matcher matcher = Pattern.compile(regex).matcher(s);
-    while(matcher.find()) {
-      String group = matcher.group(0);
-      String group2 = matcher.group(1);
-      try {
-        s = s.replace(group, net.md_5.bungee.api.ChatColor.of("#" + group2) + "");
-      } catch(Exception e) {
-        plugin.getDebugger().debug("Bad hex color match: " + group);
-      }
-    }
-    return s;
-  }
-
   /**
    * Checks whether itemstack is named (not null, has meta and display name)
    *
