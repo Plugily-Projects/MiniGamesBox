@@ -122,7 +122,9 @@ public class FileStats implements UserDatabase {
         }
       }
     });
-    config.set(uuid + ".playername", user.getPlayer().getName());
+    if(user.getPlayer() != null) {
+      config.set(uuid + ".playername", user.getPlayer().getName());
+    }
     ConfigUtils.saveConfig(plugin, config, "stats");
   }
 }
