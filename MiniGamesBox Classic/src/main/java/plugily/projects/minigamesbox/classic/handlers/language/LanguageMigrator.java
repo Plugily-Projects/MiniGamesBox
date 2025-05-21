@@ -44,7 +44,7 @@ import java.util.logging.Level;
 public class LanguageMigrator {
 
   public enum CoreFileVersion {
-    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(5), KITS(2),
+    /*ARENA_SELECTOR(0),*/ ARENAS(1), BUNGEE(1), CONFIG(6), KITS(2),
     LANGUAGE(2), /*LEADERBOARDS(0),*/ MYSQL(1), PERMISSIONS(1), POWERUPS(1),
     REWARDS(1), /*SIGNS(0),*/ SPECIAL_ITEMS(1), SPECTATOR(1)/*, STATS(0)*/;
 
@@ -175,6 +175,11 @@ public class LanguageMigrator {
                     "        # Setting it to false means on all stages of the game the event will be cancelled. \n" +
                     "        # Setting it to true means only while IN_GAME the event will be cancelled.\n" +
                     "        Check: true\r\n");
+            break;
+          case 5:
+            MigratorUtils.insertAfterLine(file, "        Check: true", "    # Should all interactions with interactive materials such as doors / buttons / fences / redstone be blocked during ingame\n" +
+                "    # Full list see https://github.com/CryptoMorin/XSeries/blob/e84000a2bead7367d893cf8661f8d5432116adaa/core/src/main/java/com/cryptomorin/xseries/XTag.java#L2793\n" +
+                "    Interact: false\r\n");
             break;
           default:
             break;

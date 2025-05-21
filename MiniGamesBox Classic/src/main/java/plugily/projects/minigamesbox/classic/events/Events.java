@@ -19,6 +19,7 @@
 package plugily.projects.minigamesbox.classic.events;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XTag;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -289,6 +290,24 @@ public class Events implements Listener {
       return;
     }
     projectile.remove();
+  }
+
+  @EventHandler(priority = EventPriority.HIGH)
+  public void onPlayerInGameInteraction(PlugilyPlayerInteractEvent event) {
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_INTERACTIONS")) {
+      return;
+    }
+    IPluginArena arena = plugin.getArenaRegistry().getArena((event.getPlayer()));
+    if(arena == null) {
+      return;
+    }
+    if(arena.getArenaState() != IArenaState.IN_GAME) {
+      return;
+    }
+    if(!XTag.isInteractable(XMaterial.matchXMaterial(event.getClickedBlock().getType()))) {
+      return;
+    }
+    event.setCancelled(true);
   }
 
 }
