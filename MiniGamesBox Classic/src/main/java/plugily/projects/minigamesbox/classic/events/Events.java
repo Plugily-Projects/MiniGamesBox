@@ -20,6 +20,7 @@ package plugily.projects.minigamesbox.classic.events;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XTag;
+import com.cryptomorin.xseries.inventory.XInventoryView;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -143,7 +144,7 @@ public class Events implements Listener {
     }
     if(arena.getArenaState() != IArenaState.IN_GAME) {
       if(event.getClickedInventory() == event.getWhoClicked().getInventory()) {
-        if(event.getView().getType() == InventoryType.WORKBENCH || event.getView().getType() == InventoryType.ANVIL || event.getView().getType() == InventoryType.ENCHANTING || event.getView().getType() == InventoryType.CRAFTING || event.getView().getType() == InventoryType.PLAYER) {
+        if(XInventoryView.of(event.getView()).getType() == InventoryType.WORKBENCH || XInventoryView.of(event.getView()).getType() == InventoryType.ANVIL || XInventoryView.of(event.getView()).getType() == InventoryType.ENCHANTING || XInventoryView.of(event.getView()).getType() == InventoryType.CRAFTING || XInventoryView.of(event.getView()).getType() == InventoryType.PLAYER) {
           event.setResult(Event.Result.DENY);
           event.setCancelled(true);
         }
@@ -287,9 +288,6 @@ public class Events implements Listener {
       return;
     }
     if(!plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
-      return;
-    }
-    if(!projectile.isOnGround()) {
       return;
     }
     projectile.remove();
