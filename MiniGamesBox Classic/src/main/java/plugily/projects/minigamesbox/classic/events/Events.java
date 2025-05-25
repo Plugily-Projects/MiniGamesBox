@@ -289,6 +289,9 @@ public class Events implements Listener {
     if(!plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
       return;
     }
+    if(!projectile.isOnGround()) {
+      return;
+    }
     projectile.remove();
   }
 
