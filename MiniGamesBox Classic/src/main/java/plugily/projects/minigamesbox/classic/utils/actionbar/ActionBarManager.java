@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.utils.actionbar;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -60,14 +59,16 @@ public class ActionBarManager extends BukkitRunnable {
     if(actionBars.isEmpty()) {
       return;
     }
-    for(Map.Entry<Player, List<ActionBar>> actionBarList : new HashMap<>(actionBars).entrySet()) {
+    for(Map.Entry<Player, List<ActionBar>> actionBarList : actionBars.entrySet()) {
       Player player = actionBarList.getKey();
       IPluginArena arena = plugin.getArenaRegistry().getArena(player);
       List<ActionBar> bars = new ArrayList<>(actionBarList.getValue());
       if(bars.isEmpty()) {
         return;
       }
-      new ArrayList<>(actionBarList.getValue()).stream().max(Comparator.comparingInt(ActionBar::getPriority)).ifPresent(actionBar -> {
+      plugin.getDebugger().debug("[ActionBarManager] [Arena {0} ] Player {1} got the following bars {2}", arena.getId(), player.getName(), bars.toString());
+      bars.stream().max(Comparator.comparingInt(ActionBar::getPriority)).ifPresent(actionBar -> {
+        plugin.getDebugger().debug("[ActionBarManager] [Arena {0} ] Player {1} sending {2}", arena.getId(), player.getName(), actionBar.toString());
         switch(actionBar.getActionBarType()) {
           case FLASHING:
             if(flashing.containsKey(actionBar.getKey())) {
@@ -110,11 +111,13 @@ public class ActionBarManager extends BukkitRunnable {
 
   private void removeFinishedActionBar(Player player, ActionBar actionBar) {
     if(actionBar.getExecutedTicks() >= actionBar.getTicks()) {
+      //Clear the ActionBar by default as on some changes such as world switch or teleportation the bar could stick
+      VersionUtils.sendActionBar(player, " ");
       if(actionBar.getActionBarType() == ActionBar.ActionBarType.FLASHING) {
-        VersionUtils.sendActionBar(player, "");
         flashing.remove(actionBar.getKey());
       }
       actionBars.get(player).remove(actionBar);
+      plugin.getDebugger().debug("[ActionBarManager] Player {1} removing {2}", player.getName(), actionBar.toString());
     }
   }
 
@@ -123,14 +126,17 @@ public class ActionBarManager extends BukkitRunnable {
   }
 
   public void addActionBar(Player player, ActionBar actionBar) {
+    plugin.getDebugger().debug("[ActionBarManager] Player {1} added {2}", player.getName(), actionBar.toString());
     if(actionBars.containsKey(player)) {
-      List<ActionBar> bars = actionBars.get(player);
+      List<ActionBar> bars = new ArrayList<>(actionBars.get(player));
+      actionBars.remove(player);
       if(bars.stream().anyMatch(bar -> bar.getActionBarType() == ActionBar.ActionBarType.DISPLAY) && bars.stream().anyMatch(bar -> bar.getPriority() == actionBar.getPriority())) {
         List<ActionBar> displayBars = bars.stream().filter(bar -> bar.getActionBarType() == ActionBar.ActionBarType.DISPLAY).filter(bar -> bar.getPriority() == actionBar.getPriority()).collect(Collectors.toList());
         bars.removeAll(displayBars);
       }
       bars.add(actionBar);
       actionBars.put(player, bars);
+      plugin.getDebugger().debug("[ActionBarManager] Player {1} got the following bars {2}", player.getName(), bars.toString());
       return;
     }
     actionBars.put(player, new ArrayList<>(Collections.singleton(actionBar)));
