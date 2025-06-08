@@ -19,6 +19,8 @@
 package plugily.projects.minigamesbox.classic.events;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XTag;
+import com.cryptomorin.xseries.inventory.XInventoryView;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -29,6 +31,7 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -141,7 +144,7 @@ public class Events implements Listener {
     }
     if(arena.getArenaState() != IArenaState.IN_GAME) {
       if(event.getClickedInventory() == event.getWhoClicked().getInventory()) {
-        if(event.getView().getType() == InventoryType.WORKBENCH || event.getView().getType() == InventoryType.ANVIL || event.getView().getType() == InventoryType.ENCHANTING || event.getView().getType() == InventoryType.CRAFTING || event.getView().getType() == InventoryType.PLAYER) {
+        if(XInventoryView.of(event.getView()).getType() == InventoryType.WORKBENCH || XInventoryView.of(event.getView()).getType() == InventoryType.ANVIL || XInventoryView.of(event.getView()).getType() == InventoryType.ENCHANTING || XInventoryView.of(event.getView()).getType() == InventoryType.CRAFTING || XInventoryView.of(event.getView()).getType() == InventoryType.PLAYER) {
           event.setResult(Event.Result.DENY);
           event.setCancelled(true);
         }
@@ -151,17 +154,17 @@ public class Events implements Listener {
 
   @EventHandler
   public void onPlayerCraft(CraftItemEvent event) {
-    if (!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ITEM_MOVE")) {
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ITEM_MOVE")) {
       return;
     }
-    if (!(event.getWhoClicked() instanceof Player)) {
+    if(!(event.getWhoClicked() instanceof Player)) {
       return;
     }
     IPluginArena arena = plugin.getArenaRegistry().getArena(((Player) event.getWhoClicked()));
-    if (arena == null) {
+    if(arena == null) {
       return;
     }
-    if (arena.getArenaState() != IArenaState.IN_GAME) {
+    if(arena.getArenaState() != IArenaState.IN_GAME) {
       event.setCancelled(true);
     }
   }
@@ -269,11 +272,43 @@ public class Events implements Listener {
     if(plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_ARMOR_STAND_CHECK")) {
       IPluginArena arena = plugin.getArenaRegistry().getArena(event.getPlayer());
       if(arena != null && arena.getArenaState() != IArenaState.IN_GAME) {
-          return;
+        return;
       }
     }
     event.setCancelled(true);
   }
 
+  @EventHandler
+  public void onArrowHitRemoveProjectile(ProjectileHitEvent event) {
+    Projectile projectile = event.getEntity();
+    if(!(projectile instanceof Arrow)) {
+      return;
+    }
+    if(!(projectile.getShooter() instanceof Player)) {
+      return;
+    }
+    if(!plugin.getArenaRegistry().isInArena((Player) projectile.getShooter())) {
+      return;
+    }
+    projectile.remove();
+  }
+
+  @EventHandler(priority = EventPriority.HIGH)
+  public void onPlayerInGameInteraction(PlugilyPlayerInteractEvent event) {
+    if(!plugin.getConfigPreferences().getOption("BLOCK_IN_GAME_INTERACTIONS")) {
+      return;
+    }
+    IPluginArena arena = plugin.getArenaRegistry().getArena((event.getPlayer()));
+    if(arena == null) {
+      return;
+    }
+    if(arena.getArenaState() != IArenaState.IN_GAME) {
+      return;
+    }
+    if(!XTag.isInteractable(XMaterial.matchXMaterial(event.getClickedBlock().getType()))) {
+      return;
+    }
+    event.setCancelled(true);
+  }
 
 }

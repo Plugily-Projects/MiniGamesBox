@@ -96,7 +96,6 @@ public class PluginStartingState implements ArenaStateHandler {
         player.setLevel(0);
       }
       plugin.getDebugger().performance("ArenaUpdate", "END 1 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.STARTING, IArenaState, arenaTimer);
-
       return;
     }
     if(timer == 0 || arena.isForceStart()) {
@@ -127,9 +126,6 @@ public class PluginStartingState implements ArenaStateHandler {
       IArenaState = IArenaState.IN_GAME;
     }
     SoundHelper.playArenaCountdown(arena);
-    if(arena.isForceStart()) {
-      arena.setForceStart(false);
-    }
 
     if(arena.getMaximumPlayers() == arena.getPlayers().size()) {
       int shorter = plugin.getConfig().getInt("Time-Manager.Shorten-Waiting-Full", 15);
@@ -141,7 +137,6 @@ public class PluginStartingState implements ArenaStateHandler {
       }
     }
     plugin.getDebugger().performance("ArenaUpdate", "END 2 Arena {0} Running state {1} value for state {2} and time {3}", arena.getId(), IArenaState.STARTING, IArenaState, arenaTimer);
-
   }
 
   @Override

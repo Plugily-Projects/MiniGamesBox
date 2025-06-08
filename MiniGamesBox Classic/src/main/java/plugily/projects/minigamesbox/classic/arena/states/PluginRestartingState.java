@@ -69,10 +69,11 @@ public class PluginRestartingState implements ArenaStateHandler {
             plugin.getUserManager().removeUser(user);
           }
           plugin.getServer().shutdown();
-        }
-        plugin.getArenaRegistry().shuffleBungeeArena();
-        for(Player player : Bukkit.getOnlinePlayers()) {
-          plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
+        } else {
+          plugin.getArenaRegistry().shuffleBungeeArena();
+          for(Player player : Bukkit.getOnlinePlayers()) {
+            plugin.getArenaManager().joinAttempt(player, plugin.getArenaRegistry().getArenas().get(plugin.getArenaRegistry().getBungeeArena()));
+          }
         }
       }
       arenaTimer = plugin.getConfig().getInt("Time-Manager.Waiting", 20);

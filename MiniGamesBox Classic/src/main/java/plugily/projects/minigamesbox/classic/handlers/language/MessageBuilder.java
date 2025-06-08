@@ -137,7 +137,7 @@ public class MessageBuilder {
   }
 
   public MessageBuilder arena(IPluginArena arena) {
-    if (arena == null) {
+    if(arena == null) {
       return this;
     }
     this.arena = arena;
@@ -273,18 +273,20 @@ public class MessageBuilder {
   }
 
   public void send(CommandSender commandSender) {
-    build();
-    if(message != null && !message.isEmpty()) {
-      commandSender.sendMessage(message);
+    if(message == null || message.isEmpty()) {
+      return;
     }
+    build();
+    commandSender.sendMessage(message);
   }
 
   public void send(IPluginArena arena) {
+    if(message == null || message.isEmpty()) {
+      return;
+    }
     build();
-    if(message != null && !message.isEmpty()) {
-      for(Player arenaPlayer : arena.getPlayers()) {
-        arenaPlayer.sendMessage(message);
-      }
+    for(Player arenaPlayer : arena.getPlayers()) {
+      arenaPlayer.sendMessage(message);
     }
   }
 
@@ -295,11 +297,12 @@ public class MessageBuilder {
   }
 
   public void broadcast() {
+    if(message == null || arena == null || message.isEmpty()) {
+      return;
+    }
     build();
-    if(message != null && arena != null && !message.isEmpty()) {
-      for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        onlinePlayer.sendMessage(message);
-      }
+    for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+      onlinePlayer.sendMessage(message);
     }
   }
 

@@ -55,13 +55,13 @@ public class ActionBar {
     this.message = message;
     this.actionBarType = actionBarType;
     this.priority = priority;
-    this.ticks = 20;
+    this.ticks = 40;
   }
 
   public ActionBar(MessageBuilder message, ActionBarType actionBarType, double seconds) {
     this.message = message;
     this.actionBarType = actionBarType;
-    this.priority = 0;
+    this.priority = 5;
     this.ticks = (int) (seconds * 20);
   }
 
@@ -69,7 +69,14 @@ public class ActionBar {
     this.message = message;
     this.actionBarType = actionBarType;
     this.priority = 0;
-    this.ticks = 20;
+    this.ticks = 40;
+  }
+
+  public ActionBar(MessageBuilder message) {
+    this.message = message;
+    this.actionBarType = ActionBarType.SHOW_PERMANENT;
+    this.priority = 0;
+    this.ticks = 0;
   }
 
   public ActionBar(String key, double seconds) {
@@ -113,7 +120,10 @@ public class ActionBar {
   }
 
   public enum ActionBarType {
-    DISPLAY, COOLDOWN, PROGRESS, FLASHING
+    SHOW_PERMANENT, /* shown until removed */
+    DISPLAY, /* shown until time elapsed */
+    PROGRESS, /* shown until progress / time is done */
+    FLASHING /* shown until time elapsed while as all strings get flashed */
   }
 
 }

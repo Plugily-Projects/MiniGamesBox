@@ -83,7 +83,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     gameStateHandlers.put(IArenaState.IN_GAME, new PluginInGameState());
     gameStateHandlers.put(IArenaState.ENDING, new PluginEndingState());
     gameStateHandlers.put(IArenaState.RESTARTING, new PluginRestartingState());
-    for (ArenaStateHandler handler : gameStateHandlers.values()) {
+    for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
     loadArenaOptions();
@@ -92,9 +92,10 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public void loadArenaOptions() {
     arenaOptions.clear();
     arenaOptions = plugin.getArenaOptionManager().getDefaultArenaOptions();
+    forceStart = false;
     FileConfiguration arenas = ConfigUtils.getConfig(plugin, "arenas");
-    for (Map.Entry<String, ArenaOption> options : arenaOptions.entrySet()) {
-      if ("null".equals(options.getValue().getPath())) {
+    for(Map.Entry<String, ArenaOption> options : arenaOptions.entrySet()) {
+      if("null".equals(options.getValue().getPath())) {
         continue;
       }
       setArenaOption(options.getKey(), arenas.getInt("instances." + id + "." + options.getValue().getPath(), options.getValue().getValue()));
@@ -106,7 +107,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public Integer getArenaOption(String name) {
     ArenaOption arenaOption = arenaOptions.get(name);
 
-    if (arenaOption == null) {
+    if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
 
@@ -116,7 +117,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public void setArenaOption(String name, int value) {
     ArenaOption arenaOption = arenaOptions.get(name);
 
-    if (arenaOption == null) {
+    if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
     arenaOption.setValue(value);
@@ -125,7 +126,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public void changeArenaOptionBy(String name, int value) {
     ArenaOption arenaOption = arenaOptions.get(name);
 
-    if (arenaOption == null) {
+    if(arenaOption == null) {
       throw new IllegalStateException("Option with name " + name + " does not exist");
     }
 
@@ -144,7 +145,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     gameStateHandlers.put(IArenaState.IN_GAME, new PluginInGameState());
     gameStateHandlers.put(IArenaState.ENDING, new PluginEndingState());
     gameStateHandlers.put(IArenaState.RESTARTING, new PluginRestartingState());
-    for (ArenaStateHandler handler : gameStateHandlers.values()) {
+    for(ArenaStateHandler handler : gameStateHandlers.values()) {
       handler.init(plugin);
     }
     bossbarManager = new BossbarManager(this);
@@ -172,7 +173,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
 
     Location firstWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 
-    for (GameLocation location : GameLocation.values()) {
+    for(GameLocation location : GameLocation.values()) {
       gameLocations.put(location, firstWorldSpawn);
     }
   }
@@ -191,7 +192,7 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   @Override
   public void run() {
     //idle task
-    if (iArenaState == iArenaState.WAITING_FOR_PLAYERS && players.isEmpty()) {
+    if(iArenaState == iArenaState.WAITING_FOR_PLAYERS && players.isEmpty()) {
       return;
     }
     plugin.getDebugger().performance("ArenaTask", "[PerformanceMonitor] [{0}] Running game task", id);
@@ -201,21 +202,21 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
     bossbarManager.bossBarUpdate();
     scoreboardManager.updateScoreboards();
     ArenaStateHandler arenaStateHandler;
-    if (iArenaState == IArenaState.FULL_GAME) {
+    if(iArenaState == IArenaState.FULL_GAME) {
       arenaStateHandler = gameStateHandlers.get(IArenaState.STARTING);
     } else {
       arenaStateHandler = gameStateHandlers.get(iArenaState);
     }
     arenaStateHandler.handleCall(this);
     plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Got from handler {1} and {2}, current {3}", getId(), arenaStateHandler.getArenaTimer(), arenaStateHandler.getArenaStateChange(), iArenaState);
-    if (!forceArenaTimer && arenaStateHandler.getArenaTimer() != -999) {
+    if(!forceArenaTimer && arenaStateHandler.getArenaTimer() != -999) {
       plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaTimer to {1} from handler", getId(), arenaStateHandler.getArenaTimer());
       setTimer(arenaStateHandler.getArenaTimer());
     }
     plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Force State {1}", getId(), forceArenaState);
-    if (!forceArenaState && iArenaState != arenaStateHandler.getArenaStateChange()) {
+    if(!forceArenaState && iArenaState != arenaStateHandler.getArenaStateChange()) {
       plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Change to {1}", getId(), arenaStateHandler.getArenaStateChange());
-      if (!(iArenaState == iArenaState.FULL_GAME && arenaStateHandler.getArenaStateChange() == iArenaState.STARTING)) {
+      if(!(iArenaState == iArenaState.FULL_GAME && arenaStateHandler.getArenaStateChange() == iArenaState.STARTING)) {
         plugin.getDebugger().performance("ArenaUpdate", "Arena {0} Changed ArenaState to {1} from handler", getId(), arenaStateHandler.getArenaStateChange());
         setArenaState(arenaStateHandler.getArenaStateChange(), false);
       }
@@ -363,10 +364,10 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public void teleportToEndLocation(Player player) {
     // We should check for #isEnabled to make sure plugin is enabled
     // This happens in some cases
-    if (plugin.isEnabled() && plugin.getConfigPreferences().getOption("BUNGEEMODE")
+    if(plugin.isEnabled() && plugin.getConfigPreferences().getOption("BUNGEEMODE")
         && ConfigUtils.getConfig(plugin, "bungee").getBoolean("End-Location-Hub", true)) {
       plugin.getBungeeManager().connectToHub(player);
-      plugin.getDebugger().debug("{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), this);
+      plugin.getDebugger().debug("{0} has left the arena {1}! Teleported to the Hub server.", player.getName(), getId());
     }
     VersionUtils.teleport(player, getEndLocation());
   }
@@ -406,8 +407,8 @@ public class PluginArena extends BukkitRunnable implements IPluginArena {
   public List<Player> getPlayersLeft() {
     List<Player> playersLeft = new ArrayList<>();
 
-    for (IUser user : plugin.getUserManager().getUsers(this)) {
-      if (!user.isSpectator()) {
+    for(IUser user : plugin.getUserManager().getUsers(this)) {
+      if(!user.isSpectator()) {
         playersLeft.add(user.getPlayer());
       }
     }

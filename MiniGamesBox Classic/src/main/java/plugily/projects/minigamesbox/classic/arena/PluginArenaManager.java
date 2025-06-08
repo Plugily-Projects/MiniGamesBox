@@ -84,8 +84,8 @@ public class PluginArenaManager {
       PluginArenaUtils.preparePlayerForGame(arena, player, arena.getSpectatorLocation(), true).thenAccept(act -> {
         new MessageBuilder("IN_GAME_SPECTATOR_YOU_ARE_SPECTATOR").asKey().player(player).arena(arena).sendPlayer();
         PluginArenaUtils.hidePlayer(player, arena);
-        for (Player spectator : arena.getPlayers()) {
-          if (plugin.getUserManager().getUser(spectator).isSpectator()) {
+        for(Player spectator : arena.getPlayers()) {
+          if(plugin.getUserManager().getUser(spectator).isSpectator()) {
             VersionUtils.hidePlayer(plugin, player, spectator);
           } else {
             VersionUtils.showPlayer(plugin, player, spectator);
@@ -166,12 +166,12 @@ public class PluginArenaManager {
     if(arena.getPlayers().size() + 1 <= arena.getMaximumPlayers()) {
       return true;
     }
-    if(!player.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
+    if(!player.hasPermission(plugin.getPluginNamePrefixLong() + ".fullgames")) {
       new MessageBuilder("IN_GAME_JOIN_FULL_GAME").asKey().player(player).arena(arena).sendPlayer();
       return false;
     }
     for(Player arenaPlayer : arena.getPlayers()) {
-      if(arenaPlayer.hasPermission(plugin.getPluginNamePrefixLong() +".fullgames")) {
+      if(arenaPlayer.hasPermission(plugin.getPluginNamePrefixLong() + ".fullgames")) {
         continue;
       }
       if(ArenaState.isLobbyStage(arena)) {
@@ -269,7 +269,7 @@ public class PluginArenaManager {
 
     Bukkit.getPluginManager().callEvent(new PlugilyGameStopEvent(arena));
     for(Player player : arena.getPlayers()) {
-      if (quickStop) {
+      if(quickStop) {
         new MessageBuilder("IN_GAME_MESSAGES_GAME_END_PLACEHOLDERS_PLAYERS").asKey().arena(arena).sendArena();
       } else {
         spawnFireworks(arena, player);

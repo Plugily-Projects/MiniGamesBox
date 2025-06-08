@@ -18,7 +18,6 @@
 
 package plugily.projects.minigamesbox.classic.utils.actionbar;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,6 +45,7 @@ public class ActionBarManager extends BukkitRunnable {
   private final PluginMain plugin;
   private final int period = 10;
   private Map<Player, List<ActionBar>> actionBars = new HashMap<>();
+  private Map<ActionBar, Integer> actionBarTimers = new HashMap<>();
   private Map<String, Integer> flashing = new HashMap<>();
 
 
@@ -63,11 +63,19 @@ public class ActionBarManager extends BukkitRunnable {
     for(Map.Entry<Player, List<ActionBar>> actionBarList : new HashMap<>(actionBars).entrySet()) {
       Player player = actionBarList.getKey();
       IPluginArena arena = plugin.getArenaRegistry().getArena(player);
-      List<ActionBar> bars = new ArrayList<>(actionBarList.getValue());
+      List<ActionBar> bars = actionBarList.getValue();
       if(bars.isEmpty()) {
         return;
       }
-      new ArrayList<>(actionBarList.getValue()).stream().max(Comparator.comparingInt(ActionBar::getPriority)).ifPresent(actionBar -> {
+      if(arena == null) {
+        return;
+      }
+      for(ActionBar actionBar : bars) {
+        plugin.getDebugger().debug("[ActionBarManager] [Arena {0} ] Player {1} got the following bars {2}", arena.getId(), player.getName(), "Type:"
+            + actionBar.getActionBarType() + "Ticks:" + actionBar.getTicks() + "ExecutedTicks:" + actionBar.getExecutedTicks() + "Message:" + actionBar.getMessage().getRaw() + "Priority:" + actionBar.getPriority());
+      }
+      bars.stream().max(Comparator.comparingInt(ActionBar::getPriority)).ifPresent(actionBar -> {
+        plugin.getDebugger().debug("[ActionBarManager] [Arena {0} ] Player {1} sending {2}", arena.getId(), player.getName(), actionBar.getMessage().getRaw());
         switch(actionBar.getActionBarType()) {
           case FLASHING:
             if(flashing.containsKey(actionBar.getKey())) {
@@ -83,12 +91,9 @@ public class ActionBarManager extends BukkitRunnable {
             }
             flashing.put(actionBar.getKey(), -1);
             break;
-          case COOLDOWN:
-            bars.remove(actionBar);
-            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).player(player).arena(arena).build());
-            break;
           case DISPLAY:
-            VersionUtils.sendActionBar(player, actionBar.getMessage().integer((actionBar.getTicks() - actionBar.getExecutedTicks()) / 20).player(player).arena(arena).build());
+          case SHOW_PERMANENT:
+            VersionUtils.sendActionBar(player, actionBar.getMessage().player(player).arena(arena).build());
             break;
           case PROGRESS:
             String progress = StringFormatUtils.getProgressBar(actionBar.getExecutedTicks() + 10, actionBar.getTicks(),
@@ -99,22 +104,27 @@ public class ActionBarManager extends BukkitRunnable {
             break;
         }
       });
-      for(ActionBar actionBar : bars) {
-        if(actionBar.getActionBarType() == ActionBar.ActionBarType.COOLDOWN || actionBar.getActionBarType() == ActionBar.ActionBarType.PROGRESS) {
+      List<ActionBar> newActionBars = new ArrayList<>();
+      for(ActionBar actionBar : new ArrayList<>(bars)) {
+        if(actionBar.getActionBarType() == ActionBar.ActionBarType.DISPLAY || actionBar.getActionBarType() == ActionBar.ActionBarType.PROGRESS) {
           actionBar.addExecutedTicks(period);
         }
-        removeFinishedActionBar(player, actionBar);
+        if(actionBar.getExecutedTicks() >= actionBar.getTicks()) {
+          if(actionBar.getActionBarType() == ActionBar.ActionBarType.FLASHING) {
+            flashing.remove(actionBar.getKey());
+          }
+          plugin.getDebugger().debug("[ActionBarManager] Player {0} removed {1}", player.getName(), actionBar.getMessage().getRaw());
+        } else {
+          newActionBars.add(actionBar);
+        }
       }
-    }
-  }
-
-  private void removeFinishedActionBar(Player player, ActionBar actionBar) {
-    if(actionBar.getExecutedTicks() >= actionBar.getTicks()) {
-      if(actionBar.getActionBarType() == ActionBar.ActionBarType.FLASHING) {
-        VersionUtils.sendActionBar(player, "");
-        flashing.remove(actionBar.getKey());
+      actionBars.remove(player);
+      if(newActionBars.isEmpty()) {
+        //Clear the ActionBar by default as on some changes such as world switch or teleportation the bar could stick
+        VersionUtils.sendActionBar(player, " ");
+      } else {
+        actionBars.put(player, newActionBars);
       }
-      actionBars.get(player).remove(actionBar);
     }
   }
 
@@ -123,14 +133,20 @@ public class ActionBarManager extends BukkitRunnable {
   }
 
   public void addActionBar(Player player, ActionBar actionBar) {
+    plugin.getDebugger().debug("[ActionBarManager] Player {0} added {1}", player.getName(), actionBar.getMessage().getRaw());
     if(actionBars.containsKey(player)) {
-      List<ActionBar> bars = actionBars.get(player);
-      if(bars.stream().anyMatch(bar -> bar.getActionBarType() == ActionBar.ActionBarType.DISPLAY) && bars.stream().anyMatch(bar -> bar.getPriority() == actionBar.getPriority())) {
-        List<ActionBar> displayBars = bars.stream().filter(bar -> bar.getActionBarType() == ActionBar.ActionBarType.DISPLAY).filter(bar -> bar.getPriority() == actionBar.getPriority()).collect(Collectors.toList());
+      List<ActionBar> bars = new ArrayList<>(actionBars.get(player));
+      actionBars.remove(player);
+      if(bars.stream().anyMatch(bar -> bar.getActionBarType() == ActionBar.ActionBarType.SHOW_PERMANENT) && bars.stream().anyMatch(bar -> bar.getPriority() >= actionBar.getPriority())) {
+        List<ActionBar> displayBars = bars.stream().filter(bar -> bar.getActionBarType() == ActionBar.ActionBarType.SHOW_PERMANENT).filter(bar -> bar.getPriority() <= actionBar.getPriority()).collect(Collectors.toList());
         bars.removeAll(displayBars);
       }
       bars.add(actionBar);
       actionBars.put(player, bars);
+      for(ActionBar debugActionBar : bars) {
+        plugin.getDebugger().debug("[ActionBarManager] Player {0} got the following bars {1}", player.getName(), "Type:"
+            + debugActionBar.getActionBarType() + "Ticks:" + debugActionBar.getTicks() + "ExecutedTicks:" + debugActionBar.getExecutedTicks() + "Message:" + debugActionBar.getMessage().getRaw() + "Priority:" + debugActionBar.getPriority());
+      }
       return;
     }
     actionBars.put(player, new ArrayList<>(Collections.singleton(actionBar)));
@@ -138,5 +154,11 @@ public class ActionBarManager extends BukkitRunnable {
 
   public void clearActionBarsFromPlayer(Player player) {
     actionBars.remove(player);
+  }
+
+  public void clearActionBarsFromPlayer(Player player, ActionBar.ActionBarType actionBarType) {
+    List<ActionBar> bars = new ArrayList<>(actionBars.get(player));
+    actionBars.remove(player);
+    actionBars.put(player, bars.stream().filter(bar -> bar.getActionBarType() != actionBarType).collect(Collectors.toList()));
   }
 }

@@ -27,32 +27,42 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class MaterialUtils {
 
+  //todo missing hanging signs! Refactor block behind state (mc 1.20 +)
+
   private static final Set<Material> WALL_SIGNS = new HashSet<Material>() {
     {
-      add(getMat("WALL_SIGN"));
-      add(getMat("ACACIA_WALL_SIGN"));
-      add(getMat("BIRCH_WALL_SIGN"));
-      add(getMat("DARK_OAK_WALL_SIGN"));
-      add(getMat("JUNGLE_WALL_SIGN"));
-      add(getMat("OAK_WALL_SIGN"));
-      add(getMat("SPRUCE_WALL_SIGN"));
-      add(getMat("WARPED_WALL_SIGN"));
-      add(getMat("CRIMSON_WALL_SIGN"));
+      add(getMaterial("WALL_SIGN"));
+      add(getMaterial("ACACIA_WALL_SIGN"));
+      add(getMaterial("BIRCH_WALL_SIGN"));
+      add(getMaterial("DARK_OAK_WALL_SIGN"));
+      add(getMaterial("JUNGLE_WALL_SIGN"));
+      add(getMaterial("OAK_WALL_SIGN"));
+      add(getMaterial("SPRUCE_WALL_SIGN"));
+      add(getMaterial("WARPED_WALL_SIGN"));
+      add(getMaterial("CRIMSON_WALL_SIGN"));
+      add(getMaterial("BAMBOO_WALL_SIGN"));
+      add(getMaterial("CHERRY_WALL_SIGN"));
+      add(getMaterial("MANGROVE_WALL_SIGN"));
+      add(getMaterial("PALE_OAK_WALL_SIGN"));
     }
   };
 
   public static final Set<Material> BASIC_SIGNS = new HashSet<Material>() {
     {
-      add(getMat("SIGN"));
-      add(getMat("STANDING_SIGN"));
-      add(getMat("ACACIA_SIGN"));
-      add(getMat("BIRCH_SIGN"));
-      add(getMat("DARK_OAK_SIGN"));
-      add(getMat("JUNGLE_SIGN"));
-      add(getMat("OAK_SIGN"));
-      add(getMat("SPRUCE_SIGN"));
-      add(getMat("WARPED_SIGN"));
-      add(getMat("CRIMSON_SIGN"));
+      add(getMaterial("SIGN"));
+      add(getMaterial("STANDING_SIGN"));
+      add(getMaterial("ACACIA_SIGN"));
+      add(getMaterial("BIRCH_SIGN"));
+      add(getMaterial("DARK_OAK_SIGN"));
+      add(getMaterial("JUNGLE_SIGN"));
+      add(getMaterial("OAK_SIGN"));
+      add(getMaterial("SPRUCE_SIGN"));
+      add(getMaterial("WARPED_SIGN"));
+      add(getMaterial("CRIMSON_SIGN"));
+      add(getMaterial("BAMBOO_SIGN"));
+      add(getMaterial("CHERRY_SIGN"));
+      add(getMaterial("MANGROVE_SIGN"));
+      add(getMaterial("PALE_OAK_SIGN"));
     }
   };
 
@@ -65,16 +75,29 @@ public class MaterialUtils {
 
   public static final Set<Material> DOORS = new HashSet<Material>() {
     {
-      add(getMat("WOODEN_DOOR"));
-      add(getMat("ACACIA_DOOR"));
-      add(getMat("BIRCH_DOOR"));
-      add(getMat("DARK_OAK_DOOR"));
-      add(getMat("JUNGLE_DOOR"));
-      add(getMat("SPRUCE_DOOR"));
-      add(getMat("OAK_DOOR"));
-      add(getMat("WOOD_DOOR"));
-      add(getMat("WARPED_DOOR"));
-      add(getMat("CRIMSON_DOOR"));
+      add(getMaterial("IRON_DOOR"));
+      add(getMaterial("ACACIA_DOOR"));
+      add(getMaterial("BIRCH_DOOR"));
+      add(getMaterial("DARK_OAK_DOOR"));
+      add(getMaterial("JUNGLE_DOOR"));
+      add(getMaterial("SPRUCE_DOOR"));
+      add(getMaterial("OAK_DOOR"));
+      add(getMaterial("WOOD_DOOR"));
+      add(getMaterial("WARPED_DOOR"));
+      add(getMaterial("CRIMSON_DOOR"));
+      add(getMaterial("BIRCH_DOOR"));
+      add(getMaterial("CHERRY_DOOR"));
+      add(getMaterial("COPPER_DOOR"));
+      add(getMaterial("EXPOSED_COPPER_DOOR"));
+      add(getMaterial("MANGROVE_DOOR"));
+      add(getMaterial("OXIDIZED_COPPER_DOOR"));
+      add(getMaterial("PALE_OAK_DOOR"));
+      add(getMaterial("WEATHERED_COPPER_DOOR"));
+      add(getMaterial("WAXED_WEATHERED_COPPER_DOOR"));
+      add(getMaterial("WAXED_OXIDIZED_COPPER_DOOR"));
+      add(getMaterial("WAXED_EXPOSED_COPPER_DOOR"));
+      add(getMaterial("WAXED_COPPER_DOOR"));
+      add(getMaterial("WARPED_DOOR"));
     }
   };
 
@@ -86,11 +109,7 @@ public class MaterialUtils {
     return DOORS.contains(mat);
   }
 
-  private static Material getMat(String name) {
-    Material material = Material.getMaterial(name.toUpperCase());
-    if(material == null) {
-      material = XMaterial.OAK_SIGN.parseMaterial();
-    }
-    return material;
+  private static Material getMaterial(String name) {
+    return XMaterial.matchXMaterial(name.toUpperCase()).orElse(XMaterial.OAK_DOOR).get();
   }
 }
