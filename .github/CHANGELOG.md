@@ -1,5 +1,17 @@
-### 1.4.2 Release (xx)
-
+### 1.4.2 Release (09.06.2025)
+* Added BLOCK_IN_GAME_INTERACTIONS option to block interactions whileas ingame
+* Added onArrowHitRemoveProjectile event to remove projectiles which got shoot from InGame Players
+* Added newer mc version door and sign types
+* Added by default link at config.yml where to translate the project
+* Added full 1.21.5 support
+* Fixed ActionBarManager and Renamed ActionBar.ActionBarType enums to match better use case
+* Fixed on bungeemode arena shutdown was to slow to overwrite shuffling and joining of next arena
+* Fixed arena forcestart
+* Fixed InventoryView on newer MC versions
+* Fixed empty messages get build / sended
+* Fixed playername update on updateStats could cause NPE in rare cases such as direct kick if no playername is recognised by server.
+* Fixed MaterialUtils matching of Materials in different mc versions
+* Updated XSeries to 13.3.1
 
 ### 1.4.1 Release (01.05.2025)
 * Fixed player names in statistics/Leaderboard module are replaced by papi placeholders instead of our player placeholder which caused empty player names
