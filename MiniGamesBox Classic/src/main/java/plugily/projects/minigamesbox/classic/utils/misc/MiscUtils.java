@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 public class MiscUtils {
 
   private static final Random RANDOM = new Random();
-  private static final Pattern PATTERN = Pattern.compile("&?#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
+  private static final Pattern PATTERN = Pattern.compile("&?#([A-Fa-f0-9]{6})");
 
   private MiscUtils() {
   }
@@ -65,7 +65,7 @@ public class MiscUtils {
       try {
         message = message.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)).toString());
       } catch(Exception exception) {
-        System.err.println("Invalid hex color: " + exception.getLocalizedMessage() + " && " + message);
+        System.err.println("Invalidh hex color: " + exception.getLocalizedMessage() + " && " + message);
       }
     }
 
