@@ -55,21 +55,21 @@ public class MiscUtils {
   private MiscUtils() {
   }
 
-  public static String matchColorRegex(String s) {
+  public static String matchColorRegex(String message) {
     if(Version.isCurrentLower(Version.v1_16)) {
-      return s;
+      return message;
     }
 
-    Matcher matcher = PATTERN.matcher(s);
+    Matcher matcher = PATTERN.matcher(message);
     while(matcher.find()) {
       try {
-        s = s.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)).toString());
-      } catch(Exception e) {
-        System.err.println("Invalid hex color: " + e.getLocalizedMessage());
+        message = message.replace(matcher.group(0), net.md_5.bungee.api.ChatColor.of("#" + matcher.group(1)).toString());
+      } catch(Exception exception) {
+        System.err.println("Invalid hex color: " + exception.getLocalizedMessage() + " && " + message);
       }
     }
 
-    return s;
+    return message;
   }
 
   @Deprecated
@@ -87,8 +87,8 @@ public class MiscUtils {
    * @param location location to spawn firework there
    */
   public static void spawnRandomFirework(Location location) {
-    Firework fw = (Firework) location.getWorld().spawnEntity(location, XEntityType.FIREWORK_ROCKET.get());
-    FireworkMeta fwm = fw.getFireworkMeta();
+    Firework firework = (Firework) location.getWorld().spawnEntity(location, XEntityType.FIREWORK_ROCKET.get());
+    FireworkMeta fireworkMeta = firework.getFireworkMeta();
 
     //Get the type
     FireworkEffect.Type type;
@@ -124,11 +124,11 @@ public class MiscUtils {
         .with(type).trail(RANDOM.nextBoolean()).build();
 
     //Then apply the effect to the meta
-    fwm.addEffect(effect);
+    fireworkMeta.addEffect(effect);
 
     //Generate some random power and set it
-    fwm.setPower(RANDOM.nextInt(2) + 1);
-    fw.setFireworkMeta(fwm);
+    fireworkMeta.setPower(RANDOM.nextInt(2) + 1);
+    firework.setFireworkMeta(fireworkMeta);
   }
 
   /**
