@@ -103,7 +103,7 @@ public class BooleanItem implements CategoryItemHandler {
               context.getForWhom().sendRawMessage(new MessageBuilder("&e✖ Only a value of the list is allowed, try again by clicking the item again").build());
               return Prompt.END_OF_CONVERSATION;
             }
-            context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + input).build());
+            context.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + input).prefix().build());
             setupInventory.setConfig(keyName, Boolean.valueOf(input));
             return Prompt.END_OF_CONVERSATION;
           }
@@ -113,7 +113,7 @@ public class BooleanItem implements CategoryItemHandler {
         boolean option = setupInventory.getConfig().getBoolean("instances." + setupInventory.getArenaKey() + "." + keyName, false);
         int position = 2;
         boolean newOption = !option;
-        event.getWhoClicked().sendMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + newOption).build());
+        event.getWhoClicked().sendMessage(new MessageBuilder("&e✔ Completed | &aSet " + name.toUpperCase() + " " + setupInventory.getArenaKey() + " to " + newOption).prefix().build());
         setupInventory.setConfig(keyName, newOption);
         InventoryHolder holder = event.getInventory().getHolder();
         if(holder instanceof RefreshableFastInv) {

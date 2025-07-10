@@ -132,7 +132,7 @@ public class CountItem implements CategoryItemHandler {
               countInput = 1;
             }
             updateArenaFile(countInput);
-            conversationContext.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aCount for " + name.toUpperCase() + " on " + setupInventory.getArenaKey() + " set to " + countInput).build());
+            conversationContext.getForWhom().sendRawMessage(new MessageBuilder("&e✔ Completed | &aCount for " + name.toUpperCase() + " on " + setupInventory.getArenaKey() + " set to " + countInput).prefix().build());
             //considerable to open setup inventory again?
             return Prompt.END_OF_CONVERSATION;
           }
