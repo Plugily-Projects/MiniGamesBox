@@ -36,6 +36,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -445,7 +446,6 @@ public final class VersionUtils {
     }
 
 
-
     java.util.Optional<org.bukkit.attribute.AttributeInstance> at = MiscUtils.getEntityAttribute(entity, XAttribute.MAX_HEALTH.get());
     return at.map(AttributeInstance::getValue).orElse(20D);
   }
@@ -643,16 +643,22 @@ public final class VersionUtils {
   }
 
   public static BannerMeta setBaseColor(BannerMeta meta, DyeColor color) {
-      BlockStateMeta bsm = (BlockStateMeta) meta;
-      BlockState state = ((BlockStateMeta) meta).getBlockState();
-      if (state instanceof Banner) {
-          ((Banner) state).setBaseColor(color);
-          state.update(true);
-      }
-      bsm.setBlockState(state);
+    BlockStateMeta bsm = (BlockStateMeta) meta;
+    BlockState state = ((BlockStateMeta) meta).getBlockState();
+    if(state instanceof Banner) {
+      ((Banner) state).setBaseColor(color);
+      state.update(true);
+    }
+    bsm.setBlockState(state);
     return meta;
+  }
 
+  public static boolean isLeftClick(Action action) {
+    return action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK;
+  }
 
-}
+  public static boolean isRightClick(Action action) {
+    return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
+  }
 
 }
