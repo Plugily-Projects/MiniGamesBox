@@ -194,9 +194,6 @@ public class Events implements Listener {
         event.setCancelled(true);
       }
     }
-    if(event.getClickedBlock() == null) {
-      return;
-    }
     if(event.getClickedBlock().getType() == XMaterial.PAINTING.parseMaterial() || event.getClickedBlock().getType() == XMaterial.FLOWER_POT.parseMaterial()) {
       event.setCancelled(true);
     }
