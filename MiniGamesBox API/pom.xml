@@ -23,7 +23,7 @@
     <parent>
         <artifactId>minigamesbox</artifactId>
         <groupId>plugily.projects</groupId>
-        <version>1.4.2-SNAPSHOT4</version>
+        <version>1.4.2-SNAPSHOT5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
