@@ -1,3 +1,13 @@
+### 1.4.3 Release (10.07.2025)
+* Added 1.21.6-7 support!
+* Updated XSeries to 13.3.3
+* Updated FastBoard to 2.1.5
+* Updated FastInv to 3.1.2
+* Fixed NPE on ServerListPing if plugin isn't fully started / arenaregistry not ready
+* Fixed NSM on CRAFTING TABLE usage at mc 1.8.8
+* Internal Code Cleanup such as prefixes and MiscUtils
+* Changed Hex code support to only support 6 digit long hex code!
+
 ### 1.4.2 Release (09.06.2025)
 * Added BLOCK_IN_GAME_INTERACTIONS option to block interactions whileas ingame
 * Added onArrowHitRemoveProjectile event to remove projectiles which got shoot from InGame Players
