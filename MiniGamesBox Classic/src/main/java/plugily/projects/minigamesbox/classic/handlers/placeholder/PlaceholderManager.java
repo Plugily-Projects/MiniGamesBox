@@ -42,7 +42,7 @@ public class PlaceholderManager {
 
   public PlaceholderManager(PluginMain plugin) {
     this.plugin = plugin;
-    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       plugin.getDebugger().debug(plugin.getPluginMessagePrefix() + "Hooking into PlaceholderAPI");
       new PAPIPlaceholders(plugin);
     }
@@ -139,10 +139,34 @@ public class PlaceholderManager {
         return Integer.toString(arena.getTimer());
       }
     });
+    registerPlaceholder(new Placeholder("timer_pretty", Placeholder.PlaceholderType.ARENA, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player, IPluginArena arena) {
+        return convertSecondsToTime(arena.getTimer());
+      }
+
+      @Override
+      public String getValue(IPluginArena arena) {
+        return convertSecondsToTime(arena.getTimer());
+      }
+
+      public String convertSecondsToTime(int oldseconds) {
+        int hours = oldseconds / 3600;
+        int minutes = (oldseconds % 3600) / 60;
+        int seconds = oldseconds % 60;
+        if(hours > 0) {
+          return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        } else if(minutes > 0) {
+          return String.format("%02d:%02d", minutes, seconds);
+        } else {
+          return String.format("%02d", seconds);
+        }
+      }
+    });
     registerPlaceholder(new Placeholder("user_kit", Placeholder.PlaceholderExecutor.ALL) {
       @Override
       public String getValue(Player player) {
-        if (!plugin.getConfigPreferences().getOption("KITS")) {
+        if(!plugin.getConfigPreferences().getOption("KITS")) {
           return null;
         }
         return plugin.getUserManager().getUser(player).getKit().getName();
@@ -150,17 +174,108 @@ public class PlaceholderManager {
 
       @Override
       public String getValue(Player player, IPluginArena arena) {
-        if (!plugin.getConfigPreferences().getOption("KITS")) {
+        if(!plugin.getConfigPreferences().getOption("KITS")) {
           return null;
         }
         return plugin.getUserManager().getUser(player).getKit().getName();
       }
     });
+    
+    
+    //get player specific details
+    registerPlaceholder(new Placeholder("current_arena_id", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = plugin.getArenaRegistry().getArena(player);
+        return playerArena != null ? playerArena.getId() : "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+    registerPlaceholder(new Placeholder("arena_current_state", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = plugin.getArenaRegistry().getArena(player);
+        if(playerArena != null) {
+          return playerArena.getArenaState().toString().toLowerCase();
+        }
+        return "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+    registerPlaceholder(new Placeholder("arena_current_name", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = plugin.getArenaRegistry().getArena(player);
+        if(playerArena != null) {
+          return playerArena.getMapName();
+        }
+        return "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+    registerPlaceholder(new Placeholder("arena_current_players", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = plugin.getArenaRegistry().getArena(player);
+        if(playerArena != null) {
+          return Integer.toString(playerArena.getPlayers().size());
+        }
+        return "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+    registerPlaceholder(new Placeholder("arena_current_max_players", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = plugin.getArenaRegistry().getArena(player);
+        if(playerArena != null) {
+          return Integer.toString(playerArena.getMaximumPlayers());
+        }
+        return "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+    registerPlaceholder(new Placeholder("arena_current_timer", Placeholder.PlaceholderType.GLOBAL, Placeholder.PlaceholderExecutor.PLACEHOLDER_API) {
+      @Override
+      public String getValue(Player player) {
+        IPluginArena playerArena = plugin.getArenaRegistry().getArena(player);
+        if(playerArena != null) {
+          return Integer.toString(playerArena.getTimer());
+        }
+        return "";
+      }
+
+      @Override
+      public String getValue() {
+        return "";
+      }
+    });
+
 
   }
 
   public void registerPlaceholder(Placeholder placeholder) {
-    switch (placeholder.getPlaceholderExecutor()) {
+    switch(placeholder.getPlaceholderExecutor()) {
       case PLACEHOLDER_API:
         registeredPAPIPlaceholders.add(placeholder);
         break;

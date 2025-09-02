@@ -53,6 +53,9 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
 
   @Override
   public void createScoreboard(IUser user) {
+    if(!arena.getPlugin().getConfigPreferences().getOption("SCOREBOARD_DISPLAY")) {
+      return;
+    }
     Player player = user.getPlayer();
 
     FastBoard board = new FastBoard(player) {
