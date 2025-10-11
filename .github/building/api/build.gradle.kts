@@ -24,7 +24,7 @@ plugins {
 
 dependencies {
     compileOnly(project(":MiniGamesBox-Database", "shadow"))
-    compileOnly("com.github.cryptomorin:XSeries:13.0.0") { isTransitive = false }
+    compileOnly("com.github.cryptomorin:XSeries:13.5.1") { isTransitive = false }
 }
 
 tasks{
