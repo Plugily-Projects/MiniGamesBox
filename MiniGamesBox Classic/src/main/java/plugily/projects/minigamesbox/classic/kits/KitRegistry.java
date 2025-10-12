@@ -256,7 +256,7 @@ public class KitRegistry implements IKitRegistry {
     path.mkdirs();
 
     try {
-      File kitsFile = new File(path, name);
+      File kitsFile = new File(path, name + ".yml");
       if(kitsFile.exists()) {
         kitsFile.delete();
       }

@@ -24,8 +24,7 @@ public class KitFileArgument {
             "&7Creates kit file \n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.kitfile")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        new MessageBuilder("Need a name!").send(sender);
-        if (args.length != 2) {
+        if(args.length != 2) {
           new MessageBuilder(ChatColor.DARK_RED + "Please provide a name!").prefix().send(sender);
           return;
         }
