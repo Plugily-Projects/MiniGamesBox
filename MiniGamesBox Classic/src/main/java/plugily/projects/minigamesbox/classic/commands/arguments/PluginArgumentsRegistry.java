@@ -91,6 +91,7 @@ public class PluginArgumentsRegistry implements CommandExecutor {
     new AdjustStatisticArgument(this);
 
     //other admin related arguments
+    new KitFileArgument(this);
     new ListArenasArgument(this);
     new LocationWandArgument(this);
     new PlaceholderCheckArgument(this);

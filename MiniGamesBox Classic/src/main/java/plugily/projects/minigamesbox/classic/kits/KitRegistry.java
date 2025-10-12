@@ -296,6 +296,12 @@ public class KitRegistry implements IKitRegistry {
         kitsConfig.set("armour.boots", XItemStack.serialize(boots));
       }
 
+      kitsConfig.set("Speed.Walk", player.getWalkSpeed());
+      kitsConfig.set("Health.Max", VersionUtils.getMaxHealth(player));
+      kitsConfig.set("Food", player.getFoodLevel());
+
+      kitsConfig.save(kitsFile);
+      plugin.getDebugger().debug("Saved kit {0} of {1}", name, player.getName());
     } catch(Exception ex) {
       Bukkit.getConsoleSender().sendMessage("Cannot save inventory of player!");
     }
