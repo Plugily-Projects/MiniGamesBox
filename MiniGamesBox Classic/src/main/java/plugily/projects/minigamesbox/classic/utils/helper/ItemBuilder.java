@@ -86,7 +86,9 @@ public class ItemBuilder {
   }
 
   public ItemBuilder name(final String name) {
-    ComplementAccessor.getComplement().setDisplayName(itemMeta, name == null ? "" : name);
+    if(name != null) {
+      ComplementAccessor.getComplement().setDisplayName(itemMeta, name);
+    }
     return this;
   }
 
