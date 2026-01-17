@@ -2,7 +2,7 @@ name: ${description}
 main: plugily.projects.PlugilyProjects.Main
 authors: [ PlugilyProjects, Tigerpanzer_02 ]
 version: ${version}
-softdepend: [ PlaceholderAPI, Parties, Spigot-Party-API-PAF, PartyAndFriends, ViaVersion, ProtocolSupport ]
+softdepend: [ PlaceholderAPI, Parties, Spigot-Party-API-PAF, PartyAndFriends, ViaVersion ]
 api-version: 1.13
 
 commands:

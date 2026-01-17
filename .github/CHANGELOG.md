@@ -1,3 +1,13 @@
+### 1.4.4 Release (17.01.2026)
+* Added support 1.21.8-11
+* Added (optional) SCOREBOARD_DISPLAY in config.yml
+* Added Placeholders for *current* usage of players for external plugins without knowing the specific arena
+* Updated XSeries to 13.6.0
+* Fixed NPE on null name with ItemBuilder
+* Fixed NPE on MySQL usage caused by debug msg
+* Changed Not checking for op or * permissions anymore. Work with negative permissions if you want to change how admin gets the boost.
+
+
 ### 1.4.3 Release (10.07.2025)
 * Added 1.21.6-7 support!
 * Updated XSeries to 13.3.3

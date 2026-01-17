@@ -23,6 +23,9 @@ Bossbar:
   # Interval in seconds between messages
   Interval: 10
 
+# Should we display the scoreboard ingame?
+Scoreboard:
+  Display: true
 
 # Should we hook into bungeecord? (If you wanna use arena per server option)
 # This option will let you access bungee.yml and its options.
@@ -210,4 +213,4 @@ Update-Notifier:
 # You edited it, huh? Next time hurt yourself!
 Do-Not-Edit:
   File-Version: 1
-  Core-Version: 6
+  Core-Version: 7

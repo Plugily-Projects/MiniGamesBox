@@ -1,5 +1,7 @@
 package plugily.projects.minigamesbox.api.kit;
 
+import org.bukkit.entity.Player;
+
 import java.util.List;
 
 /**
@@ -23,6 +25,13 @@ public interface IKitRegistry {
    */
   void registerKits(List<String> optionalConfigurations);
 
+  /**
+   * Creates a new kit file with the kit content of the players inventory
+   *
+   * @param name name of kit file and kit
+   * @param player player from which the kit gets created
+   */
+  void savePlayerAsNewKit(String name, Player player);
   /**
    * Return default game kit
    *

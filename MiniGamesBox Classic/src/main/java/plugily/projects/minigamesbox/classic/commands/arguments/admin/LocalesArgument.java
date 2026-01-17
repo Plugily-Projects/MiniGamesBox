@@ -42,9 +42,6 @@ public class LocalesArgument {
     registry.mapArgument(registry.getPlugin().getCommandAdminPrefixLong(), new LabeledCommandArgument("locales", registry.getPlugin().getPluginNamePrefixLong() + ".admin.locales", CommandArgument.ExecutorType.BOTH, new LabelData("/" + registry.getPlugin().getCommandAdminPrefix() + " locales", "/" + registry.getPlugin().getCommandAdminPrefix() + " locales", "&7Shows list with all locales\n&6Permission: &7" + registry.getPlugin().getPluginNamePrefixLong() + ".admin.locales")) {
       @Override
       public void execute(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)) {
-          return;
-        }
         new MessageBuilder("---- LOCALES THAT CAN BE USED FOR " + registry.getPlugin().getPluginNamePrefixLong().toUpperCase() + " ----").send(sender);
         for(Locale locale : LocaleRegistry.getRegisteredLocales()) {
           new MessageBuilder(locale.getName() + " by setting " + locale.getPrefix() + " in config.yml@locale").send(sender);

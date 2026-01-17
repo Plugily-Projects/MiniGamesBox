@@ -38,6 +38,7 @@ public class ConfigOption implements IConfigOption {
     options.put("DEBUG", new ConfigOption("Debug", false, true));
     options.put("DEV_DEBUG", new ConfigOption("Developer-Mode", false, true));
     options.put("BOSSBAR", new ConfigOption("Bossbar.Display", true, true));
+    options.put("SCOREBOARD_DISPLAY", new ConfigOption("Scoreboard.Display", true, true));
     options.put("BUNGEEMODE", new ConfigOption("Bungee-Mode", false, true));
     options.put("INVENTORY_MANAGER", new ConfigOption("Inventory-Manager", true, true));
     options.put("BLOCKED_LEAVE_COMMAND", new ConfigOption("Block.In-Game.Leave", false, true));

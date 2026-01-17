@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     implementation("fr.mrmicky:fastboard:2.1.3") { isTransitive = false }
-    implementation("com.github.cryptomorin:XSeries:13.0.0") { isTransitive = false }
+    implementation("com.github.cryptomorin:XSeries:13.5.1") { isTransitive = false }
     implementation(project(":MiniGamesBox-API", "shadow"))
     implementation(project(":MiniGamesBox-Inventory", "shadow"))
     implementation(project(":MiniGamesBox-Database", "shadow"))
