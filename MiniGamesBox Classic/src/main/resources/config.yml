@@ -144,7 +144,7 @@ Sign-Block-States: true
 # Eg. 4 days before and 4 days after Halloween special effects
 # for death, spooky! There are more holiday events! Check wiki!
 # Wiki: -
-Holidays: true
+Holidays-Enabled: true
 
 
 # Should the plugin enable special powerups which can be found in powerups.yml
