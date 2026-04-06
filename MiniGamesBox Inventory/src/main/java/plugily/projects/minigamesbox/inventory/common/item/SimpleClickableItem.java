@@ -48,6 +48,9 @@ public class SimpleClickableItem implements ClickableItem {
 
   @Override
   public void onClick(InventoryClickEvent event) {
+    if(clickConsumer == null) {
+      return;
+    }
     clickConsumer.accept(event);
   }
 
