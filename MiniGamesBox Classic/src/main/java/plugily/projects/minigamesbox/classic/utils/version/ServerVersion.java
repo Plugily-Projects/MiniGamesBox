@@ -44,7 +44,8 @@ public class ServerVersion {
     v1_18(18, 0),
     v1_19(19, 0),
     v1_20(20, 0),
-    v1_21(21, 0);
+    v1_21(21, 0),
+    v26_1(26, 0);
 
 
     private static Version current;
@@ -71,9 +72,17 @@ public class ServerVersion {
 
       Matcher serverVersion = Pattern.compile("^(?<major>\\d+)\\.(?<minor>\\d+)(?:\\.(?<patch>\\d+))?").matcher(Bukkit.getBukkitVersion());
       if(serverVersion.find()) {
+        int serverMajor = Integer.parseInt(serverVersion.group("major"));
         int serverMinor = Integer.parseInt(serverVersion.group("minor"));
         String patch = serverVersion.group("patch");
         int serverPatch = Integer.parseInt((patch == null || patch.isEmpty()) ? "0" : patch);
+
+        if(serverMajor != 1) {
+          // Legacy format: 1.21.1 -> Use 21 as minor, 1 as patch
+          // New format: 26.1.0 -> Use 26 as minor, 1 as patch (or drop)
+          serverMinor = serverMajor;
+          serverPatch = serverMinor;
+        }
 
         for(Version value : values()) {
           if(value.getMinor() == serverMinor && serverPatch >= value.getMinPatch()) {
