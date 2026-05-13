@@ -1,3 +1,17 @@
+### 1.4.5 Release (13.05.2026)
+* Added KitAbilites 
+* Added file based kits usage (first in vd)
+* Fixed HolidayManager enable config.yml
+* Added back Christmas and New Year Holiday event 
+* Added copper and netherite armor to ArmorHelper
+* Changed onKitBlockPlace Highest prio to override other cancels
+* Optimize scoreboard for players under 1.13 with non adjusted scoreboard template
+* Changed playArenaCountdown to be more noticable
+* Fixed NPE on empty clickconsumer
+* Updated XSeries to support mc 26
+* Fixed doubled permission message error
+* Fixed ServerVersion handler because of mc 26 naming
+
 ### 1.4.4 Release (17.01.2026)
 * Added support 1.21.8-11
 * Added (optional) SCOREBOARD_DISPLAY in config.yml
