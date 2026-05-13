@@ -166,7 +166,6 @@ public class PluginArenaUtils {
 
   public static void arenaForceStart(Player player, int timer) {
     if(!plugin.getBukkitHelper().hasPermission(player, plugin.getPluginNamePrefixLong() + ".admin.forcestart")) {
-      new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().player(player).sendPlayer();
       return;
     }
 
