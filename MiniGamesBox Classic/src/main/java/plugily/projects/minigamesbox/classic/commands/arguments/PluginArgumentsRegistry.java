@@ -138,15 +138,10 @@ public class PluginArgumentsRegistry implements CommandExecutor {
       }
       for(CommandArgument argument : entry.getValue()) {
         if(argument.getArgumentName().equalsIgnoreCase(args[0])) {
-          boolean gotPermissions = false;
           for(String perm : argument.getPermissions()) {
             if(perm.isEmpty() || plugin.getBukkitHelper().hasPermission(sender, perm)) {
-              gotPermissions = true;
+              return true;
             }
-          }
-          if(!gotPermissions) {
-            new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().send(sender);
-            return true;
           }
           if(checkSenderIsExecutorType(sender, argument.getValidExecutors())) {
             argument.execute(sender, args);
