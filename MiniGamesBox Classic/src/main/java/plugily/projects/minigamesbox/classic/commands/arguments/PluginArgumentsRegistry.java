@@ -106,56 +106,77 @@ public class PluginArgumentsRegistry implements CommandExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    String commandName = cmd.getName();
+
+    List<CommandArgument> arguments = null;
     for(Map.Entry<String, List<CommandArgument>> entry : mappedArguments.entrySet()) {
-      if(!cmd.getName().equalsIgnoreCase(entry.getKey())) {
+      if(commandName.equalsIgnoreCase(entry.getKey())) {
+        arguments = entry.getValue();
+        break;
+      }
+    }
+    if(arguments == null) {
+      return false;
+    }
+
+    if(commandName.equalsIgnoreCase(plugin.getPluginNamePrefixLong())) {
+      if(args.length == 0 || args[0].equalsIgnoreCase("help")) {
+        sendHelpCommand(sender);
+        return true;
+      }
+      if(args.length > 1 && args[0].equalsIgnoreCase("edit")) {
+        if(!checkSenderIsExecutorType(sender, CommandArgument.ExecutorType.PLAYER)
+            || !plugin.getBukkitHelper().hasPermission(sender, plugin.getPluginNamePrefixLong() + ".admin.setup")) {
+          return true;
+        }
+        IPluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
+        if(arena == null) {
+          new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
+          return true;
+        }
+        plugin.getSetupInventory((Player) sender, arena.getId()).open();
+        return true;
+      }
+    }
+
+    if(commandName.equalsIgnoreCase(plugin.getCommandAdminPrefixLong()) && (args.length == 0 || args[0].equalsIgnoreCase("help"))) {
+      if(!sender.hasPermission(plugin.getPluginNamePrefixLong() + ".admin")) {
+        return true;
+      }
+      sendAdminHelpCommand(sender);
+      return true;
+    }
+
+    if(args.length == 0) {
+      return false;
+    }
+
+    for(CommandArgument argument : arguments) {
+      if(!argument.getArgumentName().equalsIgnoreCase(args[0])) {
         continue;
       }
-      if(cmd.getName().equalsIgnoreCase(plugin.getPluginNamePrefixLong())) {
-        if(args.length == 0 || args[0].equalsIgnoreCase("help")) {
-          sendHelpCommand(sender);
-          return true;
-        }
-        if(args.length > 1 && args[0].equalsIgnoreCase("edit")) {
-          if(!checkSenderIsExecutorType(sender, CommandArgument.ExecutorType.PLAYER)
-              || !plugin.getBukkitHelper().hasPermission(sender, plugin.getPluginNamePrefixLong() + ".admin.setup")) {
-            return true;
-          }
-          IPluginArena arena = plugin.getArenaRegistry().getArena(args[1]);
-          if(arena == null) {
-            new MessageBuilder("COMMANDS_NO_ARENA_LIKE_THAT").asKey().send(sender);
-            return true;
-          }
-          plugin.getSetupInventory((Player) sender, arena.getId()).open();
-          return true;
-        }
-      }
-      if(cmd.getName().equalsIgnoreCase(plugin.getCommandAdminPrefixLong()) && (args.length == 0 || args[0].equalsIgnoreCase("help"))) {
-        if(!sender.hasPermission(plugin.getPluginNamePrefixLong() + ".admin")) {
-          return true;
-        }
-        sendAdminHelpCommand(sender);
+      boolean hasPermission = argument.getPermissions().stream()
+          .anyMatch(perm -> perm.isEmpty() || sender.hasPermission(perm));
+
+      if(!hasPermission) {
+        new MessageBuilder("COMMANDS_NO_PERMISSION").asKey().send(sender);
         return true;
-      }
-      for(CommandArgument argument : entry.getValue()) {
-        if(argument.getArgumentName().equalsIgnoreCase(args[0])) {
-          for(String perm : argument.getPermissions()) {
-            if(perm.isEmpty() || plugin.getBukkitHelper().hasPermission(sender, perm)) {
-              return true;
-            }
-          }
-          if(checkSenderIsExecutorType(sender, argument.getValidExecutors())) {
-            argument.execute(sender, args);
-            return true;
-          }
-        }
       }
 
-      //sending did you mean help
-      List<StringMatcher.Match> matches = StringMatcher.match(args[0], entry.getValue().stream().map(CommandArgument::getArgumentName).collect(Collectors.toList()));
-      if(!matches.isEmpty()) {
-        new MessageBuilder("COMMANDS_DID_YOU_MEAN").asKey().value(label + " " + matches.get(0).getMatch()).send(sender);
-        return true;
+      if(checkSenderIsExecutorType(sender, argument.getValidExecutors())) {
+        argument.execute(sender, args);
       }
+      return true;
+    }
+
+    List<String> argumentNames = arguments.stream()
+        .map(CommandArgument::getArgumentName)
+        .collect(Collectors.toList());
+
+    List<StringMatcher.Match> matches = StringMatcher.match(args[0], argumentNames);
+    if(!matches.isEmpty()) {
+      new MessageBuilder("COMMANDS_DID_YOU_MEAN").asKey().value(label + " " + matches.get(0).getMatch()).send(sender);
+      return true;
     }
     return false;
   }
