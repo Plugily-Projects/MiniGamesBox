@@ -23,7 +23,7 @@
     <parent>
         <artifactId>minigamesbox</artifactId>
         <groupId>plugily.projects</groupId>
-        <version>1.4.7</version>
+        <version>1.4.7-SNAPSHOT1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -51,9 +51,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.github.almighty-satan</groupId>
+            <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>13.6.0+26.1</version>
+            <version>13.7.1</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
