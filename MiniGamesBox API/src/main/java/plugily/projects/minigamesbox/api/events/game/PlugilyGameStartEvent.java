@@ -18,10 +18,15 @@
 
 package plugily.projects.minigamesbox.api.events.game;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import plugily.projects.minigamesbox.api.arena.IPluginArena;
 import plugily.projects.minigamesbox.api.events.PlugilyEvent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Tigerpanzer_02
@@ -32,9 +37,11 @@ import plugily.projects.minigamesbox.api.events.PlugilyEvent;
 public class PlugilyGameStartEvent extends PlugilyEvent {
 
   private static final HandlerList HANDLERS = new HandlerList();
+  private final List<Player> players;
 
   public PlugilyGameStartEvent(IPluginArena arena) {
     super(arena);
+    players = Collections.unmodifiableList(new ArrayList<>(arena.getPlayers()));
   }
 
   public static HandlerList getHandlerList() {
@@ -44,6 +51,15 @@ public class PlugilyGameStartEvent extends PlugilyEvent {
   @Override
   public @NotNull HandlerList getHandlers() {
     return HANDLERS;
+  }
+
+  /**
+   * Gets a snapshot of the players who were in the arena when the game started.
+   *
+   * @return an immutable list of players
+   */
+  public List<Player> getPlayers() {
+    return players;
   }
 
 }
