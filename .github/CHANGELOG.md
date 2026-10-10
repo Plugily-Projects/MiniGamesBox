@@ -1,3 +1,8 @@
+### 1.4.9 Release (10.10.2026)
+* Changed XSeries version from 13.7.1 to 14.0.0
+* Changed FastInv version from v3.1.2 to 3.1.2
+* Changed FastBoard version from  to 2.2.2
+
 ### 1.4.5 Release (13.05.2026)
 * Added KitAbilites 
 * Added file based kits usage (first in vd)
