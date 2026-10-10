@@ -64,6 +64,10 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
       public boolean hasLinesMaxLength() {
         return isLinesMaxLength(getPlayer());
       }
+      @Override
+      public boolean hasCustomScores() {
+        return customScores(getPlayer());
+      }
     };
 
     board.updateTitle(boardTitle);
@@ -122,6 +126,17 @@ public class PluginScoreboardManager implements IPluginScoreboardManager {
       }
     }
     return !ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_13);
+  }
+
+  private boolean customScores(Player player) {
+    if(Bukkit.getPluginManager().isPluginEnabled("ViaVersion")) {
+      try {
+        return Via.getAPI().getPlayerVersion(player) >= ProtocolVersion.v1_20_3.getVersion();
+      } catch(Exception ignored) {
+        //Not using ViaVersion 4 or unable to get ViaVersion return LegacyBoard!
+      }
+    }
+    return ServerVersion.Version.isCurrentEqualOrHigher(ServerVersion.Version.v1_21);
   }
 
 }
