@@ -1,3 +1,6 @@
+### 1.4.10 Release (10.10.2026)
+* Changed FastBoard version from  to 2.2.2
+
 ### 1.4.9 Release (10.10.2026)
 * Changed XSeries version from 13.7.1 to 14.0.0
 * Changed FastInv version from v3.1.2 to 3.1.2
